@@ -1,0 +1,3 @@
+# ignoring node_modules to avoid adding thousands of scripts to the repo.
+# run `npm init` in terminal to locally build node_modules folder as needed
+node_modules/
