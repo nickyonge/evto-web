@@ -1,12 +1,15 @@
 :root {
 
     --color-text-body: #18182e;
-    --color-bg-solid: #beeeef;
+    --color-bg-solid: #beeeef; /* TODO: wide/short replace bg solid with linear gradient */
     --color-bg-gradient-1: #4e89db;
     --color-bg-gradient-2: #4680db;
-    --color-bg-gradient-3: #225bc9;
+    --color-bg-gradient-3: #225bc8;
     /* --color-bg-gradient-1: #beeeef;
     --color-bg-gradient-2: #a4d4f3; */
+
+    --demo-bg-navbar: #ff00ff69;
+    --demo-bg-window: #44220069;
 
     --navbar-height: 40px;
 

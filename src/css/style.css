@@ -22,7 +22,13 @@ body {
     margin: 0px;
     height: var(--navbar-height);
     width: 100%;
-    /* background-color: #224466DD; */
+}
+
+.topBar.demoBG {
+    background-color: var(--demo-bg-navbar);
+}
+.btmBar.demoBG {
+    background-color: var(--demo-bg-navbar);
 }
 
 .content {
@@ -31,6 +37,10 @@ body {
     top: var(--navbar-height);
     height: calc(100% - (var(--navbar-height) * 2));
     /* background-color: blueviolet; */
+}
+
+.content.demoBG {
+    background-color: var(--demo-bg-window);
 }
 
 .btmBar {
