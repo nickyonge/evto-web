@@ -5,8 +5,8 @@ import { BuildUI } from './ui';
 
 window.addEventListener('load', function () {
     console.log("page loaded");
-    DemoLabel();
     BuildUI();
+    // DemoLabel();
 });
 
 function DemoLabel() {

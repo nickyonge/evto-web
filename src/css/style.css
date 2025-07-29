@@ -2,6 +2,7 @@
 
 body {
     height: 100%;
+    margin: 0px;
     background-repeat: no-repeat;
     background-attachment: fixed;
     font-family: 'Inclusive Sans', 'Helvetica Neue', Helvetica, sans-serif;
@@ -14,4 +15,28 @@ body {
     body {
         background-image: none;
     }
+}
+
+.topBar {
+    position: fixed;
+    margin: 0px;
+    height: var(--navbar-height);
+    width: 100%;
+    /* background-color: #224466DD; */
+}
+
+.content {
+    position: absolute;
+    width: 100%;
+    top: var(--navbar-height);
+    height: calc(100% - (var(--navbar-height) * 2));
+    /* background-color: blueviolet; */
+}
+
+.btmBar {
+    position: fixed;
+    width: 100%;
+    bottom: 0px;
+    height: var(--navbar-height);
+    /* background-color: #224466DD; */
 }
