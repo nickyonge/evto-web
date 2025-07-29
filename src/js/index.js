@@ -1,5 +1,5 @@
 // import(/* webpackPreload: true */ './../css/fonts.css');
-// import(/* webpackPreload: true */ './../css/style.css');
+import(/* webpackPreload: true */ './../css/style.css');
 
 window.addEventListener('load', function () {
     console.log("page loaded");
