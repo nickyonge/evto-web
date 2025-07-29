@@ -1,5 +1,5 @@
 
-const useDemoBGColors = true;
+const _useDemoBGColors = true;
 
 let topBar = null;
 let content = null;
@@ -10,19 +10,23 @@ let btmBar = null;
 export function BuildUI() {
 
     // top bar
-    content = useDemoBGColors ? CreateDivWithClass('content', 'demoBG') : CreateDivWithClass('content');
-    topBar = useDemoBGColors ? CreateDivWithClass('topBar', 'demoBG') : CreateDivWithClass('content');
-    btmBar = useDemoBGColors ? CreateDivWithClass('btmBar', 'demoBG') : CreateDivWithClass('content');
+    content = CreateDivWithClass('content');
+    topBar = CreateDivWithClass('topBar');
+    btmBar = CreateDivWithClass('btmBar');
     
     document.body.appendChild(content);
     document.body.appendChild(topBar);
     document.body.appendChild(btmBar);
 
     artWindow = CreateDivWithClass('content', 'window', 'art');
-    dataWindow = CreateDivWithClass('content', 'window', 'data', 'demoBG');
+    dataWindow = CreateDivWithClass('content', 'window', 'data');
 
     content.appendChild(artWindow);
     content.appendChild(dataWindow);
+
+    if (_useDemoBGColors) {
+        AddClassToDOMs('demoBG', topBar, btmBar, dataWindow);
+    }
 
 }
 
@@ -30,4 +34,15 @@ function CreateDivWithClass(...cssClasses) {
     let div = document.createElement('div');
     div.classList.add(...cssClasses);
     return div;
+}
+
+function AddClassesToDOM(domElement, ...cssClasses) {
+    domElement.classList.add(...cssClasses);
+}
+function AddClassToDOMs(cssClass, ...domElements) {
+    for (let i = 0; i < domElements.length; i++) {
+        if (!domElements[i].classList.contains(cssClass)) {
+            domElements[i].classList.add(cssClass);
+        }
+    }
 }
