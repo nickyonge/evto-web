@@ -8,5 +8,10 @@ body {
     font-size: 10.5pt;
     color: var(--color-text-body);
     background-color: var(--color-bg-solid);
-    background-image: linear-gradient(var(--color-bg-gradient-1), var(--color-bg-gradient-2));
+    background-image: radial-gradient(var(--color-bg-gradient-1), var(--color-bg-gradient-2) 40%, var(--color-bg-gradient-3) 127%);
+}
+@media screen and (min-aspect-ratio: 3) {
+    body {
+        background-image: none;
+    }
 }
