@@ -4,7 +4,7 @@ body {
     height: 100%;
     background-repeat: no-repeat;
     background-attachment: fixed;
-    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-family: 'Inclusive Sans', 'Helvetica Neue', Helvetica, sans-serif;
     font-size: 10.5pt;
     color: var(--color-text-body);
     background-color: var(--color-bg-solid);
