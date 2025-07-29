@@ -1,0 +1,12 @@
+@import 'vars.css';
+
+body {
+    height: 100%;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    font-family: 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 10.5pt;
+    color: var(--color-text-body);
+    background-color: var(--color-bg-solid);
+    background-image: linear-gradient(var(--color-bg-gradient-1), var(--color-bg-gradient-2));
+}
