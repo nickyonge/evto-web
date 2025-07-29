@@ -17,19 +17,7 @@ body {
     }
 }
 
-.topBar {
-    position: fixed;
-    margin: 0px;
-    height: var(--navbar-height);
-    width: 100%;
-}
-
-.topBar.demoBG {
-    background-color: var(--demo-bg-navbar);
-}
-.btmBar.demoBG {
-    background-color: var(--demo-bg-navbar);
-}
+/* Content window and subwindows */
 
 .content {
     position: absolute;
@@ -39,14 +27,56 @@ body {
     /* background-color: blueviolet; */
 }
 
-.content.demoBG {
-    background-color: var(--demo-bg-window);
+.content .window {
+    position: relative;
+    display: inline-block;
+    top: 0;
+    width: 50%;
+    height: 100%;
 }
 
+.content .window .art {
+    
+}
+.content .window .data {
+    
+}
+
+@media screen and (max-aspect-ratio: 1.2) {
+    .content .window {
+        display:block;
+        width: 100%;
+        height: 50%;
+    }
+}
+
+
+/* Top and Bottom Navbars */
+
+.topBar {
+    position: fixed;
+    margin: 0px;
+    height: var(--navbar-height);
+    width: 100%;
+}
 .btmBar {
     position: fixed;
     width: 100%;
     bottom: 0px;
     height: var(--navbar-height);
     /* background-color: #224466DD; */
+}
+
+
+
+/* Demo BG colours */
+
+.topBar.demoBG {
+    background-color: var(--demo-bg-navbar);
+}
+.btmBar.demoBG {
+    background-color: var(--demo-bg-navbar);
+}
+.content.demoBG {
+    background-color: var(--demo-bg-window);
 }

@@ -1,5 +1,5 @@
 
-const useDemoBGColors = false;
+const useDemoBGColors = true;
 
 let topBar = null;
 let content = null;
@@ -17,6 +17,12 @@ export function BuildUI() {
     document.body.appendChild(content);
     document.body.appendChild(topBar);
     document.body.appendChild(btmBar);
+
+    artWindow = CreateDivWithClass('content', 'window', 'art');
+    dataWindow = CreateDivWithClass('content', 'window', 'data', 'demoBG');
+
+    content.appendChild(artWindow);
+    content.appendChild(dataWindow);
 
 }
 
