@@ -11,6 +11,7 @@ body {
     background-color: var(--color-bg-solid);
     background-image: radial-gradient(var(--color-bg-gradient-1), var(--color-bg-gradient-2) 40%, var(--color-bg-gradient-3) 127%);
 }
+/* TODO: switch to linear gradient */
 @media screen and (min-aspect-ratio: 3) {
     body {
         background-image: none;
@@ -23,19 +24,19 @@ body {
     width: 100vw;
     height: 100vh;
     grid-template:
-        [header] "header header" 60px
+        [header] "header header" var(--ui-header-height)
         [main] "artWindow dataWindow" 1fr
-        [footer] "footer footer" 30px
-        / 0.8fr 1fr;
+        [footer] "footer footer" var(--ui-footer-height)
+        / var(--ui-art-window-ratio) 1fr;
 }
 
 @media screen and (max-aspect-ratio: 1.2) {
     #content {
         grid-template:
-            [header] "header" 60px
-            [main] "artWindow" 0.8fr
+            [header] "header" var(--ui-header-height)
+            [main] "artWindow" var(--ui-art-window-ratio)
             [main] "dataWindow" 1fr
-            [footer] "footer" 30px
+            [footer] "footer" var(--ui-footer-height)
             / 1fr;
     }
 }
@@ -54,14 +55,14 @@ footer {
 }
 
 header.demoBG {
-    background-color: var(--demo-bg-window);
+    background-color: var(--demo-bg-navbar);
 }
 footer.demoBG {
-    background-color: var(--demo-bg-window);
+    background-color: var(--demo-bg-navbar);
 }
 artWindow.demoBG {
-    background-color: var(--demo-bg-navbar);
+    background-color: var(--demo-bg-winart);
 }
 dataWindow.demoBG {
-    background-color: var(--demo-bg-navbar);
+    background-color: var(--demo-bg-windat);
 }

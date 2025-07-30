@@ -36,7 +36,7 @@ export function BuildUI() {
     document.body.appendChild(content);
 
     if (_useDemoBGColors) {
-        AddClassToDOMs('demoBG', topBar, btmBar, dataWindow);
+        AddClassToDOMs('demoBG', topBar, btmBar, artWindow, dataWindow);
     }
 
 }

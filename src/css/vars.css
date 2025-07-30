@@ -8,11 +8,15 @@
     /* --color-bg-gradient-1: #beeeef;
     --color-bg-gradient-2: #a4d4f3; */
 
-    --color-ui-button: #221133;
+    --color-ui-button: #221133b9;
 
-    --demo-bg-navbar: #ff00ff27;
-    --demo-bg-window: #44220027;
 
-    --navbar-height: 40px;
+    --demo-bg-navbar: #00000022;
+    --demo-bg-winart: #88888821;
+    --demo-bg-windat: #ffffff23;
+
+    --ui-header-height: 45px;
+    --ui-footer-height: 25px;
+    --ui-art-window-ratio: 0.8fr;
 
 }
