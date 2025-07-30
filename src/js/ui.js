@@ -12,10 +12,10 @@ export function BuildUI() {
     // top bar
 
     content = CreateDivWithID('content');
-    topBar = AddElementTo(content, 'topBar');
+    topBar = AddElementTo(content, 'header');
     artWindow = AddElementTo(content, 'artWindow');
     dataWindow = AddElementTo(content, 'dataWindow');
-    btmBar = AddElementTo(content, 'btmBar');
+    btmBar = AddElementTo(content, 'footer');
 
     // content = CreateDivWithClass('content');
     // topBar = CreateDivWithClass('topBar');

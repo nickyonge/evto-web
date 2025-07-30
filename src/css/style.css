@@ -17,88 +17,51 @@ body {
     }
 }
 
-/* Content window and subwindows */
-
-.content {
+#content {
+    display: grid;
     position: absolute;
-    display: table;
-    table-layout: fixed;
-    width: 100%;
-    top: var(--navbar-height);
-    height: calc(100% - (var(--navbar-height) * 2));
-    /* background-color: blueviolet; */
+    width: 100vw;
+    height: 100vh;
+    grid-template:
+        [header] "header header" 60px
+        [main] "artWindow dataWindow" 1fr
+        [footer] "footer footer" 30px
+        / 0.8fr 1fr;
 }
 
-.content.window {
-    position: relative;
-    display: table-cell;
-    top: 0;
-    width: auto;
-    height: auto;
-}
-
-.content.window.art {
-    /* max-width: 40%;
-    width: auto; */
-}
-.content.window.data {
-    /* min-width: 420px;
-    width: 60%; */
-}
-
-@media screen and (max-aspect-ratio: 1.5) {
-    .content {
-        display: grid;
-        grid-auto-flow: column;
-    }
-    .content.window {
-        /* display: list-item; */
-        /* grid-column: auto; */
-        height: auto;
-        width: 100%;
-    }
-    .content.window.art {
-        /* display:block; */
-        /* width:auto; */
-        /* max-width: 40%;
-        width: auto; */
-    }
-    .content.window.data {
-        height: 40%;
-        /* display:block; */
-        /* display:table-cell; */
-        /* min-width: 420px;
-        width: 60%; */
+@media screen and (max-aspect-ratio: 1.2) {
+    #content {
+        grid-template:
+            [header] "header" 60px
+            [main] "artWindow" 0.8fr
+            [main] "dataWindow" 1fr
+            [footer] "footer" 30px
+            / 1fr;
     }
 }
 
-
-/* Top and Bottom Navbars */
-
-.topBar {
-    position: fixed;
-    margin: 0px;
-    height: var(--navbar-height);
-    width: 100%;
+header {
+    grid-area: header;
 }
-.btmBar {
-    position: fixed;
-    width: 100%;
-    bottom: 0px;
-    height: var(--navbar-height);
-    /* background-color: #224466DD; */
+artWindow {
+    grid-area: artWindow;
+}
+dataWindow {
+    grid-area: dataWindow;
+}
+footer {
+    grid-area: footer;
 }
 
-
-
-/* Demo BG colours */
-
-.topBar.demoBG {
-    background-color: var(--demo-bg-navbar);
-}
-.btmBar.demoBG {
-    background-color: var(--demo-bg-navbar);
-}
-.content.demoBG {
+header.demoBG {
     background-color: var(--demo-bg-window);
+}
+footer.demoBG {
+    background-color: var(--demo-bg-window);
+}
+artWindow.demoBG {
+    background-color: var(--demo-bg-navbar);
+}
+dataWindow.demoBG {
+    background-color: var(--demo-bg-navbar);
 }
