@@ -17,6 +17,8 @@ export function BuildUI() {
     dataWindow = AddElementTo(content, 'dataWindow');
     btmBar = AddElementTo(content, 'footer');
 
+    topBar.appendChild(CreateHamburgerButton());
+
     // content = CreateDivWithClass('content');
     // topBar = CreateDivWithClass('topBar');
     // btmBar = CreateDivWithClass('btmBar');
@@ -38,6 +40,26 @@ export function BuildUI() {
     }
 
 }
+
+
+/* Unique UI element generation */
+
+function CreateHamburgerButton() {
+    let btn = document.createElement('label');
+    btn.setAttribute('class', 'burger');
+    btn.setAttribute('for', 'burger');
+    let input = document.createElement('input');
+    input.setAttribute('type', 'checkbox');
+    input.setAttribute('id', 'burger');
+    btn.appendChild(input);
+    btn.appendChild(document.createElement('span'));
+    btn.appendChild(document.createElement('span'));
+    btn.appendChild(document.createElement('span'));
+    return btn;
+}
+
+
+/* Basic UI element generation */
 
 function CreateDiv() {
     return document.createElement('div');

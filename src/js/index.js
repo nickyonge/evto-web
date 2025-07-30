@@ -1,5 +1,6 @@
 import(/* webpackPreload: true */ './../css/fonts.css');
 import(/* webpackPreload: true */ './../css/style.css');
+import(/* webpackPreload: true */ './../css/hbbtn.css');
 
 import { BuildUI } from './ui';
 
