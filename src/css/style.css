@@ -33,8 +33,8 @@ h3 {
 #content {
     display: grid;
     position: absolute;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     grid-template:
         [header] "header header" var(--ui-header-height)
         [main] "artWindow dataWindow" 1fr

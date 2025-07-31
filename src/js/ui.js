@@ -1,5 +1,5 @@
 
-const _useDemoBGColors = false;
+const _useDemoBGColors = true;
 
 let content = null;
 let topBar = null;
@@ -18,6 +18,7 @@ export function BuildUI() {
     btmBar = AddElementTo(content, 'footer');
 
     CreateTopBar();
+    CreateBottomBar();
 
     // content = CreateDivWithClass('content');
     // topBar = CreateDivWithClass('topBar');
@@ -69,6 +70,22 @@ function CreateHamburgerButton() {
 }
 
 
+function CreateBottomBar() {
+    let ul = CreateElementWithClass('ul', 'sbWrapper');
+    ul.appendChild(CreateSocialButton('Instagram'));
+    ul.appendChild(CreateSocialButton('GitHub'));
+    btmBar.appendChild(ul);
+}
+function CreateSocialButton(name) {
+    let li = CreateElementWithClass('li', 'icon', name.toLowerCase());
+    let tt = CreateElementWithClass('span', 'tooltip');
+    tt.innerText = name;
+    // TODO: Add SVG icon here
+    li.appendChild(tt);
+    return li;
+}
+
+
 /* Basic UI element generation */
 
 function CreateDiv() {
@@ -80,8 +97,16 @@ function CreateDivWithID(id) {
     return div;
 }
 function AddElementTo(domElement, newElement) {
-    let element = document.createElement(newElement);
+    let element = CreateElement(newElement);
     domElement.appendChild(element);
+    return element;
+}
+function CreateElement(newElement) {
+    return document.createElement(newElement);
+}
+function CreateElementWithClass(newElement, ...cssClasses) {
+    let element = CreateElement(newElement);
+    element.classList.add(...cssClasses);
     return element;
 }
 function CreateDivWithIDAndClasses(id, ...cssClasses) {

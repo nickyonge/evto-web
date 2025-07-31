@@ -1,23 +1,25 @@
 /* social media bututon input 
 https://uiverse.io/david-mohseni/brave-shrimp-86 */
 
-.wrapper {
+.sbWrapper {
   display: inline-flex;
   list-style: none;
-  height: 120px;
-  width: 100%;
-  padding-top: 40px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  margin-left: 24px;
   font-family: "Poppins", sans-serif;
-  justify-content: center;
+  justify-content: left;
 }
 
-.wrapper .icon {
+.sbWrapper .icon {
   position: relative;
-  background: #fff;
+  background: var(--color-ui-button);
   border-radius: 50%;
-  margin: 10px;
-  width: 50px;
-  height: 50px;
+  height: 80%;
+  max-height: 50px;
+  margin-left: 6.9px;
+  aspect-ratio: 1;
   font-size: 18px;
   display: flex;
   justify-content: center;
@@ -28,7 +30,7 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
   transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.wrapper .tooltip {
+.sbWrapper .tooltip {
   position: absolute;
   top: 0;
   font-size: 14px;
@@ -42,7 +44,7 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.wrapper .tooltip::before {
+.sbWrapper .tooltip::before {
   position: absolute;
   content: "";
   height: 8px;
@@ -54,35 +56,28 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-.wrapper .icon:hover .tooltip {
+.sbWrapper .icon:hover .tooltip {
   top: -45px;
   opacity: 1;
   visibility: visible;
   pointer-events: auto;
 }
 
-.wrapper .icon:hover span,
-.wrapper .icon:hover .tooltip {
+.sbWrapper .icon:hover span,
+.sbWrapper .icon:hover .tooltip {
   text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
 }
 
-.wrapper .facebook:hover,
-.wrapper .facebook:hover .tooltip,
-.wrapper .facebook:hover .tooltip::before {
-  background: #1877f2;
-  color: #fff;
-}
-
-.wrapper .twitter:hover,
-.wrapper .twitter:hover .tooltip,
-.wrapper .twitter:hover .tooltip::before {
-  background: #1da1f2;
-  color: #fff;
-}
-
-.wrapper .instagram:hover,
-.wrapper .instagram:hover .tooltip,
-.wrapper .instagram:hover .tooltip::before {
+.sbWrapper .instagram:hover,
+.sbWrapper .instagram:hover .tooltip,
+.sbWrapper .instagram:hover .tooltip::before {
   background: #e4405f;
+  color: #fff;
+}
+
+.sbWrapper .github:hover,
+.sbWrapper .github:hover .tooltip,
+.sbWrapper .github:hover .tooltip::before {
+  background: #1b1f24;
   color: #fff;
 }
