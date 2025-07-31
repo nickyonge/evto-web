@@ -1,6 +1,8 @@
 :root {
 
-    --color-text-body: #18182e;
+    --color-text-body: #a4c4ef;
+    --color-ui-button: #a4c4ef;
+
     --color-bg-solid: #beeeef; /* TODO: wide/short replace bg solid with linear gradient */
     --color-bg-gradient-1: #4e89db;
     --color-bg-gradient-2: #4680db;
@@ -8,14 +10,12 @@
     /* --color-bg-gradient-1: #beeeef;
     --color-bg-gradient-2: #a4d4f3; */
 
-    --color-ui-button: #221133b9;
-
 
     --demo-bg-navbar: #00000022;
     --demo-bg-winart: #88888821;
     --demo-bg-windat: #ffffff23;
 
-    --ui-header-height: 45px;
+    --ui-header-height: 56px;
     --ui-footer-height: 25px;
     --ui-art-window-ratio: 0.8fr;
 

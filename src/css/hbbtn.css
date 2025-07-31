@@ -90,9 +90,10 @@
     cursor: pointer;
 
     /* --- added or modified for evto --- */
-    display: block;
+    display: inline;
     float: right;
-    top: calc(50% - 15px);
+    /* top: calc(50% - 15px); */
+    top: 20px;
     left: -15px;
     /* --- end modifications --- */
 }

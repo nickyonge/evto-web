@@ -11,6 +11,18 @@ body {
     background-color: var(--color-bg-solid);
     background-image: radial-gradient(var(--color-bg-gradient-1), var(--color-bg-gradient-2) 40%, var(--color-bg-gradient-3) 127%);
 }
+h1 {
+    margin: 0;
+    font-size: 21.3pt;
+    margin-top: 0px;
+}
+h3 {
+    margin: 0;
+    font-size: 12pt;
+    margin-top: 6.9px;
+    opacity: 0.8;
+}
+
 /* TODO: switch to linear gradient */
 @media screen and (min-aspect-ratio: 3) {
     body {
@@ -53,6 +65,19 @@ dataWindow {
 footer {
     grid-area: footer;
 }
+
+
+.title {
+    display:inline-flex;
+    flex-direction: column;
+    height: 100%;
+    padding-left: 12px;
+    position: relative;
+    align-items: left;
+    
+    /* font-size: 16pt; */
+}
+
 
 header.demoBG {
     background-color: var(--demo-bg-navbar);

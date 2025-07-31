@@ -1,5 +1,5 @@
 
-const _useDemoBGColors = true;
+const _useDemoBGColors = false;
 
 let content = null;
 let topBar = null;
@@ -17,7 +17,7 @@ export function BuildUI() {
     dataWindow = AddElementTo(content, 'dataWindow');
     btmBar = AddElementTo(content, 'footer');
 
-    topBar.appendChild(CreateHamburgerButton());
+    CreateTopBar();
 
     // content = CreateDivWithClass('content');
     // topBar = CreateDivWithClass('topBar');
@@ -43,6 +43,16 @@ export function BuildUI() {
 
 
 /* Unique UI element generation */
+
+function CreateTopBar() {
+    let titleContainer = CreateDivWithClass('title');
+    let subtitle = AddElementTo(titleContainer, 'h3');
+    let title = AddElementTo(titleContainer, 'h1');
+    subtitle.innerText = "Everywhere Together";
+    title.innerText = "Canvas Visualizer"
+    topBar.appendChild(titleContainer);
+    topBar.appendChild(CreateHamburgerButton());
+}
 
 function CreateHamburgerButton() {
     let btn = document.createElement('label');
