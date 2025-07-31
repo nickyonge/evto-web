@@ -7,6 +7,14 @@ let artWindow = null;
 let dataWindow = null;
 let btmBar = null;
 
+/**
+ * check if a string is null, empty, or whitespace
+ * @param {string} str input string to test 
+ * @returns true if blank, false if contains content
+ */
+const isBlank = str => !str || !str.trim();
+
+
 export function BuildUI() {
 
     // top bar
@@ -80,8 +88,9 @@ function CreateSocialButton(name) {
     let li = CreateElementWithClass('li', 'icon', name.toLowerCase());
     let tt = CreateElementWithClass('span', 'tooltip');
     tt.innerText = name;
-    // TODO: Add SVG icon here
     li.appendChild(tt);
+    let img = CreateImage('../assets/svg/' + name.toLowerCase() + '.svg');
+    li.appendChild(img);
     return li;
 }
 
@@ -130,4 +139,13 @@ function AddClassToDOMs(cssClass, ...domElements) {
             domElements[i].classList.add(cssClass);
         }
     }
+}
+
+function CreateImage(imgSrc, alt) {
+    let img = CreateElement('img');
+    img.setAttribute('src', imgSrc);
+    if (!isBlank(alt)) {
+        img.setAttribute('alt', alt);
+    }
+    return img;
 }
