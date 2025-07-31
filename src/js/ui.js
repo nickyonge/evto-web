@@ -45,7 +45,7 @@ export function BuildUI() {
 /* Unique UI element generation */
 
 function CreateTopBar() {
-    let titleContainer = CreateDivWithClass('title');
+    let titleContainer = CreateDivWithClass('title', 'preventSelect');
     let subtitle = AddElementTo(titleContainer, 'h3');
     let title = AddElementTo(titleContainer, 'h1');
     subtitle.innerText = "Everywhere Together";
