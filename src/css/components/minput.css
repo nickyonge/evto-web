@@ -9,7 +9,7 @@ https://uiverse.io/alexruix/evil-parrot-59 */
     position: relative;
     /* height: 100%; */
     width: 200px;
-    top: 5px;
+    top: -2px;
 }
 
 .minput {
@@ -28,6 +28,7 @@ https://uiverse.io/alexruix/evil-parrot-59 */
     border: 1px solid #5e4dcd;
     border-radius: 6px 0 0 6px;
     background-color: #66449966;
+    font-family: 'Inclusive Sans', 'Helvetica Neue', Helvetica, sans-serif;
 }
 
 .mbuttonSubmit {

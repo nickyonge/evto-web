@@ -3,14 +3,12 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
 
 .sbWrapper {
     --outer-button-buffer-size: -6.9px;
-
     display: inline-flex;
     list-style: none;
     height: 100%;
     margin: 0;
     padding: 0;
     margin-left: 32px;
-    font-family: "Poppins", sans-serif;
     justify-content: left;
 }
 
@@ -111,8 +109,8 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
 }
 .sbWrapper .github img {
     margin-left: 0px;
-    margin-top: 0px;
-    height: 75%;
+    margin-top: -1px;
+    height: 76%;
 }
 .sbWrapper .github:hover img {
     margin-left: -2px;

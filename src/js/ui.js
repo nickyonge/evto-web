@@ -1,7 +1,7 @@
 import svgGithub from '../assets/svg/github.svg';
 import svgInstagram from '../assets/svg/instagram.svg';
 
-const _useDemoBGColors = true;
+const _useDemoBGColors = false;
 
 let content = null;
 let topBar = null;
