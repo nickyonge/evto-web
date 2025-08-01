@@ -3,8 +3,8 @@ https://uiverse.io/alexruix/evil-parrot-59 */
 
 .minput-group {
     display: inline;
-    align-items:normal;
-    justify-content: center;
+    /* align-items:normal; */
+    /* justify-content: center; */
     /* vertical-align: middle; */
     position: relative;
     /* height: 100%; */
@@ -14,7 +14,7 @@ https://uiverse.io/alexruix/evil-parrot-59 */
 
 .minput {
     padding: 0;
-    display: inline;
+    display: inline-flex;
     position: absolute;
     align-items:normal;
     justify-content: center;
@@ -32,7 +32,9 @@ https://uiverse.io/alexruix/evil-parrot-59 */
 }
 
 .mbuttonSubmit {
-    min-height: 50px;
+    display: inline-flex;
+    position: absolute;
+    /* min-height: 50px; */
     padding: .5em 1em;
     border: none;
     border-radius: 0 6px 6px 0;

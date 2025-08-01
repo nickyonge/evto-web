@@ -99,7 +99,7 @@ function CreateBottomBar() {
     mailButton.setAttribute('value', 'Subscribe');
     mailButton.setAttribute('type', 'submit');
     mailGroup.appendChild(mailInput);
-    // mailGroup.appendChild(mailButton);
+    mailGroup.appendChild(mailButton);
     btmBar.appendChild(mailGroup);
 }
 function CreateSocialButton(name) {
