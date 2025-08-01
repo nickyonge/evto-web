@@ -59,6 +59,12 @@ https://uiverse.io/alexruix/evil-parrot-59 */
     color: #01153b;
 }
 
+.mbuttonSubmit:active {
+    /* background-color: #d8ebfa; */
+    background-color: #beeeef;
+    color: #01153b;
+}
+
 .minput:focus,
 .minput:focus-visible {
     outline: none;

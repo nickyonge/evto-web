@@ -1,5 +1,6 @@
 import svgGithub from '../assets/svg/github.svg';
 import svgInstagram from '../assets/svg/instagram.svg';
+import svgBluesky from '../assets/svg/bluesky.svg';
 
 const _useDemoBGColors = false;
 
@@ -85,8 +86,9 @@ function CreateHamburgerButton() {
 function CreateBottomBar() {
     // ------------------------------ create social buttons 
     let ul = CreateElementWithClass('ul', 'sbWrapper');
-    ul.appendChild(CreateSocialButton('Instagram'));
     ul.appendChild(CreateSocialButton('GitHub'));
+    ul.appendChild(CreateSocialButton('Instagram'));
+    ul.appendChild(CreateSocialButton('Bluesky'));
     btmBar.appendChild(ul);
     // ------------------------------ create mailing list join 
     let mailGroup = CreateDivWithClass('minput-group');
@@ -118,6 +120,8 @@ function GetImgByName(name) {
             return svgGithub;
         case "instagram":
             return svgInstagram;
+        case "bluesky":
+            return svgBluesky;
     }
     console.warn("Could not GetImgByName from name: " + name);
     return null;

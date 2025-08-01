@@ -42,70 +42,86 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
 
 .sbWrapper .tooltip {
     position: absolute;
-    top: 0;
+    top: -25px;
     font-size: 14px;
-    background: #fff;
+    /* background: #fff; */
     color: #fff;
     padding: 5px 8px;
     border-radius: 5px;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
     opacity: 0;
     pointer-events: none;
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transition: all 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
 .sbWrapper .tooltip::before {
     position: absolute;
     content: "";
-    height: 8px;
-    width: 8px;
-    background: #fff;
-    bottom: -3px;
+    height: 0px;
+    width: 0px;
+    /* background: #fff; */
+    bottom: 3px;
     left: 50%;
     transform: translate(-50%) rotate(45deg);
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transition: all 0.213s cubic-bezier(0.68,-0.55,0.265,1.55);
+}
+.sbWrapper .icon:hover .tooltip::before {
+    bottom: -3.69px;
+    height: 8px;
+    width: 8px;
+    transition: all 0.369s ease-out;
 }
 
 .sbWrapper .icon:hover .tooltip {
+    transition: all 0.3s cubic-bezier(.21,.53,.26,1.55);
     top: -45px;
     opacity: 1;
     visibility: visible;
     pointer-events: auto;
 }
 
+.sbWrapper .icon:active .tooltip {
+    top: -40px;
+}
+
 .sbWrapper .icon:hover span,
 .sbWrapper .icon:hover .tooltip {
-    text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.1);
-}
-
-.sbWrapper .instagram:hover,
-.sbWrapper .instagram:hover .tooltip {
-    background: #e4405f;
-    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
-    color: #fff;
-}
-.sbWrapper .instagram:hover .tooltip::before {
-    background: #e4405f;
-    background: linear-gradient(45deg, #e6683c -50%, #dc2743 125%);
-    color: #fff;
-}
-
-.sbWrapper .github:hover,
-.sbWrapper .github:hover .tooltip,
-.sbWrapper .github:hover .tooltip::before {
-    background: #1b1f24;
-    color: #fff;
+    /* z-index: 2; */
+    text-shadow: 
+        /* 0px -1px 0px rgba(0, 0, 0, 0.1),
+        0px 1.5px 6.9px rgba(0, 0, 0, 0.69); */
 }
 
 .sbWrapper .icon img {
     position: absolute;
     transition: all 0.15s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
+
 .sbWrapper .instagram img {
     height: 69%;
 }
 .sbWrapper .instagram:hover img {
     height: 100%;
+}
+.sbWrapper .instagram,
+.sbWrapper .instagram .tooltip {
+    background: #e4405f;
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: #fff;
+}
+.sbWrapper .instagram .tooltip::before {
+    background: #e4405f;
+    background: linear-gradient(135deg,rgba(224, 79, 62, 0) 0%, rgba(224, 71, 63, 0) 36.9%, rgba(224, 69, 64, 1) 49%, rgba(212, 53, 62, 1) 100%);
+    color: #fff;
+}
+
+.sbWrapper .github .tooltip {
+    background: linear-gradient(0deg, #1b1f24 20%, #252a30 100%);
+}
+.sbWrapper .github,
+.sbWrapper .github .tooltip::before {
+    background: #1b1f24;
+    color: #fff;
 }
 .sbWrapper .github img {
     margin-left: 0px;
@@ -117,3 +133,28 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
     margin-top: -2px;
     height: 110%;
 }
+
+.sbWrapper .bluesky .tooltip {
+    background: linear-gradient(0deg, #1185fe 20%, #3597ff 125%);
+}
+.sbWrapper .bluesky .tooltip::before {
+    background: #1185fe;
+    color: #fff;
+}
+.sbWrapper .bluesky {
+    background: #3597ff;
+    /* background: #1185fe; */
+    color: #fff;
+}
+.sbWrapper .bluesky img {
+    margin-left: 0px;
+    margin-top: 1px;
+    height: 60%;
+}
+.sbWrapper .bluesky:hover img {
+    margin-left: 0px;
+    margin-top: -1px;
+    height: 92%;
+}
+
+/* 1185fe */
