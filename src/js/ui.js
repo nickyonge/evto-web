@@ -9,6 +9,8 @@ let artWindow = null;
 let dataWindow = null;
 let btmBar = null;
 
+const _placeholderEmailText = "Duck Pond Newsletter";
+
 /**
  * check if a string is null, empty, or whitespace
  * @param {string} str input string to test 
@@ -81,10 +83,24 @@ function CreateHamburgerButton() {
 
 
 function CreateBottomBar() {
+    // ------------------------------ create social buttons 
     let ul = CreateElementWithClass('ul', 'sbWrapper');
     ul.appendChild(CreateSocialButton('Instagram'));
     ul.appendChild(CreateSocialButton('GitHub'));
     btmBar.appendChild(ul);
+    // ------------------------------ create mailing list join 
+    let mailGroup = CreateDivWithClass('minput-group');
+    let mailInput = CreateElementWithClass('input', 'minput');
+    mailInput.setAttribute('id', 'Email');
+    mailInput.setAttribute('name', 'Email');
+    mailInput.setAttribute('placeholder', _placeholderEmailText);
+    mailInput.setAttribute('autocomplete', 'off');
+    let mailButton = CreateElementWithClass('input', 'mbuttonSubmit');
+    mailButton.setAttribute('value', 'Subscribe');
+    mailButton.setAttribute('type', 'submit');
+    mailGroup.appendChild(mailInput);
+    // mailGroup.appendChild(mailButton);
+    btmBar.appendChild(mailGroup);
 }
 function CreateSocialButton(name) {
     let li = CreateElementWithClass('li', 'icon', name.toLowerCase());

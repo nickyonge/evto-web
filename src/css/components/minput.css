@@ -1,39 +1,53 @@
 /* mailing list text input
 https://uiverse.io/alexruix/evil-parrot-59 */
 
-.input-group {
-  display: flex;
-  align-items: center;
+.minput-group {
+    display: inline;
+    align-items:normal;
+    justify-content: center;
+    /* vertical-align: middle; */
+    position: relative;
+    /* height: 100%; */
+    width: 200px;
+    top: 5px;
 }
 
-.input {
-  min-height: 50px;
-  max-width: 150px;
-  padding: 0 1rem;
-  color: #fff;
-  font-size: 15px;
-  border: 1px solid #5e4dcd;
-  border-radius: 6px 0 0 6px;
-  background-color: transparent;
+.minput {
+    padding: 0;
+    display: inline;
+    position: absolute;
+    align-items:normal;
+    justify-content: center;
+    height: 30px;
+    width: 250px;
+    max-width: 50vw;
+    padding: 0 1rem;
+    color: #fff;
+    font-size: 15px;
+    border: 0;
+    border: 1px solid #5e4dcd;
+    border-radius: 6px 0 0 6px;
+    background-color: #66449966;
 }
 
-.button--submit {
-  min-height: 50px;
-  padding: .5em 1em;
-  border: none;
-  border-radius: 0 6px 6px 0;
-  background-color: #5e4dcd;
-  color: #fff;
-  font-size: 15px;
-  cursor: pointer;
-  transition: background-color .3s ease-in-out;
+.mbuttonSubmit {
+    min-height: 50px;
+    padding: .5em 1em;
+    border: none;
+    border-radius: 0 6px 6px 0;
+    background-color: #5e4dcd;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background-color .3s ease-in-out;
 }
 
-.button--submit:hover {
-  background-color: #5e5dcd;
+.mbuttonSubmit:hover {
+    background-color: #5e5dcd;
 }
 
-.input:focus, .input:focus-visible {
-  border-color: #3898EC;
-  outline: none;
+.minput:focus,
+.minput:focus-visible {
+    border-color: #3898EC;
+    outline: none;
 }
