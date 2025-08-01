@@ -11,7 +11,7 @@ let dataWindow = null;
 let btmBar = null;
 
 const _placeholderEmailText = "Duck Pond Newsletter";
-const _slidingButtonText = "Kickstarter";
+const _slidingButtonText = "Live now on Kickstarter!";
 
 /**
  * check if a string is null, empty, or whitespace

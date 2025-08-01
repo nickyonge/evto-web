@@ -1,23 +1,25 @@
 /* sliding arrow button
 https://uiverse.io/cssbuttons-io/massive-mayfly-74 */
 
-button {
+button.slidingbtn {
  position: relative;
- display: inline-block;
+ display: inline;
+ 
  cursor: pointer;
  outline: none;
  border: 0;
- vertical-align: middle;
+ vertical-align: top;
  text-decoration: none;
  background: transparent;
  padding: 0;
  font-size: inherit;
  font-family: inherit;
-}
+ width: var(--ui-footer-kickstarter-width);
+ height: 30px;
 
-button.slidingbtn {
- width: 12rem;
- height: auto;
+ padding-right: 10px;
+ /* right: 10px; */
+ float:right;
 }
 
 button.slidingbtn .circle {
@@ -25,10 +27,10 @@ button.slidingbtn .circle {
  position: relative;
  display: block;
  margin: 0;
- width: 3rem;
- height: 3rem;
- background: #282936;
- border-radius: 1.625rem;
+ width: 30px;
+ height: 30px;
+ background: var(--color-ui-button);
+ border-radius: 15px;
 }
 
 button.slidingbtn .circle .icon {
@@ -37,7 +39,8 @@ button.slidingbtn .circle .icon {
  top: 0;
  bottom: 0;
  margin: auto;
- background: #fff;
+ margin-left: -8px;
+ background: var(--color-ui-dark);
 }
 
 button.slidingbtn .circle .icon.arrow {
@@ -55,8 +58,9 @@ button.slidingbtn .circle .icon.arrow::before {
  right: 0.0625rem;
  width: 0.625rem;
  height: 0.625rem;
- border-top: 0.125rem solid #fff;
- border-right: 0.125rem solid #fff;
+ border-top: 0.125rem solid var(--color-ui-dark);
+ border-right: 0.125rem solid var(--color-ui-dark);
+ transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
  transform: rotate(45deg);
 }
 
@@ -67,24 +71,32 @@ button.slidingbtn .button-text {
  left: 0;
  right: 0;
  bottom: 0;
- padding: 0.75rem 0;
- margin: 0 0 0 1.85rem;
- color: #282936;
+ padding: 0;
+ margin: 0;
+ margin-top: 1px;
+ margin-left: 38px;
+ color: var(--color-ui-verylight);
  font-weight: 700;
  line-height: 1.6;
- text-align: center;
- text-transform: uppercase;
+ text-align: left;
+ align-self: center;
+ /* text-transform: uppercase; */
 }
 
 button:hover .circle {
  width: 100%;
+ background: var(--color-ui-verylight);
 }
 
 button:hover .circle .icon.arrow {
- background: #fff;
- transform: translate(1rem, 0);
+ background: var(--color-ui-verydark);
+ transform: translate(8px, 0);
+}
+button.slidingbtn:hover .circle .icon.arrow::before {
+ border-top: 0.125rem solid var(--color-ui-verydark);
+ border-right: 0.125rem solid var(--color-ui-verydark);
 }
 
 button:hover .button-text {
- color: #fff;
+ color: var(--color-ui-verydark);
 }
