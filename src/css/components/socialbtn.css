@@ -86,10 +86,9 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
 
 .sbWrapper .icon:hover span,
 .sbWrapper .icon:hover .tooltip {
-    /* z-index: 2; */
     text-shadow: 
-        /* 0px -1px 0px rgba(0, 0, 0, 0.1),
-        0px 1.5px 6.9px rgba(0, 0, 0, 0.69); */
+        0px -1px 0px rgba(0, 0, 0, 0.1),
+        0px 1.5px 6.9px rgba(0, 0, 0, 0.69);
 }
 
 .sbWrapper .icon img {
