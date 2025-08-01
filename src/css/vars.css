@@ -19,4 +19,8 @@
     --ui-footer-height: 40px;
     --ui-art-window-ratio: 0.8fr;
 
+    --ui-footer-email-bar-width: 250px;
+    --ui-footer-email-bar-iconspace: 32px;
+    --ui-footer-emali-btn-width: 100px;
+
 }
