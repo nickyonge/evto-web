@@ -1,3 +1,5 @@
+import svgGithub from '../assets/svg/github.svg';
+import svgInstagram from '../assets/svg/instagram.svg';
 
 const _useDemoBGColors = true;
 
@@ -18,7 +20,7 @@ const isBlank = str => !str || !str.trim();
 export function BuildUI() {
 
     // top bar
-
+    console.log("WPP: " + __webpack_public_path__);
     content = CreateDivWithID('content');
     topBar = AddElementTo(content, 'header');
     artWindow = AddElementTo(content, 'artWindow');
@@ -89,9 +91,20 @@ function CreateSocialButton(name) {
     let tt = CreateElementWithClass('span', 'tooltip');
     tt.innerText = name;
     li.appendChild(tt);
-    let img = CreateImage('../assets/svg/' + name.toLowerCase() + '.svg');
+    let img = CreateImage(GetImgByName(name), name);
     li.appendChild(img);
     return li;
+}
+
+function GetImgByName(name) {
+    switch (name.toLowerCase()) {
+        case "github":
+            return svgGithub;
+        case "instagram":
+            return svgInstagram;
+    }
+    console.warn("Could not GetImgByName from name: " + name);
+    return null;
 }
 
 
