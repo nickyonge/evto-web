@@ -15,12 +15,12 @@ button {
  font-family: inherit;
 }
 
-button.learn-more {
+button.slidingbtn {
  width: 12rem;
  height: auto;
 }
 
-button.learn-more .circle {
+button.slidingbtn .circle {
  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
  position: relative;
  display: block;
@@ -31,7 +31,7 @@ button.learn-more .circle {
  border-radius: 1.625rem;
 }
 
-button.learn-more .circle .icon {
+button.slidingbtn .circle .icon {
  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
  position: absolute;
  top: 0;
@@ -40,7 +40,7 @@ button.learn-more .circle .icon {
  background: #fff;
 }
 
-button.learn-more .circle .icon.arrow {
+button.slidingbtn .circle .icon.arrow {
  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
  left: 0.625rem;
  width: 1.125rem;
@@ -48,7 +48,7 @@ button.learn-more .circle .icon.arrow {
  background: none;
 }
 
-button.learn-more .circle .icon.arrow::before {
+button.slidingbtn .circle .icon.arrow::before {
  position: absolute;
  content: "";
  top: -0.29rem;
@@ -60,7 +60,7 @@ button.learn-more .circle .icon.arrow::before {
  transform: rotate(45deg);
 }
 
-button.learn-more .button-text {
+button.slidingbtn .button-text {
  transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
  position: absolute;
  top: 0;

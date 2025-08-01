@@ -11,6 +11,7 @@ let dataWindow = null;
 let btmBar = null;
 
 const _placeholderEmailText = "Duck Pond Newsletter";
+const _slidingButtonText = "Kickstarter";
 
 /**
  * check if a string is null, empty, or whitespace
@@ -103,6 +104,8 @@ function CreateBottomBar() {
     mailGroup.appendChild(mailInput);
     mailGroup.appendChild(mailButton);
     btmBar.appendChild(mailGroup);
+    // create sliding button
+    btmBar.appendChild(CreateSlidingButton());
 }
 function CreateSocialButton(name) {
     let li = CreateElementWithClass('li', 'icon', name.toLowerCase());
@@ -125,6 +128,18 @@ function GetImgByName(name) {
     }
     console.warn("Could not GetImgByName from name: " + name);
     return null;
+}
+
+function CreateSlidingButton() {
+    let btn = CreateElementWithClass('button', 'slidingbtn');
+    let circle = CreateElementWithClass('span', 'circle');
+    circle.setAttribute('aria-hidden', 'true');
+    circle.appendChild(CreateElementWithClass('span', 'icon', 'arrow'));
+    btn.appendChild(circle);
+    let text = CreateElementWithClass('span', 'button-text');
+    text.innerText = _slidingButtonText;
+    btn.appendChild(text);
+    return btn;
 }
 
 
