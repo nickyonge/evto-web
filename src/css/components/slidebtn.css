@@ -2,101 +2,104 @@
 https://uiverse.io/cssbuttons-io/massive-mayfly-74 */
 
 button.slidingbtn {
- position: relative;
- display: inline;
- 
- cursor: pointer;
- outline: none;
- border: 0;
- vertical-align: top;
- text-decoration: none;
- background: transparent;
- padding: 0;
- font-size: inherit;
- font-family: inherit;
- width: var(--ui-footer-kickstarter-width);
- height: 30px;
+    position: relative;
+    display: inline;
 
- padding-right: 10px;
- /* right: 10px; */
- float:right;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: top;
+    text-decoration: none;
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+    font-family: inherit;
+    width: var(--ui-footer-kickstarter-width);
+    height: 30px;
+
+    right: 15px;
+    float: right;
 }
 
 button.slidingbtn .circle {
- transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
- position: relative;
- display: block;
- margin: 0;
- width: 30px;
- height: 30px;
- background: var(--color-ui-button);
- border-radius: 15px;
+    transition: all 0.213s cubic-bezier(0.69, 0, 0.069, 1);
+    position: relative;
+    display: block;
+    margin: 0;
+    width: 30px;
+    height: 30px;
+    background: var(--color-ui-button);
+    border-radius: 15px;
 }
 
 button.slidingbtn .circle .icon {
- transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
- position: absolute;
- top: 0;
- bottom: 0;
- margin: auto;
- margin-left: -8px;
- background: var(--color-ui-dark);
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    margin-left: -8px;
+    background: var(--color-ui-dark);
 }
 
 button.slidingbtn .circle .icon.arrow {
- transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
- left: 0.625rem;
- width: 1.125rem;
- height: 0.125rem;
- background: none;
+    transition: all 0.213s cubic-bezier(0.69, 0, 0.069, 1);
+    left: 0.625rem;
+    width: 1.125rem;
+    height: 0.125rem;
+    background: none;
 }
 
 button.slidingbtn .circle .icon.arrow::before {
- position: absolute;
- content: "";
- top: -0.29rem;
- right: 0.0625rem;
- width: 0.625rem;
- height: 0.625rem;
- border-top: 0.125rem solid var(--color-ui-dark);
- border-right: 0.125rem solid var(--color-ui-dark);
- transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
- transform: rotate(45deg);
+    position: absolute;
+    content: "";
+    top: -0.29rem;
+    right: 0.0625rem;
+    width: 0.625rem;
+    height: 0.625rem;
+    border-top: 0.125rem solid var(--color-ui-dark);
+    border-right: 0.125rem solid var(--color-ui-dark);
+    transition: all 0.213s cubic-bezier(0.69, 0, 0.069, 1);
+    transform: rotate(45deg);
 }
 
 button.slidingbtn .button-text {
- transition: all 0.45s cubic-bezier(0.65, 0, 0.076, 1);
- position: absolute;
- top: 0;
- left: 0;
- right: 0;
- bottom: 0;
- padding: 0;
- margin: 0;
- margin-top: 1px;
- margin-left: 38px;
- color: var(--color-ui-verylight);
- font-weight: 700;
- line-height: 1.6;
- text-align: left;
- align-self: center;
- /* text-transform: uppercase; */
+    transition: all 0.2s cubic-bezier(0.69, 0, 0.069, 1);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 0;
+    margin: 0;
+    margin-top: 1px;
+    margin-left: 38px;
+    color: var(--color-ui-verylight);
+    font-weight: 700;
+    line-height: 1.6;
+    text-align: left;
+    align-self: center;
+    /* text-transform: uppercase; */
 }
 
 button:hover .circle {
- width: 100%;
- background: var(--color-ui-verylight);
+    width: 100%;
+    background: var(--color-ui-verylight);
 }
-
+button:active .circle {
+    width: 100%;
+    /* make selected colour transition faster */
+    transition: all 0.069s ease-out;
+    background: var(--color-ui-active);
+}
 button:hover .circle .icon.arrow {
- background: var(--color-ui-verydark);
- transform: translate(8px, 0);
+    background: var(--color-ui-verydark);
+    transform: translate(8px, 0);
 }
 button.slidingbtn:hover .circle .icon.arrow::before {
- border-top: 0.125rem solid var(--color-ui-verydark);
- border-right: 0.125rem solid var(--color-ui-verydark);
+    border-top: 0.125rem solid var(--color-ui-verydark);
+    border-right: 0.125rem solid var(--color-ui-verydark);
 }
 
 button:hover .button-text {
- color: var(--color-ui-verydark);
+    color: var(--color-ui-verydark);
 }

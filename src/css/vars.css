@@ -1,13 +1,17 @@
 :root {
 
     --color-text-body: #a4c4ef;
-    
     --color-ui-button: #a4c4ef;
 
+    --color-ui-ultralight: #e1f1fd;
     --color-ui-verylight: #c6e1fa;
     --color-ui-light: #a4c4ef;
     --color-ui-dark: #3875d6;
     --color-ui-verydark: #225bc8;
+    --color-ui-ultradark: #2a4880;
+    --color-ui-black: #01153b;
+
+    --color-ui-active: #beeeef;
 
     --color-bg-solid: #beeeef;
     /* TODO: wide/short replace bg solid with linear gradient */
@@ -29,6 +33,6 @@
     --ui-footer-email-bar-width: 250px;
     --ui-footer-email-bar-iconspace: 32px;
     --ui-footer-emali-btn-width: 100px;
-    --ui-footer-kickstarter-width: 230px;
+    --ui-footer-kickstarter-width: 220px;
 
 }

@@ -108,7 +108,7 @@ function CreateBottomBar() {
     btmBar.appendChild(CreateSlidingButton());
 }
 function CreateSocialButton(name) {
-    let li = CreateElementWithClass('li', 'icon', name.toLowerCase());
+    let li = CreateElementWithClass('li', 'icon', name.toLowerCase(), 'preventSelect');
     let tt = CreateElementWithClass('span', 'tooltip');
     tt.innerText = name;
     li.appendChild(tt);
@@ -136,7 +136,7 @@ function CreateSlidingButton() {
     circle.setAttribute('aria-hidden', 'true');
     circle.appendChild(CreateElementWithClass('span', 'icon', 'arrow'));
     btn.appendChild(circle);
-    let text = CreateElementWithClass('span', 'button-text');
+    let text = CreateElementWithClass('span', 'button-text', 'preventSelect');
     text.innerText = _slidingButtonText;
     btn.appendChild(text);
     return btn;
