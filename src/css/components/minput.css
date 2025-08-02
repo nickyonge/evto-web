@@ -13,7 +13,6 @@ https://uiverse.io/alexruix/evil-parrot-59 */
     /* right justify */
     /* float: right;
     padding-right: 25px; */
-
 }
 
 .minput {
@@ -25,7 +24,7 @@ https://uiverse.io/alexruix/evil-parrot-59 */
     max-width: calc(100vw - 335px);
     padding-left: var(--ui-footer-email-bar-iconspace);
     padding-right: 10px;
-    color:var(--color-ui-ultralight);
+    color: var(--color-ui-ultralight);
     font-size: 10pt;
     border: none;
     border-radius: 12px 0 0 12px;
@@ -33,8 +32,20 @@ https://uiverse.io/alexruix/evil-parrot-59 */
     font-family: 'Inclusive Sans', 'Helvetica Neue', Helvetica, sans-serif;
 }
 
+/* match width to var(--viewport-bottombar-wrap) in vars.css */
+@media screen and (max-width: 750px) {
+    .minput-group {
+        float: right;
+        /* margin-right: 10px; */
+        right: 10px;
+    }
+    .minput {
+        max-width: auto;
+    }
+}
+
 .minput::placeholder {
-    color:var(--color-text-body);
+    color: var(--color-text-body);
 }
 
 .mbuttonSubmit {

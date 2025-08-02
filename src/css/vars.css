@@ -1,5 +1,7 @@
 :root {
 
+    --viewport-bottombar-wrap: 750px;
+
     --color-text-body: #a4c4ef;
     --color-ui-button: #a4c4ef;
 
