@@ -28,6 +28,7 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
     flex-direction: column;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+    transform: scale(1);
     transition: all 0.2s cubic-bezier(0.69, -0.55, 0.265, 1.55);
 }
 
@@ -42,7 +43,7 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
 
 .sbWrapper .tooltip {
     position: absolute;
-    top: -25px;
+    top: -32px;
     font-size: 14px;
     /* background: #fff; */
     color: #fff;
@@ -80,8 +81,14 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
     pointer-events: auto;
 }
 
+.sbWrapper .icon:active {
+    transition: all 0.075s ease-out;
+    transform: scale(0.8);
+}
 .sbWrapper .icon:active .tooltip {
-    top: -40px;
+    transition: all 0.069s ease-out;
+    transform: scale(1.2);
+    top: -50px;
 }
 
 .sbWrapper .icon:hover span,
@@ -155,5 +162,3 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
     margin-top: -1px;
     height: 92%;
 }
-
-/* 1185fe */

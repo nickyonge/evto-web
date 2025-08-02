@@ -22,6 +22,7 @@ https://uiverse.io/alexruix/evil-parrot-59 */
     position: relative;
     height: 30px;
     width: calc(var(--ui-footer-email-bar-width) - var(--ui-footer-email-bar-iconspace) - 10px);
+    max-width: calc(100vw - 335px);
     padding-left: var(--ui-footer-email-bar-iconspace);
     padding-right: 10px;
     color:var(--color-ui-ultralight);
