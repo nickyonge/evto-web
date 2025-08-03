@@ -108,7 +108,7 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({
             //                                          webpage title here
-            title: 'New Website',
+            title: 'Canvas Visualizer',
         }),
     ],
 

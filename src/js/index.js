@@ -5,7 +5,7 @@ import(/* webpackPreload: true */ './../css/components/minput.css');
 import(/* webpackPreload: true */ './../css/components/socialbtn.css');
 import(/* webpackPreload: true */ './../css/components/slidebtn.css');
 
-import { BuildUI } from './ui';
+import { BuildUI } from './uiMain';
 
 window.addEventListener('load', function () {
     console.log("page loaded");
