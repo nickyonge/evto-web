@@ -114,7 +114,7 @@ export function AddElementAttributes(element, attTypes, attValues) {
         console.error("ERROR: attribute types and values array lengths must match");
         return;
     }
-    for (let i = 0; i < attTypes; i++) {
+    for (let i = 0; i < attTypes.length; i++) {
         AddElementAttribute(element, attTypes[i], attValues[i]);
     }
 }
