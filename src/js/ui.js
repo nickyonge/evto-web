@@ -3,16 +3,16 @@
 import { isBlank } from "./lilutils";
 
 /**
- * Create a DIV element
- * @returns {Element} newly made HTML <div> element
+ * Create a DIV HTMLElement
+ * @returns {HTMLElement} newly made HTML <div> element
  */
 export function CreateDiv() {
     return CreateElement('div'); 
 }
 /**
- * Create a DIV element with the given ID
+ * Create a DIV HTMLElement with the given ID
  * @param {string} id ID value
- * @returns {Element} newly made HTML <div> element
+ * @returns {HTMLElement} newly made HTML <div> element
  */
 export function CreateDivWithID(id) {
     let div = CreateDiv();
@@ -20,9 +20,9 @@ export function CreateDivWithID(id) {
     return div;
 }
 /**
- * Create a DIV element with the given CSS class(es)
+ * Create a DIV HTMLElement with the given CSS class(es)
  * @param {...string} cssClasses one or more CSS classes to add
- * @returns {Element} newly made HTML <div> element
+ * @returns {HTMLElement} newly made HTML <div> element
  */
 export function CreateDivWithClass(...cssClasses) {
     let div = CreateDiv();
@@ -30,10 +30,10 @@ export function CreateDivWithClass(...cssClasses) {
     return div;
 }
 /**
- * Create a DIV element with the given ID and CSS class(es)
+ * Create a DIV HTMLElement with the given ID and CSS class(es)
  * @param {string} id ID value
  * @param {...string} cssClasses one or more CSS classes to add
- * @returns {Element} newly made HTML <div> element
+ * @returns {HTMLElement} newly made HTML <div> element
  */
 export function CreateDivWithIDAndClasses(id, ...cssClasses) {
     let div = CreateDiv();
@@ -42,11 +42,11 @@ export function CreateDivWithIDAndClasses(id, ...cssClasses) {
     return div;
 }
 /**
- * Creates a new element of the given type (newElement) 
+ * Creates a new HTMLElement of the given type (newElement) 
  * and appends it as a child to the given pre-existing element (domElement)
- * @param {Element} domElement existing element which will be newElement's parent
- * @param {string} newElement element type to create and append as a child to domElement
- * @returns {Element} returns the newly created element
+ * @param {HTMLElement} domElement existing HTMLElement which will be newElement's parent
+ * @param {string} newElement HTMLElement type to create and append as a child to domElement
+ * @returns {HTMLElement} returns the newly created HTMLElement
  */
 export function AddElementTo(domElement, newElement) {
     let element = CreateElement(newElement);
@@ -54,18 +54,18 @@ export function AddElementTo(domElement, newElement) {
     return element;
 }
 /**
- * Create a new element of the given type
- * @param {string} newElement type of element
- * @returns {Element}
+ * Create a new HTMLElement of the given type
+ * @param {string} newElement type of HTMLElement
+ * @returns {HTMLElement}
  */
 export function CreateElement(newElement) {
     return document.createElement(newElement);
 }
 /**
- * Create a new element of the given type, with one or more CSS classes
+ * Create a new HTMLElement of the given type, with one or more CSS classes
  * @param {string} newElement 
  * @param  {...string} cssClasses 
- * @returns {Element} returns element with the given CSS class name(s)
+ * @returns {HTMLElement} returns HTMLElement with the given CSS class name(s)
  */
 export function CreateElementWithClass(newElement, ...cssClasses) {
     let element = CreateElement(newElement);
@@ -74,8 +74,8 @@ export function CreateElementWithClass(newElement, ...cssClasses) {
 }
 
 /**
- * Adds the given class(es) to the given DOM element (one element, multiple classes)
- * @param {Element} domElement DOM element to add the given classes to
+ * Adds the given class(es) to the given HTMLElement (one element, multiple classes)
+ * @param {HTMLElement} domElement HTMLElement to add the given classes to
  * @param  {...string} cssClasses one or more classes to add to the domElement
  * @returns 
  */
@@ -91,9 +91,9 @@ export function AddClassesToDOM(domElement, ...cssClasses) {
     }
 }
 /**
- * Adds the given class to the given DOM element(s) (one class, multiple elements)
+ * Adds the given class to the given HTMLElement(s) (one class, multiple elements)
  * @param {string} cssClass Class to add
- * @param  {...Element} domElements DOM Element(s) to add the class to
+ * @param  {...Element} domElements HTMLElement(s) to add the class to
  */
 export function AddClassToDOMs(cssClass, ...domElements) {
     for (let i = 0; i < domElements.length; i++) {
@@ -104,8 +104,8 @@ export function AddClassToDOMs(cssClass, ...domElements) {
 }
 
 /**
- * Sets the given attributes on the given element (attTypes and attValues lengths must match)
- * @param {Element} element Element to add attributes to
+ * Sets the given attributes on the given HTMLElement (attTypes and attValues lengths must match)
+ * @param {HTMLElement} element HTMLElement to add attributes to
  * @param {string[]} attTypes Array of attribute types (qualifiedNames)
  * @param {string[]} attValues Array of values of attributes
  */
@@ -120,8 +120,8 @@ export function AddElementAttributes(element, attTypes, attValues) {
 }
 
 /**
- * Sets the given attribute on the given element
- * @param {Element} element Element to add attribute to
+ * Sets the given attribute on the given HTMLElement
+ * @param {HTMLElement} element HTMLElement to add attribute to
  * @param {string} attTypes Type (qualifiedName) of attribute
  * @param {string} attValues Value of attributue
  */
