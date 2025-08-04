@@ -201,7 +201,7 @@ h2.tab-title.tab-default {
   margin-bottom: 0pt !important;
   margin-top: 6pt;
   height: 22pt;
-  text-fill-color: transparent !important;
+  /* text-fill-color: transparent !important; */ /* commented to ignore problem */
   background-clip: text !important;
   -webkit-text-fill-color: transparent !important;
   -webkit-background-clip: text !important;
