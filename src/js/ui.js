@@ -104,6 +104,32 @@ export function AddClassToDOMs(cssClass, ...domElements) {
 }
 
 /**
+ * Sets the given attributes on the given element (attTypes and attValues lengths must match)
+ * @param {Element} element Element to add attributes to
+ * @param {string[]} attTypes Array of attribute types (qualifiedNames)
+ * @param {string[]} attValues Array of values of attributes
+ */
+export function AddElementAttributes(element, attTypes, attValues) {
+    if (attTypes.length != attValues.length) {
+        console.error("ERROR: attribute types and values array lengths must match");
+        return;
+    }
+    for (let i = 0; i < attTypes; i++) {
+        AddElementAttribute(element, attTypes[i], attValues[i]);
+    }
+}
+
+/**
+ * Sets the given attribute on the given element
+ * @param {Element} element Element to add attribute to
+ * @param {string} attTypes Type (qualifiedName) of attribute
+ * @param {string} attValues Value of attributue
+ */
+export function AddElementAttribute(element, attType, attValue) {
+    element.setAttribute(attType, attValue);
+}
+
+/**
  * Creates a new <img> element, and assigns the given src attribute (and optional alt text value)
  * @param {string} imgSrc Value to add to the "src" attribute to the new img
  * @param {string} alt Alt text to provide to the new img (optional)
