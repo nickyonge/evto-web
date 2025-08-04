@@ -54,17 +54,34 @@ export function AddElementTo(domElement, newElement) {
     return element;
 }
 /**
+ * Creates a new HTMLElement of the given type (newElement) with the given CSS class(es)
+ * and appends it as a child to the given pre-existing element (domElement)
+ * @param {HTMLElement} domElement existing HTMLElement which will be newElement's parent
+ * @param {string} newElement HTMLElement type to create and append as a child to domElement
+ * @param  {...string} cssClasses one or more classes to add to the new element. 
+ * If none is specified, uses `newElement` as class name
+ * @returns {HTMLElement} returns the newly created HTMLElement
+ */
+export function AddElementWithClassTo(domElement, newElement, ...cssClasses) {
+    if (cssClasses.length == 0) {
+        cssClasses.push(newElement);
+    }
+    let element = CreateElementWithClass(newElement, ...cssClasses);
+    domElement.appendChild(element);
+    return element;
+}
+/**
  * Create a new HTMLElement of the given type
  * @param {string} newElement type of HTMLElement
- * @returns {HTMLElement}
+ * @returns {HTMLElement} newly created HTMLElement
  */
 export function CreateElement(newElement) {
     return document.createElement(newElement);
 }
 /**
  * Create a new HTMLElement of the given type, with one or more CSS classes
- * @param {string} newElement 
- * @param  {...string} cssClasses 
+ * @param {string} newElement type of new HTMLElement
+ * @param  {...string} cssClasses one or more classes to add to the new element
  * @returns {HTMLElement} returns HTMLElement with the given CSS class name(s)
  */
 export function CreateElementWithClass(newElement, ...cssClasses) {

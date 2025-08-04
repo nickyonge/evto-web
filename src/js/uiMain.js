@@ -23,10 +23,10 @@ export function BuildUI() {
     // top bar
     content = ui.CreateDivWithID('content');
 
-    topBar = ui.AddElementTo(content, 'header');
-    artWindow = ui.AddElementTo(content, 'artWindow');
-    dataWindow = ui.AddElementTo(content, 'dataWindow');
-    btmBar = ui.AddElementTo(content, 'footer');
+    topBar = ui.AddElementWithClassTo(content, 'header');
+    artWindow = ui.AddElementWithClassTo(content, 'artWindow');
+    dataWindow = ui.AddElementWithClassTo(content, 'dataWindow');
+    btmBar = ui.AddElementWithClassTo(content, 'footer');
 
     CreateHeaderFooter(topBar, btmBar);
     CreateDataWindow(dataWindow);
