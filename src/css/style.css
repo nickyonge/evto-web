@@ -66,6 +66,11 @@ footer {
 }
 
 
+dataWindow {
+    
+}
+
+
 .title {
     display: inline-flex;
     flex-direction: column;

@@ -9,7 +9,6 @@ import * as txt from './text';
  * @param {Element} dataWindow 
  */
 export function CreateDataWindow(dataWindow) {
-
     CreateTabs(dataWindow);
 }
 
