@@ -4,7 +4,7 @@ import { CreateHeaderFooter } from "./uiHdFt";
 import { CreateDataWindow } from "./uiData";
 import * as ui from './ui';
 
-const _useDemoBGColors = false;
+const _useDemoBGColors = true;
 
 /** container div for all content on the page @type Element */
 let content = null;

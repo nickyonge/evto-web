@@ -22,7 +22,9 @@ function CreateTabs(dataWindow) {
             ['radio', 'tab' + (i + 1), 'tab']);
         let tabLabel = ui.CreateElement('label'); // label element
         ui.AddElementAttribute(tabLabel, 'for', 'tab' + (i + 1));
-        tabLabel.innerText = txt.TABS[i];
+        let tabText = ui.CreateDivWithClass('text');
+        tabText.innerText = txt.TABS[i];
+        tabLabel.appendChild(tabText);
         // add elements
         tabs.appendChild(tabInput);
         tabs.appendChild(tabLabel);

@@ -22,30 +22,83 @@ body {
     flex-direction: column;
     justify-content: space-around;
     position: relative;
+    float: left;
 }
 
-label {
+.tabs label {
     font-size: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
     font-weight: 700;
     cursor: pointer;
     color: #525d6f;
     opacity: .4;
     transition: opacity .4s ease-in-out;
-    display: block;
     width: calc(100% - 48px);
+    height: calc(100% / 5);
     text-align: right;
     z-index: 100;
     user-select: none;
 }
-input[type="radio"] {
+.tabs label .text {
+    position: relative;
+    display: inline-block;
+    height: auto;
+}
+.tabs input[type="radio"] {
     display: none;
     width: 0;
 }
-label:hover,
-input[type="radio"]:checked+label {
+.tabs label:hover,
+.tabs input[type="radio"]:checked+label {
     opacity: 1;
 }
-.popup {
+.tabMarker {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    /* top: -50%; */
+    left: 0;
+    transition: transform .2s ease-in-out;
+}
+.tabMarker #tmBottom,
+.tabMarker #tmTop {
+    background-color: #ebf0f4;
+    box-shadow: 32px 32px 48px #2e364315;
+}
+.tabMarker #tmTop {
+    height: 200%;
+    /* padding-bottom: calc(200% - calc(100% / 5)); */
+    border-radius: 0 0 32px 0;
+}
+.tabMarker #tmBottom {
+    /* margin-top: calc(50% - calc(100% / 5) - 1px); */
+    /* height: 100%; */
+    border-radius: 0 32px 0 0;
+}
+#tab1:checked~.tabMarker {
+    transform: translateY(calc(calc(100% / 5) * 0));
+}
+#tab2:checked~.tabMarker {
+    transform: translateY(calc(calc(100% / 5) * 1));
+}
+#tab3:checked~.tabMarker {
+    transform: translateY(calc(calc(100% / 5) * 2));
+}
+#tab4:checked~.tabMarker {
+    transform: translateY(calc(calc(100% / 5) * 3));
+}
+#tab5:checked~.tabMarker {
+    transform: translateY(calc(calc(100% / 5) * 4));
+}
+/* #tab6:checked~.tabMarker {
+    transform: translateY(calc(calc(51% / 6) * 5));
+} */
+
+/* .tabs .popup {
     width: 80%;
     height: 80%;
     min-height: 480px;
@@ -56,46 +109,4 @@ input[type="radio"]:checked+label {
     background-color: #dfe6ed;
     overflow: hidden;
     box-shadow: 16px 16px 48px #2e364330;
-}
-.tabMarker {
-    position: absolute;
-    width: 100%;
-    height: 200%;
-    display: flex;
-    flex-direction: column;
-    top: calc(-100%);
-    left: 0;
-    transition: transform .2s ease-in-out;
-}
-.tabMarker #tmBottom,
-.tabMarker #tmTop {
-    background-color: #ebf0f4;
-    box-shadow: 32px 32px 48px #2e364315;
-}
-.tabMarker #tmTop {
-    height: calc(50%);
-    margin-bottom: auto;
-    border-radius: 0 0 32px 0;
-}
-.tabMarker #tmBottom {
-    height: calc(50% - 72px);
-    border-radius: 0 32px 0 0;
-}
-#tab1:checked~.tabMarker {
-    transform: translateY(calc(calc(50% / 5) * 0));
-}
-#tab2:checked~.tabMarker {
-    transform: translateY(calc(calc(50% / 5) * 1));
-}
-#tab3:checked~.tabMarker {
-    transform: translateY(calc(calc(50% / 5) * 2));
-}
-#tab4:checked~.tabMarker {
-    transform: translateY(calc(calc(50% / 5) * 3));
-}
-#tab5:checked~.tabMarker {
-    transform: translateY(calc(calc(50% / 5) * 4));
-}
-/* #tab6:checked~.tabMarker {
-    transform: translateY(calc(calc(51% / 6) * 5));
 } */

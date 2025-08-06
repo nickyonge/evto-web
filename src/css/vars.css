@@ -23,10 +23,12 @@
     /* --color-bg-gradient-1: #beeeef;
     --color-bg-gradient-2: #a4d4f3; */
 
-
     --demo-bg-navbar: #00000022;
     --demo-bg-winart: #88888821;
     --demo-bg-windat: #ffffff23;
+
+    --ui-data-window-margin: 10px;
+
 
     --ui-header-height: 56px;
     --ui-footer-height: 40px;
