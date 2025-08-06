@@ -35,13 +35,14 @@ body {
     color: #525d6f;
     opacity: .4;
     transition: opacity .4s ease-in-out;
-    width: calc(100% - 48px);
-    height: calc(100% / 5);
+    width: 100%;
+    height: 20%;
     text-align: right;
     z-index: 100;
     user-select: none;
 }
 .tabs label .text {
+    padding-right: 48px;
     position: relative;
     display: inline-block;
     height: auto;
@@ -66,17 +67,20 @@ body {
 }
 .tabMarker #tmBottom,
 .tabMarker #tmTop {
+    height: 100%;
+    width: 100%;
+    position: absolute;
     background-color: #ebf0f4;
     box-shadow: 32px 32px 48px #2e364315;
 }
 .tabMarker #tmTop {
-    height: 200%;
-    /* padding-bottom: calc(200% - calc(100% / 5)); */
+    top: -100%;
+    margin-bottom: 1px;
     border-radius: 0 0 32px 0;
 }
 .tabMarker #tmBottom {
-    /* margin-top: calc(50% - calc(100% / 5) - 1px); */
-    /* height: 100%; */
+    top: 20%;
+    margin-top: 1px;
     border-radius: 0 32px 0 0;
 }
 #tab1:checked~.tabMarker {
