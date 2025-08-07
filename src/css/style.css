@@ -67,9 +67,10 @@ footer {
 
 
 dataWindow {
-    height: calc(100% - (var(--ui-data-window-margin) * 2));
+    height: calc(100% - (var(--ui-data-window-margin) * 2) - var(--ui-data-window-bottom-margin));
     overflow: hidden;
     margin: var(--ui-data-window-margin);
+    /* margin-bottom: var(--ui-data-window-bottom-margin); */
 }
 
 
