@@ -1,4 +1,4 @@
-import './css';
+import './css'; // import css classes 
 import { BuildUI } from './uiMain';
 
 window.addEventListener('load', function () {
