@@ -38,7 +38,7 @@ body {
     opacity: .4;
     transition: opacity .4s ease-in-out;
     /* width: 100%; */
-    width: 80px;
+    width: 110px;
     height: 20%;
     text-align: right;
     z-index: 100;
@@ -58,6 +58,16 @@ body {
 
     display: inline-block;
     height: auto;
+}
+.tabs label .icon {
+    /* padding-right: 0px;
+    position: relative;
+    display: inline-block; */
+    width: 24px;
+    margin-left: 10px;
+    height: auto;
+    filter: brightness(0.213);
+    /* display: none; */
 }
 .tabs input[type="radio"] {
     display: none;
