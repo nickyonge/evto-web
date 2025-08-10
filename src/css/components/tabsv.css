@@ -22,6 +22,7 @@ body {
     float: left;
 }
 
+
 .tabs label {
     /* font-size: 9pt; */
     display: flex;
@@ -42,17 +43,8 @@ body {
     /* margin-right: 10px; */
     padding-right: 10px;
     /* background-color: red; */
-    /* background: linear-gradient(#22449966 0%, #22ff9900 5%); */
-
-    padding-bottom: 0px;
-    border: solid;
-    border-width: 0px;
-    border-bottom-width: 1px;
-    border-color: #00000000;
-    border-image: linear-gradient(90deg, #22449900 6.9%, #22449969 69%, #22449900 90%);
-    border-image-slice: 1;
-    transition: border-bottom-width 0.2s linear;
-    transition: padding-bottom 0.2s linear;
+    background: linear-gradient(1.69deg, var(--ui-data-sidebar-transition) 0%, var(--ui-data-sidebar-transparent) 5%);
+    transition: --ui-data-sidebar-transition 0.1s 0.1s;
 }
 @media screen and (max-height: 280px) {
     .tabs label {
@@ -87,10 +79,7 @@ body {
 }
 
 .tabs input[type="radio"]:checked+label {
-    border-bottom-width: 0px;
-    padding-bottom: 1px;
-    transition: border-bottom-width 0.2s linear;
-    transition: padding-bottom 0.2s linear;
+    --ui-data-sidebar-transition: var(--ui-data-sidebar-transparent);
 }
 
 /* .tabs input[type="radio"]:checked+label {
@@ -114,8 +103,8 @@ body {
     box-shadow: 0px 0px 32px #2e364315;
 }
 .tabMarker #tmTop {
-    top: -100%;
-    margin-bottom: 1px;
+    top: calc(-100% - 0.213px);
+    padding-bottom: 0px;
     border-radius: 0 0 var(--ui-data-window-sidebar-rounding) 0;
 }
 .tabMarker #tmBottom {

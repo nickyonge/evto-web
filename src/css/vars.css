@@ -41,3 +41,19 @@
     --ui-footer-kickstarter-width: 220px;
 
 }
+
+@property --ui-data-sidebar-transparent {
+    syntax: '<color>';
+    initial-value: #22449900;
+    inherits: false;
+}
+@property --ui-data-sidebar-opaque {
+    syntax: '<color>';
+    initial-value: #22449969;
+    inherits: false;
+}
+@property --ui-data-sidebar-transition {
+    syntax: '<color>';
+    initial-value: #22449969;
+    inherits: false;
+}
