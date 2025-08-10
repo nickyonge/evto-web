@@ -26,7 +26,14 @@
     --demo-bg-navbar: #00000022;
     --demo-bg-winart: #88888821;
     --demo-bg-windat: #ffffff23;
-    
+
+    --ui-data-sidebar-color-opacity: 0.69;
+    --ui-data-sidebar-color-text: #525d69;
+    --ui-data-sidebar-color-background: #e9f2ff;
+    --ui-data-sidebar-color-shadow: #2e364315;
+
+    --ui-data-sidebar-color-text-selected: #525d69;
+    --ui-data-sidebar-color-opacity-hover-selected: 1;
 
     --ui-data-window-margin: 10px;
     --ui-data-window-bottom-margin: 40px;
@@ -55,6 +62,7 @@
 }
 @property --ui-data-sidebar-transition {
     syntax: '<color>';
+    /* initial-value should match ui-data-sidebar-opaqe */
     initial-value: #22449969;
     inherits: false;
 }

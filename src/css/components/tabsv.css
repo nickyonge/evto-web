@@ -30,9 +30,8 @@ body {
     justify-content: right;
     /* font-weight: 700; */
     cursor: pointer;
-    --ui-data-sidebar-color-text: #525d69;
     color: var(--ui-data-sidebar-color-text);
-    opacity: .4;
+    opacity: var(--ui-data-sidebar-color-opacity);
     transition: opacity .3s ease-in-out;
     width: 110px;
     height: 20%;
@@ -73,15 +72,13 @@ body {
 }
 .tabs label:hover,
 .tabs input[type="radio"]:checked+label {
-    opacity: 1;
+    opacity: var(--ui-data-sidebar-color-opacity-hover-selected);
 }
 
 .tabs input[type="radio"]:checked+label {
     --ui-data-sidebar-transition: var(--ui-data-sidebar-transparent);
 }
 
-/* .tabs input[type="radio"]:checked+label {
-} */
 .tabMarker {
     position: absolute;
     width: 100%;
@@ -97,8 +94,8 @@ body {
     height: 100%;
     width: 100%;
     position: absolute;
-    background-color: #ebf0f4;
-    box-shadow: 0px 0px 32px #2e364315;
+    background-color: var(--ui-data-sidebar-color-background);
+    box-shadow: 0px 0px 32px var(--ui-data-sidebar-color-shadow);
 }
 .tabMarker #tmTop {
     top: calc(-100% - 0.213px);
