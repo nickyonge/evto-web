@@ -32,18 +32,19 @@ body {
     cursor: pointer;
     color: #525d6f;
     opacity: .4;
-    transition: opacity .4s ease-in-out;
-    /* width: 100%; */
+    transition: opacity .3s ease-in-out;
     width: 110px;
     height: 20%;
     text-align: right;
     z-index: 100;
     user-select: none;
     margin-left: auto;
-    /* margin-right: 10px; */
     padding-right: 10px;
-    /* background-color: red; */
-    background: linear-gradient(1.69deg, var(--ui-data-sidebar-transition) 0%, var(--ui-data-sidebar-transparent) 5%);
+}
+.tabs .separator {
+    background: linear-gradient(2.13deg,
+            var(--ui-data-sidebar-transition) 0%,
+            var(--ui-data-sidebar-transparent) 6.9%);
     transition: --ui-data-sidebar-transition 0.1s 0.1s;
 }
 @media screen and (max-height: 280px) {
@@ -60,14 +61,10 @@ body {
     height: auto;
 }
 .tabs label .icon {
-    /* padding-right: 0px;
-    position: relative;
-    display: inline-block; */
     width: 24px;
     margin-left: 10px;
     height: auto;
     filter: brightness(0.213);
-    /* display: none; */
 }
 .tabs input[type="radio"] {
     display: none;
