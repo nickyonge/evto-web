@@ -3,11 +3,17 @@
 import * as ui from "./ui";
 import * as txt from './text';
 
-import iconArt from '../assets/svg/icon-art.svg';
-import iconFeatures from '../assets/svg/icon-features.svg';
-import iconHome from '../assets/svg/icon-home.svg';
-import iconSave from '../assets/svg/icon-save.svg';
-import iconScale from '../assets/svg/icon-scale.svg';
+// import iconArt from '../assets/svg/icons-white/icon-art.svg';
+// import iconFeatures from '../assets/svg/icons-white/icon-features.svg';
+// import iconHome from '../assets/svg/icons-white/icon-home.svg';
+// import iconSave from '../assets/svg/icons-white/icon-save.svg';
+// import iconScale from '../assets/svg/icons-white/icon-scale.svg';
+
+import iconArt from '../assets/svg/icons-red/icon-art.svg';
+import iconFeatures from '../assets/svg/icons-red/icon-features.svg';
+import iconHome from '../assets/svg/icons-red/icon-home.svg';
+import iconSave from '../assets/svg/icons-red/icon-save.svg';
+import iconScale from '../assets/svg/icons-red/icon-scale.svg';
 
 let iconArray = [iconHome, iconScale, iconFeatures, iconArt, iconSave];
 
@@ -23,11 +29,14 @@ function CreateTabs(dataWindow) {
     let tabs = ui.CreateDivWithClass('tabs');
     for (let i = 0; i < txt.TABS_NUM; i++) {
         // create individual tabs, based off TABS array in text.js
-        let tabInput = ui.CreateElementWithClass('input', 'tabInput'); // input element
+        let tabInput = ui.CreateElement('input'); // input element
         ui.AddElementAttributes(tabInput,
             ['type', 'id', 'name'],
             ['radio', 'tab' + (i + 1), 'tab']);
         let tabLabel = ui.CreateElement('label'); // label element
+        if (i != txt.TABS_NUM - 1) {
+            ui.AddClassToDOMs('separator', tabLabel);
+        }
         ui.AddElementAttribute(tabLabel, 'for', 'tab' + (i + 1));
         // tab text and icon
         let tabText = ui.CreateDivWithClass('text');
