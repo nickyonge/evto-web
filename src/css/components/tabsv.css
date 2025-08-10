@@ -15,14 +15,9 @@ body {
 } */
 
 .tabs {
-    /* width: 30%; */
-    /* min-width: 105px; */
-    /* max-width: 90px; */
     height: 100%;
     display: flex;
     flex-direction: column;
-    /* justify-content: space-around; */
-    /* justify-content:right; */
     position: relative;
     float: left;
 }
@@ -44,7 +39,20 @@ body {
     z-index: 100;
     user-select: none;
     margin-left: auto;
-    margin-right: 10px;
+    /* margin-right: 10px; */
+    padding-right: 10px;
+    /* background-color: red; */
+    /* background: linear-gradient(#22449966 0%, #22ff9900 5%); */
+
+    padding-bottom: 0px;
+    border: solid;
+    border-width: 0px;
+    border-bottom-width: 1px;
+    border-color: #00000000;
+    border-image: linear-gradient(90deg, #22449900 6.9%, #22449969 69%, #22449900 90%);
+    border-image-slice: 1;
+    transition: border-bottom-width 0.2s linear;
+    transition: padding-bottom 0.2s linear;
 }
 @media screen and (max-height: 280px) {
     .tabs label {
@@ -77,6 +85,16 @@ body {
 .tabs input[type="radio"]:checked+label {
     opacity: 1;
 }
+
+.tabs input[type="radio"]:checked+label {
+    border-bottom-width: 0px;
+    padding-bottom: 1px;
+    transition: border-bottom-width 0.2s linear;
+    transition: padding-bottom 0.2s linear;
+}
+
+/* .tabs input[type="radio"]:checked+label {
+} */
 .tabMarker {
     position: absolute;
     width: 100%;

@@ -23,7 +23,7 @@ function CreateTabs(dataWindow) {
     let tabs = ui.CreateDivWithClass('tabs');
     for (let i = 0; i < txt.TABS_NUM; i++) {
         // create individual tabs, based off TABS array in text.js
-        let tabInput = ui.CreateElement('input'); // input element
+        let tabInput = ui.CreateElementWithClass('input', 'tabInput'); // input element
         ui.AddElementAttributes(tabInput,
             ['type', 'id', 'name'],
             ['radio', 'tab' + (i + 1), 'tab']);
