@@ -36,7 +36,7 @@
     --ui-data-window-bottom-margin: 40px;
     --ui-data-window-sidebar-rounding: 8px;
     --ui-data-window-bg-shadow: #22113342;
-    --ui-data-window-bg-color: #ffffffdd;
+    --ui-data-window-bg-color: #ffffffcb;
 
     --ui-header-height: 56px;
     --ui-footer-height: 40px;
@@ -60,6 +60,7 @@
     --color-svg-default-sat-unsel: 469%;
     --color-svg-default-bri-unsel: 400%;
     --color-svg-default-gry-unsel: 86.9%;
+    --color-data-bg-blend-default: #eff4ffcb;
 
     --opacity-svg-red-sel: 1;
     --opacity-svg-red-unsel: 0.69;
@@ -71,6 +72,7 @@
     --color-svg-red-sat-unsel: 420%;
     --color-svg-red-bri-unsel: 300%;
     --color-svg-red-gry-unsel: 95%;
+    --color-data-bg-blend-red: #faeeeecb;
     
     --opacity-svg-orange-sel: 1;
     --opacity-svg-orange-unsel: 0.8;
@@ -136,19 +138,30 @@
 
 }
 
-@property --ui-data-sidebar-transparent {
+@property --ui-data-sidebar-separator-transparent {
     syntax: '<color>';
     initial-value: #22449900;
     inherits: false;
 }
-@property --ui-data-sidebar-opaque {
+@property --ui-data-sidebar-separator-opaque {
     syntax: '<color>';
     initial-value: #22449969;
     inherits: false;
 }
-@property --ui-data-sidebar-transition {
+@property --ui-data-sidebar-separator-transition {
     syntax: '<color>';
     /* initial-value should match ui-data-sidebar-opaqe */
     initial-value: #22449969;
+    inherits: false;
+}
+
+@property --ui-data-bg-blendcolor {
+    syntax: '<color>';
+    initial-value: #ffd2d6cb;
+    inherits: false;
+}
+@property --ui-data-bg-red {
+    syntax: '<color>';
+    initial-value: #ff0000cb;
     inherits: false;
 }

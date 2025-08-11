@@ -74,6 +74,10 @@ dataWindow {
     border-radius: var(--ui-data-window-radius);
     box-shadow: 0px 6px 9px -2.13px var(--ui-data-window-bg-shadow);
     background-color: var(--ui-data-window-bg-color);
+    background: linear-gradient(90deg,
+        var(--ui-data-bg-blendcolor) -25%,
+        var(--ui-data-window-bg-color) 169%)
+        ;
 }
 
 

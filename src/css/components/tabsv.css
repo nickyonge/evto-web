@@ -43,10 +43,10 @@ body {
     transition: opacity 0.1s ease-out;
 }
 .tabs .separator {
-    transition: opacity 0.1s ease-out, --ui-data-sidebar-transition 0.269s 0.0213s ease-in-out;
+    transition: opacity 0.1s ease-out, --ui-data-sidebar-separator-transition 0.269s 0.0213s ease-in-out;
     background: linear-gradient(2.13deg,
-            var(--ui-data-sidebar-transition) 0%,
-            var(--ui-data-sidebar-transparent) 6.9%);
+            var(--ui-data-sidebar-separator-transition) 0%,
+            var(--ui-data-sidebar-separator-transparent) 6.9%);
 }
 @media screen and (max-height: 280px) {
     .tabs label {
@@ -77,7 +77,7 @@ body {
 }
 
 .tabs input[type="radio"]:checked+label {
-    --ui-data-sidebar-transition: var(--ui-data-sidebar-transparent);
+    --ui-data-sidebar-separator-transition: var(--ui-data-sidebar-separator-transparent);
 }
 
 .tabs input[type="radio"]:checked+label {
@@ -132,62 +132,52 @@ label .icon {
     transition: opacity 0.2s ease-out, filter 0.2s ease-in-out;
     opacity: var(--opacity-svg-default-unsel);
     filter:
-    grayscale(  var(--color-svg-default-gry-unsel))
-    brightness( var(--color-svg-default-bri-unsel)) 
-    saturate(   var(--color-svg-default-sat-unsel)) 
-    hue-rotate( var(--color-svg-default-hue-unsel));
+        grayscale(var(--color-svg-default-gry-unsel)) brightness(var(--color-svg-default-bri-unsel)) saturate(var(--color-svg-default-sat-unsel)) hue-rotate(var(--color-svg-default-hue-unsel));
 }
 .tabs input[type="radio"]:hover+label .icon {
     transition: opacity 0.2s ease-out;
     opacity: var(--opacity-svg-default-sel);
 }
 .tabs input[type="radio"]:checked+label .icon {
-    transition: opacity 0.2s ease-out, filter 0.2s ease-out;
+    transition: opacity 0.2s ease-out, filter 0.2s ease-out, --ui-data-bg-blendcolor 0.5s ease-in-out;
     opacity: var(--opacity-svg-default-sel);
     filter:
-        grayscale(  var(--color-svg-default-gry-sel))
-        brightness( var(--color-svg-default-bri-sel)) 
-        saturate(   var(--color-svg-default-sat-sel)) 
-        hue-rotate( var(--color-svg-default-hue-sel));
+        grayscale(var(--color-svg-default-gry-sel)) brightness(var(--color-svg-default-bri-sel)) saturate(var(--color-svg-default-sat-sel)) hue-rotate(var(--color-svg-default-hue-sel));
 }
 
 label .icon.red {
     opacity: var(--opacity-svg-red-unsel);
     filter:
-        grayscale(  var(--color-svg-red-gry-unsel))
-        brightness( var(--color-svg-red-bri-unsel)) 
-        saturate(   var(--color-svg-red-sat-unsel)) 
-        hue-rotate( var(--color-svg-red-hue-unsel));
+        grayscale(var(--color-svg-red-gry-unsel)) brightness(var(--color-svg-red-bri-unsel)) saturate(var(--color-svg-red-sat-unsel)) hue-rotate(var(--color-svg-red-hue-unsel));
 }
-.tabs input[type="radio"]:hover+label .icon.red { 
+.tabs input[type="radio"]:hover+label .icon.red {
     opacity: var(--opacity-svg-red-sel);
 }
-.tabs input[type="radio"]:checked+label .icon.red { 
+.tabs input[type="radio"]:checked+label .icon.red {
     opacity: var(--opacity-svg-red-sel);
     filter:
-        grayscale(  var(--color-svg-red-gry-sel))
-        brightness( var(--color-svg-red-bri-sel)) 
-        saturate(   var(--color-svg-red-sat-sel)) 
-        hue-rotate( var(--color-svg-red-hue-sel));
+        grayscale(var(--color-svg-red-gry-sel)) brightness(var(--color-svg-red-bri-sel)) saturate(var(--color-svg-red-sat-sel)) hue-rotate(var(--color-svg-red-hue-sel));
+    --ui-data-bg-blendcolor: var(--ui-data-bg-red);
 }
+/* .tabs input[type="radio"]:checked+label .icon.red ~ dataWindow {
+    display:none; 
+} */
+/* background: linear-gradient(90deg,
+        var(--ui-data-bg-blendcolor) -25%,
+        var(--ui-data-window-bg-color) 169%)
+        ; */
 label .icon.orange {
     opacity: var(--opacity-svg-orange-unsel);
     filter:
-        grayscale(  var(--color-svg-orange-gry-unsel))
-        brightness( var(--color-svg-orange-bri-unsel)) 
-        saturate(   var(--color-svg-orange-sat-unsel)) 
-        hue-rotate( var(--color-svg-orange-hue-unsel));
+        grayscale(var(--color-svg-orange-gry-unsel)) brightness(var(--color-svg-orange-bri-unsel)) saturate(var(--color-svg-orange-sat-unsel)) hue-rotate(var(--color-svg-orange-hue-unsel));
 }
-.tabs input[type="radio"]:hover+label .icon.orange { 
+.tabs input[type="radio"]:hover+label .icon.orange {
     opacity: var(--opacity-svg-orange-sel);
 }
-.tabs input[type="radio"]:checked+label .icon.orange { 
+.tabs input[type="radio"]:checked+label .icon.orange {
     opacity: var(--opacity-svg-orange-sel);
     filter:
-        grayscale(  var(--color-svg-orange-gry-sel))
-        brightness( var(--color-svg-orange-bri-sel)) 
-        saturate(   var(--color-svg-orange-sat-sel)) 
-        hue-rotate( var(--color-svg-orange-hue-sel));
+        grayscale(var(--color-svg-orange-gry-sel)) brightness(var(--color-svg-orange-bri-sel)) saturate(var(--color-svg-orange-sat-sel)) hue-rotate(var(--color-svg-orange-hue-sel));
 }
 /* yellow not implemented
 label .icon.yellow {
@@ -212,59 +202,41 @@ label .icon.yellow {
 label .icon.green {
     opacity: var(--opacity-svg-green-unsel);
     filter:
-        grayscale(  var(--color-svg-green-gry-unsel))
-        brightness( var(--color-svg-green-bri-unsel)) 
-        saturate(   var(--color-svg-green-sat-unsel)) 
-        hue-rotate( var(--color-svg-green-hue-unsel));
+        grayscale(var(--color-svg-green-gry-unsel)) brightness(var(--color-svg-green-bri-unsel)) saturate(var(--color-svg-green-sat-unsel)) hue-rotate(var(--color-svg-green-hue-unsel));
 }
-.tabs input[type="radio"]:hover+label .icon.green { 
+.tabs input[type="radio"]:hover+label .icon.green {
     opacity: var(--opacity-svg-green-sel);
 }
-.tabs input[type="radio"]:checked+label .icon.green { 
+.tabs input[type="radio"]:checked+label .icon.green {
     opacity: var(--opacity-svg-green-sel);
     filter:
-        grayscale(  var(--color-svg-green-gry-sel))
-        brightness( var(--color-svg-green-bri-sel)) 
-        saturate(   var(--color-svg-green-sat-sel)) 
-        hue-rotate( var(--color-svg-green-hue-sel));
+        grayscale(var(--color-svg-green-gry-sel)) brightness(var(--color-svg-green-bri-sel)) saturate(var(--color-svg-green-sat-sel)) hue-rotate(var(--color-svg-green-hue-sel));
 }
 label .icon.blue {
     opacity: var(--opacity-svg-blue-unsel);
     filter:
-        grayscale(  var(--color-svg-blue-gry-unsel))
-        brightness( var(--color-svg-blue-bri-unsel)) 
-        saturate(   var(--color-svg-blue-sat-unsel)) 
-        hue-rotate( var(--color-svg-blue-hue-unsel));
+        grayscale(var(--color-svg-blue-gry-unsel)) brightness(var(--color-svg-blue-bri-unsel)) saturate(var(--color-svg-blue-sat-unsel)) hue-rotate(var(--color-svg-blue-hue-unsel));
 }
-.tabs input[type="radio"]:hover+label .icon.blue { 
+.tabs input[type="radio"]:hover+label .icon.blue {
     opacity: var(--opacity-svg-blue-sel);
 }
-.tabs input[type="radio"]:checked+label .icon.blue { 
+.tabs input[type="radio"]:checked+label .icon.blue {
     opacity: var(--opacity-svg-blue-sel);
     filter:
-        grayscale(  var(--color-svg-blue-gry-sel))
-        brightness( var(--color-svg-blue-bri-sel)) 
-        saturate(   var(--color-svg-blue-sat-sel)) 
-        hue-rotate( var(--color-svg-blue-hue-sel));
+        grayscale(var(--color-svg-blue-gry-sel)) brightness(var(--color-svg-blue-bri-sel)) saturate(var(--color-svg-blue-sat-sel)) hue-rotate(var(--color-svg-blue-hue-sel));
 }
 label .icon.purple {
     opacity: var(--opacity-svg-purple-unsel);
     filter:
-        grayscale(  var(--color-svg-purple-gry-unsel))
-        brightness( var(--color-svg-purple-bri-unsel)) 
-        saturate(   var(--color-svg-purple-sat-unsel)) 
-        hue-rotate( var(--color-svg-purple-hue-unsel));
+        grayscale(var(--color-svg-purple-gry-unsel)) brightness(var(--color-svg-purple-bri-unsel)) saturate(var(--color-svg-purple-sat-unsel)) hue-rotate(var(--color-svg-purple-hue-unsel));
 }
-.tabs input[type="radio"]:hover+label .icon.purple { 
+.tabs input[type="radio"]:hover+label .icon.purple {
     opacity: var(--opacity-svg-purple-sel);
 }
-.tabs input[type="radio"]:checked+label .icon.purple { 
+.tabs input[type="radio"]:checked+label .icon.purple {
     opacity: var(--opacity-svg-purple-sel);
     filter:
-        grayscale(  var(--color-svg-purple-gry-sel))
-        brightness( var(--color-svg-purple-bri-sel)) 
-        saturate(   var(--color-svg-purple-sat-sel)) 
-        hue-rotate( var(--color-svg-purple-hue-sel));
+        grayscale(var(--color-svg-purple-gry-sel)) brightness(var(--color-svg-purple-bri-sel)) saturate(var(--color-svg-purple-sat-sel)) hue-rotate(var(--color-svg-purple-hue-sel));
 }
 
 /* 
