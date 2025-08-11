@@ -36,22 +36,17 @@ function CreateTabs(dataWindow) {
     let tabs = ui.CreateDivWithClass('tabs');
     for (let i = 0; i < txt.TABS_NUM; i++) {
         // create individual tabs, based off TABS array in text.js
+        let tab = 'tab' + i;
         let tabInput = ui.CreateElement('input'); // input element
         ui.AddElementAttributes(tabInput,
             ['type', 'id', 'name'],
-            ['radio', 'tab' + (i + 1), 'tab']);
-        // ensure first element is checked
-        if (i == 0) {
-            tabInput.checked = true;
-        } else {
-            tabInput.checked = false;
-        }
+            ['radio', tab, 'tab']);
         // create label 
         let tabLabel = ui.CreateElement('label'); // label element
         if (i != txt.TABS_NUM - 1) {
             ui.AddClassToDOMs('separator', tabLabel);
         }
-        ui.AddElementAttribute(tabLabel, 'for', 'tab' + (i + 1));
+        ui.AddElementAttribute(tabLabel, 'for', tab);
         // tab text and icon
         let tabText = ui.CreateDivWithClass('text');
         tabText.innerText = txt.TABS[i];

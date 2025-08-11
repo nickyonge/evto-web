@@ -111,19 +111,19 @@ body {
     margin-top: 1px;
     border-radius: 0 var(--ui-data-window-sidebar-rounding) 0 0;
 }
-#tab1:checked~.tabMarker {
+#tab0:checked~.tabMarker {
     transform: translateY(calc(calc(100% / 5) * 0));
 }
-#tab2:checked~.tabMarker {
+#tab1:checked~.tabMarker {
     transform: translateY(calc(calc(100% / 5) * 1));
 }
-#tab3:checked~.tabMarker {
+#tab2:checked~.tabMarker {
     transform: translateY(calc(calc(100% / 5) * 2));
 }
-#tab4:checked~.tabMarker {
+#tab3:checked~.tabMarker {
     transform: translateY(calc(calc(100% / 5) * 3));
 }
-#tab5:checked~.tabMarker {
+#tab4:checked~.tabMarker {
     transform: translateY(calc(calc(100% / 5) * 4));
 }
 
@@ -240,8 +240,11 @@ label .icon.purple {
 }
 
 /* 
+#tab0 + label .icon {
+    filter: grayscale(var(--ui-data-sidebar-tab0-grayscale)) brightness(var(--ui-data-sidebar-tab-brightness-unsel)) saturate(var(--ui-data-sidebar-tab-saturation-unsel)) hue-rotate(var(--ui-data-sidebar-tab0-hue)) saturate(var(--ui-data-sidebar-tab-saturation-unsel));
+}
 #tab1 + label .icon {
-    filter: grayscale(var(--ui-data-sidebar-tab1-grayscale)) brightness(var(--ui-data-sidebar-tab-brightness-unsel)) saturate(var(--ui-data-sidebar-tab-saturation-unsel)) hue-rotate(var(--ui-data-sidebar-tab1-hue)) saturate(var(--ui-data-sidebar-tab-saturation-unsel));
+    filter: brightness(var(--ui-data-sidebar-tab-brightness-unsel)) hue-rotate(var(--ui-data-sidebar-tab1-hue)) saturate(var(--ui-data-sidebar-tab-saturation-unsel));
 }
 #tab2 + label .icon {
     filter: brightness(var(--ui-data-sidebar-tab-brightness-unsel)) hue-rotate(var(--ui-data-sidebar-tab2-hue)) saturate(var(--ui-data-sidebar-tab-saturation-unsel));
@@ -252,11 +255,11 @@ label .icon.purple {
 #tab4 + label .icon {
     filter: brightness(var(--ui-data-sidebar-tab-brightness-unsel)) hue-rotate(var(--ui-data-sidebar-tab4-hue)) saturate(var(--ui-data-sidebar-tab-saturation-unsel));
 }
-#tab5 + label .icon {
-    filter: brightness(var(--ui-data-sidebar-tab-brightness-unsel)) hue-rotate(var(--ui-data-sidebar-tab5-hue)) saturate(var(--ui-data-sidebar-tab-saturation-unsel));
+#tab0:checked + label .icon {
+    filter: grayscale(var(--ui-data-sidebar-tab0-grayscale)) brightness(var(--ui-data-sidebar-tab-brightness-sel)) hue-rotate(var(--ui-data-sidebar-tab0-hue)) saturate(var(--ui-data-sidebar-tab-saturation-sel));
 }
 #tab1:checked + label .icon {
-    filter: grayscale(var(--ui-data-sidebar-tab1-grayscale)) brightness(var(--ui-data-sidebar-tab-brightness-sel)) hue-rotate(var(--ui-data-sidebar-tab1-hue)) saturate(var(--ui-data-sidebar-tab-saturation-sel));
+    filter: brightness(var(--ui-data-sidebar-tab-brightness-sel)) hue-rotate(var(--ui-data-sidebar-tab1-hue)) saturate(var(--ui-data-sidebar-tab-saturation-sel));
 }
 #tab2:checked + label .icon {
     filter: brightness(var(--ui-data-sidebar-tab-brightness-sel)) hue-rotate(var(--ui-data-sidebar-tab2-hue)) saturate(var(--ui-data-sidebar-tab-saturation-sel));
@@ -266,7 +269,4 @@ label .icon.purple {
 }
 #tab4:checked + label .icon {
     filter: brightness(var(--ui-data-sidebar-tab-brightness-sel)) hue-rotate(var(--ui-data-sidebar-tab4-hue)) saturate(var(--ui-data-sidebar-tab-saturation-sel));
-}
-#tab5:checked + label .icon {
-    filter: brightness(var(--ui-data-sidebar-tab-brightness-sel)) hue-rotate(var(--ui-data-sidebar-tab5-hue)) saturate(var(--ui-data-sidebar-tab-saturation-sel));
 } */
