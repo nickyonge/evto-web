@@ -23,35 +23,18 @@
     /* --color-bg-gradient-1: #beeeef;
     --color-bg-gradient-2: #a4d4f3; */
 
-    --demo-bg-navbar: #00000022;
-    --demo-bg-winart: #88888821;
-    --demo-bg-windat: #ffffff23;
-
-    --ui-data-sidebar-color-opacity: 0.42;
+    --ui-data-sidebar-color-opacity: 1;
     --ui-data-sidebar-color-text: #525d69;
     --ui-data-sidebar-color-background: #e9f2ff;
     --ui-data-sidebar-color-shadow: #2e364315;
-
-
-    --ui-data-sidebar-tab1-hue: 256deg;
-    --ui-data-sidebar-tab1-grayscale: 96.9%;
-    --ui-data-sidebar-tab-saturation-sel: 690%;
-    --ui-data-sidebar-tab-brightness-sel: 2.69;
-
-    --ui-data-sidebar-tab-saturation-unsel: 300%;
-    --ui-data-sidebar-tab-brightness-unsel: 1.2;
-    --ui-data-sidebar-tab2-hue: 72deg;
-    --ui-data-sidebar-tab3-hue: 144deg;
-    --ui-data-sidebar-tab4-hue: 216deg;
-    --ui-data-sidebar-tab5-hue: 288deg;
 
     --ui-data-sidebar-color-text-selected: #525d69;
     --ui-data-sidebar-color-opacity-hover-selected: 1;
 
     --ui-data-window-margin: 10px;
     --ui-data-window-bottom-margin: 40px;
-    --ui-data-window-sidebar-rounding: 16px;
-    --ui-data-window-bg-color: #ffffff27;
+    --ui-data-window-sidebar-rounding: 8px;
+    --ui-data-window-bg-color: #ffffffdd;
 
     --ui-header-height: 56px;
     --ui-footer-height: 40px;
@@ -61,6 +44,93 @@
     --ui-footer-email-bar-iconspace: 32px;
     --ui-footer-emali-btn-width: 100px;
     --ui-footer-kickstarter-width: 220px;
+
+    
+
+    /* RAINBOW PASTEL SVG FILTERS */
+    --opacity-svg-default-sel: 1;
+    --opacity-svg-default-unsel: 0.75;
+    --color-svg-default-hue-sel: 213deg;
+    --color-svg-default-sat-sel: 690%;
+    --color-svg-default-bri-sel: 372%;
+    --color-svg-default-gry-sel: 96.9%;
+    --color-svg-default-hue-unsel: 213deg;
+    --color-svg-default-sat-unsel: 469%;
+    --color-svg-default-bri-unsel: 400%;
+    --color-svg-default-gry-unsel: 86.9%;
+
+    --opacity-svg-red-sel: 1;
+    --opacity-svg-red-unsel: 0.69;
+    --color-svg-red-hue-sel: 352deg;
+    --color-svg-red-sat-sel: 369%;
+    --color-svg-red-bri-sel: 369%;
+    --color-svg-red-gry-sel: 92.13%;
+    --color-svg-red-hue-unsel: 355deg;
+    --color-svg-red-sat-unsel: 420%;
+    --color-svg-red-bri-unsel: 300%;
+    --color-svg-red-gry-unsel: 95%;
+    
+    --opacity-svg-orange-sel: 1;
+    --opacity-svg-orange-unsel: 0.8;
+    --color-svg-orange-hue-sel: 21.3deg;
+    --color-svg-orange-sat-sel: 690%;
+    --color-svg-orange-bri-sel: 400%;
+    --color-svg-orange-gry-sel: 96.9%;
+    --color-svg-orange-hue-unsel: 21.3deg;
+    --color-svg-orange-sat-unsel: 420%;
+    --color-svg-orange-bri-unsel: 390%;
+    --color-svg-orange-gry-unsel: 92%;
+
+/*  yellow not implemented  
+    --opacity-svg-yellow-sel: 1;
+    --opacity-svg-yellow-unsel: 0.75; 
+    --color-svg-yellow-hue-sel: 0deg;
+    --color-svg-yellow-sat-sel: 100%;
+    --color-svg-yellow-bri-sel: 100%;
+    --color-svg-yellow-gry-sel: 0%;
+    --color-svg-yellow-hue-unsel: 0deg;
+    --color-svg-yellow-sat-unsel: 100%;
+    --color-svg-yellow-bri-unsel: 100%;
+    --color-svg-yellow-gry-unsel: 0%; */
+    
+    --opacity-svg-green-sel: 1;
+    --opacity-svg-green-unsel: 0.69;
+    --color-svg-green-hue-sel: 132deg;
+    --color-svg-green-sat-sel: 1690%;
+    --color-svg-green-bri-sel: 500%;
+    --color-svg-green-gry-sel: 88.2%;
+    --color-svg-green-hue-unsel: 140deg;
+    --color-svg-green-sat-unsel: 1800%;
+    --color-svg-green-bri-unsel: 469%;
+    --color-svg-green-gry-unsel: 92.13%;
+    
+    --opacity-svg-blue-sel: 1;
+    --opacity-svg-blue-unsel: 0.75;
+    --color-svg-blue-hue-sel: 213deg;
+    --color-svg-blue-sat-sel: 690%;
+    --color-svg-blue-bri-sel: 420%;
+    --color-svg-blue-gry-sel: 97.2%;
+    --color-svg-blue-hue-unsel: 213deg;
+    --color-svg-blue-sat-unsel: 469%;
+    --color-svg-blue-bri-unsel: 400%;
+    --color-svg-blue-gry-unsel: 86.9%;
+    
+    --opacity-svg-purple-sel: 1;
+    --opacity-svg-purple-unsel: 0.8;
+    --color-svg-purple-hue-sel: 256deg;
+    --color-svg-purple-sat-sel: 690%;
+    --color-svg-purple-bri-sel: 420%;
+    --color-svg-purple-gry-sel: 92.5%;
+    --color-svg-purple-hue-unsel: 256deg;
+    --color-svg-purple-sat-unsel: 720%;
+    --color-svg-purple-bri-unsel: 420%;
+    --color-svg-purple-gry-unsel: 90%;
+    
+
+    /* DEMO COLORS */
+    --demo-bg-navbar: #00000022;
+    --demo-bg-winart: #88888821;
+    --demo-bg-windat: #ffffff23;
 
 }
 
