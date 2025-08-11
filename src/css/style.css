@@ -36,18 +36,14 @@ h3 {
     width: 100%;
     height: 100%;
     grid-template:
-        [header] "header header" var(--ui-header-height) 
-        [main] "artWindow dataWindow" 1fr
-        [footer] "footer footer" var(--ui-footer-height) 
-        / var(--ui-art-window-ratio) 1fr;
+        [header] "header header" var(--ui-header-height) [main] "artWindow dataWindow" 1fr
+        [footer] "footer footer" var(--ui-footer-height) / var(--ui-art-window-ratio) 1fr;
 }
 
 @media screen and (max-aspect-ratio: 1.2) {
     #content {
         grid-template:
-            [header] "header" var(--ui-header-height) 
-            [main] "artWindow" var(--ui-art-window-ratio) 
-            [main] "dataWindow" 1fr
+            [header] "header" var(--ui-header-height) [main] "artWindow" var(--ui-art-window-ratio) [main] "dataWindow" 1fr
             [footer] "footer" var(--ui-footer-height) / 1fr;
     }
 }
@@ -75,9 +71,8 @@ dataWindow {
     box-shadow: 0px 6px 9px -2.13px var(--ui-data-window-bg-shadow);
     background-color: var(--ui-data-window-bg-color);
     background: linear-gradient(90deg,
-        var(--ui-data-bg-blendcolor) -25%,
-        var(--ui-data-window-bg-color) 169%)
-        ;
+            var(--ui-data-bg-blendcolor) -25%,
+            var(--ui-data-window-bg-color) 169%);
 }
 
 
