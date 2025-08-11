@@ -32,8 +32,10 @@
     --ui-data-sidebar-color-opacity-hover-selected: 1;
 
     --ui-data-window-margin: 10px;
+    --ui-data-window-radius: 16.9px;
     --ui-data-window-bottom-margin: 40px;
     --ui-data-window-sidebar-rounding: 8px;
+    --ui-data-window-bg-shadow: #22113342;
     --ui-data-window-bg-color: #ffffffdd;
 
     --ui-header-height: 56px;
