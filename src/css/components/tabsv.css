@@ -159,13 +159,6 @@ label .icon.red {
         grayscale(var(--color-svg-red-gry-sel)) brightness(var(--color-svg-red-bri-sel)) saturate(var(--color-svg-red-sat-sel)) hue-rotate(var(--color-svg-red-hue-sel));
     --ui-data-bg-blendcolor: var(--ui-data-bg-red);
 }
-/* .tabs input[type="radio"]:checked+label .icon.red ~ dataWindow {
-    display:none; 
-} */
-/* background: linear-gradient(90deg,
-        var(--ui-data-bg-blendcolor) -25%,
-        var(--ui-data-window-bg-color) 169%)
-        ; */
 label .icon.orange {
     opacity: var(--opacity-svg-orange-unsel);
     filter:
