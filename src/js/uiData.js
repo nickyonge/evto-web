@@ -39,6 +39,13 @@ function CreateTabs(dataWindow) {
         ui.AddElementAttributes(tabInput,
             ['type', 'id', 'name'],
             ['radio', 'tab' + (i + 1), 'tab']);
+        // ensure first element is checked
+        if (i == 0) {
+            tabInput.checked = true;
+        } else {
+            tabInput.checked = false;
+        }
+        // create label 
         let tabLabel = ui.CreateElement('label'); // label element
         if (i != txt.TABS_NUM - 1) {
             ui.AddClassToDOMs('separator', tabLabel);
