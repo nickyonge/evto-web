@@ -14,7 +14,7 @@ let topBar = null;
 /** Art window, where the canvas rendering goes @type Element */
 let artWindow = null;
 /** Data window, where the tabs and info window goes @type Element */
-let dataWindow = null;
+export let dataWindow = null;
 /** Footer (bottom bar) element @type Element */
 let btmBar = null;
 
