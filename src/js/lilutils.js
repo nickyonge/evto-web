@@ -34,3 +34,15 @@ let _style;
  * @returns {number|null} The parsed number, or null if no digits are found.
  */
 export const StringToNumber = str => (str.match(/\d+/) ? parseInt(str.match(/\d+/)[0], 10) : null);
+
+/**
+ * 
+ * @param {string} color Hex code formatted color, eg `#FF00FF` 
+ * @param {number} opacity Number from 0 to 1 to represent alpha value 
+ * @returns Hex code with hex-formatted alpha added
+ */
+export function AddAlphaToHex(color, opacity) {
+    // credit: https://stackoverflow.com/questions/19799777/how-to-add-transparency-information-to-a-hex-color-code/68398236#68398236
+    let _opacity = Math.round(Math.min(Math.max(opacity ?? 1, 0), 1) * 255);
+    return color + _opacity.toString(16).toUpperCase();
+}
