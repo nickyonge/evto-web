@@ -63,7 +63,7 @@ footer {
 
 
 dataWindow {
-    height: calc(100% - (var(--ui-data-window-margin) * 2) - var(--ui-data-window-bottom-margin));
+    height: calc(100% - (var(--ui-data-window-margin) * 2));
     overflow: hidden;
     margin: var(--ui-data-window-margin);
     /* margin-bottom: var(--ui-data-window-bottom-margin); */
@@ -73,6 +73,13 @@ dataWindow {
     background: linear-gradient(to right,
             var(--color-data-bg-blend-default) -100%,
             var(--ui-data-window-bg-color) 127%);
+}
+
+/* match width to var(--viewport-bottombar-wrap) in vars.css */
+@media screen and (max-width: 750px) {
+    dataWindow {
+        height: calc(100% - (var(--ui-data-window-margin) * 2) - var(--ui-data-window-bottom-margin));
+    }
 }
 
 
