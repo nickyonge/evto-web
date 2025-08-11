@@ -99,12 +99,15 @@ body {
     width: 100%;
     position: absolute;
     background-color: var(--ui-data-sidebar-color-background);
-    box-shadow: 0px 0px 32px var(--ui-data-sidebar-color-shadow);
+    box-shadow: 0px 0px 32px var(--ui-data-sidebar-color-shadow-full);
 }
 .tabMarker #tmTop {
     top: calc(-100% - 0.213px);
     padding-bottom: 0px;
     border-radius: 0 0 var(--ui-data-window-sidebar-rounding) 0;
+    box-shadow: -4px 3px 5px var(--ui-data-sidebar-color-shadow-sharp);
+    margin-top: 0px;
+    transition: margin-top 0.2s;
 }
 .tabMarker #tmBottom {
     top: 20%;
@@ -113,6 +116,10 @@ body {
 }
 #tab0:checked~.tabMarker {
     transform: translateY(calc(calc(100% / 5) * 0));
+}
+#tab0:checked~.tabMarker #tmTop {
+    /* move drop shadow out of the way on top tab selection*/
+    margin-top: -8px;
 }
 #tab1:checked~.tabMarker {
     transform: translateY(calc(calc(100% / 5) * 1));
