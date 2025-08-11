@@ -2,6 +2,7 @@
 
 import * as ui from "./ui";
 import * as txt from './text';
+import { tabColors, SelectTab } from "./data";
 
 // import iconArt from '../assets/svg/icons-currentColor/icon-art.svg';
 // import iconFeatures from '../assets/svg/icons-currentColor/icon-features.svg';
@@ -22,7 +23,6 @@ import iconSave from '../assets/svg/icons-red/icon-save.svg';
 import iconScale from '../assets/svg/icons-red/icon-scale.svg';
 
 let iconArray = [iconHome, iconScale, iconFeatures, iconArt, iconSave];
-let iconColors = ['red', 'orange', 'blue', 'green', 'purple'];
 
 /**
  * Create the data window (tabs, options, info)
@@ -50,13 +50,8 @@ function CreateTabs(dataWindow) {
         // tab text and icon
         let tabText = ui.CreateDivWithClass('text');
         tabText.innerText = txt.TABS[i];
-        // let tabIcon = ui.CreateDivWithClass('icon');
-        // let img = ui.CreateImage(iconArray[i]);
-        // let tabIcon = ui.CreateDivWithClass('icon');
         let tabIcon = ui.CreateImage(iconArray[i]);
-        // ui.AddClassToDOMs('icon', tabIcon);
-        ui.AddClassesToDOM(tabIcon, 'icon', iconColors[i]);
-        // tabIcon.appendChild(img);
+        ui.AddClassesToDOM(tabIcon, 'icon', tabColors[i]);
         tabLabel.appendChild(tabText);
         tabLabel.appendChild(tabIcon);
         // add tab elements to tabs list
