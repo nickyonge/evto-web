@@ -22,6 +22,7 @@ import iconSave from '../assets/svg/icons-red/icon-save.svg';
 import iconScale from '../assets/svg/icons-red/icon-scale.svg';
 
 let iconArray = [iconHome, iconScale, iconFeatures, iconArt, iconSave];
+let iconColors = ['red', 'orange', 'blue', 'green', 'purple'];
 
 /**
  * Create the data window (tabs, options, info)
@@ -58,7 +59,8 @@ function CreateTabs(dataWindow) {
         // let img = ui.CreateImage(iconArray[i]);
         // let tabIcon = ui.CreateDivWithClass('icon');
         let tabIcon = ui.CreateImage(iconArray[i]);
-        ui.AddClassToDOMs('icon', tabIcon);
+        // ui.AddClassToDOMs('icon', tabIcon);
+        ui.AddClassesToDOM(tabIcon, 'icon', iconColors[i]);
         // tabIcon.appendChild(img);
         tabLabel.appendChild(tabText);
         tabLabel.appendChild(tabIcon);
