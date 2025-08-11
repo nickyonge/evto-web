@@ -25,3 +25,11 @@ export const style = {
 /** local style reference for utils
  * @type {CSSStyleDeclaration} */
 let _style;
+
+/**
+ * Removes non-numeric chars from a string and returns the resulting number. 
+ * Returns null if no number is found. 
+ * @param {string} str Input string to convert 
+ * @returns {number|null} The parsed number, or null if no digits are found.
+ */
+export const StringToNumber = str => (str.match(/\d+/) ? parseInt(str.match(/\d+/)[0], 10) : null);
