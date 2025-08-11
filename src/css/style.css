@@ -73,6 +73,7 @@ dataWindow {
     /* margin-bottom: var(--ui-data-window-bottom-margin); */
     border-radius: 32px;
     box-shadow: 0px 6px 9px -2.13px #22113342;
+    background-color: var(--ui-data-window-bg-color);
 }
 
 
