@@ -1,7 +1,7 @@
 /* functiionality related to the Data window */
 
 import * as txt from './text';
-import { style, StringToNumber } from "./lilutils";
+import { style, StringToNumber, AddAlphaToHex } from "./lilutils";
 import { dataWindow } from './uiMain';
 
 const initialTab = 0;
@@ -32,9 +32,11 @@ export function SelectTab(tabNum, snap = false) {
         if (currentTab) {
             let tabColor = tabColors[i];
             let cssColor = GetBGColor(tabColor);
+            cssColor = AddAlphaToHex(cssColor, 0.69);
             console.log(`Tab ID: ${tabId}, tabColor: ${tabColor}, cssColor: ${cssColor}`);
-            let bgGradient = `linear-gradient(to right, ${cssColor} -100%, ${bgColorMain} 127%)`;
-            dataWindow.style.setProperty('background', bgGradient);
+            // let bgGradient = `linear-gradient(to right, ${cssColor} -100%, ${bgColorMain} 127%)`;
+            // dataWindow.style.setProperty('background', bgGradient);
+            dataWindow.style.setProperty('background-color', cssColor);
         }
 
         if (snap) {

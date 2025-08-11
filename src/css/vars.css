@@ -37,6 +37,7 @@
     --ui-data-window-sidebar-rounding: 8px;
     --ui-data-window-bg-shadow: #22113342;
     --ui-data-window-bg-color: #ffffffcb;
+    --ui-data-window-bg-color-transparent: #ffffff00;
 
     --ui-header-height: 56px;
     --ui-footer-height: 40px;
@@ -60,7 +61,8 @@
     --color-svg-default-sat-unsel: 469%;
     --color-svg-default-bri-unsel: 400%;
     --color-svg-default-gry-unsel: 86.9%;
-    --color-data-bg-blend-default: #eff4ffcb;
+    --color-data-bg-blend-default: #eff4ff;
+    --color-base-default: #eff4ff;
 
     --opacity-svg-red-sel: 1;
     --opacity-svg-red-unsel: 0.69;
@@ -72,7 +74,8 @@
     --color-svg-red-sat-unsel: 420%;
     --color-svg-red-bri-unsel: 300%;
     --color-svg-red-gry-unsel: 95%;
-    --color-data-bg-blend-red: #ffb3bacb;
+    --color-data-bg-blend-red: #ffc8ce;
+    --color-base-red: #ffb3ba;
     
     --opacity-svg-orange-sel: 1;
     --opacity-svg-orange-unsel: 0.8;
@@ -84,7 +87,8 @@
     --color-svg-orange-sat-unsel: 420%;
     --color-svg-orange-bri-unsel: 390%;
     --color-svg-orange-gry-unsel: 92%;
-    --color-data-bg-blend-orange: #fedeb9cb;
+    --color-data-bg-blend-orange: #fedeb9;
+    --color-base-orange: #fedeb9;
 
 /*  yellow not implemented  
     --opacity-svg-yellow-sel: 1;
@@ -97,43 +101,47 @@
     --color-svg-yellow-sat-unsel: 100%;
     --color-svg-yellow-bri-unsel: 100%;
     --color-svg-yellow-gry-unsel: 0%;
-    --color-data-bg-blend-yellow: #fbfbb7cb; */
+    --color-data-bg-blend-yellow: #fbfbb7;
+    --color-base-yellow: #fbfbb7; */
     
     --opacity-svg-green-sel: 1;
     --opacity-svg-green-unsel: 0.69;
     --color-svg-green-hue-sel: 132deg;
     --color-svg-green-sat-sel: 1690%;
-    --color-svg-green-bri-sel: 500%;
-    --color-svg-green-gry-sel: 88.2%;
+    --color-svg-green-bri-sel: 469%;
+    --color-svg-green-gry-sel: 90%;
     --color-svg-green-hue-unsel: 140deg;
     --color-svg-green-sat-unsel: 1800%;
     --color-svg-green-bri-unsel: 469%;
     --color-svg-green-gry-unsel: 92.13%;
-    --color-data-bg-blend-green: #baffc9cb;
+    --color-data-bg-blend-green: #d1ffdb;
+    --color-base-green: #baffc9;
     
     --opacity-svg-blue-sel: 1;
     --opacity-svg-blue-unsel: 0.75;
     --color-svg-blue-hue-sel: 213deg;
     --color-svg-blue-sat-sel: 690%;
-    --color-svg-blue-bri-sel: 420%;
-    --color-svg-blue-gry-sel: 97.2%;
+    --color-svg-blue-bri-sel: 369%;
+    --color-svg-blue-gry-sel: 94.20%;
     --color-svg-blue-hue-unsel: 213deg;
     --color-svg-blue-sat-unsel: 469%;
     --color-svg-blue-bri-unsel: 400%;
     --color-svg-blue-gry-unsel: 86.9%;
-    --color-data-bg-blend-blue: #b7ddfbcb;
+    --color-data-bg-blend-blue: #b7ddfb;
+    --color-base-blue: #b7ddfb;
     
     --opacity-svg-purple-sel: 1;
     --opacity-svg-purple-unsel: 0.8;
     --color-svg-purple-hue-sel: 256deg;
     --color-svg-purple-sat-sel: 690%;
-    --color-svg-purple-bri-sel: 420%;
+    --color-svg-purple-bri-sel: 400%;
     --color-svg-purple-gry-sel: 92.5%;
     --color-svg-purple-hue-unsel: 256deg;
     --color-svg-purple-sat-unsel: 720%;
     --color-svg-purple-bri-unsel: 420%;
     --color-svg-purple-gry-unsel: 90%;
-    --color-data-bg-blend-purple: #e5c5f9cb;
+    --color-data-bg-blend-purple: #e5c5f9;
+    --color-base-purple: #e5c5f9;
     
 
     /* DEMO COLORS */

@@ -63,6 +63,9 @@ function CreateTabs(dataWindow) {
     marker.appendChild(ui.CreateDivWithID('tmTop'));
     marker.appendChild(ui.CreateDivWithID('tmBottom'));
     tabs.appendChild(marker);
+    // create fade bg
+    let fadeBG = ui.CreateDivWithClass('fadeBG');
     // add to window
     dataWindow.appendChild(tabs);
+    dataWindow.appendChild(fadeBG);
 }
