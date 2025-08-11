@@ -3,6 +3,12 @@
 import * as ui from "./ui";
 import * as txt from './text';
 
+// import iconArt from '../assets/svg/icons-currentColor/icon-art.svg';
+// import iconFeatures from '../assets/svg/icons-currentColor/icon-features.svg';
+// import iconHome from '../assets/svg/icons-currentColor/icon-home.svg';
+// import iconSave from '../assets/svg/icons-currentColor/icon-save.svg';
+// import iconScale from '../assets/svg/icons-currentColor/icon-scale.svg';
+
 // import iconArt from '../assets/svg/icons-white/icon-art.svg';
 // import iconFeatures from '../assets/svg/icons-white/icon-features.svg';
 // import iconHome from '../assets/svg/icons-white/icon-home.svg';
