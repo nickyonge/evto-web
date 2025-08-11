@@ -27,10 +27,23 @@
     --demo-bg-winart: #88888821;
     --demo-bg-windat: #ffffff23;
 
-    --ui-data-sidebar-color-opacity: 0.69;
+    --ui-data-sidebar-color-opacity: 0.42;
     --ui-data-sidebar-color-text: #525d69;
     --ui-data-sidebar-color-background: #e9f2ff;
     --ui-data-sidebar-color-shadow: #2e364315;
+
+
+    --ui-data-sidebar-tab1-hue: 256deg;
+    --ui-data-sidebar-tab1-grayscale: 96.9%;
+    --ui-data-sidebar-tab-saturation-sel: 690%;
+    --ui-data-sidebar-tab-brightness-sel: 2.69;
+
+    --ui-data-sidebar-tab-saturation-unsel: 300%;
+    --ui-data-sidebar-tab-brightness-unsel: 1.2;
+    --ui-data-sidebar-tab2-hue: 72deg;
+    --ui-data-sidebar-tab3-hue: 144deg;
+    --ui-data-sidebar-tab4-hue: 216deg;
+    --ui-data-sidebar-tab5-hue: 288deg;
 
     --ui-data-sidebar-color-text-selected: #525d69;
     --ui-data-sidebar-color-opacity-hover-selected: 1;

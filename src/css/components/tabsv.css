@@ -32,7 +32,6 @@ body {
     cursor: pointer;
     color: var(--ui-data-sidebar-color-text);
     opacity: var(--ui-data-sidebar-color-opacity);
-    transition: opacity .3s ease-in-out;
     width: 110px;
     height: 20%;
     text-align: right;
@@ -40,12 +39,13 @@ body {
     user-select: none;
     margin-left: auto;
     padding-right: 10px;
+    transition: opacity 0.2s ease-out;
 }
 .tabs .separator {
     background: linear-gradient(2.13deg,
             var(--ui-data-sidebar-transition) 0%,
             var(--ui-data-sidebar-transparent) 6.9%);
-    transition: --ui-data-sidebar-transition 0.1s 0.1s;
+    transition: opacity 0.2s ease-out, --ui-data-sidebar-transition 0.1s 0.1s;
 }
 @media screen and (max-height: 280px) {
     .tabs label {
@@ -64,7 +64,7 @@ body {
     width: 24px;
     margin-left: 10px;
     height: auto;
-    filter: brightness(0.213);
+    /* filter: brightness(0.69) hue-rotate(213deg) saturate(80%); */
 }
 .tabs input[type="radio"] {
     display: none;
@@ -79,13 +79,16 @@ body {
     --ui-data-sidebar-transition: var(--ui-data-sidebar-transparent);
 }
 
+.tabs input[type="radio"]:checked+label {
+    color: var(--ui-data-sidebar-color-text-selected);
+}
+
 .tabMarker {
     position: absolute;
     width: 100%;
     height: 100%;
     display: flex;
     flex-direction: column;
-    /* top: -50%; */
     left: 0;
     transition: transform .2s ease-in-out;
 }
@@ -122,19 +125,55 @@ body {
 #tab5:checked~.tabMarker {
     transform: translateY(calc(calc(100% / 5) * 4));
 }
-/* #tab6:checked~.tabMarker {
-    transform: translateY(calc(calc(51% / 6) * 5));
-} */
 
-/* .tabs .popup {
-    width: 80%;
-    height: 80%;
-    min-height: 480px;
-    max-height: 480px;
-    border-radius: 48px;
-    box-sizing: border-box;
-    border: 16px solid #ebf0f4;
-    background-color: #dfe6ed;
-    overflow: hidden;
-    box-shadow: 16px 16px 48px #2e364330;
+
+label .icon {
+    filter: 
+        grayscale(var(--ui-data-sidebar-tab1-grayscale)) 
+        brightness(var(--ui-data-sidebar-tab-brightness-sel)) 
+        saturate(var(--ui-data-sidebar-tab-saturation-sel)) 
+        hue-rotate(var(--ui-data-sidebar-tab1-hue));
+}
+#tab3 + label .icon {
+    opacity: 1;
+    filter: 
+        grayscale(var(--ui-data-sidebar-tab1-grayscale)) 
+        brightness(var(--ui-data-sidebar-tab-brightness-sel)) 
+        saturate(var(--ui-data-sidebar-tab-saturation-sel)) 
+        hue-rotate(var(--ui-data-sidebar-tab1-hue));
+}
+#tab3 + label { 
+    opacity: 1;
+}
+
+/* 
+#tab1 + label .icon {
+    filter: grayscale(var(--ui-data-sidebar-tab1-grayscale)) brightness(var(--ui-data-sidebar-tab-brightness-unsel)) saturate(var(--ui-data-sidebar-tab-saturation-unsel)) hue-rotate(var(--ui-data-sidebar-tab1-hue)) saturate(var(--ui-data-sidebar-tab-saturation-unsel));
+}
+#tab2 + label .icon {
+    filter: brightness(var(--ui-data-sidebar-tab-brightness-unsel)) hue-rotate(var(--ui-data-sidebar-tab2-hue)) saturate(var(--ui-data-sidebar-tab-saturation-unsel));
+}
+#tab3 + label .icon {
+    filter: brightness(var(--ui-data-sidebar-tab-brightness-unsel)) hue-rotate(var(--ui-data-sidebar-tab3-hue)) saturate(var(--ui-data-sidebar-tab-saturation-unsel));
+}
+#tab4 + label .icon {
+    filter: brightness(var(--ui-data-sidebar-tab-brightness-unsel)) hue-rotate(var(--ui-data-sidebar-tab4-hue)) saturate(var(--ui-data-sidebar-tab-saturation-unsel));
+}
+#tab5 + label .icon {
+    filter: brightness(var(--ui-data-sidebar-tab-brightness-unsel)) hue-rotate(var(--ui-data-sidebar-tab5-hue)) saturate(var(--ui-data-sidebar-tab-saturation-unsel));
+}
+#tab1:checked + label .icon {
+    filter: grayscale(var(--ui-data-sidebar-tab1-grayscale)) brightness(var(--ui-data-sidebar-tab-brightness-sel)) hue-rotate(var(--ui-data-sidebar-tab1-hue)) saturate(var(--ui-data-sidebar-tab-saturation-sel));
+}
+#tab2:checked + label .icon {
+    filter: brightness(var(--ui-data-sidebar-tab-brightness-sel)) hue-rotate(var(--ui-data-sidebar-tab2-hue)) saturate(var(--ui-data-sidebar-tab-saturation-sel));
+}
+#tab3:checked + label .icon {
+    filter: brightness(var(--ui-data-sidebar-tab-brightness-sel)) hue-rotate(var(--ui-data-sidebar-tab3-hue)) saturate(var(--ui-data-sidebar-tab-saturation-sel));
+}
+#tab4:checked + label .icon {
+    filter: brightness(var(--ui-data-sidebar-tab-brightness-sel)) hue-rotate(var(--ui-data-sidebar-tab4-hue)) saturate(var(--ui-data-sidebar-tab-saturation-sel));
+}
+#tab5:checked + label .icon {
+    filter: brightness(var(--ui-data-sidebar-tab-brightness-sel)) hue-rotate(var(--ui-data-sidebar-tab5-hue)) saturate(var(--ui-data-sidebar-tab-saturation-sel));
 } */
