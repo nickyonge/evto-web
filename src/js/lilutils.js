@@ -8,7 +8,8 @@
 export const isBlank = str => !str || !str.trim();
 
 /** 
- * Gets the CSS stylesheet for the page 
+ * Gets the CSS stylesheet for the page.
+ * Remember to use `.value` when accessing `style` (eg, `style.value.getPropertyValue`)
  * @type {CSSStyleDeclaration}
  */
 export const style = {

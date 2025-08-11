@@ -20,11 +20,12 @@ export function SetupDataWindow() {
 }
 
 export function SelectTab(tabNum, snap = false) {
-    console.log(`Now selected: ${tabNum}, snap: ${snap}`);
     for (let i = 0; i < txt.TABS_NUM; i++) {
-        let tab = 'tab' + i;
-        let tabInput = document.querySelector(`input[id=${tab}]`);
-        console.log(tabInput);
+        let tabId = 'tab' + i;
+        let tabInput = document.querySelector(`input[id=${tabId}]`);
+        let tabColor = tabColors[i];
+        let cssColor = GetBGColor(tabColor);
+        console.log(`Tab ID: ${tabId}, tabColor: ${tabColor}, cssColor: ${cssColor}`);
         if (snap) {
             // snap to initial state
             if (i == tabNum) {
@@ -34,4 +35,13 @@ export function SelectTab(tabNum, snap = false) {
             }
         }
     }
+}
+
+function GetBGColor(color) {
+    let cssVar = '--color-data-bg-blend-' + color;
+    let cssColor = style.value.getPropertyValue(cssVar);
+    if (!cssColor) {
+        throw new Error(`ERROR: couldn't get CSS variable for BG color: ${color}, parsed to CSS var ${cssVar}`);
+    }
+    return cssColor;
 }
