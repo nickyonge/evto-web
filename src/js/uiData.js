@@ -25,6 +25,8 @@ import iconScale from '../assets/svg/icons-red/icon-scale.svg';
 
 let iconArray = [iconHome, iconScale, iconFeatures, iconArt, iconSave];
 
+const useSeparators = false;
+
 /**
  * Create the data window (tabs, options, info)
  */
@@ -44,8 +46,9 @@ function CreateTabs() {
             ['type', 'id', 'name'],
             ['radio', tab, 'tab']);
         // create label 
-        let tabLabel = ui.CreateElement('label'); // label element
-        if (i != txt.TABS_NUM - 1) {
+        let tabLabel = ui.CreateElementWithClass('label', tabColors[i]); // label element
+        // check for separators
+        if (useSeparators && i != txt.TABS_NUM - 1) {
             ui.AddClassToDOMs('separator', tabLabel);
         }
         ui.AddElementAttribute(tabLabel, 'for', tab);
