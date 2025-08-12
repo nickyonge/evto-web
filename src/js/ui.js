@@ -168,5 +168,35 @@ export function CreateImage(imgSrc, alt) {
  * @param {number} tabIndex Default 0, optional value to specify tab index. `-1` = not tabbable
  */
 export function MakeTabbable(element, tabIndex = 0) {
-    element.setAttribute('tabIndex', tabIndex)
+    element.setAttribute('tabIndex', tabIndex);
+}
+
+/**
+ * Makes the given HTMLElement appear in the tab index for the page, 
+ * and sends any received keyboard enter/spacebar inputs to `inputToElement`.
+ * Eg, if you add a <label> to the tab index, but want to send its input to a different <input> tag.
+ * @param {HTMLElement} tabElement HTMLElement to add to the tab index
+ * @param {HTMLElement} inputToElement HTMLElement that receives Enter/Spacebar keyboard input from `tabElement` as a `click()`
+ * @param {number} tabIndex Default 0, optional value to specify tab index. `-1` = not tabbable (and no input events are added)
+ */
+export function MakeTabbableWithInputTo(tabElement, inputToElement, tabIndex = 0) {
+    MakeTabbable(tabElement, tabIndex);
+    if (tabIndex != -1) {
+        PassKeyboardSelection(tabElement, inputToElement);
+    }
+}
+
+/**
+ * Adds a `keydown` event listener for Enter/Spacebar to `fromElement`, which sends a `click()` event to the `toElement`
+ * @param {HTMLElement} fromElement Element that receives the user keyboard input
+ * @param {HTMLElement} toElement Element that the `click()` event gets sent to
+ */
+export function PassKeyboardSelection(fromElement, toElement) {
+    fromElement.addEventListener('keydown', e => {
+        // much older devices check for "Spacebar", might as well support it 
+        if (e.key === ' ' || e.key === 'Spacebar' || e.key === 'Enter') {
+            e.preventDefault(); // don't scroll the page down or anything
+            toElement.click(); // pass click to new element
+        }
+    });
 }
