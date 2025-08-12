@@ -2,7 +2,8 @@
 
 import * as ui from "./ui";
 import * as txt from './text';
-import { tabColors, SelectTab } from "./data";
+import { tabColors } from "./data";
+import { dataWindow } from "./uiMain";
 
 // import iconArt from '../assets/svg/icons-currentColor/icon-art.svg';
 // import iconFeatures from '../assets/svg/icons-currentColor/icon-features.svg';
@@ -26,13 +27,14 @@ let iconArray = [iconHome, iconScale, iconFeatures, iconArt, iconSave];
 
 /**
  * Create the data window (tabs, options, info)
- * @param {Element} dataWindow 
  */
-export function CreateDataWindow(dataWindow) {
-    CreateTabs(dataWindow);
+export function CreateDataWindow() {
+    CreateTabs();
+    CreateContent();
+    CreateFadeBG();
 }
 
-function CreateTabs(dataWindow) {
+function CreateTabs() {
     let tabs = ui.CreateDivWithClass('tabs');
     for (let i = 0; i < txt.TABS_NUM; i++) {
         // create individual tabs, based off TABS array in text.js
@@ -63,9 +65,17 @@ function CreateTabs(dataWindow) {
     marker.appendChild(ui.CreateDivWithID('tmTop'));
     marker.appendChild(ui.CreateDivWithID('tmBottom'));
     tabs.appendChild(marker);
-    // create fade bg
-    let fadeBG = ui.CreateDivWithClass('fadeBG');
     // add to window
     dataWindow.appendChild(tabs);
+}
+
+function CreateContent() {
+    let content = ui.CreateDivWithClass('content');
+    dataWindow.appendChild(content);
+}
+
+function CreateFadeBG() {
+    // create fade bg
+    let fadeBG = ui.CreateDivWithClass('fadeBG');
     dataWindow.appendChild(fadeBG);
 }

@@ -30,7 +30,7 @@ h3 {
     }
 }
 
-#content {
+#container {
     display: grid;
     position: absolute;
     width: 100%;
@@ -41,7 +41,7 @@ h3 {
 }
 
 @media screen and (max-aspect-ratio: 1.2) {
-    #content {
+    #container {
         grid-template:
             [header] "header" var(--ui-header-height) [main] "artWindow" var(--ui-art-window-ratio) [main] "dataWindow" 1fr
             [footer] "footer" var(--ui-footer-height) / 1fr;
@@ -74,6 +74,10 @@ dataWindow {
     /* background: linear-gradient(to right,
             var(--color-data-bg-blend-default) -100%,
             var(--ui-data-window-bg-color) 127%); */
+}
+
+dataWindow .content {
+
 }
 
 dataWindow .fadeBG {
