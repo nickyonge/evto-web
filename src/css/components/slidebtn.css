@@ -3,7 +3,7 @@ https://uiverse.io/cssbuttons-io/massive-mayfly-74 */
 
 button.slidingbtn {
     position: relative;
-    display: inline;
+    display: inline-flex;
 
     cursor: pointer;
     outline: none;
@@ -22,11 +22,22 @@ button.slidingbtn {
     transition: all 0.213s cubic-bezier(0.69, 0, 0.069, 1);
 }
 
+button.slidingbtn::before {
+    content: "";
+    position: absolute;
+    display: flex;
+    top: var(--ui-footer-kickstarter-buffer-size);
+    left: var(--ui-footer-kickstarter-buffer-size);
+    right: var(--ui-footer-kickstarter-buffer-size);
+    bottom: var(--ui-footer-kickstarter-buffer-size);
+    transition: all 0.213s cubic-bezier(0.69, 0, 0.069, 1);
+}
+
 /* match width to var(--viewport-bottombar-wrap) in vars.css */
 @media screen and (max-width: 750px) {
     button.slidingbtn {
         position: fixed;
-        display: block;
+        display: flex;
 
         float: right;
         right: 0px;
@@ -50,6 +61,15 @@ button.slidingbtn .circle {
     border-radius: 15px;
 }
 
+/* button.slidingbtn .outer {
+    position: absolute;
+    display: block;
+    width: 200%;
+    height: 100%;
+    top: 0px;
+    overflow: hidden;
+} */
+
 button.slidingbtn .circle .icon {
     position: absolute;
     top: 0;
@@ -61,21 +81,21 @@ button.slidingbtn .circle .icon {
 
 button.slidingbtn .circle .icon.arrow {
     transition: all 0.213s cubic-bezier(0.69, 0, 0.069, 1);
-    left: 0.625rem;
-    width: 1.125rem;
-    height: 0.125rem;
+    left: 10px;
+    width: 18px;
+    height: 2px;
     background: none;
 }
 
 button.slidingbtn .circle .icon.arrow::before {
     position: absolute;
     content: "";
-    top: -0.29rem;
-    right: 0.0625rem;
-    width: 0.625rem;
-    height: 0.625rem;
-    border-top: 0.125rem solid var(--color-ui-dark);
-    border-right: 0.125rem solid var(--color-ui-dark);
+    top: -5px;
+    right: 1px;
+    width: 10px;
+    height: 10px;
+    border-top: 2px solid var(--color-ui-dark);
+    border-right: 2px solid var(--color-ui-dark);
     transition: all 0.213s cubic-bezier(0.69, 0, 0.069, 1);
     transform: rotate(45deg);
 }
@@ -101,7 +121,25 @@ button.slidingbtn .button-text {
 
 button.slidingbtn:hover {
     transition: all 0.213s cubic-bezier(0.69, 0, 0.069, 1);
-    right: 8px;
+    /* right: var(--ui-footer-kickstarter-hover-offset); */
+    /* margin-left: var(--ui-footer-kickstarter-hover-offset); */
+}
+button.slidingbtn:hover::before {
+    transition: all 0.213s cubic-bezier(0.69, 0, 0.069, 1);
+    
+    /* left: calc(var(--ui-footer-kickstarter-buffer-size) - var(--ui-footer-kickstarter-hover-offset)); */
+    /* - var(--ui-footer-kickstarter-hover-offset) */
+    
+    /* left: calc(
+        var(--ui-footer-kickstarter-buffer-size)
+        ); */
+        /* right: calc(
+            (-2 * var(--ui-footer-kickstarter-hover-offset))
+            + var(--ui-footer-kickstarter-buffer-size)
+    ); */
+
+    /* left: calc(var(--ui-footer-kickstarter-buffer-size) - var(--ui-footer-kickstarter-hover-offset));
+    right: calc(var(--ui-footer-kickstarter-buffer-size) + var(--ui-footer-kickstarter-hover-offset)); */
 }
 button:hover .circle {
     width: 100%;
@@ -115,11 +153,11 @@ button:active .circle {
 }
 button:hover .circle .icon.arrow {
     background: var(--color-ui-verydark);
-    transform: translate(8px, 0);
+    transform: translate(var(--ui-footer-kickstarter-hover-offset), 0);
 }
 button.slidingbtn:hover .circle .icon.arrow::before {
-    border-top: 0.125rem solid var(--color-ui-verydark);
-    border-right: 0.125rem solid var(--color-ui-verydark);
+    border-top: 2px solid var(--color-ui-verydark);
+    border-right: 2px solid var(--color-ui-verydark);
 }
 
 button:hover .button-text {

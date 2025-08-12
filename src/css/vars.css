@@ -49,6 +49,8 @@
     --ui-footer-emali-btn-width: 100px;
     --ui-footer-kickstarter-width: 220px;
 
+    --ui-footer-kickstarter-hover-offset: 6px;
+    --ui-footer-kickstarter-buffer-size: -8px;
     
 
     /* RAINBOW PASTEL SVG FILTERS */

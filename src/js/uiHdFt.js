@@ -101,5 +101,7 @@ function CreateSlidingButton() {
     let text = ui.CreateElementWithClass('span', 'button-text', 'preventSelect');
     text.innerText = txt.SLIDING_BUTTON;
     btn.appendChild(text);
+    // let outer = ui.CreateDivWithClass('outer');
+    // btn.appendChild(outer);
     return btn;
 }
