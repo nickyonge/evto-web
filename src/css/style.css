@@ -63,9 +63,9 @@ footer {
 
 
 dataWindow {
-    height: calc(100% - (var(--ui-data-window-margin) * 2));
+    height: calc(100% - var(--ui-data-window-height-offset));
     overflow: hidden;
-    margin: var(--ui-data-window-margin);
+    margin: var(--ui-data-window-margin-vert);
     border-radius: var(--ui-data-window-radius);
     box-shadow: 0px 6px 9px -2.13px var(--ui-data-window-bg-shadow);
     background-color: var(--ui-data-window-bg-color);
@@ -93,10 +93,20 @@ dataWindow .fadeBG {
             var(--ui-data-window-bg-color) 169%);
 }
 
+@media screen and (min-aspect-ratio: 1.2) {
+    dataWindow {
+        /* display: none; */
+        height: calc(100% - (var(--ui-data-window-height-offset)));
+        /* margin: var(--ui-data-window-margin); */
+    }
+}
+
 /* match width to var(--viewport-bottombar-wrap) in vars.css */
 @media screen and (max-width: 750px) {
     dataWindow {
-        height: calc(100% - (var(--ui-data-window-margin) * 2) - var(--ui-data-window-bottom-margin));
+        /* display: none; */
+        height: calc(100% - (var(--ui-data-window-height-offset) * 3));
+        margin: var(--ui-data-window-margin);
     }
 }
 
