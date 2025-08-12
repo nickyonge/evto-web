@@ -66,14 +66,16 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
     transform: translate(-50%) rotate(45deg);
     transition: all 0.213s cubic-bezier(0.68,-0.55,0.265,1.55);
 }
-.sbWrapper .icon:hover .tooltip::before {
+.sbWrapper .icon:hover .tooltip::before,
+.sbWrapper .icon:focus-visible .tooltip::before {
     bottom: -3.69px;
     height: 8px;
     width: 8px;
     transition: all 0.369s ease-out;
 }
 
-.sbWrapper .icon:hover .tooltip {
+.sbWrapper .icon:hover .tooltip,
+.sbWrapper .icon:focus-visible .tooltip {
     transition: all 0.3s cubic-bezier(.21,.53,.26,1.55);
     top: -45px;
     opacity: 1;
@@ -92,7 +94,9 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
 }
 
 .sbWrapper .icon:hover span,
-.sbWrapper .icon:hover .tooltip {
+.sbWrapper .icon:hover .tooltip,
+.sbWrapper .icon:focus-visible span,
+.sbWrapper .icon:focus-visible .tooltip {
     text-shadow: 
         0px -1px 0px rgba(0, 0, 0, 0.1),
         0px 1.5px 6.9px rgba(0, 0, 0, 0.69);
@@ -106,7 +110,8 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
 .sbWrapper .instagram img {
     height: 69%;
 }
-.sbWrapper .instagram:hover img {
+.sbWrapper .instagram:hover img,
+.sbWrapper .instagram:focus-visible img {
     height: 100%;
 }
 .sbWrapper .instagram,
@@ -134,10 +139,11 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
     margin-top: -1px;
     height: 76%;
 }
-.sbWrapper .github:hover img {
-    margin-left: -2px;
-    margin-top: -2px;
-    height: 110%;
+.sbWrapper .github:hover img,
+.sbWrapper .github:focus-visible img {
+    margin-left: 0px;
+    margin-top: -1.69px;
+    height: 104.20%;
 }
 
 .sbWrapper .bluesky .tooltip {
@@ -157,7 +163,8 @@ https://uiverse.io/david-mohseni/brave-shrimp-86 */
     margin-top: 1px;
     height: 60%;
 }
-.sbWrapper .bluesky:hover img {
+.sbWrapper .bluesky:hover img,
+.sbWrapper .bluesky:focus-visible img {
     margin-left: 0px;
     margin-top: -1px;
     height: 92%;

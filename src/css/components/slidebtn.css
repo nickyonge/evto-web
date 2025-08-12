@@ -6,10 +6,11 @@ button.slidingbtn {
     display: inline-flex;
 
     cursor: pointer;
-    outline: none;
+    /* outline: none; */
+    border-radius: 15px;
     border: 0;
     vertical-align: top;
-    text-decoration: none;
+    /* text-decoration: none; */
     background: transparent;
     padding: 0;
     font-size: inherit;
@@ -105,7 +106,8 @@ button.slidingbtn .button-text {
     align-self: center;
 }
 
-button:hover .circle {
+button:hover .circle,
+button:focus-visible .circle {
     width: 100%;
     background: var(--color-ui-verylight);
 }
@@ -115,16 +117,19 @@ button:active .circle {
     transition: all 0.069s ease-out;
     background: var(--color-ui-active);
 }
-button:hover .circle .icon.arrow {
+button:hover .circle .icon.arrow,
+button:focus-visible .circle .icon.arrow {
     background: var(--color-ui-verydark);
     transform: translate(var(--ui-footer-kickstarter-hover-offset), 0);
 }
-button.slidingbtn:hover .circle .icon.arrow::before {
+button.slidingbtn:hover .circle .icon.arrow::before,
+button.slidingbtn:focus-visible .circle .icon.arrow::before {
     border-top: 2px solid var(--color-ui-verydark);
     border-right: 2px solid var(--color-ui-verydark);
 }
 
-button:hover .button-text {
+button:hover .button-text,
+button:focus-visible .button-text {
     transition: all 0.2s cubic-bezier(0.69, 0, 0.069, 1);
     font-weight: bold;
     letter-spacing: -0.369px;

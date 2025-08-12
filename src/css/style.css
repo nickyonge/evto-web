@@ -83,7 +83,7 @@ dataWindow .content {
 }
 
 dataWindow .content .page {
-    background-color: #ff00ff69;
+    /* background-color: #ff00ff69; */
     display: inline-flex;
     /* position: absolute; */
     width: 100%;

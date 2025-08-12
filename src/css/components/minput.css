@@ -65,7 +65,8 @@ https://uiverse.io/alexruix/evil-parrot-59 */
     transition: all 0.169s ease-out;
 }
 
-.mbuttonSubmit:hover {
+.mbuttonSubmit:hover,
+.mbuttonSubmit:focus-visible {
     background-color: var(--color-ui-verylight);
     color: var(--color-ui-black);
 }

@@ -40,6 +40,7 @@ function CreateHamburgerButton() {
     btn.appendChild(document.createElement('span'));
     btn.appendChild(document.createElement('span'));
     btn.appendChild(document.createElement('span'));
+    ui.MakeTabbableWithInputTo(btn, input);
     return btn;
 }
 
@@ -76,6 +77,7 @@ function CreateSocialButton(name) {
     li.appendChild(tt);
     let img = ui.CreateImage(GetSocialImgByName(name), name);
     li.appendChild(img);
+    ui.MakeTabbable(li);
     return li;
 }
 
@@ -103,5 +105,6 @@ function CreateSlidingButton() {
     btn.appendChild(text);
     // let outer = ui.CreateDivWithClass('outer');
     // btn.appendChild(outer);
+    ui.MakeTabbable(btn);
     return btn;
 }
