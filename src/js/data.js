@@ -7,6 +7,8 @@ import { dataWindow } from './uiMain';
 const initialTab = 0;
 export const tabColors = ['red', 'orange', 'blue', 'green', 'purple'];
 
+const bgFadeAlpha = 0.82;
+
 let bgColorMain;
 
 export function SetupDataWindow() {
@@ -32,7 +34,7 @@ export function SelectTab(tabNum, snap = false) {
         if (currentTab) {
             let tabColor = tabColors[i];
             let cssColor = GetBGColor(tabColor);
-            cssColor = AddAlphaToHex(cssColor, 0.69);
+            cssColor = AddAlphaToHex(cssColor, bgFadeAlpha);
             console.log(`Tab ID: ${tabId}, tabColor: ${tabColor}, cssColor: ${cssColor}`);
             // let bgGradient = `linear-gradient(to right, ${cssColor} -100%, ${bgColorMain} 127%)`;
             // dataWindow.style.setProperty('background', bgGradient);
