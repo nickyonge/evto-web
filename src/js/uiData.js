@@ -50,7 +50,7 @@ function CreateTabs() {
         }
         ui.AddElementAttribute(tabLabel, 'for', tab);
         // tab text and icon
-        let tabText = ui.CreateDivWithClass('text');
+        let tabText = ui.CreateDivWithClass('text', tabColors[i]);
         tabText.innerText = txt.TABS[i];
         let tabIcon = ui.CreateImage(iconArray[i]);
         ui.AddClassesToDOM(tabIcon, 'icon', tabColors[i]);

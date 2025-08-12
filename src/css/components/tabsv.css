@@ -30,7 +30,6 @@ body {
     justify-content: right;
     /* font-weight: 700; */
     cursor: pointer;
-    color: var(--ui-data-sidebar-color-text);
     opacity: var(--ui-data-sidebar-color-opacity);
     width: 110px;
     height: 20%;
@@ -40,7 +39,7 @@ body {
     margin-left: auto;
     padding-right: 10px;
     /* transition: opacity 0.2s ease-out; */
-    transition: opacity 0.1s ease-out;
+    transition: color 0.2s ease-out, opacity 0.1s ease-out;
 }
 .tabs .separator {
     transition: opacity 0.1s ease-out, --ui-data-sidebar-separator-transition 0.269s 0.0213s ease-in-out;
@@ -57,9 +56,10 @@ body {
 .tabs label .text {
     padding-right: 0px;
     position: relative;
-
     display: inline-block;
     height: auto;
+    color: var(--ui-data-sidebar-color-text);
+    transition: color 0.3s ease-out, opacity 0.1s ease-out;
 }
 .tabs label .icon {
     width: 24px;
@@ -82,6 +82,7 @@ body {
 
 .tabs input[type="radio"]:checked+label {
     color: var(--ui-data-sidebar-color-text-selected);
+    /* transition: color 0.2s ease-out, --ui-data-sidebar-separator-transition 0.269s 0.0213s ease-in-out; */
 }
 
 .tabMarker {
@@ -151,6 +152,10 @@ label .icon {
     filter:
         grayscale(var(--color-svg-default-gry-sel)) brightness(var(--color-svg-default-bri-sel)) saturate(var(--color-svg-default-sat-sel)) hue-rotate(var(--color-svg-default-hue-sel));
 }
+.tabs input[type="radio"]:checked+label .text.default {
+    transition: color 0.2s ease-out;
+    color: var(--color-data-bg-text-default);
+}
 
 label .icon.red {
     opacity: var(--opacity-svg-red-unsel);
@@ -166,6 +171,11 @@ label .icon.red {
         grayscale(var(--color-svg-red-gry-sel)) brightness(var(--color-svg-red-bri-sel)) saturate(var(--color-svg-red-sat-sel)) hue-rotate(var(--color-svg-red-hue-sel));
     --ui-data-bg-blendcolor: var(--ui-data-bg-red);
 }
+.tabs input[type="radio"]:checked+label .text.red {
+    transition: color 0.2s ease-out;
+    color: var(--color-data-bg-text-red);
+}
+
 label .icon.orange {
     opacity: var(--opacity-svg-orange-unsel);
     filter:
@@ -179,6 +189,11 @@ label .icon.orange {
     filter:
         grayscale(var(--color-svg-orange-gry-sel)) brightness(var(--color-svg-orange-bri-sel)) saturate(var(--color-svg-orange-sat-sel)) hue-rotate(var(--color-svg-orange-hue-sel));
 }
+.tabs input[type="radio"]:checked+label .text.orange {
+    transition: color 0.2s ease-out;
+    color: var(--color-data-bg-text-orange);
+}
+
 /* yellow not implemented
 label .icon.yellow {
     opacity: var(--opacity-svg-yellow-unsel);
@@ -198,7 +213,12 @@ label .icon.yellow {
         brightness( var(--color-svg-yellow-bri-sel)) 
         saturate(   var(--color-svg-yellow-sat-sel)) 
         hue-rotate( var(--color-svg-yellow-hue-sel));
+}
+.tabs input[type="radio"]:checked+label .text.yellow {
+    transition: color 0.2s ease-out;
+    color: var(--color-data-bg-text-yellow);
 } */
+
 label .icon.green {
     opacity: var(--opacity-svg-green-unsel);
     filter:
@@ -212,6 +232,11 @@ label .icon.green {
     filter:
         grayscale(var(--color-svg-green-gry-sel)) brightness(var(--color-svg-green-bri-sel)) saturate(var(--color-svg-green-sat-sel)) hue-rotate(var(--color-svg-green-hue-sel));
 }
+.tabs input[type="radio"]:checked+label .text.green {
+    transition: color 0.2s ease-out;
+    color: var(--color-data-bg-text-green);
+}
+
 label .icon.blue {
     opacity: var(--opacity-svg-blue-unsel);
     filter:
@@ -225,6 +250,11 @@ label .icon.blue {
     filter:
         grayscale(var(--color-svg-blue-gry-sel)) brightness(var(--color-svg-blue-bri-sel)) saturate(var(--color-svg-blue-sat-sel)) hue-rotate(var(--color-svg-blue-hue-sel));
 }
+.tabs input[type="radio"]:checked+label .text.blue {
+    transition: color 0.2s ease-out;
+    color: var(--color-data-bg-text-blue);
+}
+
 label .icon.purple {
     opacity: var(--opacity-svg-purple-unsel);
     filter:
@@ -237,6 +267,10 @@ label .icon.purple {
     opacity: var(--opacity-svg-purple-sel);
     filter:
         grayscale(var(--color-svg-purple-gry-sel)) brightness(var(--color-svg-purple-bri-sel)) saturate(var(--color-svg-purple-sat-sel)) hue-rotate(var(--color-svg-purple-hue-sel));
+}
+.tabs input[type="radio"]:checked+label .text.purple {
+    transition: color 0.2s ease-out;
+    color: var(--color-data-bg-text-purple);
 }
 
 /* 
