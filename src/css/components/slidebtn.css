@@ -98,7 +98,8 @@ button.slidingbtn .button-text {
     margin-top: 1px;
     margin-left: 38px;
     color: var(--color-ui-verylight);
-    font-weight: 700;
+    font-weight: normal;
+    letter-spacing: 0px;
     line-height: 1.6;
     text-align: left;
     align-self: center;
@@ -124,5 +125,8 @@ button.slidingbtn:hover .circle .icon.arrow::before {
 }
 
 button:hover .button-text {
+    transition: all 0.2s cubic-bezier(0.69, 0, 0.069, 1);
+    font-weight: bold;
+    letter-spacing: -0.369px;
     color: var(--color-ui-verydark);
 }
