@@ -68,9 +68,9 @@
     --opacity-svg-red-sel: 1;
     --opacity-svg-red-unsel: 0.69;
     --color-svg-red-hue-sel: 352deg;
-    --color-svg-red-sat-sel: 369%;
+    --color-svg-red-sat-sel: 420%;
     --color-svg-red-bri-sel: 369%;
-    --color-svg-red-gry-sel: 92.13%;
+    --color-svg-red-gry-sel: 90%;
     --color-svg-red-hue-unsel: 355deg;
     --color-svg-red-sat-unsel: 420%;
     --color-svg-red-bri-unsel: 300%;
@@ -81,8 +81,8 @@
     --opacity-svg-orange-sel: 1;
     --opacity-svg-orange-unsel: 0.8;
     --color-svg-orange-hue-sel: 21.3deg;
-    --color-svg-orange-sat-sel: 690%;
-    --color-svg-orange-bri-sel: 400%;
+    --color-svg-orange-sat-sel: 604%;
+    --color-svg-orange-bri-sel: 343%;
     --color-svg-orange-gry-sel: 96.9%;
     --color-svg-orange-hue-unsel: 21.3deg;
     --color-svg-orange-sat-unsel: 420%;
