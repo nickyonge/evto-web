@@ -2,8 +2,8 @@
 
 import * as ui from "./ui";
 import * as txt from './text';
-import { tabColors } from "./data";
 import { dataWindow } from "./uiMain";
+import { style, AddAlphaToHex } from "./lilutils";
 
 // import iconArt from '../assets/svg/icons-currentColor/icon-art.svg';
 // import iconFeatures from '../assets/svg/icons-currentColor/icon-features.svg';
@@ -23,7 +23,13 @@ import iconHome from '../assets/svg/icons-red/icon-home.svg';
 import iconSave from '../assets/svg/icons-red/icon-save.svg';
 import iconScale from '../assets/svg/icons-red/icon-scale.svg';
 
-let iconArray = [iconHome, iconScale, iconFeatures, iconArt, iconSave];
+export const initialTab = 0;
+const bgFadeAlpha = 0.82;
+
+const iconArray = [iconHome, iconScale, iconFeatures, iconArt, iconSave];
+const tabColors = ['red', 'orange', 'blue', 'green', 'purple'];
+
+let bgColorMain;
 
 const useSeparators = false;
 
@@ -31,10 +37,48 @@ const useSeparators = false;
  * Create the data window (tabs, options, info)
  */
 export function CreateDataWindow() {
+    // create UI elements
     CreateTabs();
     CreateContent();
     CreateFadeBG();
 }
+
+
+
+export function SelectTab(tabNum, snap = false) {
+    for (let i = 0; i < txt.TABS_NUM; i++) {
+        let currentTab = i == tabNum;
+        let tabId = 'tab' + i;
+        let tabInput = document.querySelector(`input[id=${tabId}]`);
+
+        if (currentTab) {
+            let tabColor = tabColors[i];
+            let cssColor = GetBGColor(tabColor);
+            cssColor = AddAlphaToHex(cssColor, bgFadeAlpha);
+            console.log(`Tab ID: ${tabId}, tabColor: ${tabColor}, cssColor: ${cssColor}`);
+            dataWindow.style.setProperty('background-color', cssColor);
+        }
+
+        if (snap) {
+            // snap to initial state
+            if (i == tabNum) {
+                tabInput.checked = true;
+            } else {
+                tabInput.checked = false;
+            }
+        }
+    }
+}
+
+function GetBGColor(color) {
+    let cssVar = '--color-data-bg-blend-' + color;
+    let cssColor = style.value.getPropertyValue(cssVar);
+    if (!cssColor) {
+        throw new Error(`ERROR: couldn't get CSS variable for BG color: ${color}, parsed to CSS var ${cssVar}`);
+    }
+    return cssColor;
+}
+
 
 function CreateTabs() {
     let tabs = ui.CreateDivWithClass('tabs');

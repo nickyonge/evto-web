@@ -1,19 +1,11 @@
 /* functiionality related to the Data window */
 
 import * as txt from './text';
-import { style, StringToNumber, AddAlphaToHex } from "./lilutils";
+import { StringToNumber } from "./lilutils";
 import { dataWindow } from './uiMain';
-
-const initialTab = 0;
-export const tabColors = ['red', 'orange', 'blue', 'green', 'purple'];
-
-const bgFadeAlpha = 0.82;
-
-let bgColorMain;
+import { initialTab, SelectTab } from './uiData';
 
 export function SetupDataWindow() {
-    // prep vars 
-    bgColorMain = style.value.getPropertyValue('--ui-data-window-bg-color');
     // select initial tab
     SelectTab(initialTab, true);
     // create events for changing tabs
@@ -23,40 +15,4 @@ export function SetupDataWindow() {
             SelectTab(StringToNumber(selected.id));
         });
     });
-}
-
-export function SelectTab(tabNum, snap = false) {
-    for (let i = 0; i < txt.TABS_NUM; i++) {
-        let currentTab = i == tabNum;
-        let tabId = 'tab' + i;
-        let tabInput = document.querySelector(`input[id=${tabId}]`);
-
-        if (currentTab) {
-            let tabColor = tabColors[i];
-            let cssColor = GetBGColor(tabColor);
-            cssColor = AddAlphaToHex(cssColor, bgFadeAlpha);
-            console.log(`Tab ID: ${tabId}, tabColor: ${tabColor}, cssColor: ${cssColor}`);
-            // let bgGradient = `linear-gradient(to right, ${cssColor} -100%, ${bgColorMain} 127%)`;
-            // dataWindow.style.setProperty('background', bgGradient);
-            dataWindow.style.setProperty('background-color', cssColor);
-        }
-
-        if (snap) {
-            // snap to initial state
-            if (i == tabNum) {
-                tabInput.checked = true;
-            } else {
-                tabInput.checked = false;
-            }
-        }
-    }
-}
-
-function GetBGColor(color) {
-    let cssVar = '--color-data-bg-blend-' + color;
-    let cssColor = style.value.getPropertyValue(cssVar);
-    if (!cssColor) {
-        throw new Error(`ERROR: couldn't get CSS variable for BG color: ${color}, parsed to CSS var ${cssVar}`);
-    }
-    return cssColor;
 }
