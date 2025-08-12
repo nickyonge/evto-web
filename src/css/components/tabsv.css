@@ -20,6 +20,7 @@ body {
     flex-direction: column;
     position: relative;
     float: left;
+    z-index: 1;
 }
 
 
@@ -34,12 +35,12 @@ body {
     width: 110px;
     height: 20%;
     text-align: right;
-    z-index: 100;
     user-select: none;
     margin-left: auto;
     padding-right: 10px;
     /* transition: opacity 0.2s ease-out; */
     transition: color 0.2s ease-out, opacity 0.1s ease-out;
+    z-index: inherit;
 }
 .tabs .separator {
     transition: opacity 0.1s ease-out, --ui-data-sidebar-separator-transition 0.269s 0.0213s ease-in-out;
@@ -70,6 +71,7 @@ body {
 .tabs input[type="radio"] {
     display: none;
     width: 0;
+    z-index: 2;
 }
 .tabs label:hover,
 .tabs input[type="radio"]:checked+label {

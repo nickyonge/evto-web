@@ -33,13 +33,19 @@ let bgColorMain;
 
 const useSeparators = false;
 
+let pageIntro;
+let pageSize;
+let pageFeatures;
+let pagePattern;
+let pageSave;
+
 /**
  * Create the data window (tabs, options, info)
  */
 export function CreateDataWindow() {
     // create UI elements
     CreateTabs();
-    CreateContent();
+    CreatePages();
     CreateFadeBG();
 }
 
@@ -116,9 +122,13 @@ function CreateTabs() {
     dataWindow.appendChild(tabs);
 }
 
-function CreateContent() {
+function CreatePages() {
+    // create pages content container
     let content = ui.CreateDivWithClass('content');
     dataWindow.appendChild(content);
+    // create pages 
+    pageIntro = ui.CreateDivWithClass('page', 'intro');
+    content.appendChild(pageIntro);
 }
 
 function CreateFadeBG() {
