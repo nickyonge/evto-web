@@ -42,11 +42,6 @@ button.slidingbtn::before {
         float: right;
         right: 0px;
         bottom: 52px;
-
-        /* 
-        float:initial;
-        left: calc(50vw - calc(var(--ui-footer-kickstarter-width) / 2)); 
-        */
     }
 }
 
@@ -60,15 +55,6 @@ button.slidingbtn .circle {
     background: var(--color-ui-button);
     border-radius: 15px;
 }
-
-/* button.slidingbtn .outer {
-    position: absolute;
-    display: block;
-    width: 200%;
-    height: 100%;
-    top: 0px;
-    overflow: hidden;
-} */
 
 button.slidingbtn .circle .icon {
     position: absolute;
@@ -116,31 +102,8 @@ button.slidingbtn .button-text {
     line-height: 1.6;
     text-align: left;
     align-self: center;
-    /* text-transform: uppercase; */
 }
 
-button.slidingbtn:hover {
-    transition: all 0.213s cubic-bezier(0.69, 0, 0.069, 1);
-    /* right: var(--ui-footer-kickstarter-hover-offset); */
-    /* margin-left: var(--ui-footer-kickstarter-hover-offset); */
-}
-button.slidingbtn:hover::before {
-    transition: all 0.213s cubic-bezier(0.69, 0, 0.069, 1);
-    
-    /* left: calc(var(--ui-footer-kickstarter-buffer-size) - var(--ui-footer-kickstarter-hover-offset)); */
-    /* - var(--ui-footer-kickstarter-hover-offset) */
-    
-    /* left: calc(
-        var(--ui-footer-kickstarter-buffer-size)
-        ); */
-        /* right: calc(
-            (-2 * var(--ui-footer-kickstarter-hover-offset))
-            + var(--ui-footer-kickstarter-buffer-size)
-    ); */
-
-    /* left: calc(var(--ui-footer-kickstarter-buffer-size) - var(--ui-footer-kickstarter-hover-offset));
-    right: calc(var(--ui-footer-kickstarter-buffer-size) + var(--ui-footer-kickstarter-hover-offset)); */
-}
 button:hover .circle {
     width: 100%;
     background: var(--color-ui-verylight);
