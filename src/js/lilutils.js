@@ -36,7 +36,7 @@ let _style;
 export const StringToNumber = str => (str.match(/\d+/) ? parseInt(str.match(/\d+/)[0], 10) : null);
 
 /**
- * 
+ * Adds an alpha value to a hex code via 0-1 numeric value
  * @param {string} color Hex code formatted color, eg `#FF00FF` 
  * @param {number} opacity Number from 0 to 1 to represent alpha value 
  * @returns Hex code with hex-formatted alpha added
@@ -45,4 +45,45 @@ export function AddAlphaToHex(color, opacity) {
     // credit: https://stackoverflow.com/questions/19799777/how-to-add-transparency-information-to-a-hex-color-code/68398236#68398236
     let _opacity = Math.round(Math.min(Math.max(opacity ?? 1, 0), 1) * 255);
     return color + _opacity.toString(16).toUpperCase();
+}
+
+/**
+ * Deselects (and optionally blurs) the given HTMLElement AND all its children
+ * @param {HTMLElement} element HTMLElement to deselect
+ * @param {boolean} [alsoBlur=true] also blur (unfocus) the element, or any focused children of the element?  
+ */
+export function DeselectElement(element, alsoBlur = true) {
+    // get selection 
+    const selection = window.getSelection();
+    // ensure that selection(s) exist
+    if (selection.rangeCount) {
+        for (let i = 0; i < selection.rangeCount; i++) {
+            const range = selection.getRangeAt(i);
+            // check if the selection intersects the given element
+            if (element.contains(range.commonAncestorContainer)) {
+                selection.removeAllRanges();
+                break;
+            }
+        }
+    }
+    if (alsoBlur) {
+        // check for any active elements / descendants to defocus 
+        const active = document.activeElement;
+        if (element.contains(active)) {
+            active.blur();
+        }
+    }
+}
+
+/**
+ * Deselect ALL selected elements on the page 
+ * @param {boolean} [alsoBlur=true] also blur (unfocus) any and all focused elements?
+ */
+export function DeselectAll(alsoBlur = true) {
+    window.getSelection().removeAllRanges();
+    if (alsoBlur) {
+        if (document.activeElement && document.activeElement !== document.body) {
+            document.activeElement.blur();
+        }
+    }
 }
