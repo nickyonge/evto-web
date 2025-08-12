@@ -102,6 +102,7 @@ function CreateTabs() {
             ui.AddClassToDOMs('separator', tabLabel);
         }
         ui.AddElementAttribute(tabLabel, 'for', tab);
+        ui.MakeTabbable(tabLabel);
         // tab text and icon
         let tabText = ui.CreateDivWithClass('text', tabColors[i]);
         tabText.innerText = txt.TABS[i];

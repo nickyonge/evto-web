@@ -147,7 +147,7 @@ export function AddElementAttribute(element, attType, attValue) {
 }
 
 /**
- * Creates a new <img> element, and assigns the given src attribute (and optional alt text value)
+ * Creates a new `<img>` element, and assigns the given src attribute (and optional alt text value)
  * @param {string} imgSrc Value to add to the "src" attribute to the new img
  * @param {string} alt Alt text to provide to the new img (optional)
  * @returns 
@@ -159,4 +159,14 @@ export function CreateImage(imgSrc, alt) {
         img.setAttribute('alt', alt);
     }
     return img;
+}
+
+/**
+ * Make the given HTMLElement appear in the tab index for the page
+ * Note: giving the `tabIndex` value `-1` will make an element untabbable, even if it's tabbable by default.
+ * @param {HTMLElement} element HTMLElement to add to the tab index 
+ * @param {number} tabIndex Default 0, optional value to specify tab index. `-1` = not tabbable
+ */
+export function MakeTabbable(element, tabIndex = 0) {
+    element.setAttribute('tabIndex', tabIndex)
 }
