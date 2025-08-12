@@ -26,18 +26,13 @@ import iconScale from '../assets/svg/icons-red/icon-scale.svg';
 export const initialTab = 0;
 const bgFadeAlpha = 0.82;
 
-const iconArray = [iconHome, iconScale, iconFeatures, iconArt, iconSave];
-const tabColors = ['red', 'orange', 'blue', 'green', 'purple'];
-
-let bgColorMain;
-
 const useSeparators = false;
 
-let pageIntro;
-let pageSize;
-let pageFeatures;
-let pagePattern;
-let pageSave;
+const iconArray = [iconHome, iconScale, iconFeatures, iconArt, iconSave];
+const tabColors = ['red', 'orange', 'blue', 'green', 'purple'];
+const pageNames = ['intro', 'size', 'features', 'pattern', 'save'];
+
+let currentPage = -1;
 
 let pages = [];
 
@@ -52,19 +47,33 @@ export function CreateDataWindow() {
 }
 
 
-
+/**
+ * 
+ * @param {number} tabNum number of tab/page to select
+ * @param {boolean} snap skip animation / timing? default false 
+ */
 export function SelectTab(tabNum, snap = false) {
+    if (tabNum == currentPage && !snap) { return; }
+    currentPage = tabNum;
     for (let i = 0; i < txt.TABS_NUM; i++) {
         let currentTab = i == tabNum;
         let tabId = 'tab' + i;
         let tabInput = document.querySelector(`input[id=${tabId}]`);
+        let page = pages[i];
 
         if (currentTab) {
             let tabColor = tabColors[i];
             let cssColor = GetBGColor(tabColor);
             cssColor = AddAlphaToHex(cssColor, bgFadeAlpha);
-            console.log(`Tab ID: ${tabId}, tabColor: ${tabColor}, cssColor: ${cssColor}`);
+            // console.log(`Tab ID: ${tabId}, tabColor: ${tabColor}, cssColor: ${cssColor}`);
             dataWindow.style.setProperty('background-color', cssColor);
+
+            page.style.setProperty('transition', 'opacity 0.5s ease-out');
+            page.style.opacity = '1';
+            
+        } else {
+            page.style.setProperty('transition', 'opacity 0.1s ease-out');
+            page.style.opacity = '0';
         }
 
         if (snap) {
@@ -129,16 +138,16 @@ function CreatePages() {
     // create pages content container
     let content = ui.CreateDivWithClass('content');
     dataWindow.appendChild(content);
-    // create pages 
-    pageIntro = ui.CreateDivWithClass('page', 'intro');
-    pageSize = ui.CreateDivWithClass('page', 'size');
-    pageFeatures = ui.CreateDivWithClass('page', 'features');
-    pagePattern = ui.CreateDivWithClass('page', 'pattern');
-    pageSave = ui.CreateDivWithClass('page', 'save');
-    pages = [pageIntro, pageSize, pageFeatures, pagePattern, pageSave];
-    for (let i = 0; i < pages.length; i++) {
-        content.appendChild(pages[i]);
-        ui.AddElementAttribute(pages[i], 'z-index', i);
+    // create pages
+    for (let i = 0; i < txt.TABS_NUM; i++) {
+        let page = ui.CreateDivWithClass('page', pageNames[i], tabColors[i]);
+        page.id = `page${i}`; // page ID is numeric
+        // page.id = pageNames[i]; // page ID is named
+        ui.AddElementAttribute(page, 'z-index', i + 1);
+        pages.push(page);
+        content.appendChild(page);
+        page.innerText = `Page Test, PG${i}`;
+
     }
 }
 

@@ -9,37 +9,6 @@ dataWindow {
     z-index: -1;
 }
 
-dataWindow .content {
-    display: flex;
-    width: auto;
-    height: 100%;
-    /* float:none; */
-    overflow: hidden;
-    position: relative;
-}
-
-dataWindow .content .page {
-    /* background-color: #ff00ff69; */
-    /* display: inline-flex; */
-    position: absolute;
-    width: 100%;
-    height: 100%;
-}
-
-dataWindow .fadeBG {
-    position: relative;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    top: -100%;
-    overflow: hidden;
-    background-color: var(--ui-data-window-bg-color-transparent);
-    background: linear-gradient(to right,
-            var(--ui-data-window-bg-color-transparent) 0%,
-            var(--ui-data-window-bg-color) 169%);
-    z-index: 0;
-}
-
 @media screen and (min-aspect-ratio: 1.2) {
     dataWindow {
         /* display: none; */
@@ -55,4 +24,40 @@ dataWindow .fadeBG {
         height: calc(100% - (var(--ui-data-window-height-offset) * 3));
         margin: var(--ui-data-window-margin);
     }
+}
+
+
+
+dataWindow .content {
+    display: flex;
+    width: auto;
+    height: 100%;
+    /* float:none; */
+    overflow: hidden;
+    position: relative;
+    color: var(--color-data-bg-text-default);
+}
+
+dataWindow .content .page {
+    display: initial;
+    opacity: 1;
+    transition: opacity 0.5s ease-out;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+dataWindow .fadeBG {
+    position: relative;
+    pointer-events: none;
+    display: flex;
+    width: 100%;
+    height: 100%;
+    top: -100%;
+    overflow: hidden;
+    background-color: var(--ui-data-window-bg-color-transparent);
+    background: linear-gradient(to right,
+            var(--ui-data-window-bg-color-transparent) 0%,
+            var(--ui-data-window-bg-color) 169%);
+    z-index: 0;
 }
