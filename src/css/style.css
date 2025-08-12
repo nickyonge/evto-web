@@ -80,12 +80,13 @@ dataWindow .content {
     height: 100%;
     /* float:none; */
     overflow: hidden;
+    position: relative;
 }
 
 dataWindow .content .page {
     /* background-color: #ff00ff69; */
-    display: inline-flex;
-    /* position: absolute; */
+    /* display: inline-flex; */
+    position: absolute;
     width: 100%;
     height: 100%;
 }

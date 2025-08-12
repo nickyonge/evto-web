@@ -39,6 +39,8 @@ let pageFeatures;
 let pagePattern;
 let pageSave;
 
+let pages = [];
+
 /**
  * Create the data window (tabs, options, info)
  */
@@ -129,7 +131,15 @@ function CreatePages() {
     dataWindow.appendChild(content);
     // create pages 
     pageIntro = ui.CreateDivWithClass('page', 'intro');
-    content.appendChild(pageIntro);
+    pageSize = ui.CreateDivWithClass('page', 'size');
+    pageFeatures = ui.CreateDivWithClass('page', 'features');
+    pagePattern = ui.CreateDivWithClass('page', 'pattern');
+    pageSave = ui.CreateDivWithClass('page', 'save');
+    pages = [pageIntro, pageSize, pageFeatures, pagePattern, pageSave];
+    for (let i = 0; i < pages.length; i++) {
+        content.appendChild(pages[i]);
+        ui.AddElementAttribute(pages[i], 'z-index', i);
+    }
 }
 
 function CreateFadeBG() {
