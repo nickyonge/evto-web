@@ -67,13 +67,12 @@ export function SelectTab(tabNum, snap = false) {
             cssColor = AddAlphaToHex(cssColor, bgFadeAlpha);
             // console.log(`Tab ID: ${tabId}, tabColor: ${tabColor}, cssColor: ${cssColor}`);
             dataWindow.style.setProperty('background-color', cssColor);
-
+            // enable page elements, fade in
             SetElementEnabled(page, true);
             page.style.setProperty('transition', 'opacity 0.5s ease-out');
             page.style.opacity = '1';
-            
         } else {
-
+            // disable page elements, fade out 
             SetElementEnabled(page, false);
             page.style.setProperty('transition', 'opacity 0.1s ease-out');
             page.style.opacity = '0';
@@ -150,9 +149,64 @@ function CreatePages() {
         ui.AddElementAttribute(page, 'z-index', i + 1);
         pages.push(page);
         content.appendChild(page);
-        page.innerText = `Page Test, PG${i}`;
 
+        // page.innerHTML = `<p>Page Test, PG${i}</p>`; // test text
+
+        // add unique page content 
+        // separate functions for each so I don't have to worry about variable name conflicts 
+        switch (pageNames[i]) {
+            case 'intro':
+                CreatePageIntro(page);
+                break;
+            case 'size':
+                CreatePageSize(page);
+                break;
+            case 'features':
+                CreatePageFeatures(page);
+                break;
+            case 'pattern':
+                CreatePagePattern(page);
+                break;
+            case 'save':
+                CreatePageSave(page);
+                break;
+
+            default:
+                throw new Error(`ERROR: invalid page name, can't create page content. Page name: ${pageNames[i]}, index: ${i}`);
+
+        }
     }
+}
+
+
+function CreatePageIntro(page) {
+    // ----------------------------- CREATE INTRO PAGE ----- 
+}
+function CreatePageSize(page) {
+    // ----------------------------- CREATE SIZE PAGE ----- 
+}
+function CreatePageFeatures(page) {
+    // ----------------------------- CREATE FEATURES PAGE ----- 
+}
+function CreatePagePattern(page) {
+    // ----------------------------- CREATE COLOUR & PATTERN PAGE ----- 
+}
+function CreatePageSave(page) {
+    // ----------------------------- CREATE SAVE & LOAD PAGE ----- 
+}
+
+/**
+ * Reference function. PageName must be one of the values found in `pageNames`. Gets that page's index
+ * @param {string} pageName 
+ * @returns {number} array index of `pageName` in `pageNames`
+ */
+function GetPageNumberByName(pageName) {
+    for (let i = 0; i < pageNames.length; i++) {
+        if (pageNames[i] == pageName) {
+            return i;
+        }
+    }
+    throw new Error(`Could not find page number for page name ${pageName}, check spelling. PageNames array: ${pageNames}`);
 }
 
 function CreateFadeBG() {
