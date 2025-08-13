@@ -42,6 +42,9 @@
     --ui-data-window-bg-color: #ffffffcb;
     --ui-data-window-bg-color-transparent: #ffffff00;
 
+    --ui-data-page-padding: 16.9px 10px 10px;
+    --ui-data-page-margin-right: 6.9px;
+
     --ui-header-height: 56px;
     --ui-footer-height: 40px;
     --ui-art-window-ratio: 0.8fr;
