@@ -57,7 +57,7 @@
 
     /* RAINBOW PASTEL SVG FILTERS */
     --opacity-svg-default-sel: 1;
-    --opacity-svg-default-hover: 0.875;
+    --opacity-svg-default-hover: 0.95;
     --opacity-svg-default-unsel: 0.75;
     --color-svg-default-hue-sel: 213deg;
     --color-svg-default-sat-sel: 690%;
@@ -72,7 +72,7 @@
     --color-base-default: #eff4ff;
 
     --opacity-svg-red-sel: 1;
-    --opacity-svg-red-hover: 0.85;
+    --opacity-svg-red-hover: 0.94;
     --opacity-svg-red-unsel: 0.69;
     --color-svg-red-hue-sel: 352deg;
     --color-svg-red-sat-sel: 420%;
@@ -87,7 +87,7 @@
     --color-base-red: #ffb3ba;
     
     --opacity-svg-orange-sel: 1;
-    --opacity-svg-orange-hover: 0.92;
+    --opacity-svg-orange-hover: 0.975;
     --opacity-svg-orange-unsel: 0.8;
     --color-svg-orange-hue-sel: 21.3deg;
     --color-svg-orange-sat-sel: 604%;
@@ -103,7 +103,7 @@
 
 /*  yellow not implemented  
     --opacity-svg-yellow-sel: 1;
-    --opacity-svg-yellow-hover: 0.875;
+    --opacity-svg-yellow-hover: 0.95;
     --opacity-svg-yellow-unsel: 0.75; 
     --color-svg-yellow-hue-sel: 0deg;
     --color-svg-yellow-sat-sel: 100%;
@@ -118,7 +118,7 @@
     --color-base-yellow: #fbfbb7; */
     
     --opacity-svg-green-sel: 1;
-    --opacity-svg-green-hover: 0.85;
+    --opacity-svg-green-hover: 0.94;
     --opacity-svg-green-unsel: 0.69;
     --color-svg-green-hue-sel: 132deg;
     --color-svg-green-sat-sel: 1690%;
@@ -133,7 +133,7 @@
     --color-base-green: #baffc9;
     
     --opacity-svg-blue-sel: 1;
-    --opacity-svg-blue-hover: 0.875;
+    --opacity-svg-blue-hover: 0.95;
     --opacity-svg-blue-unsel: 0.75;
     --color-svg-blue-hue-sel: 213deg;
     --color-svg-blue-sat-sel: 690%;
@@ -148,7 +148,7 @@
     --color-base-blue: #b7ddfb;
     
     --opacity-svg-purple-sel: 1;
-    --opacity-svg-purple-hover: 0.92;
+    --opacity-svg-purple-hover: 0.975;
     --opacity-svg-purple-unsel: 0.8;
     --color-svg-purple-hue-sel: 256deg;
     --color-svg-purple-sat-sel: 690%;
