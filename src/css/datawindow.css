@@ -1,7 +1,7 @@
 dataWindow {
     /* wide dataWindow = */
-    /* height: 100%; */
     /* display: inline-flex; */
+    /* height: 100%; */
     overflow: hidden;
     margin: var(--ui-data-window-margin);
     border-radius: var(--ui-data-window-radius);
@@ -26,8 +26,10 @@ dataWindow {
 /* match width to var(--viewport-bottombar-wrap) in vars.css */
 @media screen and (max-width: 750px) {
     dataWindow {
-        height: calc(100% - var(--ui-footer-height));
+        /* height: calc(auto); */
+        /* margin-bottom: 0px; */
         /* margin: var(--ui-data-window-margin); */
+        margin-bottom: var(--ui-footer-kickstarter-wrap-bottom);
     }
 }
 

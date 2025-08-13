@@ -32,7 +32,9 @@
     --ui-data-sidebar-color-text-selected: #525d69;
     --ui-data-sidebar-color-opacity-hover-selected: 1;
 
-    --ui-data-window-margin: 21.3px 16.9px;
+    --ui-data-window-margin-topbottom: 21.3px;
+    --ui-data-window-margin-leftright: 16.9px;
+    --ui-data-window-margin: var(--ui-data-window-margin-topbottom) var(--ui-data-window-margin-leftright);
     --ui-data-window-dwPortrait-margin-left: 2.13px;
     --ui-data-window-radius: 16.9px;
     --ui-data-window-bottom-margin: 40px;
@@ -52,6 +54,7 @@
     --ui-footer-email-bar-iconspace: 32px;
     --ui-footer-emali-btn-width: 100px;
     --ui-footer-kickstarter-width: 220px;
+    --ui-footer-kickstarter-wrap-bottom: calc(9px + var(--ui-footer-height));
 
     --ui-footer-kickstarter-hover-offset: 6px;
     --ui-footer-kickstarter-buffer-size: -8px;
