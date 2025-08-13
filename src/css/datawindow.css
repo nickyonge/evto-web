@@ -48,7 +48,7 @@ dataWindow .content .page {
     margin-right: var(--ui-data-page-margin-right);
 }
 
-dataWindow .content h1 {
+dataWindow .content h2 {
     text-align: center;
     justify-content: center;
 }

@@ -182,7 +182,7 @@ function CreatePages() {
 function CreatePageIntro(page) {
     // ----------------------------- CREATE INTRO PAGE -----
 
-    let header = ui.CreateElement('h1');
+    let header = ui.CreateElement('h2');
     header.innerText = "Hello World";
     page.appendChild(header);
     
