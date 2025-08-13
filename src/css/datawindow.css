@@ -1,7 +1,9 @@
 dataWindow {
-    height: calc(100% - var(--ui-data-window-height-offset));
+    /* wide dataWindow = */
+    /* height: 100%; */
+    /* display: inline-flex; */
     overflow: hidden;
-    margin: var(--ui-data-window-margin-vert);
+    margin: var(--ui-data-window-margin);
     border-radius: var(--ui-data-window-radius);
     box-shadow: 0px 6px 9px -2.13px var(--ui-data-window-bg-shadow);
     background-color: var(--ui-data-window-bg-color);
@@ -9,20 +11,23 @@ dataWindow {
     z-index: -1;
 }
 
+/* tall dataWindow [] */
 @media screen and (min-aspect-ratio: 1.2) {
     dataWindow {
-        /* display: none; */
-        height: calc(100% - (var(--ui-data-window-height-offset)));
-        /* margin: var(--ui-data-window-margin); */
+        margin-left: var(--ui-data-window-dwPortrait-margin-left);
     }
 }
+
+/* wide dataWindow = */
+/* @media screen and (min-aspect-ratio: 1.2) {
+    dataWindow { }
+} */
 
 /* match width to var(--viewport-bottombar-wrap) in vars.css */
 @media screen and (max-width: 750px) {
     dataWindow {
-        /* display: none; */
-        height: calc(100% - (var(--ui-data-window-height-offset) * 3));
-        margin: var(--ui-data-window-margin);
+        height: calc(100% - var(--ui-footer-height));
+        /* margin: var(--ui-data-window-margin); */
     }
 }
 

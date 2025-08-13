@@ -32,9 +32,8 @@
     --ui-data-sidebar-color-text-selected: #525d69;
     --ui-data-sidebar-color-opacity-hover-selected: 1;
 
-    --ui-data-window-height-offset: 20px;
-    --ui-data-window-margin: 6.9px 16.9px 0px 16.9px;
-    --ui-data-window-margin-vert: 6.9px 16.9px 20px 6.9px;
+    --ui-data-window-margin: 21.3px 16.9px;
+    --ui-data-window-dwPortrait-margin-left: 2.13px;
     --ui-data-window-radius: 16.9px;
     --ui-data-window-bottom-margin: 40px;
     --ui-data-window-sidebar-rounding: 8px;
