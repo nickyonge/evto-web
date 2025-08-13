@@ -23,6 +23,8 @@
     /* --color-bg-gradient-1: #beeeef;
     --color-bg-gradient-2: #a4d4f3; */
 
+    --ui-data-sidebar-tabs-width: 110px;
+
     --ui-data-sidebar-color-opacity: 1;
     --ui-data-sidebar-color-text: #525d69;
     --ui-data-sidebar-color-background: #ffffff69;

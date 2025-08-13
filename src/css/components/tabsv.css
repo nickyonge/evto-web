@@ -32,7 +32,7 @@ body {
     /* font-weight: 700; */
     cursor: pointer;
     opacity: var(--ui-data-sidebar-color-opacity);
-    width: 110px;
+    width: var(--ui-data-sidebar-tabs-width);
     height: 20%;
     text-align: right;
     user-select: none;
@@ -48,24 +48,47 @@ body {
             var(--ui-data-sidebar-separator-transition) 0%,
             var(--ui-data-sidebar-separator-transparent) 6.9%);
 }
-@media screen and (max-height: 280px) {
-    .tabs label {
-        font-size: 9pt;
-        max-width: 100px;
-    }
-}
 .tabs label .text {
+    font-size: 10.5pt;
+    /* 10.5pt default size */
+    padding-left: 12px;
     padding-right: 0px;
     position: relative;
-    display: inline-block;
+    display: inline-flex;
     height: auto;
     color: var(--ui-data-sidebar-color-text);
     transition: color 0.3s ease-out, opacity 0.1s ease-out;
 }
+/* tall dataWindow [] */
+@media screen and (min-aspect-ratio: 1.2) {}
+/* wide dataWindow = */
+@media screen and (max-aspect-ratio: 1.2) {
+    .tabs label .text {
+        font-size: 10pt;
+    }
+    @media screen and (max-height: 620px) {
+        .tabs label {
+            width: calc(
+                var(--ui-data-sidebar-tabs-width)
+                - ((620px - 100vh) * 0.12)
+            );
+        }
+        .tabs label .text {
+            font-size: 2.13vh;
+        }
+    }
+}
+/* @media screen and (max-height: 280px) {
+    .tabs label {
+        font-size: small;
+        max-width: 100px;
+    }
+} */
 .tabs label .icon {
-    width: 24px;
+    height: 69%;
+    max-height: 24px;
+    width: auto;
     margin-left: 10px;
-    height: auto;
     /* filter: brightness(0.69) hue-rotate(213deg) saturate(80%); */
 }
 .tabs input[type="radio"] {
