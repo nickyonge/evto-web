@@ -180,7 +180,12 @@ function CreatePages() {
 
 
 function CreatePageIntro(page) {
-    // ----------------------------- CREATE INTRO PAGE ----- 
+    // ----------------------------- CREATE INTRO PAGE -----
+
+    let header = ui.CreateElement('h1');
+    header.innerText = "Hello World";
+    page.appendChild(header);
+    
 }
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE ----- 
