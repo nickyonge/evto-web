@@ -7,7 +7,7 @@ import { isBlank } from "./lilutils";
  * @returns {HTMLElement} newly made HTML <div> element
  */
 export function CreateDiv() {
-    return CreateElement('div'); 
+    return CreateElement('div');
 }
 /**
  * Create a DIV HTMLElement with the given ID
@@ -165,10 +165,14 @@ export function CreateImage(imgSrc, alt) {
  * Make the given HTMLElement appear in the tab index for the page
  * Note: giving the `tabIndex` value `-1` will make an element untabbable, even if it's tabbable by default.
  * @param {HTMLElement} element HTMLElement to add to the tab index 
- * @param {number} tabIndex Default 0, optional value to specify tab index. `-1` = not tabbable
+ * @param {number} [tabIndex=0] Optional value to specify tab index. `-1` = not tabbable
+ * @param {boolean} [preserve=true] Optionally add a `preservedTabIndex` attribute with the given `tabIndex` value
  */
-export function MakeTabbable(element, tabIndex = 0) {
+export function MakeTabbable(element, tabIndex = 0, preserve = true) {
     element.setAttribute('tabIndex', tabIndex);
+    if (preserve) {
+        element.setAttribute('preservedTabIndex', tabIndex);
+    }
 }
 
 /**

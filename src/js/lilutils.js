@@ -92,9 +92,10 @@ export function DeselectAll(alsoBlur = true) {
  * Enables or disables the given HTML element by doing the following:
  * - To Enable...
  *   - Setting `pointerEvents` attribute to `'auto'`
- *   - Removing `tabIndex` attribute, including on all interactive children
  *   - Removing `aria-hidden` attribute
  *   - Removing `inert` attribute
+ *   - Removing `tabIndex` attribute, including on all interactive children,
+ *     unless a `preservedTabIndex` attribute is found, who's value will be used instead.
  * - To Disable...
  *   - Setting `pointerEvents` attribute to `'none'`
  *   - Setting `tabIndex` attribute to `-1`, including to all interactive children
@@ -107,7 +108,11 @@ export function SetElementEnabled(element, set = true) {
     element.style.pointerEvents = set ? 'auto' : 'none';
     if (set) {
         // enable 
-        element.removeAttribute('tabIndex');
+        if (element.hasAttribute('preservedTabIndex')) {
+            element.setAttribute('tabIndex', element.getAttribute('preservedTabIndex'));
+        } else {
+            element.removeAttribute('tabIndex');
+        }
         element.removeAttribute('aria-hidden');
         element.removeAttribute('inert');
     } else {
@@ -119,7 +124,11 @@ export function SetElementEnabled(element, set = true) {
     element.querySelectorAll('a, button, input, select, textarea, [tabindex]').forEach(el => {
         if (set) {
             // enable 
-            el.removeAttribute('tabIndex');
+            if (el.hasAttribute('preservedTabIndex')) {
+                el.setAttribute('tabIndex', el.getAttribute('preservedTabIndex'));
+            } else {
+                el.removeAttribute('tabIndex');
+            }
         } else {
             // disable 
             el.setAttribute('tabIndex', '-1');
