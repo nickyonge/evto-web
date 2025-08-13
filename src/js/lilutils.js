@@ -87,3 +87,59 @@ export function DeselectAll(alsoBlur = true) {
         }
     }
 }
+
+/**
+ * Enables or disables the given HTML element by doing the following:
+ * - To Enable...
+ *   - Setting `pointerEvents` attribute to `'auto'`
+ *   - Removing `tabIndex` attribute, including on all interactive children
+ *   - Removing `aria-hidden` attribute
+ *   - Removing `inert` attribute
+ * - To Disable...
+ *   - Setting `pointerEvents` attribute to `'none'`
+ *   - Setting `tabIndex` attribute to `-1`, including to all interactive children
+ *   - Setting `aria-hidden` attribute to `true`
+ *   - Setting `inert` attribute to `''`
+ * @param {HTMLElement} element HTMLElement to fully enable or disable
+ * @param {boolean} [set=true] state to assign, `true` to Enable (default), or `false` to Disable 
+ */
+export function SetElementEnabled(element, set = true) {
+    element.style.pointerEvents = set ? 'auto' : 'none';
+    if (set) {
+        // enable 
+        element.style.removeAttribute('tabIndex');
+        element.style.removeAttribute('aria-hidden');
+        element.style.removeAttribute('inert');
+    } else {
+        // disable 
+        element.style.setAttribute('tabIndex', '-1');
+        element.style.setAttribute('aria-hidden', 'true');
+        element.style.setAttribute('inert', '');
+    }
+    page.querySelectorAll('a, button, input, select, textarea, [tabindex]').forEach(el => {
+        if (set) {
+            // enable 
+            el.removeAttribute('tabIndex');
+        } else {
+            // disable 
+            el.setAttribute('tabIndex', '-1');
+        }
+        if ('disabled' in el) el.disabled = !set;
+    });
+}
+
+/**
+ * Disables the given HTML element by doing the following:
+ * - Setting `pointerEvents` attribute to `'none'`
+ * - Setting `tabIndex` attribute to `-1`, including to all interactive children
+ * - Setting `aria-hidden` attribute to `true`
+ * - Setting `inert` attribute to `''`
+ * 
+ * Convenience function; simply calls `SetElementEnabled(element,false);`
+ * @param {HTMLElement} element Element to fully disable
+ */
+export function SetElementDisabled(element) {
+    SetElementEnabled(element, false);
+}
+
+// TODO: organize this class better, so similar utilities are grouped 
