@@ -3,7 +3,7 @@
 import * as ui from "./ui";
 import * as txt from './text';
 import { dataWindow } from "./uiMain";
-import { style, AddAlphaToHex, DeselectElement } from "./lilutils";
+import { style, AddAlphaToHex, DeselectElement, SetElementEnabled } from "./lilutils";
 
 // import iconArt from '../assets/svg/icons-currentColor/icon-art.svg';
 // import iconFeatures from '../assets/svg/icons-currentColor/icon-features.svg';
@@ -68,13 +68,16 @@ export function SelectTab(tabNum, snap = false) {
             // console.log(`Tab ID: ${tabId}, tabColor: ${tabColor}, cssColor: ${cssColor}`);
             dataWindow.style.setProperty('background-color', cssColor);
 
+            SetElementEnabled(page, true);
             page.style.setProperty('transition', 'opacity 0.5s ease-out');
             page.style.opacity = '1';
             
         } else {
-            DeselectElement(page);
+
+            SetElementEnabled(page, false);
             page.style.setProperty('transition', 'opacity 0.1s ease-out');
             page.style.opacity = '0';
+            DeselectElement(page);
         }
 
         if (snap) {

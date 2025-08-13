@@ -107,16 +107,16 @@ export function SetElementEnabled(element, set = true) {
     element.style.pointerEvents = set ? 'auto' : 'none';
     if (set) {
         // enable 
-        element.style.removeAttribute('tabIndex');
-        element.style.removeAttribute('aria-hidden');
-        element.style.removeAttribute('inert');
+        element.removeAttribute('tabIndex');
+        element.removeAttribute('aria-hidden');
+        element.removeAttribute('inert');
     } else {
         // disable 
-        element.style.setAttribute('tabIndex', '-1');
-        element.style.setAttribute('aria-hidden', 'true');
-        element.style.setAttribute('inert', '');
+        element.setAttribute('tabIndex', '-1');
+        element.setAttribute('aria-hidden', 'true');
+        element.setAttribute('inert', '');
     }
-    page.querySelectorAll('a, button, input, select, textarea, [tabindex]').forEach(el => {
+    element.querySelectorAll('a, button, input, select, textarea, [tabindex]').forEach(el => {
         if (set) {
             // enable 
             el.removeAttribute('tabIndex');
