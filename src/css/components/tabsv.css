@@ -146,7 +146,7 @@ label .icon {
 }
 .tabs input[type="radio"]:hover+label .icon {
     transition: opacity 0.2s ease-out;
-    opacity: var(--opacity-svg-default-sel);
+    opacity: var(--opacity-svg-default-hover);
 }
 .tabs input[type="radio"]:checked+label .icon {
     transition: opacity 0.2s ease-out, filter 0.2s ease-out, --ui-data-bg-blendcolor 0.5s ease-in-out;
@@ -165,7 +165,7 @@ label .icon.red {
         grayscale(var(--color-svg-red-gry-unsel)) brightness(var(--color-svg-red-bri-unsel)) saturate(var(--color-svg-red-sat-unsel)) hue-rotate(var(--color-svg-red-hue-unsel));
 }
 .tabs input[type="radio"]:hover+label .icon.red {
-    opacity: var(--opacity-svg-red-sel);
+    opacity: var(--opacity-svg-red-hover);
 }
 .tabs input[type="radio"]:checked+label .icon.red {
     opacity: var(--opacity-svg-red-sel);
@@ -184,7 +184,7 @@ label .icon.orange {
         grayscale(var(--color-svg-orange-gry-unsel)) brightness(var(--color-svg-orange-bri-unsel)) saturate(var(--color-svg-orange-sat-unsel)) hue-rotate(var(--color-svg-orange-hue-unsel));
 }
 .tabs input[type="radio"]:hover+label .icon.orange {
-    opacity: var(--opacity-svg-orange-sel);
+    opacity: var(--opacity-svg-orange-hover);
 }
 .tabs input[type="radio"]:checked+label .icon.orange {
     opacity: var(--opacity-svg-orange-sel);
@@ -206,7 +206,7 @@ label .icon.yellow {
         hue-rotate( var(--color-svg-yellow-hue-unsel));
 }
 .tabs input[type="radio"]:hover+label .icon.yellow { 
-    opacity: var(--opacity-svg-yellow-sel);
+    opacity: var(--opacity-svg-yellow-hover);
 }
 .tabs input[type="radio"]:checked+label .icon.yellow { 
     opacity: var(--opacity-svg-yellow-sel);
@@ -227,7 +227,7 @@ label .icon.green {
         grayscale(var(--color-svg-green-gry-unsel)) brightness(var(--color-svg-green-bri-unsel)) saturate(var(--color-svg-green-sat-unsel)) hue-rotate(var(--color-svg-green-hue-unsel));
 }
 .tabs input[type="radio"]:hover+label .icon.green {
-    opacity: var(--opacity-svg-green-sel);
+    opacity: var(--opacity-svg-green-hover);
 }
 .tabs input[type="radio"]:checked+label .icon.green {
     opacity: var(--opacity-svg-green-sel);
@@ -245,7 +245,7 @@ label .icon.blue {
         grayscale(var(--color-svg-blue-gry-unsel)) brightness(var(--color-svg-blue-bri-unsel)) saturate(var(--color-svg-blue-sat-unsel)) hue-rotate(var(--color-svg-blue-hue-unsel));
 }
 .tabs input[type="radio"]:hover+label .icon.blue {
-    opacity: var(--opacity-svg-blue-sel);
+    opacity: var(--opacity-svg-blue-hover);
 }
 .tabs input[type="radio"]:checked+label .icon.blue {
     opacity: var(--opacity-svg-blue-sel);
@@ -263,7 +263,7 @@ label .icon.purple {
         grayscale(var(--color-svg-purple-gry-unsel)) brightness(var(--color-svg-purple-bri-unsel)) saturate(var(--color-svg-purple-sat-unsel)) hue-rotate(var(--color-svg-purple-hue-unsel));
 }
 .tabs input[type="radio"]:hover+label .icon.purple {
-    opacity: var(--opacity-svg-purple-sel);
+    opacity: var(--opacity-svg-purple-hover);
 }
 .tabs input[type="radio"]:checked+label .icon.purple {
     opacity: var(--opacity-svg-purple-sel);
