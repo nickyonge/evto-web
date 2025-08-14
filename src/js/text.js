@@ -32,10 +32,10 @@ export const SLIDING_BUTTON = "Live now on Kickstarter!";
 
 // --------- SIDEBAR / TABS -------------------
 
-// total tabs count: intro, size, features, colour/pattern, save/load
-export const TABS = ["Intro", "Size", "Features", "Colour & Pattern", "Save & Load"];
-export const TABS_NUM = TABS.length;
-// TODO: replace txt.TABS_NUM with somethinig better. theoretically the number of tabs overall shouldn't be defined by text class, but whatever, it works
+// total pages count: intro, size, features, colour/pattern, save/load
+export const PAGE_NAMES = ["Intro", "Size", "Features", "Colour & Pattern", "Save & Load"];
+export const PAGES_COUNT = PAGE_NAMES.length;
+// TODO: replace txt.PAGES_COUNT with somethinig better. theoretically the number of pages overall shouldn't be defined by text class, but whatever, it works
 
 // ============= ART WINDOW ==============================
 
