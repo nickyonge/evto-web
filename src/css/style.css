@@ -90,18 +90,21 @@ footer {
     padding-left: 12px;
     position: relative;
     align-items: left;
-
     /* font-size: 16pt; */
 }
 
-
+.allowSelectDefaultCursor {
+    user-select: text;
+    -ms-user-select: text;
+    -moz-user-select: text;
+    -webkit-user-select: text;
+    cursor: default;
+}
 .preventSelect {
-    -webkit-user-select: none;
-    /* Safari */
-    -ms-user-select: none;
-    /* IE 10 and IE 11 */
     user-select: none;
-    /* Standard syntax */
+    -ms-user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
 }
 
 

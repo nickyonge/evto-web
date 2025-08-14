@@ -21,6 +21,7 @@ export function CreateHeaderFooter(topBar, btmBar) {
 
 function CreateTopBar(topBar) {
     let titleContainer = ui.CreateDivWithClass('title', 'preventSelect');
+    // let titleContainer = ui.CreateDivWithClass('title', 'allowSelectDefaultCursor');
     let subtitle = ui.AddElementTo(titleContainer, 'h3');
     let title = ui.AddElementTo(titleContainer, 'h1');
     subtitle.innerText = txt.TITLE;
