@@ -60,7 +60,19 @@ body {
     transition: color 0.3s ease-out, opacity 0.1s ease-out;
 }
 /* tall dataWindow [] */
-@media screen and (min-aspect-ratio: 1.2) {}
+@media screen and (min-aspect-ratio: 1.2) {
+    @media screen and (max-height: 500px) {
+        .tabs label {
+            width: calc(
+                var(--ui-data-sidebar-tabs-width)
+                - ((500px - 100vh) * 0.169)
+            );
+        }
+        .tabs label .text {
+            font-size: 2.8vh;
+        }
+    }
+}
 /* wide dataWindow = */
 @media screen and (max-aspect-ratio: 1.2) {
     .tabs label .text {
@@ -85,8 +97,9 @@ body {
     }
 } */
 .tabs label .icon {
-    height: 69%;
+    height: 50%;
     max-height: 24px;
+    min-height: 6px;
     width: auto;
     margin-left: 10px;
     /* filter: brightness(0.69) hue-rotate(213deg) saturate(80%); */
