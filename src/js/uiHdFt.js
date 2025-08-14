@@ -23,8 +23,8 @@ function CreateTopBar(topBar) {
     let titleContainer = ui.CreateDivWithClass('title', 'preventSelect');
     let subtitle = ui.AddElementTo(titleContainer, 'h3');
     let title = ui.AddElementTo(titleContainer, 'h1');
-    subtitle.innerText = "Everywhere Together";
-    title.innerText = "Canvas Visualizer"
+    subtitle.innerText = txt.TITLE;
+    title.innerText = txt.SUBTITLE;
     topBar.appendChild(titleContainer);
     topBar.appendChild(CreateHamburgerButton());
 }
@@ -62,7 +62,7 @@ function CreateBottomBar(btmBar) {
     mailInput.setAttribute('placeholder', txt.EMAIL_PLACEHOLDER);
     mailInput.setAttribute('autocomplete', 'off');
     let mailButton = ui.CreateElementWithClass('input', 'mbuttonSubmit');
-    mailButton.setAttribute('value', 'Subscribe');
+    mailButton.setAttribute('value', txt.EMAIL_BTN_TEXT);
     mailButton.setAttribute('type', 'submit');
     mailGroup.appendChild(mailInput);
     mailGroup.appendChild(mailButton);
@@ -90,7 +90,19 @@ function GetSocialImgByName(name) {
         case "bluesky":
             return svgBluesky;
     }
-    console.warn("Could not GetImgByName from name: " + name);
+    console.warn("Could not GetSocialImgByName from name: " + name);
+    return null;
+}
+function GetSocialTextByName(name) {
+    switch (name.toLowerCase()) {
+        case "github":
+            return txt.SOCIAL_GITHUB;
+        case "instagram":
+            return txt.SOCIAL_INSTAGRAM;
+        case "bluesky":
+            return txt.SOCIAL_BLUESKY;
+    }
+    console.warn("Could not GetSocialTextByName from name: " + name);
     return null;
 }
 
