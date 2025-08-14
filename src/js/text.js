@@ -12,7 +12,7 @@ export const SUBTITLE = "Everywhere Together";
 export const SOCIAL_GITHUB = "GitHub";
 export const SOCIAL_INSTAGRAM = "Instagram";
 export const SOCIAL_BLUESKY = "Bluesky";
-    
+
 export const EMAIL_PLACEHOLDER = "Duck Pond Newsletter";
 export const EMAIL_BTN_TEXT = "Subscribe";
 export const SLIDING_BUTTON = "Live now on Kickstarter!";

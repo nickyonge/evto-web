@@ -2,6 +2,7 @@
 
 import * as ui from "./ui";
 import * as txt from './text';
+import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE, PageOpened, PageClosed } from "./data";
 import { dataWindow } from "./uiMain";
 import { style, AddAlphaToHex, DeselectElement, SetElementEnabled } from "./lilutils";
 
@@ -30,7 +31,7 @@ const useSeparators = false;
 
 const iconArray = [iconHome, iconScale, iconFeatures, iconArt, iconSave];
 const tabColors = ['red', 'orange', 'blue', 'green', 'purple'];
-const pageNames = ['intro', 'size', 'features', 'pattern', 'save'];
+const pageNames = [PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE];
 
 let currentPage = -1;
 
@@ -54,6 +55,7 @@ export function CreateDataWindow() {
  */
 export function SelectTab(tabNum, snap = false) {
     if (tabNum == currentPage && !snap) { return; }
+    let lastPage = currentPage;
     currentPage = tabNum;
     for (let i = 0; i < txt.TABS_NUM; i++) {
         let currentTab = i == tabNum;
@@ -62,6 +64,7 @@ export function SelectTab(tabNum, snap = false) {
         let page = pages[i];
 
         if (currentTab) {
+            // logic current tab/page being displayed, not others 
             let tabColor = tabColors[i];
             let cssColor = GetBGColor(tabColor);
             cssColor = AddAlphaToHex(cssColor, bgFadeAlpha);
@@ -71,12 +74,18 @@ export function SelectTab(tabNum, snap = false) {
             SetElementEnabled(page, true);
             page.style.setProperty('transition', 'opacity 0.5s ease-out');
             page.style.opacity = '1';
+            PageOpened(page, snap);
         } else {
-            // disable page elements, fade out 
+            // non-active tab, disable page elements, fade out 
+            if (lastPage == i) {
+                // recently closed page
+                console.log("closing page: " + page.id);
+            }
             SetElementEnabled(page, false);
             page.style.setProperty('transition', 'opacity 0.1s ease-out');
             page.style.opacity = '0';
             DeselectElement(page);
+            PageClosed(page);
         }
 
         if (snap) {
@@ -144,8 +153,8 @@ function CreatePages() {
     // create pages
     for (let i = 0; i < txt.TABS_NUM; i++) {
         let page = ui.CreateDivWithClass('page', pageNames[i], tabColors[i]);
-        page.id = `page${i}`; // page ID is numeric
-        // page.id = pageNames[i]; // page ID is named
+        // page.id = `page${i}`; // page ID is numeric
+        page.id = pageNames[i]; // page ID is named
         ui.AddElementAttribute(page, 'z-index', i + 1);
         pages.push(page);
         content.appendChild(page);
@@ -155,19 +164,19 @@ function CreatePages() {
         // add unique page content 
         // separate functions for each so I don't have to worry about variable name conflicts 
         switch (pageNames[i]) {
-            case 'intro':
+            case PG_INTRO:
                 CreatePageIntro(page);
                 break;
-            case 'size':
+            case PG_SIZE:
                 CreatePageSize(page);
                 break;
-            case 'features':
+            case PG_FEATURES:
                 CreatePageFeatures(page);
                 break;
-            case 'pattern':
+            case PG_PATTERN:
                 CreatePagePattern(page);
                 break;
-            case 'save':
+            case PG_SAVE:
                 CreatePageSave(page);
                 break;
 
