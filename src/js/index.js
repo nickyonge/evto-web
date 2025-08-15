@@ -1,10 +1,12 @@
 import './css'; // import css classes 
 import { BuildUI } from './uiMain';
-import { SetupDataWindow } from './data';
+import { SetupDataWindow } from './contentData';
+import { SetupArtWindow } from './contentArt';
 
 window.addEventListener('load', function () {
     BuildUI();
     SetupDataWindow();
+    SetupArtWindow();
     // DemoLabel();
 });
 

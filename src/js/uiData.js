@@ -3,7 +3,7 @@
 import * as ui from "./ui";
 import * as txt from './text';
 import { PAGE_NAMES } from "./text";
-import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE, PageOpened, PageClosed } from "./data";
+import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE, PageOpened, PageClosed } from "./contentData";
 import { dataWindow } from "./uiMain";
 import { style, AddAlphaToHex, DeselectElement, SetElementEnabled } from "./lilutils";
 

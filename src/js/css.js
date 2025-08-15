@@ -1,6 +1,7 @@
 // import all css files 
 import(/* webpackPreload: true */ './../css/fonts.css');
 import(/* webpackPreload: true */ './../css/style.css');
+import(/* webpackPreload: true */ './../css/artwindow.css');
 import(/* webpackPreload: true */ './../css/datawindow.css');
 import(/* webpackPreload: true */ './../css/components/hbbtn.css');
 import(/* webpackPreload: true */ './../css/components/minput.css');
