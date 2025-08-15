@@ -41,4 +41,4 @@ export const PAGES_COUNT = PAGE_NAMES.length;
 
 
 
-// TODO - localization?
+// TODO - localization

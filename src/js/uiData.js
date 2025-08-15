@@ -24,6 +24,7 @@ const pageIDs = [PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE];
 
 let currentPage = -1;
 
+let tabs;
 let pages = [];
 
 /**
@@ -98,7 +99,7 @@ function GetBGColor(color) {
 
 
 function CreateTabs() {
-    let tabs = ui.CreateDivWithClass('tabs');
+    tabs = ui.CreateDivWithClass('tabs');
     for (let i = 0; i < txt.PAGES_COUNT; i++) {
         // create individual tabs, based off TABS array in text.js
         let tab = 'tab' + i;

@@ -3,6 +3,7 @@
 import { CreateHeaderFooter } from "./uiHdFt";
 import { CreateDataWindow } from "./uiData";
 import * as ui from './ui';
+import { CreateArtWindow } from "./uiArt";
 
 const _useDemoBGColors = false;
 
@@ -12,7 +13,7 @@ let container = null;
 /** Header (top bar) element @type Element */
 let topBar = null;
 /** Art window, where the canvas rendering goes @type Element */
-let artWindow = null;
+export let artWindow = null;
 /** Data window, where the tabs and info window goes @type Element */
 export let dataWindow = null;
 /** Footer (bottom bar) element @type Element */
@@ -30,6 +31,7 @@ export function BuildUI() {
 
     CreateHeaderFooter(topBar, btmBar);
     CreateDataWindow();
+    CreateArtWindow();
 
     document.body.appendChild(container);
 

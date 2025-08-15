@@ -1,3 +1,42 @@
+/* HORIZONTAL ORIENTATION, eg desktop / landscape tablet */
+/* @media screen and (min-aspect-ratio: 1.2) { } */
+
+/* VERTICAL ORIENTATION, eg phone / portrait tablet */
+/* @media screen and (max-aspect-ratio: 1.2) { } */
+
 artWindow {
-    /* display: none; */
+    display: flex;
+    flex-direction: column;
+}
+
+artWindow .canvas {
+    display: flex;
+    /* width: 100%; */
+    height: 100%;
+    background-color: gray;
+}
+artWindow .info {
+    display: flex;
+    /* width: 100%; */
+    height: 69%;
+    background-color: blue;
+}
+
+/* VERTICAL ORIENTATION, eg phone / portrait tablet */
+@media screen and (max-aspect-ratio: 1.2) {
+    artWindow {
+        flex-direction: row;
+    }
+    artWindow .canvas {
+        display: inline-flex;
+        width: 100%;
+        height: 100%;
+    }
+    artWindow .info {
+        display: inline-flex;
+        width: fit-content;
+        max-width: 40%;
+        min-width: 25%;
+        height: 100%;
+    }
 }
