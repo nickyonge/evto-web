@@ -158,7 +158,9 @@ module.exports = {
     },
     output: {
         filename: '[name].bundle.js',
+        // TODO: cleanup filenames in dist, create subdirectories
         path: path.resolve(__dirname, 'dist'),
+        assetModuleFilename: "[name][ext]",
         clean: true,
     },
     // build time optimization, see https://webpack.js.org/guides/development/#using-webpack-dev-server 
