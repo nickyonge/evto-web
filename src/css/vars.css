@@ -13,6 +13,8 @@
     --color-ui-ultradark: #2a4880;
     --color-ui-black: #01153b;
 
+    --color-ui-light-transparent: #a4c4ef00;
+
     --color-ui-active: #beeeef;
 
     --color-bg-solid: #beeeef;
@@ -47,6 +49,11 @@
 
     --ui-data-page-padding: 16.9px 10px 10px;
     --ui-data-page-margin-right: 6.9px;
+
+    --ui-art-canvas-inner-inset-topbottom: 21.3px;
+    --ui-art-canvas-inner-inset-leftright: 16.9px;
+    --ui-art-canvas-border-width: 1px;
+    --ui-art-canvas-border-radius: 21.3px;
 
     --ui-header-height: 56px;
     --ui-footer-height: 40px;
