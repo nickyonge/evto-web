@@ -55,6 +55,13 @@
     --ui-art-canvas-border-width: 1px;
     --ui-art-canvas-border-radius: 21.3px;
 
+    --ui-art-info-border-top: 20px;
+    --ui-art-info-border-sideOuter: 29.75px;
+    --ui-art-info-border-sideInner: 24px;
+    --ui-art-info-border-bottom: 29.75px;
+    --ui-art-info-border-top-portraitScreen: 69px;
+    --ui-art-info-border-sideInner-portraitScreen: 16.9px;
+
     --ui-header-height: 56px;
     --ui-footer-height: 40px;
     --ui-art-window-ratio: 0.8fr;
