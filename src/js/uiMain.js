@@ -7,6 +7,13 @@ import { CreateArtWindow } from "./uiArt";
 
 const _useDemoBGColors = false;
 
+/** in portrait orientation, should the Data window be located on top? */
+// const _dataWindowOnTop = true;
+const _dataWindowOnTop = false;
+/** in landscape orientation, should the Data window be located on the left? */
+const _dataWindowOnLeft = true;
+// const _dataWindowOnLeft = false;
+
 /** container div for all content on the page @type Element */
 let container = null;
 
@@ -32,6 +39,13 @@ export function BuildUI() {
     CreateHeaderFooter(topBar, btmBar);
     CreateDataWindow();
     CreateArtWindow();
+
+    if (_dataWindowOnTop) {
+        ui.AddClassToDOMs('dataOnTop', container, artWindow, dataWindow);
+    }
+    if (_dataWindowOnLeft) {
+        ui.AddClassToDOMs('dataOnLeft', container, artWindow, dataWindow);
+    }
 
     document.body.appendChild(container);
 

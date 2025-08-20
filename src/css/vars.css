@@ -2,6 +2,9 @@
 
     --viewport-bottombar-wrap: 750px;
 
+    --grid-layout-portrait-top: "artWindow";
+    --grid-layout-portrait-bottom: "dataWindow";
+
     --color-text-body: #a4c4ef;
     --color-ui-button: #a4c4ef;
 
@@ -40,6 +43,8 @@
     --ui-data-window-margin-leftright: 16.9px;
     --ui-data-window-margin: var(--ui-data-window-margin-topbottom) var(--ui-data-window-margin-leftright);
     --ui-data-window-dwPortrait-margin-left: 2.13px;
+    --ui-data-window-dwLandscape-margin-top: 2.13px;
+    --ui-data-window-dataTop-dwLandscape-margin-bottom: 2.13px;
     --ui-data-window-radius: 16.9px;
     --ui-data-window-bottom-margin: 40px;
     --ui-data-window-sidebar-rounding: 8px;

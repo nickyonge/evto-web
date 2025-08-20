@@ -16,12 +16,22 @@ dataWindow {
     dataWindow {
         margin-left: var(--ui-data-window-dwPortrait-margin-left);
     }
+    dataWindow.dataOnLeft {
+        margin-left: var(--ui-data-window-margin-leftright);
+        margin-right: var(--ui-data-window-dwPortrait-margin-left);
+    }
 }
 
 /* wide dataWindow = */
-/* @media screen and (min-aspect-ratio: 1.2) {
-    dataWindow { }
-} */
+@media screen and (max-aspect-ratio: 1.2) {
+    dataWindow {
+        margin-top: var(--ui-data-window-dwLandscape-margin-top);
+    }
+    dataWindow.dataOnTop {
+        margin-top: var(--ui-data-window-margin-topbottom);
+        margin-bottom: var(--ui-data-window-dataTop-dwLandscape-margin-bottom);
+    }
+}
 
 /* match width to var(--viewport-bottombar-wrap) in vars.css */
 @media screen and (max-width: 750px) {

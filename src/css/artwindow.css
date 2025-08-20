@@ -53,33 +53,28 @@ artWindow .info {
     /* background-color: #0000ff69; */
 }
 artWindow .info .inner {
-    /* display: block; */
     /* z-index: 1; */
     position: relative;
     display: flex;
     background-color: rgb(144, 183, 251);
     width: 100%;
     height: calc(100% - var(--ui-art-info-border-top) - var(--ui-art-info-border-bottom));
-    /* inset: 10px; */
     margin-top: var(--ui-art-info-border-top);
     margin-left: var(--ui-art-info-border-sideOuter);
     margin-right: var(--ui-art-info-border-sideInner);
+}
 
-
-    /* --ui-art-info-border-top: 25px;
-    --ui-art-info-border-sideOuter: 30px;
-    --ui-art-info-border-sideInner: 5px;
-    --ui-art-info-border-bottom: 10px; */
-
-    /* margin-bottom: calc(-1 * 10px); */
-    /* margin-left: var(--ui-art-canvas-inner-inset-leftright);
-    margin-top: var(--ui-art-canvas-inner-inset-topbottom);
-    width: calc(100% - (var(--ui-art-canvas-inner-inset-leftright) * 2));
-    height: calc(100% - (var(--ui-art-canvas-inner-inset-topbottom) * 2)); */
+/* HORIZONTAL ORIENTATION, eg computer / landscape tablet */
+@media screen and (min-aspect-ratio: 1.2) {
+    artWindow.dataOnLeft .info .inner {
+        margin-right: var(--ui-art-info-border-sideOuter);
+        margin-left: var(--ui-art-info-border-sideInner);
+    }
 }
 
 /* VERTICAL ORIENTATION, eg phone / portrait tablet */
 @media screen and (max-aspect-ratio: 1.2) {
+
     artWindow {
         flex-direction: row;
     }
