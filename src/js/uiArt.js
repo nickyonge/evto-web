@@ -21,7 +21,7 @@ export function CreateArtWindow() {
     infoTitle = ui.CreateDivWithClass('title');
     infoInner = ui.CreateDivWithClass('inner');
     infoTitle.innerHTML = `<h3>${txt.INFO_TITLE}</h3>`;
-    ui.AllowContentSelectionWithDefaultCursor(infoTitle);
+    ui.DisableContentSelection(infoTitle);
     infoContainer.appendChild(infoInner);
     infoInner.appendChild(infoTitle);
     // add to artWindow
