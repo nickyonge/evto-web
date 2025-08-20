@@ -121,6 +121,35 @@ export function AddClassToDOMs(cssClass, ...domElements) {
 }
 
 /**
+ * Removes the given class(es) from the given HTMLElement (one element, multiple classes)
+ * @param {HTMLElement} domElement HTMLElement to remove the given classes from
+ * @param  {...string} cssClasses one or more classes to remove from the domElement
+ * @returns 
+ */
+export function RemoveClassesFromDOM(domElement, ...cssClasses) {
+    if (domElement.classList.length == 0) {
+        return;
+    }
+    for (let i = 0; i < cssClasses.length; i++) {
+        if (domElement.classList.contains(cssClasses[i])) {
+            domElement.classList.remove(cssClasses[i]);
+        }
+    }
+}
+/**
+ * Removes the given class from the given HTMLElement(s) (one class, multiple elements)
+ * @param {string} cssClass Class to remove
+ * @param  {...Element} domElements HTMLElement(s) to remove the class from
+ */
+export function RemoveClassFromDOMs(cssClass, ...domElements) {
+    for (let i = 0; i < domElements.length; i++) {
+        if (domElements[i].classList.contains(cssClass)) {
+            domElements[i].classList.remove(cssClass);
+        }
+    }
+}
+
+/**
  * Sets the given attributes on the given HTMLElement (attTypes and attValues lengths must match)
  * @param {HTMLElement} element HTMLElement to add attributes to
  * @param {string[]} attTypes Array of attribute types (qualifiedNames)
@@ -203,6 +232,25 @@ export function PassKeyboardSelection(fromElement, toElement) {
             toElement.click(); // pass click to new element
         }
     });
+}
+
+/** Disable text/content selection overall
+ * @param  {...HTMLElement} domElements Elements to assign these selection parameters to */
+export function DisableContentSelection(...domElements) {
+    RemoveClassFromDOMs('allowSelectDefaultCursor', ...domElements); // prevent conflicts
+    AddClassToDOMs('preventSelect', ...domElements); // prevent selection 
+}
+/** Allow text/content selection but keep the default, non-text cursor
+ * @param  {...HTMLElement} domElements Elements to assign these selection parameters to */
+export function AllowContentSelectionWithDefaultCursor(...domElements) {
+    RemoveClassFromDOMs('preventSelect', ...domElements); // prevent conflicts
+    AddClassToDOMs('allowSelectDefaultCursor', ...domElements); // allow selection, default cursor
+}
+/** Allow text/content selection, keep regular cursor properties (text selection carat)
+ * @param  {...HTMLElement} domElements Elements to assign these selection parameters to */
+export function AllowContentSelectionWithTextIndicator(...domElements) {
+    RemoveClassFromDOMs('allowSelectDefaultCursor', ...domElements);
+    RemoveClassFromDOMs('preventSelect', ...domElements); // default selection type
 }
 
 // TODO: add enter input to elements that only function on spacebar (eg, rn the "Subscribe" btn works for Spacebar but not Enter)
