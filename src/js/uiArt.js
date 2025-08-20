@@ -2,6 +2,7 @@
 
 import { artWindow } from "./uiMain";
 import * as ui from './ui';
+import * as txt from './text';
 
 let canvasContainer;
 let canvasInner;
@@ -19,7 +20,8 @@ export function CreateArtWindow() {
     infoContainer = ui.CreateDivWithClass('info');
     infoTitle = ui.CreateDivWithClass('title');
     infoInner = ui.CreateDivWithClass('inner');
-    infoTitle.innerHTML = "<h3>Info Window</h3>";
+    infoTitle.innerHTML = `<h3>${txt.INFO_TITLE}</h3>`;
+    ui.AllowContentSelectionWithDefaultCursor(infoTitle);
     infoContainer.appendChild(infoInner);
     infoInner.appendChild(infoTitle);
     // add to artWindow

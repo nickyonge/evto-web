@@ -31,14 +31,18 @@ export const SLIDING_BUTTON = "Live now on Kickstarter!";
 // --------- SAVE & LOAD PAGE -----------------
 
 // --------- SIDEBAR / TABS -------------------
-
-// total pages count: intro, size, features, colour/pattern, save/load
+/** total pages count: intro, size, features, colour/pattern, save/load */
 export const PAGE_NAMES = ["Intro", "Size", "Features", "Colour & Pattern", "Save & Load"];
 export const PAGES_COUNT = PAGE_NAMES.length;
 // TODO: replace txt.PAGES_COUNT with somethinig better. theoretically the number of pages overall shouldn't be defined by text class, but whatever, it works
 
 // ============= ART WINDOW ==============================
 
+// --------- CANVAS WINDOW --------------------
+
+// --------- INFO WINDOW ----------------------
+
+export const INFO_TITLE = "Canvas Info";
 
 
 // TODO - localization
