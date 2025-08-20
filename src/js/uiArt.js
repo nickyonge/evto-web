@@ -17,8 +17,11 @@ export function CreateArtWindow() {
     canvasContainer.appendChild(canvasInner);
     // create info window 
     infoContainer = ui.CreateDivWithClass('info');
+    infoTitle = ui.CreateDivWithClass('title');
     infoInner = ui.CreateDivWithClass('inner');
+    infoTitle.innerHTML = "<h3>Info Window</h3>";
     infoContainer.appendChild(infoInner);
+    infoInner.appendChild(infoTitle);
     // add to artWindow
     artWindow.appendChild(canvasContainer);
     artWindow.appendChild(infoContainer);
