@@ -7,6 +7,7 @@ let canvasContainer;
 let canvasInner;
 
 let infoContainer;
+let infoTitle;
 let infoInner;
 
 export function CreateArtWindow() {

@@ -47,16 +47,19 @@ artWindow .canvas .inner:before {
 }
 
 artWindow .info {
+    /* background-color: #0000ff69; */
     display: flex;
     /* width: 100%; */
     height: 69%;
-    /* background-color: #0000ff69; */
 }
 artWindow .info .inner {
+    background-color: #2a5fba69;
     /* z-index: 1; */
     position: relative;
     display: flex;
-    background-color: rgb(144, 183, 251);
+
+    border: solid 1px #f2f1f369;
+
     width: 100%;
     height: calc(100% - var(--ui-art-info-border-top) - var(--ui-art-info-border-bottom));
     margin-top: var(--ui-art-info-border-top);
