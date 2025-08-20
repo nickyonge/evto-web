@@ -5,7 +5,8 @@ import * as ui from './ui';
 import * as txt from './text';
 
 let canvasContainer;
-let canvasInner;
+/** @type {HTMLElement} */
+export let canvasInner;
 
 let infoContainer;
 let infoTitle;

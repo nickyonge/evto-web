@@ -47,7 +47,11 @@ export function SelectTab(tabNum, snap = false) {
     if (tabNum == currentPage && !snap) { return; }
     let lastPage = currentPage;
     currentPage = tabNum;
-    console.log(`Closing ${PAGE_NAMES[lastPage]} page, opening ${PAGE_NAMES[currentPage]} page`)
+    if (lastPage == -1) {
+        console.log(`Opening initial page: ${PAGE_NAMES[currentPage]}`);
+    } else {
+        console.log(`Closing ${PAGE_NAMES[lastPage]} page, opening ${PAGE_NAMES[currentPage]} page`)
+    }
     for (let i = 0; i < txt.PAGES_COUNT; i++) {
         let currentTab = i == tabNum;
         let tabId = 'tab' + i;
@@ -183,7 +187,7 @@ function CreatePageIntro(page) {
     let header = ui.CreateElement('h2');
     header.innerText = "Hello World";
     page.appendChild(header);
-    
+
 }
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE ----- 
