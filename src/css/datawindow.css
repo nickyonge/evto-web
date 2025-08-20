@@ -22,6 +22,19 @@ dataWindow {
         margin-left: var(--ui-data-window-margin-leftright);
         margin-right: var(--ui-data-window-dwPortrait-margin-left);
     }
+
+    /* match width to var(--viewport-bottombar-wrap) in vars.css */
+    @media screen and (max-width: 750px) {
+        dataWindow {
+            /* height: calc(auto); */
+            /* margin-bottom: 0px; */
+            /* margin: var(--ui-data-window-margin); */
+            margin-bottom: var(--ui-footer-kickstarter-wrap-bottom);
+        }
+        dataWindow.dataOnLeft {
+            margin-bottom: var(--ui-data-window-margin-topbottom)
+        }
+    }
 }
 
 /* wide dataWindow = */
@@ -31,17 +44,19 @@ dataWindow {
     }
     dataWindow.dataOnTop {
         margin-top: var(--ui-data-window-margin-topbottom);
-        margin-bottom: var(--ui-data-window-dataTop-dwLandscape-margin-bottom);
     }
-}
 
-/* match width to var(--viewport-bottombar-wrap) in vars.css */
-@media screen and (max-width: 750px) {
-    dataWindow {
-        /* height: calc(auto); */
-        /* margin-bottom: 0px; */
-        /* margin: var(--ui-data-window-margin); */
-        margin-bottom: var(--ui-footer-kickstarter-wrap-bottom);
+    /* match width to var(--viewport-bottombar-wrap) in vars.css */
+    @media screen and (max-width: 750px) {
+        dataWindow {
+            /* height: calc(auto); */
+            /* margin-bottom: 0px; */
+            /* margin: var(--ui-data-window-margin); */
+            margin-bottom: var(--ui-footer-kickstarter-wrap-bottom);
+        }
+        dataWindow.dataOnTop {
+            margin-bottom: var(--ui-data-window-margin-topbottom)
+        }
     }
 }
 

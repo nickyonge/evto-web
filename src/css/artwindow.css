@@ -12,7 +12,7 @@ artWindow {
 artWindow .canvas {
     display: flex;
     width: 100%;
-    height: 100%;
+    height: var(--ui-art-flexHeight-canvasRatio);
     /* background-color: #aaaaaa69; */
 }
 
@@ -50,7 +50,7 @@ artWindow .info {
     /* background-color: #0000ff69; */
     display: flex;
     /* width: 100%; */
-    height: 69%;
+    height: var(--ui-art-flexHeight-infoRatio);
 }
 artWindow .info .inner {
     background-color: #2a5fba69;
@@ -90,6 +90,15 @@ artWindow .info .title h3 {
         margin-right: var(--ui-art-info-border-sideOuter);
         margin-left: var(--ui-art-info-border-sideInner);
     }
+    /* KS button is wrapped  */
+    @media screen and (max-width: 750px) {
+        artWindow.dataOnLeft .info {
+            height: var(--ui-art-flexHeight-infoRatio-KS-dataOnLeft);
+        }
+        artWindow.dataOnLeft .info .inner {
+            height: calc(100% - var(--ui-art-info-border-top) - var(--ui-art-info-border-bottom) - var(--ui-footer-kickstarter-wrap-dataOnLeft));
+        }
+    }
 }
 
 /* VERTICAL ORIENTATION, eg phone / portrait tablet */
@@ -97,6 +106,9 @@ artWindow .info .title h3 {
 
     artWindow {
         flex-direction: row;
+    }
+    artWindow.dataOnTop {
+        margin-top: -16.9px;
     }
     artWindow .canvas {
         display: inline-flex;
@@ -106,16 +118,21 @@ artWindow .info .title h3 {
     artWindow .info {
         display: inline-flex;
         width: 69%;
-        height: 100%;
-        /* width: fit-content;
-        max-width: 40%;
-        min-width: 25%; */
+        height: calc(100% - var(--ui-art-info-landscape-height-offset));
     }
     artWindow .info .inner {
         height: calc(100% - var(--ui-art-info-border-top-portraitScreen) - var(--ui-art-info-border-bottom));
         margin-top: var(--ui-art-info-border-top-portraitScreen);
         margin-left: var(--ui-art-info-border-sideInner-portraitScreen);
         margin-right: var(--ui-art-info-border-sideOuter);
-        /* height: 100%; */
     }
+    artWindow.dataOnTop .info {
+        margin-top: var(--ui-art-info-landscape-dataOnTop-margin-offset);
+    }
+    artWindow.dataOnTop .info .inner {
+        margin-top: var(--ui-art-info-border-top);
+    }
+
+    /* KS button is wrapped  */
+    @media screen and (max-width: 750px) {}
 }

@@ -44,7 +44,6 @@
     --ui-data-window-margin: var(--ui-data-window-margin-topbottom) var(--ui-data-window-margin-leftright);
     --ui-data-window-dwPortrait-margin-left: 2.13px;
     --ui-data-window-dwLandscape-margin-top: 2.13px;
-    --ui-data-window-dataTop-dwLandscape-margin-bottom: 2.13px;
     --ui-data-window-radius: 16.9px;
     --ui-data-window-bottom-margin: 40px;
     --ui-data-window-sidebar-rounding: 8px;
@@ -54,6 +53,10 @@
 
     --ui-data-page-padding: 16.9px 10px 10px;
     --ui-data-page-margin-right: 6.9px;
+
+    --ui-art-flexHeight-canvasRatio: 100%;
+    --ui-art-flexHeight-infoRatio: 69%;
+    --ui-art-flexHeight-infoRatio-KS-dataOnLeft: 92%;
 
     --ui-art-canvas-inner-inset-topbottom: 21.3px;
     --ui-art-canvas-inner-inset-leftright: 16.9px;
@@ -68,6 +71,8 @@
     --ui-art-info-border-bottom: 29.75px;
     --ui-art-info-border-top-portraitScreen: 69px;
     --ui-art-info-border-sideInner-portraitScreen: 16.9px;
+    --ui-art-info-landscape-height-offset: 16.9px;
+    --ui-art-info-landscape-dataOnTop-margin-offset: 16.9px;
 
     --ui-header-height: 56px;
     --ui-footer-height: 40px;
@@ -78,6 +83,7 @@
     --ui-footer-emali-btn-width: 100px;
     --ui-footer-kickstarter-width: 220px;
     --ui-footer-kickstarter-wrap-bottom: calc(9px + var(--ui-footer-height));
+    --ui-footer-kickstarter-wrap-dataOnLeft: 18px;
 
     --ui-footer-kickstarter-hover-offset: 6px;
     --ui-footer-kickstarter-buffer-size: -8px;
