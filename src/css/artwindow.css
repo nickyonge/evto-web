@@ -82,6 +82,8 @@ artWindow .info .title h3 {
     margin-bottom: var(--ui-art-info-title-margin-bottom);
 }
 
+/* TODO: LiveNowOnKS button wrap / show info on right issues */
+
 /* HORIZONTAL ORIENTATION, eg computer / landscape tablet */
 @media screen and (min-aspect-ratio: 1.2) {
     artWindow.dataOnLeft .info .inner {
