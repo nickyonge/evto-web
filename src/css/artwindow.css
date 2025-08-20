@@ -53,12 +53,14 @@ artWindow .info {
     height: var(--ui-art-flexHeight-infoRatio);
 }
 artWindow .info .inner {
-    background-color: #2a5fba69;
+    background-color: #434f6369;
     /* z-index: 1; */
     position: relative;
     display: flex;
 
-    border: solid 1px #f2f1f369;
+    border: solid var(--ui-art-info-border-width) #f2f1f38e;
+    border-image: linear-gradient(169deg, #c2d1d3cb 0%, #a2c1f369 100%);
+    border-image-slice: 1;
 
     width: 100%;
     height: calc(100% - var(--ui-art-info-border-top) - var(--ui-art-info-border-bottom));

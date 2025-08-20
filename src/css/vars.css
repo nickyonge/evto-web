@@ -60,11 +60,12 @@
 
     --ui-art-canvas-inner-inset-topbottom: 21.3px;
     --ui-art-canvas-inner-inset-leftright: 16.9px;
-    --ui-art-canvas-border-width: 1px;
+    --ui-art-canvas-border-width: 1.27px;
     --ui-art-canvas-border-radius: 21.3px;
 
     --ui-art-info-title-height: 32px;
     --ui-art-info-title-margin-bottom: 2.13px;
+    --ui-art-info-border-width: 1.27px;
     --ui-art-info-border-top: 20px;
     --ui-art-info-border-sideOuter: 29.75px;
     --ui-art-info-border-sideInner: 24px;
