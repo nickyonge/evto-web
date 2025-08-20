@@ -20,8 +20,9 @@ export function CreateHeaderFooter(topBar, btmBar) {
 // --------------------------------------------- Header (aka TopBar) --- 
 
 function CreateTopBar(topBar) {
-    let titleContainer = ui.CreateDivWithClass('title', 'preventSelect');
-    // let titleContainer = ui.CreateDivWithClass('title', 'allowSelectDefaultCursor');
+    let titleContainer = ui.CreateDivWithClass('title');
+    ui.DisableContentSelection(titleContainer);
+    // ui.AllowContentSelectionWithDefaultCursor(titleContainer);
     let subtitle = ui.AddElementTo(titleContainer, 'h3');
     let title = ui.AddElementTo(titleContainer, 'h1');
     subtitle.innerText = txt.TITLE;
@@ -72,7 +73,8 @@ function CreateBottomBar(btmBar) {
     btmBar.appendChild(CreateSlidingButton());
 }
 function CreateSocialButton(name) {
-    let li = ui.CreateElementWithClass('li', 'icon', name.toLowerCase(), 'preventSelect');
+    let li = ui.CreateElementWithClass('li', 'icon', name.toLowerCase());
+    ui.DisableContentSelection(li);
     let tt = ui.CreateElementWithClass('span', 'tooltip');
     tt.innerText = name;
     li.appendChild(tt);
@@ -113,7 +115,8 @@ function CreateSlidingButton() {
     circle.setAttribute('aria-hidden', 'true');
     circle.appendChild(ui.CreateElementWithClass('span', 'icon', 'arrow'));
     btn.appendChild(circle);
-    let text = ui.CreateElementWithClass('span', 'button-text', 'preventSelect');
+    let text = ui.CreateElementWithClass('span', 'button-text');
+    ui.DisableContentSelection(text);
     text.innerText = txt.SLIDING_BUTTON;
     btn.appendChild(text);
     // let outer = ui.CreateDivWithClass('outer');
