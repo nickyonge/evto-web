@@ -6,6 +6,7 @@ import(/* webpackPreload: true */ './../css/datawindow.css');
 import(/* webpackPreload: true */ './../css/threejs.css');
 import(/* webpackPreload: true */ './../css/components/hbbtn.css');
 import(/* webpackPreload: true */ './../css/components/minput.css');
+import(/* webpackPreload: true */ './../css/components/multioption.css');
 import(/* webpackPreload: true */ './../css/components/socialbtn.css');
 import(/* webpackPreload: true */ './../css/components/slidebtn.css');
 import(/* webpackPreload: true */ './../css/components/tabs.css');
