@@ -90,13 +90,14 @@ export function DeselectAll(alsoBlur = true) {
 
 /**
  * Enables or disables the given HTML element by doing the following:
- * - To Enable...
+ * - On Enable...
  *   - Setting `pointerEvents` attribute to `'auto'`
  *   - Removing `aria-hidden` attribute
  *   - Removing `inert` attribute
  *   - Removing `tabIndex` attribute, including on all interactive children,
  *     unless a `preservedTabIndex` attribute is found, who's value will be used instead.
- * - To Disable...
+ * - On Disable...
+ *   - Calls `DeselectElement` to deselect and blur the element
  *   - Setting `pointerEvents` attribute to `'none'`
  *   - Setting `tabIndex` attribute to `-1`, including to all interactive children
  *   - Setting `aria-hidden` attribute to `true`
@@ -105,6 +106,7 @@ export function DeselectAll(alsoBlur = true) {
  * @param {boolean} [set=true] state to assign, `true` to Enable (default), or `false` to Disable 
  */
 export function SetElementEnabled(element, set = true) {
+    if (!set) { DeselectElement(element, true); }
     element.style.pointerEvents = set ? 'auto' : 'none';
     if (set) {
         // enable 
