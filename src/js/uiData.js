@@ -12,6 +12,7 @@ import iconFeatures from '../assets/svg/icons-red/icon-features.svg';
 import iconHome from '../assets/svg/icons-red/icon-home.svg';
 import iconSave from '../assets/svg/icons-red/icon-save.svg';
 import iconScale from '../assets/svg/icons-red/icon-scale.svg';
+import { CreatePageContent } from "./uiDataCreatePageContent";
 
 export const initialTab = 0;
 const bgFadeAlpha = 0.82;
@@ -25,11 +26,13 @@ const pageIDs = [PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE];
 let currentPage = -1;
 
 let tabs;
+let content;
 let pages = [];
 
-/**
- * Create the data window (tabs, options, info)
- */
+
+// ----------------------------------------------------- UI CREATION ----- 
+
+/** Create the data window (tabs, options, info) */
 export function CreateDataWindow() {
     // create UI elements
     CreateTabs();
@@ -37,71 +40,7 @@ export function CreateDataWindow() {
     CreateFadeBG();
 }
 
-
-/**
- * Select the current tab and switch to its corresponding page
- * @param {number} tabNum number of tab/page to select
- * @param {boolean} snap skip animation / timing? default false 
- */
-export function SelectTab(tabNum, snap = false) {
-    if (tabNum == currentPage && !snap) { return; }
-    let lastPage = currentPage;
-    currentPage = tabNum;
-    if (lastPage == -1) {
-        console.log(`Opening initial page: ${PAGE_NAMES[currentPage]}`);
-    } else {
-        console.log(`Closing ${PAGE_NAMES[lastPage]} page, opening ${PAGE_NAMES[currentPage]} page`)
-    }
-    for (let i = 0; i < txt.PAGES_COUNT; i++) {
-        let currentTab = i == tabNum;
-        let tabId = 'tab' + i;
-        let tabInput = document.querySelector(`input[id=${tabId}]`);
-        let page = pages[i];
-
-        if (currentTab) {
-            // logic current tab/page being displayed, not others 
-            let tabColor = tabColors[i];
-            let cssColor = GetBGColor(tabColor);
-            cssColor = AddAlphaToHex(cssColor, bgFadeAlpha);
-            dataWindow.style.setProperty('background-color', cssColor);
-            // enable page elements, fade in
-            SetElementEnabled(page, true);
-            page.style.setProperty('transition', 'opacity 0.5s ease-out');
-            page.style.opacity = '1';
-            PageOpened(page, snap);
-        } else {
-            // non-active tab, disable page elements, fade out 
-            if (lastPage == i) {
-                // recently closed page
-            }
-            SetElementEnabled(page, false);
-            page.style.setProperty('transition', 'opacity 0.1s ease-out');
-            page.style.opacity = '0';
-            DeselectElement(page);
-            PageClosed(page);
-        }
-
-        if (snap) {
-            // snap to initial state
-            if (i == tabNum) {
-                tabInput.checked = true;
-            } else {
-                tabInput.checked = false;
-            }
-        }
-    }
-}
-
-function GetBGColor(color) {
-    let cssVar = '--color-data-bg-blend-' + color;
-    let cssColor = style.value.getPropertyValue(cssVar);
-    if (!cssColor) {
-        throw new Error(`ERROR: couldn't get CSS variable for BG color: ${color}, parsed to CSS var ${cssVar}`);
-    }
-    return cssColor;
-}
-
-
+/** Creates the tabs sidebar for the data window to switch between pages */
 function CreateTabs() {
     tabs = ui.CreateDivWithClass('tabs');
     for (let i = 0; i < txt.PAGES_COUNT; i++) {
@@ -139,9 +78,15 @@ function CreateTabs() {
     dataWindow.appendChild(tabs);
 }
 
+/**
+ * Creates the individual pages for the data window.
+ * 
+ * NOTE: See `uiDataCreatePageContent.js` for creation of the actual content 
+ * in the pages themselves (text, buttons, sliders, graphics, etc)
+ */
 function CreatePages() {
     // create pages content container
-    let content = ui.CreateDivWithClass('content');
+    content = ui.CreateDivWithClass('content');
     dataWindow.appendChild(content);
     // create pages
     for (let i = 0; i < txt.PAGES_COUNT; i++) {
@@ -151,56 +96,77 @@ function CreatePages() {
         ui.AddElementAttribute(page, 'z-index', i + 1);
         pages.push(page);
         content.appendChild(page);
+        // external page content creation function
+        CreatePageContent(page);
+    }
+}
 
-        // page.innerHTML = `<p>Page Test, PG${i}</p>`; // test text
+/** creates the gradient fade element that sits atop the solid colour background */
+function CreateFadeBG() {
+    let fadeBG = ui.CreateDivWithClass('fadeBG');
+    dataWindow.appendChild(fadeBG);
+}
 
-        // add unique page content 
-        // separate functions for each so I don't have to worry about variable name conflicts 
-        switch (pageIDs[i]) {
-            case PG_INTRO:
-                CreatePageIntro(page);
-                break;
-            case PG_SIZE:
-                CreatePageSize(page);
-                break;
-            case PG_FEATURES:
-                CreatePageFeatures(page);
-                break;
-            case PG_PATTERN:
-                CreatePagePattern(page);
-                break;
-            case PG_SAVE:
-                CreatePageSave(page);
-                break;
 
-            default:
-                throw new Error(`ERROR: invalid page ID, can't create page content. Page ID: ${pageIDs[i]}, index: ${i}`);
+// ------------------------------------- UI SELECTION AND NAVIGATION ----- 
 
+/**
+ * Select the current tab and switch to its corresponding page
+ * @param {number} tabNum number of tab/page to select
+ * @param {boolean} snap skip animation / timing? default false 
+ */
+export function SelectTab(tabNum, snap = false) {
+    if (tabNum == currentPage && !snap) { return; }
+    let lastPage = currentPage;
+    currentPage = tabNum;
+    if (lastPage == -1) {
+        // first open 
+        console.log(`Opening initial page: ${PAGE_NAMES[currentPage]}`);
+    } else {
+        // subsequent open 
+        console.log(`Closing ${PAGE_NAMES[lastPage]} page, opening ${PAGE_NAMES[currentPage]} page`)
+    }
+    for (let i = 0; i < txt.PAGES_COUNT; i++) {
+        let currentTab = i == tabNum;
+        let tabId = 'tab' + i;
+        let tabInput = document.querySelector(`input[id=${tabId}]`);
+        let page = pages[i];
+
+        if (currentTab) {
+            // logic current tab/page being displayed, not others 
+            let tabColor = tabColors[i];
+            let cssColor = GetBGColor(tabColor);
+            cssColor = AddAlphaToHex(cssColor, bgFadeAlpha);
+            dataWindow.style.setProperty('background-color', cssColor);
+            // enable page elements, fade in
+            SetElementEnabled(page, true);
+            page.style.setProperty('transition', 'opacity 0.5s ease-out');
+            page.style.opacity = '1';
+            PageOpened(page, snap);
+        } else {
+            // non-active tab, disable page elements, fade out 
+            if (lastPage == i) {
+                // recently closed page
+            }
+            SetElementEnabled(page, false);
+            page.style.setProperty('transition', 'opacity 0.1s ease-out');
+            page.style.opacity = '0';
+            PageClosed(page);
+        }
+
+        if (snap) {
+            // snap to initial state
+            if (i == tabNum) {
+                tabInput.checked = true;
+            } else {
+                tabInput.checked = false;
+            }
         }
     }
 }
 
 
-function CreatePageIntro(page) {
-    // ----------------------------- CREATE INTRO PAGE -----
-
-    let header = ui.CreateElement('h2');
-    header.innerText = "Hello World";
-    page.appendChild(header);
-
-}
-function CreatePageSize(page) {
-    // ----------------------------- CREATE SIZE PAGE ----- 
-}
-function CreatePageFeatures(page) {
-    // ----------------------------- CREATE FEATURES PAGE ----- 
-}
-function CreatePagePattern(page) {
-    // ----------------------------- CREATE COLOUR & PATTERN PAGE ----- 
-}
-function CreatePageSave(page) {
-    // ----------------------------- CREATE SAVE & LOAD PAGE ----- 
-}
+// --------------------------------------------------------- GETTERS ----- 
 
 /**
  * Reference function. PageName must be one of the values found in `pageNames`. Gets that page's index
@@ -216,8 +182,16 @@ function GetPageNumberByID(pageID) {
     throw new Error(`Could not find page number for page name ${pageID}, check spelling. PageNames array: ${pageIDs}`);
 }
 
-/** creates the gradient fade element that sits atop the solid colour background */
-function CreateFadeBG() {
-    let fadeBG = ui.CreateDivWithClass('fadeBG');
-    dataWindow.appendChild(fadeBG);
+/**
+ * Gets the color associated with the given `tabColors` value for window BGs
+ * @param {string} color Color name, see `tabColors` 
+ * @returns {string} Color in hex code `#ABCDEF` format, from CSS vars
+ */
+function GetBGColor(color) {
+    let cssVar = '--color-data-bg-blend-' + color;
+    let cssColor = style.value.getPropertyValue(cssVar);
+    if (!cssColor) {
+        throw new Error(`ERROR: couldn't get CSS variable for BG color: ${color}, parsed to CSS var ${cssVar}`);
+    }
+    return cssColor;
 }
