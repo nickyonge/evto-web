@@ -21,20 +21,27 @@ export const SLIDING_BUTTON = "Live now on Kickstarter!";
 // ============= DATA WINDOW =============================
 
 // --------- INTRO PAGE -----------------------
+export const PG_TITLE_INTRO = "<i>Everywhere Together</i> Canvas Visualizer";
 
 // --------- SIZE PAGE ------------------------
+export const PG_TITLE_SIZE = "Canvas Size";
 
 // --------- FEATURES PAGE --------------------
+export const PG_TITLE_FEATURES = "Map Features & Details";
 
 // --------- COLOUR & PATTERN PAGE ------------
+export const PG_TITLE_PATTERN = "Map Colours & Design";
 
 // --------- SAVE & LOAD PAGE -----------------
+export const PG_TITLE_SAVE = "Save & Load Map Info";
 
 // --------- SIDEBAR / TABS -------------------
 /** total pages count: intro, size, features, colour/pattern, save/load */
 export const PAGE_NAMES = ["Intro", "Size", "Features", "Colour & Pattern", "Save & Load"];
 export const PAGES_COUNT = PAGE_NAMES.length;
 // TODO: replace txt.PAGES_COUNT with somethinig better. theoretically the number of pages overall shouldn't be defined by text class, but whatever, it works
+
+export const PAGE_TITLES = [PG_TITLE_INTRO, PG_TITLE_SIZE, PG_TITLE_FEATURES, PG_TITLE_PATTERN, PG_TITLE_SAVE];
 
 // ============= ART WINDOW ==============================
 

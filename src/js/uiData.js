@@ -173,7 +173,7 @@ export function SelectTab(tabNum, snap = false) {
  * @param {string} pageID ID of the page, must correspond to something in `pageIDs`
  * @returns {number} array index of `pageName` in `pageNames`
  */
-function GetPageNumberByID(pageID) {
+export function GetPageNumberByID(pageID) {
     for (let i = 0; i < pageIDs.length; i++) {
         if (pageIDs[i] == pageID) {
             return i;

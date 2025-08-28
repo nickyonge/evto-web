@@ -1,19 +1,15 @@
 // script to create internal content on each page in the data window
 // just didn't like how long uiData.js was getting
 import * as ui from "./ui";
+import * as txt from './text';
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentData";
+import { GetPageNumberByID } from "./uiData";
 
 function CreatePageIntro(page) {
     // ----------------------------- CREATE INTRO PAGE -----
-    let header = ui.CreateElement('h2');
-    header.innerText = "Hello World";
-
     let p1 = ui.CreateElement('p');
-    p1.innerText = "Lorem ipsum doler set amit";
-
-    page.appendChild(header);
+    p1.innerHTML = "Lorem ipsum doler set amit";
     page.appendChild(p1);
-
 }
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE ----- 
@@ -26,6 +22,7 @@ function CreatePagePattern(page) {
 }
 function CreatePageSave(page) {
     // ----------------------------- CREATE SAVE & LOAD PAGE ----- 
+    
 }
 
 /**
@@ -39,6 +36,11 @@ export function CreatePageContent(page) {
     if (!page) {
         throw new Error("ERROR: can't CreatePageContent, page is null");
     } else if (!page.id) { throw new Error(`ERROR: can't CreatePageContent, page.id is null, page: ${page}`); }
+
+    // universal page header
+    let header = ui.CreateElement('h2');
+    header.innerHTML = txt.PAGE_TITLES[GetPageNumberByID(page.id)];
+    page.appendChild(header);
 
     // separate functions for each so I don't have to worry about variable name conflicts 
     switch (page.id) {
