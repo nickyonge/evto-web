@@ -6,12 +6,8 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
 }
 
 .listtitle {
-  /* dark mode color */
   color: #e2e1e3;
-
-  /* light mode color */
-  /* color: #222123; */
-
+  
   display: flex;
   font-size: 12pt;
   margin: 4px;
