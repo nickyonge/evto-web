@@ -22,7 +22,6 @@ function CreatePagePattern(page) {
 }
 function CreatePageSave(page) {
     // ----------------------------- CREATE SAVE & LOAD PAGE ----- 
-    
 }
 
 /**
