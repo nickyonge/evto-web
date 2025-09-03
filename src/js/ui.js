@@ -2,6 +2,10 @@
 
 import { isBlank } from "./lilutils";
 
+// ------------------------------------------------------------------ 
+// -----------------------------------  BASIC ELEMENT CREATION  ----- 
+// ------------------------------------------------------------------ 
+
 /**
  * Create a DIV HTMLElement
  * @returns {HTMLElement} newly made HTML <div> element
@@ -30,6 +34,25 @@ export function CreateDivWithClass(...cssClasses) {
     return div;
 }
 /**
+ * Create a new HTMLElement of the given type
+ * @param {string} newElement type of HTMLElement
+ * @returns {HTMLElement} newly created HTMLElement
+ */
+export function CreateElement(newElement) {
+    return document.createElement(newElement);
+}
+/**
+ * Create a new HTMLElement of the given type, with one or more CSS classes
+ * @param {string} newElement type of new HTMLElement
+ * @param  {...string} cssClasses one or more classes to add to the new element
+ * @returns {HTMLElement} returns HTMLElement with the given CSS class name(s)
+ */
+export function CreateElementWithClass(newElement, ...cssClasses) {
+    let element = CreateElement(newElement);
+    element.classList.add(...cssClasses);
+    return element;
+}
+/**
  * Create a DIV HTMLElement with the given ID and CSS class(es)
  * @param {string} id ID value
  * @param {...string} cssClasses one or more CSS classes to add
@@ -53,6 +76,11 @@ export function AddElementTo(domElement, newElement) {
     domElement.appendChild(element);
     return element;
 }
+
+// ------------------------------------------------------------------ 
+// -----------------------------------  CLASSES AND ATTRIBUTES  ----- 
+// ------------------------------------------------------------------ 
+
 /**
  * Creates a new HTMLElement of the given type (newElement) with the given CSS class(es)
  * and appends it as a child to the given pre-existing element (domElement)
@@ -68,25 +96,6 @@ export function AddElementWithClassTo(domElement, newElement, ...cssClasses) {
     }
     let element = CreateElementWithClass(newElement, ...cssClasses);
     domElement.appendChild(element);
-    return element;
-}
-/**
- * Create a new HTMLElement of the given type
- * @param {string} newElement type of HTMLElement
- * @returns {HTMLElement} newly created HTMLElement
- */
-export function CreateElement(newElement) {
-    return document.createElement(newElement);
-}
-/**
- * Create a new HTMLElement of the given type, with one or more CSS classes
- * @param {string} newElement type of new HTMLElement
- * @param  {...string} cssClasses one or more classes to add to the new element
- * @returns {HTMLElement} returns HTMLElement with the given CSS class name(s)
- */
-export function CreateElementWithClass(newElement, ...cssClasses) {
-    let element = CreateElement(newElement);
-    element.classList.add(...cssClasses);
     return element;
 }
 
@@ -175,6 +184,11 @@ export function AddElementAttribute(element, attType, attValue) {
     element.setAttribute(attType, attValue);
 }
 
+// ------------------------------------------------------------------- 
+// --------------------------------------  OTHER BASIC ELEMENTS  ----- 
+// ------------------------------------------------------------------- 
+
+
 /**
  * Creates a new `<img>` element, and assigns the given src attribute (and optional alt text value)
  * @param {string} imgSrc Value to add to the "src" attribute to the new img
@@ -189,6 +203,10 @@ export function CreateImage(imgSrc, alt) {
     }
     return img;
 }
+
+// ------------------------------------------------------------------ 
+// ---------------------------------  NAVIGATION AND SELECTION  ----- 
+// ------------------------------------------------------------------ 
 
 /**
  * Make the given HTMLElement appear in the tab index for the page
