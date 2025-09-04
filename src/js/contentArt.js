@@ -59,17 +59,16 @@ export function UpdateCamera() {
     if (queueCameraUpdate) {
         return;
     }
-    if (lastCameraUpdate == 0) {
-        console.log("first camera update");
-    } else {
+    // check if camera has updated. if so, test for update duration
+    if (lastCameraUpdate != 0) {
         let camUpdateInterval = performance.now() - lastCameraUpdate;
         if (camUpdateInterval < cameraUpdateInterval) {
             queueCameraUpdate = true;
-            console.log("Queueing update...");
             return;
         }
     }
-    console.log("UPDATING CAMERA");
+    // update camera
+    // TODO: instead of re-instancing the camera, just reset the properties if camera is non-null
     if (useOrthographicCamera) {
         camera = new THREE.OrthographicCamera(sceneWidth() / - camOrthoDivFactor, sceneWidth() / camOrthoDivFactor, sceneHeight() / camOrthoDivFactor, sceneHeight() / - camOrthoDivFactor, cameraNearClip, cameraFarClip);
     } else {
@@ -91,6 +90,7 @@ export function ThreeJSFrame() {
 
     renderer.render(scene, camera);
 
+    // check for queued camera update... 
     if (queueCameraUpdate) {
         if (performance.now() - lastCameraUpdate >= cameraUpdateInterval) {
             queueCameraUpdate = false;
