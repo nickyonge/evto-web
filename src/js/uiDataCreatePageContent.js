@@ -2,6 +2,7 @@
 // just didn't like how long uiData.js was getting
 import * as ui from "./ui";
 import * as txt from './text';
+import { ToggleSwitch, MutliOptionList, DropdownList } from "./uiComponents";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentData";
 import { GetPageNumberByID } from "./uiData";
 
@@ -12,7 +13,10 @@ function CreatePageIntro(page) {
     page.appendChild(p1);
 }
 function CreatePageSize(page) {
-    // ----------------------------- CREATE SIZE PAGE ----- 
+    // ----------------------------- CREATE SIZE PAGE -----
+
+    let t1 = new ToggleSwitch();
+    console.log(t1.div);
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE ----- 
