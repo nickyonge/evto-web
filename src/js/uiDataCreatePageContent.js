@@ -17,6 +17,9 @@ function CreatePageSize(page) {
 
     let t1 = new ToggleSwitch();
     console.log(t1.div);
+    let toggle = new ToggleSwitch();
+    t1.title = "hi";
+    let t = t1.title;
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE ----- 
