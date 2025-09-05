@@ -16,8 +16,8 @@
   cursor: pointer;
 }
 
-.switchtitle {
-  color: #e2e1e3;
+.toggle .title {
+  /* color: #e2e1e3; */
   font-size: 12pt;
   margin-right: 8px;
   opacity: 0.8;

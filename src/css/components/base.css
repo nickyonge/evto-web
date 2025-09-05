@@ -1,9 +1,9 @@
 
-.componentTitle {
-  color: #e2e1e3;
-  font-size: 12pt;
+.uiComponent .title {
+  /* color: #e2e1e3; */
+  /* font-size: 12pt; */
 }
-.componentText {
+.uiComponent .text {
   color: #e2e1e3;
 }
 
