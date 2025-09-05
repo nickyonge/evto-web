@@ -20,6 +20,8 @@ function CreatePageSize(page) {
     console.log(t1.div);
     t1.title = "hi";
     let t = t1.title;
+
+    page.appendChild(t1.div);
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE ----- 
