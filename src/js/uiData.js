@@ -14,7 +14,7 @@ import iconSave from '../assets/svg/icons-red/icon-save.svg';
 import iconScale from '../assets/svg/icons-red/icon-scale.svg';
 import { CreatePageContent } from "./uiDataCreatePageContent";
 
-export const initialTab = 0;
+export const initialTab = 1;
 const bgFadeAlpha = 0.82;
 
 const useSeparators = false;
@@ -155,12 +155,13 @@ export function SelectTab(tabNum, snap = false) {
         }
 
         if (snap) {
-            // snap to initial state
+            // snap to target state
             if (i == tabNum) {
                 tabInput.checked = true;
             } else {
                 tabInput.checked = false;
             }
+            // TODO: set directly to final state (noticeable when using non-0 initial tab)
         }
     }
 }
