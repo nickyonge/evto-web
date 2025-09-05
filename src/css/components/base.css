@@ -1,0 +1,42 @@
+
+.componentTitle {
+  color: #e2e1e3;
+  font-size: 12pt;
+}
+.componentText {
+  color: #e2e1e3;
+}
+
+/* 
+.toggleLabel {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.switchtitle {
+  color: #e2e1e3;
+  font-size: 12pt;
+  margin-right: 8px;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.listtitle {
+  color: #e2e1e3;
+  
+  display: flex;
+  font-size: 12pt;
+  margin: 4px;
+}
+
+
+
+.select {
+  width: fit-content;
+  cursor: pointer;
+  position: relative;
+  transition: 300ms;
+  color: white;
+  overflow: hidden;
+} 
+*/
