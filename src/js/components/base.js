@@ -31,7 +31,7 @@ export class TitledComponent extends BasicComponent {
         return this.#titleText;
     }
 
-    /** the title HTML element, auto-updates the text on set 
+    /** get/set the title HTML element, auto-updates the text on set 
      * @type {HTMLElement} */
     set _titleElement(titleElement) {
         if (!titleElement) { return; }
