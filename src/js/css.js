@@ -7,6 +7,7 @@ import(/* webpackPreload: true */ './../css/threejs.css');
 import(/* webpackPreload: true */ './../css/components/base.css');
 import(/* webpackPreload: true */ './../css/components/dropdown.css');
 import(/* webpackPreload: true */ './../css/components/hbbtn.css');
+import(/* webpackPreload: true */ './../css/components/helpicon.css');
 import(/* webpackPreload: true */ './../css/components/minput.css');
 import(/* webpackPreload: true */ './../css/components/multioption.css');
 import(/* webpackPreload: true */ './../css/components/socialbtn.css');
