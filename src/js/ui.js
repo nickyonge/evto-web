@@ -30,7 +30,7 @@ export function CreateDivWithID(id) {
  */
 export function CreateDivWithClass(...cssClasses) {
     let div = CreateDiv();
-    div.classList.add(...cssClasses);
+    AddClassesToDOM(div, ...cssClasses);
     return div;
 }
 /**
@@ -49,7 +49,7 @@ export function CreateElement(newElement) {
  */
 export function CreateElementWithClass(newElement, ...cssClasses) {
     let element = CreateElement(newElement);
-    element.classList.add(...cssClasses);
+    AddClassesToDOM(element, ...cssClasses);
     return element;
 }
 /**
@@ -61,8 +61,32 @@ export function CreateElementWithClass(newElement, ...cssClasses) {
 export function CreateDivWithIDAndClasses(id, ...cssClasses) {
     let div = CreateDiv();
     div.id = id;
-    div.classList.add(...cssClasses);
+    AddClassesToDOM(div, ...cssClasses);
     return div;
+}
+/**
+ * Create an input `HTMLElement`, optionally with the given CSS class(es)
+ * @param {string} type type of input, eg 'checkbox'
+ * @param  {...string} cssClasses optional CSS class or classes to assign
+ * @returns {HTMLElement} newly made HTML `<input>` element
+ */
+export function CreateInput(type, ...cssClasses) {
+    let input = CreateElement('input');
+    AddElementAttribute(input, 'type', type);
+    AddClassesToDOM(input, ...cssClasses);
+    return input;
+}
+/**
+ * Create an input `HTMLElement` and the given ID, optionally with the given CSS class(es)
+ * @param {string} type type of input, eg 'checkbox'
+ * @param {string} id id for the input element
+ * @param  {...string} cssClasses optional CSS class or classes to assign
+ * @returns {HTMLElement} newly made HTML `<input>` element
+ */
+export function CreateInputWithID(type, id, ...cssClasses) {
+    let input = CreateInput(type, ...cssClasses);
+    AddElementAttribute(input, 'id', id);
+    return input;
 }
 /**
  * Creates a new HTMLElement of the given type (newElement) 
@@ -106,6 +130,9 @@ export function AddElementWithClassTo(domElement, newElement, ...cssClasses) {
  * @returns 
  */
 export function AddClassesToDOM(domElement, ...cssClasses) {
+    if (cssClasses.length == 0) {
+        return;
+    }
     if (domElement.classList.length == 0) {
         domElement.classList.add(...cssClasses);
         return;
