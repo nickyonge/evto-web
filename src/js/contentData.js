@@ -15,7 +15,7 @@ export function SetupDataWindow() {
     document.querySelectorAll('input[name="tab"]').forEach(tab => {
         tab.addEventListener('change', () => {
             const selected = document.querySelector('input[name="tab"]:checked');
-            console.log("MANUAL SELECT TAB");
+            SelectTab(StringToNumber(selected.id));
         });
     });
 }
