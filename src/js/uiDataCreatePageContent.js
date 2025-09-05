@@ -16,10 +16,8 @@ function CreatePageIntro(page) {
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
 
-    let t1 = new Toggle();
-    console.log(t1.div);
-    t1.title = "hi";
-    let t = t1.title;
+    let t1 = new Toggle("hello!");
+    // let t1 = new Toggle();
 
     page.appendChild(t1.div);
 }

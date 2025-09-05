@@ -22,7 +22,7 @@ export class TitledComponent extends BasicComponent {
      * @type {string} Title text to assign */
     set title(text) {
         this.#titleText = text;
-        if (this.#titleElement) {
+        if (text && this.#titleElement) {
             this.#titleElement.innerHTML = text;
         }
     }
