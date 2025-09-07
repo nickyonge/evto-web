@@ -6,7 +6,7 @@ export class MutliOptionList extends TitledComponent {
     #inputs;
     #labels;
 
-    constructor(componentTitle, onSelectCallback, ...options) {
+    constructor(componentTitle, onSelectCallback, options, icons) {
         super(componentTitle);
 
         ui.AddClassesToDOM(this.div, 'multichoicelist');
@@ -16,12 +16,16 @@ export class MutliOptionList extends TitledComponent {
         this.#inputs = [];
         this.#labels = [];
 
+        if (!options) {
+            console.warn("WARNING: creating a multi-option list without any options array");
+            options = [];
+        }
+
         // create options
         for (let i = 0; i < options.length; i++) {
             // create input 
             let input = ui.CreateInputWithID('radio', options[i]);
             if (i == 0) {
-
                 ui.AddElementAttributes(input, ['name', 'checked'], ['menu', '']);
             } else {
                 ui.AddElementAttribute(input, 'name', 'menu');
@@ -31,7 +35,12 @@ export class MutliOptionList extends TitledComponent {
             let label = ui.CreateElementWithClass('label', 'value');
             ui.AddElementAttribute(label, 'for', options[i]);
             this.#labels.push(label);
-            // TODO: add SVG to label
+            // create svg
+            if (icons && icons.length >= i + 1 && icons[i]) {
+                // found valid icon
+                // TODO: add SVG to label
+            }
+            // create text 
             let text = ui.CreateElement('p');
             text.innerHTML = options[i];
             label.appendChild(text);
