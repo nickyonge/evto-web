@@ -35,6 +35,7 @@ export class TitledComponent extends BasicComponent {
      * @type {HTMLElement} */
     set _titleElement(titleElement) {
         if (!titleElement) { return; }
+        ui.AddClassToDOMs('componentTitle', titleElement);
         this.#titleElement = titleElement;
         this._updateTitle();
     }
