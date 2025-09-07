@@ -16,10 +16,15 @@ function CreatePageIntro(page) {
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
 
-    let t1 = new Toggle("hello!");
+    let t1 = new Toggle("toggle", tCallback);
     // let t1 = new Toggle();
 
     page.appendChild(t1.div);
+
+    function tCallback() {
+        console.log('changed: ' + t1.checked);
+    }
+
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE ----- 

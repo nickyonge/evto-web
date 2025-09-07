@@ -1,4 +1,5 @@
 import * as ui from "../ui";
+import { isBlank } from "../lilutils";
 
 export class BasicComponent {
     div;
@@ -23,8 +24,13 @@ export class TitledComponent extends BasicComponent {
      * @type {string} Title text to assign */
     set title(text) {
         this.#titleText = text;
-        if (text && this.#titleElement) {
-            this.#titleElement.innerHTML = text;
+        if (this.#titleElement) {
+            if (!text || text.isBlank) {
+                this.#titleElement.style.visibility = 'hidden';
+            } else {
+                this.#titleElement.style.visibility = 'visible';
+                this.#titleElement.innerHTML = text;
+            }
         }
     }
     /** @returns {string} title of this component */

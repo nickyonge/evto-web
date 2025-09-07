@@ -7,7 +7,7 @@ export class Toggle extends TitledComponent {
     #label;
     #switch;
 
-    constructor(componentTitle) {
+    constructor(componentTitle, onChangeCallback, initialState = false) {
         super(componentTitle);
 
         ui.AddClassesToDOM(this.div, 'toggle');
@@ -19,11 +19,33 @@ export class Toggle extends TitledComponent {
 
         ui.MakeTabbableWithInputTo(this.#switch, this.#input);
 
+        this.#input.checked = initialState;
+
         this.div.appendChild(this.#input);
         this.div.appendChild(this.#label);
         this.#label.appendChild(this._titleElement);
         this.#label.appendChild(this.#switch);
 
+        if (onChangeCallback) {
+            this.#input.addEventListener('change', (event) => { 
+                onChangeCallback(event.target.checked);
+            });
+        }
+    }
+    
+    // function exampleOnChangeCallback(isChecked) {
+    //     console.log(`toggle state changed, checked: ${isChecked}`);
+    // }
+    
+    // function exampleOnChangeCallbackNoParameters() {
+    //     console.log(`checked: ${myToggle.checked}`);
+    // }
+
+    get checked() {
+        if (!this.#input) {
+            return false;
+        }
+        return this.#input.checked;
     }
 
     // this.div = ui.CreateDivWithClass("switchContainer");
