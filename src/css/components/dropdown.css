@@ -23,7 +23,7 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
   overflow: hidden;
 }
 
-.selected {
+.ddSelected {
   background-color: #2a2f3b;
   padding: 5px;
   margin-bottom: 3px;
@@ -36,7 +36,7 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
   transition: 300ms;
 }
 
-.selected::before {
+.ddSelected::before {
   content: attr(data-label);
 }
 
@@ -51,7 +51,7 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
   transition: 300ms;
 }
 
-.options {
+.ddOptions {
   display: flex;
   flex-direction: column;
   border-radius: 5px;
@@ -63,35 +63,35 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
   transition: 300ms;
 }
 
-.dropdown:hover > .options {
+.dropdown:hover > .ddOptions {
   opacity: 1;
   top: 0;
 }
 
-.dropdown:hover > .selected .arrow {
+.dropdown:hover > .ddSelected .arrow {
   transform: rotate(0deg);
 }
-.dropdown:hover > .selected {
+.dropdown:hover > .ddSelected {
   transition: 300ms;
   background-color: #424751;
 }
 
-.option {
+.ddOption {
   border-radius: 5px;
   padding: 5px;
   transition: 300ms;
   background-color: #2a2f3b;
   width: 150px;
 }
-.option:hover {
+.ddOption:hover {
   background-color: #424751;
 }
 
-.options input[type="radio"] {
+.ddOptions input[type="radio"] {
   display: none;
 }
 
-.options label {
+.ddOptions label {
   display: block;
   width: 100%;
   cursor: pointer;
@@ -99,61 +99,50 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
 }
 
 /* Show the option text directly */
-.options label::before {
+.ddOptions label::before {
   content: attr(data-txt);
 }
 
 /* use background-color to highlight selected option, or use display:none to hide it */
-.options input[type="radio"]:checked + label {
+.ddOptions input[type="radio"]:checked + label {
   background-color: #042069;
   /*display: none;*/
 }
 
 /* Dynamic: the selected label text is copied to .selected */
-.options input[type="radio"]:checked + label::before {
+.ddOptions input[type="radio"]:checked + label::before {
   content: attr(data-txt);
 }
 
 /* EXAMLPE HTML 
 
 <div class="dropdownContainer">
-  <div class="componentTitle">My Dropdown Friend</div>
-  <div class="dropdown">
-    <div class="selected" data-label="All">
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        height="1em"
-        viewBox="0 0 512 512"
-        class="arrow"
-      >
-        <path
-          d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
-        ></path>
-      </svg>
+    <div class="componentTitle">My Dropdown Friend</div>
+    <div class="dropdown">
+        <div class="ddSelected" data-label="All"><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 512 512" class="arrow"> <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path></svg></div>
+        <div class="ddOptions">
+
+            <div>
+                <input id="all" name="ddOption" type="radio" checked="" />
+                <label class="ddOption" for="all" data-txt="All"></label>
+            </div>
+
+            <div>
+                <input id="opt-1" name="ddOption" type="radio" />
+                <label class="ddOption" for="opt-1" data-txt="Option A"></label>
+            </div>
+
+            <div>
+                <input id="opt-2" name="ddOption" type="radio" />
+                <label class="ddOption" for="opt-2" data-txt="Option B"></label>
+            </div>
+
+            <div>
+                <input id="opt-3" name="ddOption" type="radio" />
+                <label class="ddOption" for="opt-3" data-txt="Option C"></label>
+            </div>
+
+        </div>
     </div>
-
-    <div class="options">
-      <div>
-        <input id="all" name="option" type="radio" checked="" />
-        <label class="option" for="all" data-txt="All"></label>
-      </div>
-
-      <div>
-        <input id="opt-1" name="option" type="radio" />
-        <label class="option" for="opt-1" data-txt="Option A"></label>
-      </div>
-
-      <div>
-        <input id="opt-2" name="option" type="radio" />
-        <label class="option" for="opt-2" data-txt="Option B"></label>
-      </div>
-
-      <div>
-        <input id="opt-3" name="option" type="radio" />
-        <label class="option" for="opt-3" data-txt="Option C"></label>
-      </div>
-    </div>
-  </div>
 </div>
-
 */
