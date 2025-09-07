@@ -16,15 +16,15 @@ function CreatePageIntro(page) {
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
 
-    let t1 = new Toggle("toggle", tCallback);
-    // let t1 = new Toggle();
+    let mo = new MutliOptionList('multi', null, 'a','b','c');
 
-    page.appendChild(t1.div);
+    page.appendChild(mo.div);
 
-    function tCallback() {
-        console.log('changed: ' + t1.checked);
-    }
-
+    // let t1 = new Toggle("toggle", tCallback);
+    // function tCallback() {
+    //     console.log('changed: ' + t1.checked);
+    // }
+    // page.appendChild(t1.div);
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE ----- 
