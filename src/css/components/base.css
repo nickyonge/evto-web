@@ -2,12 +2,8 @@
     padding: 2px;
 }
 
-.uiComponent .title {
-  /* color: #e2e1e3; */
-  /* font-size: 12pt; */
-}
-.uiComponent .text {
-  color: #e2e1e3;
+.uiComponent .componentTitle {
+  color: var(--ui-component-color-text);
 }
 
 /* 

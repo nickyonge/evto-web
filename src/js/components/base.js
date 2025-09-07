@@ -16,6 +16,7 @@ export class TitledComponent extends BasicComponent {
         if (componentTitle) {
             this.title = componentTitle;
         }
+        
     }
 
     /** Get/set the title text for this toggle switch. Automatically updates HTML.
@@ -36,6 +37,7 @@ export class TitledComponent extends BasicComponent {
     set _titleElement(titleElement) {
         if (!titleElement) { return; }
         ui.AddClassToDOMs('componentTitle', titleElement);
+        ui.DisableContentSelection(titleElement);// disable selecting text
         this.#titleElement = titleElement;
         this._updateTitle();
     }
@@ -44,5 +46,4 @@ export class TitledComponent extends BasicComponent {
 
     /** Reassigns `title` to itself, re-invoking the setter method */
     _updateTitle() { this.title = this.title; }
-
 }
