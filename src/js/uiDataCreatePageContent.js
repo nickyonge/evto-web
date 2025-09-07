@@ -16,8 +16,10 @@ function CreatePageIntro(page) {
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
 
-    let mo = new MutliOptionList('multi', null, 'a','b','c');
-
+    let mo = new MutliOptionList('multi', mCallback, 'a','b','c');
+    function mCallback() {
+        console.log('changed: ' + mo.currentSelection);
+    }
     page.appendChild(mo.div);
 
     // let t1 = new Toggle("toggle", tCallback);

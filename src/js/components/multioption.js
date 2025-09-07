@@ -15,7 +15,7 @@ export class MutliOptionList extends TitledComponent {
 
         this.#inputs = [];
         this.#labels = [];
-        
+
         // create options
         for (let i = 0; i < options.length; i++) {
             // create input 
@@ -39,20 +39,44 @@ export class MutliOptionList extends TitledComponent {
             ui.DisableContentSelection(text);
             ui.MakeTabbableWithInputTo(label, input);
 
+            if (onSelectCallback) {
+                input.addEventListener('change', (event) => {
+                    onSelectCallback(event.target.id);
+                });
+            }
         }
 
 
         // add to document 
         this.div.appendChild(this._titleElement);
         this.div.appendChild(this.#listSelect);
-        
+
         for (let i = 0; i < options.length; i++) {
             this.#listSelect.appendChild(this.#inputs[i]);
             this.#listSelect.appendChild(this.#labels[i]);
         }
+
+        document.addEventListener('keydown', function (event) {
+            if (event.key == 'k') {
+                console.log(this.currentSelection);
+            }
+        }.bind(this));
     }
 
-    /*
+    /** returns the text of the current selection */
+    get currentSelection() {
+        if (!this.#inputs) {
+            return null;
+        }
+        for (let i = 0; i < this.#inputs.length; i++) {
+            if (this.#inputs[i].checked) {
+                return this.#inputs[i].id;
+            }
+        }
+        return null;
+    }
+
+    /* example HTML
 
 <div class="multichoicelist">
   <div class="listtitle">My Wonderful List</div>
