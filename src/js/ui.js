@@ -231,6 +231,118 @@ export function CreateImage(imgSrc, alt) {
     return img;
 }
 
+/**
+ * Creates a new `<svg>` element, with the given `path` child element attributes
+ * @param {string|string[]} path Path value, either a single string for the `d` path attribute, 
+ * or a two-value string array with [d,fill] attributes
+ * @param  {...string} cssClasses optional CSS class(es) to apply to the SVG
+ * @returns {HTMLElement} newly-made SVG HTMLElement
+ */
+export function CreateSVGFromPath(path, ...cssClasses) {
+    if (path) {
+        return CreateSVG([[path, '#ffffff']], null, ...cssClasses);
+    }
+    return CreateSVG(null, null, ...cssClasses);
+}
+/**
+ * Creates a new `<svg>` element, with the given `path` child element attributes
+ * @param {string} path Path `d` attribute value
+ * @param {string} fill Path `fill` attribute value
+ * @param  {...string} cssClasses optional CSS class(es) to apply to the SVG
+ * @returns {HTMLElement} newly-made SVG HTMLElement
+ */
+export function CreateSVGFromPathWithFill(path, fill, ...cssClasses) {
+    if (path) {
+        return CreateSVG([[path, fill]], null, ...cssClasses);
+    }
+    return CreateSVG(null, null, ...cssClasses);
+}
+/**
+ * Creates a new `<svg>` element, wth the given `path` child elements, 
+ * and the given attributes. Automatically assigns `xmlns`, 
+ * `xmlns:xlink`, and `version` attributes if they aren't present.
+ * @param {string[][]} paths 2D array for paths. Each element is a new path, 
+ * and each path is 2 string values for its attributes: `[d,fill]`. If `fill`
+ * is omitted, defaults to `#ffffff`.
+ * @param {string[][]} attributes 2D array of attributes. Each element is a
+ * separate attribute, and each attribute is an array of two strings,
+ * [attribute,value]. If no value is present, assigns `''`.
+ * @param  {...string} cssClasses optional CSS class(es) to apply to the SVG
+ * @returns {HTMLElement} newly-made SVG HTMLElement
+ */
+export function CreateSVG(paths, attributes, ...cssClasses) {
+    let svg = CreateElement('svg');
+    // add given attributes
+    if (attributes) {
+        // [['attr','value'],['attr','value']]
+        for (let i = 0; i < attributes.length; i++) {
+            if (attributes[i]) {
+                if (attributes[i].length >= 2) {
+                    AddElementAttribute(svg, attributes[i][0], '');
+                } else {
+                    AddElementAttribute(svg, attributes[i][0], attributes[i][1])
+                }
+            }
+        }
+    }
+    // ensure basic attributes present (if these are already added, they'll be ignored)
+    AddElementAttributes(svg, ['xmlns', 'version', 'xmlns:xlink'], ['http://www.w3.org/2000/svg', '1.1', 'http://www.w3.org/1999/xlink']);
+    // add paths
+    if (paths) {
+        // type check
+        if (typeof paths === 'string') {
+            // just a string, assume it's a path D value and add
+            let path = CreateElement('path');
+            AddElementAttributes(path, ['fill', 'd'], ['#ffffff', ParseSVGPathD(path)]);
+            svg.appendChild(path);
+        } else {
+            // should be an array, [['d','fill'],['d','fill']] 
+            for (let i = 0; i < paths.length; i++) {
+                if (paths[i]) {
+                    let path = CreateElement('path');
+                    if (paths[i].length >= 2) {
+                        // assume [d,fill]
+                        // TODO: accommodate more path attributes than just d and fill
+                        AddElementAttributes(path, ['d', 'fill'], [paths[i][0],
+                        paths[i][1] ? paths[i][1] : '#ffffff']);
+                    } else if (paths[i].length == 1) {
+                        // only one attribute, assume 'd'
+                        AddElementAttributes(path, ['d', 'fill'], [paths[i][0], '#ffffff']);
+                    } else {
+                        // no elements
+                        AddElementAttributes(path, ['d', 'fill'], ['', '#ffffff']);
+                    }
+                    svg.appendChild(path);
+                }
+            }
+        }
+    }
+    // add classes
+    AddClassesToDOM(div, ...cssClasses);
+
+    // <svg 
+    //     xmlns="http://www.w3.org/2000/svg"
+    //     height="1em"
+    //     viewBox="0 0 512 512"
+    //     class="arrow"
+    // >
+    //     <path
+    //         fill="#ffffff"
+    //         d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+    //     ></path>
+    // </svg>
+}
+/** Returns the SVG path WITHOUT `d="`...`"` or `d='`...`'` at the beginning/end
+ * @param {string} path SVG path value 
+ * @returns {string} */
+function ParseSVGPathD(path) {
+    if (!path) return null;
+    if (path.indexOf('d=') == 0) {
+        return path.substring(3, path.length - 4);
+    }
+    return path;
+}
+
 // ------------------------------------------------------------------ 
 // ---------------------------------  NAVIGATION AND SELECTION  ----- 
 // ------------------------------------------------------------------ 
