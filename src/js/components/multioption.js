@@ -10,7 +10,7 @@ export class MutliOptionList extends TitledComponent {
         super(componentTitle);
 
         ui.AddClassesToDOM(this.div, 'multichoicelist');
-        this._titleElement = ui.CreateDivWithClass('listtitle');
+        this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
         this.#listSelect = ui.CreateDivWithClass('listselect');
 
         this.#inputs = [];
@@ -73,7 +73,7 @@ export class MutliOptionList extends TitledComponent {
     }
 
     /** returns the text of the current selection */
-    get currentSelection() {
+    get selection() {
         if (!this.#inputs) {
             return null;
         }

@@ -1,7 +1,16 @@
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
 export class DropdownList extends TitledComponent {
+
+
+
     constructor(componentTitle) {
         super(componentTitle);
+
+        this.div = ui.CreateDivWithClass('dropdownContainer');
+        ui.AddClassesToDOM(this.div, 'dropdownContainer');
+        this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
+
+
     }
 }

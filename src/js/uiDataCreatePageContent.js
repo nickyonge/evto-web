@@ -16,17 +16,18 @@ function CreatePageIntro(page) {
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
 
-    let mo = new MutliOptionList('multi', mCallback, ['a','b','c']);
-    function mCallback() {
-        console.log('changed: ' + mo.currentSelection);
-    }
-    page.appendChild(mo.div);
+    let dd = new DropdownList('dropdown', null, ['a', 'b', 'c']);
+    page.appendChild(dd.div);
 
-    // let t1 = new Toggle("toggle", tCallback);
-    // function tCallback() {
-    //     console.log('changed: ' + t1.checked);
-    // }
-    // page.appendChild(t1.div);
+    // let mo = new MutliOptionList('multi', mCallback, ['a','b','c']);
+    // function mCallback() { console.log(`changed: ${mo.selection}`); }
+    // // function mCallback(selection) { console.log(`changed: ${selection}`); }
+    // page.appendChild(mo.div);
+
+    // let tg = new Toggle("toggle", tCallback);
+    // // function tCallback() { console.log('checked: ' + tg.checked); }
+    // function tCallback(checked) { console.log('checked: ' + checked); }
+    // page.appendChild(tg.div);
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE ----- 

@@ -4,15 +4,6 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
 .dropdownContainer {
   width: 200px;
 }
-.componentTitle {
-  /* dark mode color */
-  color: #e2e1e3;
-  /* light mode color */
-  /* color: #222123;*/
-  display: flex;
-  font-size: 12pt;
-  margin: 4px;
-}
 
 .dropdown {
   font-size: 10.5pt;
