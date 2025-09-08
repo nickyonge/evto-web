@@ -3,9 +3,11 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
 
 .dropdownContainer {
     /* width: 200px; */
+    height: 30px;
 }
 
 .dropdown {
+    z-index: 10;
     font-size: 10.5pt;
     cursor: pointer;
     position: relative;
@@ -54,26 +56,27 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     transition: 300ms;
 }
 
-.dropdown:focus > .ddOptions,
-.ddSelected:focus > .ddOptions,
-.dropdown:focus-within > .ddOptions,
+.dropdown:focus-visible > .ddOptions,
+.ddSelected:focus-visible > .ddOptions,
+.dropdown:has(:focus-visible) > .ddOptions,
 .dropdown:hover > .ddOptions {
+    /* :has(:focus-visible) seems to emulate :focus-visible-within, cuz why not */
     opacity: 1;
     top: 0;
 }
-.dropdown:focus > .ddSelected .arrow,
-.ddSelected:focus > .ddSelected .arrow,
+.dropdown:focus-visible > .ddSelected .arrow,
+.ddSelected:focus-visible > .ddSelected .arrow,
 .dropdown:hover > .ddSelected .arrow {
     transform: rotate(0deg);
 }
-.dropdown:focus > .ddSelected,
-.ddSelected:focus > .ddSelected,
+.dropdown:focus-visible > .ddSelected,
+.ddSelected:focus-visible > .ddSelected,
 .dropdown:hover > .ddSelected {
     transition: 300ms;
     background-color: #424751;
 }
-.ddOption:focus,
-.ddSelected:focus,
+.ddOption:focus-visible,
+.ddSelected:focus-visible,
 .ddOption:hover {
     background-color: #424751;
 }
