@@ -52,11 +52,11 @@
         background-color 0.2s;
 }
 
-.toggle #checkboxInput:checked+.toggleLabel .toggleSwitch {
+.toggle #checkboxInput:checked + .toggleLabel .toggleSwitch {
     background-color: var(--ui-component-color-enabled);
 }
 
-.toggle #checkboxInput:checked+.toggleLabel .toggleSwitch::after {
+.toggle #checkboxInput:checked + .toggleLabel .toggleSwitch::after {
     transform: translate(calc(var(--ui-component-toggle-width) - var(--ui-component-toggle-knob-size) - var(--ui-component-toggle-knob-offset-left) - var(--ui-component-toggle-knob-offset-right)),
             -50%);
     /* transform: translate(calc(), -50%); */
@@ -64,7 +64,7 @@
     /* background-color: white; */
 }
 
-.toggle #checkboxInput:checked+.toggleLabel .switchtitle {
+.toggle #checkboxInput:checked + .toggleLabel .switchtitle {
     opacity: 1;
 }
 

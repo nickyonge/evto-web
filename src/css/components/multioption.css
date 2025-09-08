@@ -50,10 +50,10 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
     background-color: #21262c;
 }
 
-.listselect input[type="radio"]:checked+.value {
+.listselect input[type="radio"]:checked + .value {
     background-color: #1a1f24;
 }
-.listselect input[type="radio"]:checked+.value svg {
+.listselect input[type="radio"]:checked + .value svg {
     transition: all 200ms;
     opacity: 1;
 }
@@ -72,36 +72,36 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
     z-index: 1;
 }
 
-.listselect input[type="radio"]:checked+.value::before {
+.listselect input[type="radio"]:checked + .value::before {
     opacity: 1;
     top: 10%;
     height: 80%;
     transition: all 690ms;
 }
 
-.listselect:hover>input:not(:checked)+.value:not(:hover) p {
+.listselect:hover > input:not(:checked) + .value:not(:hover) p {
     transition: all 300ms;
     transform: scale(1) translate(2px, 0px);
 }
 
-.listselect:hover>input:checked+.value:hover p {
+.listselect:hover > input:checked + .value:hover p {
     transform: scale(1.05) translate(3px, 0px);
     transition: all 300ms;
 }
-.listselect:hover>input:checked+.value p {
+.listselect:hover > input:checked + .value p {
     transform: scale(1.05) translate(2px, 0px);
     transition: all 300ms;
 }
-.listselect:hover>input:checked+.value svg {
+.listselect:hover > input:checked + .value svg {
     transition: all 500ms;
     opacity: 1;
 }
 
-.listselect:hover>.value:hover p {
+.listselect:hover > .value:hover p {
     transform: scale(1.05) translate(5px, 0px);
     transition: all 300ms;
 }
-.listselect:hover>.value:hover svg {
+.listselect:hover > .value:hover svg {
     transition: all 200ms;
     opacity: 0.8;
 }
