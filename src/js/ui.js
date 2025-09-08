@@ -211,6 +211,25 @@ export function AddElementAttribute(element, attType, attValue) {
     element.setAttribute(attType, attValue);
 }
 
+/**
+ * Removes the given attribute from the given HTMLElement
+ * @param {HTMLElement} element 
+ * @param {string} attType 
+ */
+export function RemoveElementAttribute(element, attType) {
+    element.removeAttribute(attType);
+}
+/**
+ * Removes all the given attribute from the given HTMLElement
+ * @param {HTMLElement} element 
+ * @param {string[]} attTypes 
+ */
+export function RemoveElementAttributes(element, attTypes) {
+    for (let i = 0; i < attTypes.length; i++) {
+        element.removeAttribute(attTypes[i]);
+    }
+}
+
 // ------------------------------------------------------------------- 
 // --------------------------------------  OTHER BASIC ELEMENTS  ----- 
 // ------------------------------------------------------------------- 
