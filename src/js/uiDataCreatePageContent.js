@@ -26,10 +26,10 @@ function CreatePageSize(page) {
     // // function mCallback(selection) { console.log(`changed: ${selection}`); }
     // page.appendChild(mo.div);
 
-    // let tg = new Toggle("toggle", tCallback);
-    // // function tCallback() { console.log('checked: ' + tg.checked); }
-    // function tCallback(checked) { console.log('checked: ' + checked); }
-    // page.appendChild(tg.div);
+    let tg = new Toggle("toggle", tCallback);
+    // function tCallback() { console.log('checked: ' + tg.checked); }
+    function tCallback(checked) { console.log('checked: ' + checked); }
+    page.appendChild(tg.div);
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE ----- 

@@ -27,9 +27,13 @@ export class DropdownList extends TitledComponent {
             ui.AddElementAttribute(this.#selected, 'data-label', '');
         }
         // create dropdown arrow SVG
+        // TODO: arrow SVG path is not appearing
         this.#svg = ui.CreateSVG(
             [[arrowSVGPath, '#ffffff']],
-            [['height', '1em'], ['viewBox', '0 0 512 512']],
+            [
+                // ['height', '1em'], 
+                ['viewBox', '0 0 512 512']
+            ],
             'ddArrow');
         // create menu options 
         this.#optionsDivs = [];
