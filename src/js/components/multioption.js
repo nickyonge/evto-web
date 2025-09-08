@@ -1,5 +1,7 @@
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
+const initialValue = 0;
+
 export class MutliOptionList extends TitledComponent {
 
     #listSelect;
@@ -25,11 +27,8 @@ export class MutliOptionList extends TitledComponent {
         for (let i = 0; i < options.length; i++) {
             // create input 
             let input = ui.CreateInputWithID('radio', options[i]);
-            if (i == 0) {
-                ui.AddElementAttributes(input, ['name', 'checked'], ['menu', '']);
-            } else {
-                ui.AddElementAttribute(input, 'name', 'menu');
-            }
+            ui.AddElementAttribute(input, 'name', 'menu');
+            input.defaultChecked = i == initialValue;
             this.#inputs.push(input);
             // create label
             let label = ui.CreateElementWithClass('label', 'value');
@@ -66,6 +65,27 @@ export class MutliOptionList extends TitledComponent {
         }
     }
 
+    set selection(sel) {
+        if (sel == this.selection) { return; }
+        if (!this.#isValidSelection(sel)) {
+            console.warn(`WARNING: can't assign invalid selection ${sel}`);
+            return;
+        }
+        for (let i = 0; i < this.#inputs.length; i++) {
+            this.#inputs[i].checked = this.#inputs[i].id == sel;
+        }
+    }
+    set selectionIndex(index) {
+        if (index == this.selectionIndex) { return; }
+        if (!this.#isValidSelectionIndex(index)) {
+            console.warn(`WARNING: can't assign invalid selection index ${index}`);
+            return;
+        }
+        for (let i = 0; i < this.#inputs.length; i++) {
+            this.#inputs[i].checked = i == index;
+        }
+    }
+
     /** returns the text of the current selection 
      * @returns {string} text value of the current selection, or `null` if none/invalid */
     get selection() {
@@ -86,6 +106,18 @@ export class MutliOptionList extends TitledComponent {
             }
         }
         return -1;
+    }
+
+    #isValidSelection(s) {
+        for (let i = 0; i < this.#inputs.length; i++) {
+            if (this.#inputs[i].id == s) {
+                return true;
+            }
+        }
+        return false;
+    }
+    #isValidSelectionIndex(i) {
+        return (i >= 0 && i < this.#inputs.length);
     }
 
     /* example HTML

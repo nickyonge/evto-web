@@ -71,11 +71,10 @@ export class DropdownList extends TitledComponent {
         document.addEventListener('keydown', function (event) {
             // Check which key was pressed
             if (event.key === 'g') {
-                this.selectionIndex = this.gg;
                 this.gg++;
-                if (!this.isValidSelectionIndex(this.gg)) {
-                    this.gg = 0;
-                }
+                if (this.gg > 2) { this.gg = 0; }
+                // this.selectionIndex = this.gg;
+                this.selection = 'b';
             }
 
         }.bind(this));
@@ -84,11 +83,11 @@ export class DropdownList extends TitledComponent {
     gg = 0;
 
     #updateSelection() {
-        // console.log("Updatniig to: " + )
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
     }
 
     set selection(sel) {
+        if (sel == this.selection) { return; }
         if (!this.#isValidSelection(sel)) {
             console.warn(`WARNING: can't assign invalid selection ${sel}`);
             return;
@@ -99,7 +98,8 @@ export class DropdownList extends TitledComponent {
         this.#updateSelection();
     }
     set selectionIndex(index) {
-        if (!this.isValidSelectionIndex(index)) {
+        if (index == this.selectionIndex) { return; }
+        if (!this.#isValidSelectionIndex(index)) {
             console.warn(`WARNING: can't assign invalid selection index ${index}`);
             return;
         }
@@ -139,7 +139,7 @@ export class DropdownList extends TitledComponent {
         }
         return false;
     }
-    isValidSelectionIndex(i) {
+    #isValidSelectionIndex(i) {
         return (i >= 0 && i < this.#optionsInputs.length);
     }
 }
