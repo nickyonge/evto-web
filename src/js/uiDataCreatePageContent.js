@@ -16,7 +16,7 @@ function CreatePageIntro(page) {
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
 
-    let dd = new DropdownList('dropdown', dCallback, ['a', 'b', 'c']);
+    let dd = new DropdownList('dropdown', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam', 'a', 'b', 'c', '1235387235897293859823598729387592359792837598', 'test', 'ewbai']);
     // function dCallback() { console.log(`changed: ${dd.selection}`); }
     function dCallback(selection) { console.log(`changed: ${selection}`); }
     page.appendChild(dd.div);

@@ -28,10 +28,12 @@
     /* --color-bg-gradient-1: #beeeef;
     --color-bg-gradient-2: #a4d4f3; */
 
-    --ui-component-color-bg: #525153;
+    --ui-component-color-bg: #323133;
+    --ui-component-color-bg-highlight: #424143;
     --ui-component-color-text: #2a292b;
     --ui-component-color-input: #ffffff;
-    --ui-component-color-enabled: #d6853e;
+    --ui-component-color-enabled-light: #26a079;
+    --ui-component-color-enabled-dark: #a3e6d1;
 
     --ui-component-toggle-width: 36px;
     --ui-component-toggle-height: 24px;
