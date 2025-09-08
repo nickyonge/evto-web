@@ -55,6 +55,14 @@ export class DropdownList extends TitledComponent {
             oDiv.appendChild(oInput);
             oDiv.appendChild(oLabel);
             this.#optionsContainer.appendChild(oDiv);
+
+            // create callback
+            oInput.addEventListener('change', (event) => {
+                this.#updateSelection();
+                if (onSelectCallback) {
+                    onSelectCallback(event.target.id);
+                }
+            });
         }
         // add elements 
         this.div.appendChild(this._titleElement);
@@ -62,6 +70,32 @@ export class DropdownList extends TitledComponent {
         this.#dropdown.appendChild(this.#selected);
         this.#selected.appendChild(this.#svg);
         this.#dropdown.appendChild(this.#optionsContainer);
+    }
+
+    #updateSelection() {
+        ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
+    }
+
+    /** returns the text of the current selection 
+     * @returns {string} text value of the current selection, or `null` if none/invalid */
+    get selection() {
+        let i = this.selectionIndex;
+        if (i == -1) { return null; }
+        return this.#optionsInputs[i].id;
+    }
+
+    /** returns the index of the current selection 
+     * @returns {number} integer index of the current selection, or `-1` if none/invalid */
+    get selectionIndex() {
+        if (!this.#optionsInputs) {
+            return -1;
+        }
+        for (let i = 0; i < this.#optionsInputs.length; i++) {
+            if (this.#optionsInputs[i].checked) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
 

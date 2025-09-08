@@ -64,25 +64,28 @@ export class MutliOptionList extends TitledComponent {
             this.#listSelect.appendChild(this.#inputs[i]);
             this.#listSelect.appendChild(this.#labels[i]);
         }
-
-        document.addEventListener('keydown', function (event) {
-            if (event.key == 'k') {
-                console.log(this.currentSelection);
-            }
-        }.bind(this));
     }
 
-    /** returns the text of the current selection */
+    /** returns the text of the current selection 
+     * @returns {string} text value of the current selection, or `null` if none/invalid */
     get selection() {
+        let i = this.selectionIndex;
+        if (i == -1) { return null; }
+        return this.#inputs[i].id;
+    }
+
+    /** returns the index of the current selection 
+     * @returns {number} integer index of the current selection, or `-1` if none/invalid */
+    get selectionIndex() {
         if (!this.#inputs) {
-            return null;
+            return -1;
         }
         for (let i = 0; i < this.#inputs.length; i++) {
             if (this.#inputs[i].checked) {
-                return this.#inputs[i].id;
+                return i;
             }
         }
-        return null;
+        return -1;
     }
 
     /* example HTML
