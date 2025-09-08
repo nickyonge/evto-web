@@ -2,108 +2,108 @@
 https://uiverse.io/nickyonge/mighty-hound-30 */
 
 .multichoicelist {
-  width: 169px;
+    width: 169px;
 }
 
 .listselect {
-  width: 100%;
-  background-color: #262830;
-  border-radius: 6.9px;
+    width: 100%;
+    background-color: #262830;
+    border-radius: 6.9px;
 }
 
 .listselect input[type="radio"] {
-  display: none;
+    display: none;
 }
 
 .listselect .value {
-  background-color: transparent;
-  border: none;
-  padding: 4px;
-  margin-left: -1px;
-  color: white;
-  font-size: 10pt;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  position: relative;
-  width: calc(100% + 2px);
-  cursor: pointer;
-  border-radius: 5px;
-  transition: all 150ms;
+    background-color: transparent;
+    border: none;
+    padding: 4px;
+    margin-left: -1px;
+    color: white;
+    font-size: 10pt;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    position: relative;
+    width: calc(100% + 2px);
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 150ms;
 }
 
 .listselect .value p {
-  transform-origin: 4px 50%;
-  padding-left: 8px;
-  transition: all 150ms;
+    transform-origin: 4px 50%;
+    padding-left: 8px;
+    transition: all 150ms;
 }
 .listselect .value svg {
-  /* uncomment display: none to view what list looks like without SVGs */
-  /*display: none; */
-  width: 16px;
-  opacity: 50%;
-  transition: all 200ms;
-  margin-right: -5px;
+    /* uncomment display: none to view what list looks like without SVGs */
+    /*display: none; */
+    width: 16px;
+    opacity: 50%;
+    transition: all 200ms;
+    margin-right: -5px;
 }
 
 .value:hover {
-  background-color: #21262c;
+    background-color: #21262c;
 }
 
-.listselect input[type="radio"]:checked + .value {
-  background-color: #1a1f24;
+.listselect input[type="radio"]:checked+.value {
+    background-color: #1a1f24;
 }
-.listselect input[type="radio"]:checked + .value svg {
-  transition: all 200ms;
-  opacity: 1;
+.listselect input[type="radio"]:checked+.value svg {
+    transition: all 200ms;
+    opacity: 1;
 }
 
 .listselect .value::before {
-  content: "";
-  position: absolute;
-  top: 22%;
-  left: -12px;
-  width: 5px;
-  height: 60%;
-  background-color: #2f81f7;
-  border-radius: 5px;
-  opacity: 0;
-  transition: all 150ms;
-  z-index: 1;
+    content: "";
+    position: absolute;
+    top: 22%;
+    left: -12px;
+    width: 5px;
+    height: 60%;
+    background-color: #2f81f7;
+    border-radius: 5px;
+    opacity: 0;
+    transition: all 150ms;
+    z-index: 1;
 }
 
-.listselect input[type="radio"]:checked + .value::before {
-  opacity: 1;
-  top: 10%;
-  height: 80%;
-  transition: all 690ms;
+.listselect input[type="radio"]:checked+.value::before {
+    opacity: 1;
+    top: 10%;
+    height: 80%;
+    transition: all 690ms;
 }
 
-.listselect:hover > input:not(:checked) + .value:not(:hover) p {
-  transition: all 300ms;
-  transform: scale(1) translate(2px, 0px);
+.listselect:hover>input:not(:checked)+.value:not(:hover) p {
+    transition: all 300ms;
+    transform: scale(1) translate(2px, 0px);
 }
 
-.listselect:hover > input:checked + .value:hover p {
-  transform: scale(1.05) translate(3px, 0px);
-  transition: all 300ms;
+.listselect:hover>input:checked+.value:hover p {
+    transform: scale(1.05) translate(3px, 0px);
+    transition: all 300ms;
 }
-.listselect:hover > input:checked + .value p {
-  transform: scale(1.05) translate(2px, 0px);
-  transition: all 300ms;
+.listselect:hover>input:checked+.value p {
+    transform: scale(1.05) translate(2px, 0px);
+    transition: all 300ms;
 }
-.listselect:hover > input:checked + .value svg {
-  transition: all 500ms;
-  opacity: 1;
+.listselect:hover>input:checked+.value svg {
+    transition: all 500ms;
+    opacity: 1;
 }
 
-.listselect:hover > .value:hover p {
-  transform: scale(1.05) translate(5px, 0px);
-  transition: all 300ms;
+.listselect:hover>.value:hover p {
+    transform: scale(1.05) translate(5px, 0px);
+    transition: all 300ms;
 }
-.listselect:hover > .value:hover svg {
-  transition: all 200ms;
-  opacity: 0.8;
+.listselect:hover>.value:hover svg {
+    transition: all 200ms;
+    opacity: 0.8;
 }
 
 
