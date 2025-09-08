@@ -40,11 +40,8 @@ export class DropdownList extends TitledComponent {
             // create elements
             let oDiv = ui.CreateDiv();
             let oInput = ui.CreateInputWithID('radio', options[i]);
-            if (i == initialValue) {
-                ui.AddElementAttributes(oInput, ['name', 'checked'], ['ddOption', '']);
-            } else {
-                ui.AddElementAttribute(oInput, 'name', 'ddOption');
-            }
+            ui.AddElementAttribute(oInput, 'name', 'ddOption');
+            oInput.defaultChecked = i == initialValue;
             let oLabel = ui.CreateElementWithClass('label', 'ddOption');
             ui.AddElementAttributes(oLabel, ['for', 'data-txt'], [options[i], options[i]]);
             // push to arrays
@@ -70,10 +67,46 @@ export class DropdownList extends TitledComponent {
         this.#dropdown.appendChild(this.#selected);
         this.#selected.appendChild(this.#svg);
         this.#dropdown.appendChild(this.#optionsContainer);
+
+        document.addEventListener('keydown', function (event) {
+            // Check which key was pressed
+            if (event.key === 'g') {
+                this.selectionIndex = this.gg;
+                this.gg++;
+                if (!this.isValidSelectionIndex(this.gg)) {
+                    this.gg = 0;
+                }
+            }
+
+        }.bind(this));
     }
 
+    gg = 0;
+
     #updateSelection() {
+        // console.log("Updatniig to: " + )
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
+    }
+
+    set selection(sel) {
+        if (!this.#isValidSelection(sel)) {
+            console.warn(`WARNING: can't assign invalid selection ${sel}`);
+            return;
+        }
+        for (let i = 0; i < this.#optionsInputs.length; i++) {
+            this.#optionsInputs[i].checked = this.#optionsInputs[i].id == sel;
+        }
+        this.#updateSelection();
+    }
+    set selectionIndex(index) {
+        if (!this.isValidSelectionIndex(index)) {
+            console.warn(`WARNING: can't assign invalid selection index ${index}`);
+            return;
+        }
+        for (let i = 0; i < this.#optionsInputs.length; i++) {
+            this.#optionsInputs[i].checked = i == index;
+        }
+        this.#updateSelection();
     }
 
     /** returns the text of the current selection 
@@ -96,6 +129,18 @@ export class DropdownList extends TitledComponent {
             }
         }
         return -1;
+    }
+
+    #isValidSelection(s) {
+        for (let i = 0; i < this.#optionsInputs.length; i++) {
+            if (this.#optionsInputs[i].id == s) {
+                return true;
+            }
+        }
+        return false;
+    }
+    isValidSelectionIndex(i) {
+        return (i >= 0 && i < this.#optionsInputs.length);
     }
 }
 

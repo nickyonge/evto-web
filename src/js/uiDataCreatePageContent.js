@@ -16,7 +16,9 @@ function CreatePageIntro(page) {
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
 
-    let dd = new DropdownList('dropdown', null, ['a', 'b', 'c']);
+    let dd = new DropdownList('dropdown', dCallback, ['a', 'b', 'c']);
+    // function dCallback() { console.log(`changed: ${dd.selection}`); }
+    function dCallback(selection) { console.log(`changed: ${selection}`); }
     page.appendChild(dd.div);
 
     // let mo = new MutliOptionList('multi', mCallback, ['a','b','c']);
