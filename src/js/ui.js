@@ -342,9 +342,9 @@ export function CreateSVG(paths, attributes, ...cssClasses) {
         for (let i = 0; i < attributes.length; i++) {
             if (attributes[i]) {
                 if (attributes[i].length >= 2) {
-                    AddElementAttribute(svg, attributes[i][0], '');
-                } else {
                     AddElementAttribute(svg, attributes[i][0], attributes[i][1])
+                } else {
+                    AddElementAttribute(svg, attributes[i][0], '');
                 }
             }
         }
