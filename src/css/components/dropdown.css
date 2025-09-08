@@ -54,16 +54,27 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
   transition: 300ms;
 }
 
+.dropdown:focus > .ddOptions,
+.ddSelected:focus > .ddOptions,
+.dropdown:focus-within > .ddOptions,
 .dropdown:hover > .ddOptions {
   opacity: 1;
   top: 0;
 }
-
+.dropdown:focus > .ddSelected .arrow,
+.ddSelected:focus > .ddSelected .arrow,
 .dropdown:hover > .ddSelected .arrow {
   transform: rotate(0deg);
 }
+.dropdown:focus > .ddSelected,
+.ddSelected:focus > .ddSelected,
 .dropdown:hover > .ddSelected {
   transition: 300ms;
+  background-color: #424751;
+}
+.ddOption:focus,
+.ddSelected:focus,
+.ddOption:hover {
   background-color: #424751;
 }
 
@@ -72,19 +83,14 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
   padding: 5px;
   transition: 300ms;
   background-color: #2a2f3b;
-  width: 150px;
 }
-.ddOption:hover {
-  background-color: #424751;
-}
-
 .ddOptions input[type="radio"] {
   display: none;
 }
 
 .ddOptions label {
   display: block;
-  width: 100%;
+  width: calc(100% - 10px);
   cursor: pointer;
   color: white;
 }

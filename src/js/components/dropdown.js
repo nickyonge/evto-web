@@ -20,6 +20,7 @@ export class DropdownList extends TitledComponent {
         this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
         this.#dropdown = ui.CreateDivWithClass('dropdown');
         this.#selected = ui.CreateDivWithClass('ddSelected');
+        ui.MakeTabbable(this.#dropdown);
         if (options && options.length >= initialValue + 1) {
             ui.AddElementAttribute(this.#selected, 'data-label', options[initialValue]);
         } else {
@@ -48,6 +49,7 @@ export class DropdownList extends TitledComponent {
             this.#optionsDivs.push(oDiv);
             this.#optionsInputs.push(oInput);
             this.#optionsLabels.push(oLabel);
+            ui.MakeTabbableWithInputTo(oLabel, oInput);
             // add children to parents 
             oDiv.appendChild(oInput);
             oDiv.appendChild(oLabel);
