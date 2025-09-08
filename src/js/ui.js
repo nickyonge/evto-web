@@ -229,6 +229,51 @@ export function RemoveElementAttributes(element, attTypes) {
         element.removeAttribute(attTypes[i]);
     }
 }
+/**
+ * Checks if the given attribute is present on the given HTMLElement
+ * @param {HTMLElement} element 
+ * @param {string} attType Type (qualifiedName) of attribute to check 
+ * @returns {boolean}
+ */
+export function HasAttribute(element, attType) {
+    return element.hasAttribute(attType);
+}
+/**
+ * Checks if the given element has the given attribute, and if its
+ * value matches the given attribute value
+ * @param {HTMLElement} element 
+ * @param {string} attType Type (qualifiedName) of attribute to check 
+ * @param {any} attValue Value of the attribute, typically a `string`,
+ * `number`, or `boolean`. 
+ * @returns {boolean}
+ */
+export function HasAttributeWithValue(element, attType, attValue) {
+    if (!HasAttribute(element, attType)) { return false; }
+    return (element.getAttribute(attType) == attValue);
+}
+/**
+ * Check if the given HTMLElement has any or all of the given attributes
+ * @param {HTMLElement} element 
+ * @param {string[]} attTypes List of attribute names to check 
+ * @param {boolean} [all=true] Check for all attributes? If `true` (default), 
+ * only returns `true` if all given attributes are present. If `false`,
+ * returns `true` if any of the given attributes are present
+ * @returns {boolean}
+ */
+export function HasAttributes(element, attTypes, all = true) {
+    for (let i = 0; i < attTypes.length; i++) {
+        if (all) {
+            if (!element.hasAttribute(attTypes[i])) {
+                return false;
+            }
+        } else {
+            if (element.hasAttribute(attTypes[i])) {
+                return true;
+            }
+        }
+    }
+    return all ? true : false;
+}
 
 // ------------------------------------------------------------------- 
 // --------------------------------------  OTHER BASIC ELEMENTS  ----- 
@@ -389,7 +434,7 @@ export function MakeTabbable(element, tabIndex = 0, preserve = true) {
  * Eg, if you add a <label> to the tab index, but want to send its input to a different <input> tag.
  * @param {HTMLElement} tabElement HTMLElement to add to the tab index
  * @param {HTMLElement} inputToElement HTMLElement that receives Enter/Spacebar keyboard input from `tabElement` as a `click()`
- * @param {number} tabIndex Default 0, optional value to specify tab index. `-1` = not tabbable (and no input events are added)
+ * @param {number} [tabIndex=0] Default 0, optional value to specify tab index. `-1` = not tabbable (and no input events are added)
  */
 export function MakeTabbableWithInputTo(tabElement, inputToElement, tabIndex = 0) {
     MakeTabbable(tabElement, tabIndex);
