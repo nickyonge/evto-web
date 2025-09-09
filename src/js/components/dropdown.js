@@ -1,6 +1,6 @@
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
-import { ObserveNode } from "../mutationObserver";
+import { ObserveNode, ObserverCallbackOnAdded } from "../mutationObserver";
 const initialValue = 0;
 
 export class DropdownList extends TitledComponent {
@@ -8,7 +8,7 @@ export class DropdownList extends TitledComponent {
     #dropdown;
     #selected;
     #svg;
-    #optionsContainer;
+    _optionsContainer;
     #optionsDivs;
     #optionsInputs;
     #optionsLabels;
@@ -39,8 +39,8 @@ export class DropdownList extends TitledComponent {
         this.#optionsDivs = [];
         this.#optionsInputs = [];
         this.#optionsLabels = [];
-        this.#optionsContainer = ui.CreateDivWithClass('ddOptions');
-        ObserveNode(this.#optionsContainer,false,true,false);
+        this._optionsContainer = ui.CreateDivWithClass('ddOptions');
+        ObserverCallbackOnAdded(this._optionsContainer, this.AddedToPage)
         // iterate thru options 
         for (let i = 0; i < options.length; i++) {
             // create elements
@@ -59,7 +59,7 @@ export class DropdownList extends TitledComponent {
             // add children to parents 
             oDiv.appendChild(oInput);
             oDiv.appendChild(oLabel);
-            this.#optionsContainer.appendChild(oDiv);
+            this._optionsContainer.appendChild(oDiv);
 
             // create callback
             oInput.addEventListener('change', (event) => {
@@ -74,10 +74,7 @@ export class DropdownList extends TitledComponent {
         this.div.appendChild(this.#dropdown);
         this.#dropdown.appendChild(this.#selected);
         this.#selected.appendChild(this.#svg);
-        this.#dropdown.appendChild(this.#optionsContainer);
-
-        // determine CSS height
-        console.log("H: " + this.#optionsContainer.offsetHeight);
+        this.#dropdown.appendChild(this._optionsContainer);
 
         // TESTING 
         document.addEventListener('keydown', function (event) {
@@ -90,6 +87,13 @@ export class DropdownList extends TitledComponent {
             }
 
         }.bind(this));
+    }
+
+    AddedToPage(target) {
+        
+        console.log("T: " + target);
+        // determine CSS height
+        console.log("H: " + target.offsetHeight);
     }
 
     gg = 0;

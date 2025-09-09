@@ -2,10 +2,11 @@ import './css'; // import css classes
 import { BuildUI } from './uiMain';
 import { SetupDataWindow } from './contentData';
 import { SetupArtWindow } from './contentArt';
-import { DisconnectObserver } from './mutationObserver';
+import { DisconnectObserver, StartObservation } from './mutationObserver';
 
 window.addEventListener('load', function () {
-    // initial window load 
+    // initial window load
+    StartObservation();
     BuildUI();
     SetupDataWindow();
     SetupArtWindow();
