@@ -44,11 +44,11 @@ export class DropdownList extends TitledComponent {
         for (let i = 0; i < options.length; i++) {
             // create elements
             let oDiv = ui.CreateDiv();
-            let oInput = ui.CreateInputWithID('radio', options[i]);
+            let oInput = ui.CreateInputWithID('radio', options[i] + componentTitle);
             ui.AddElementAttribute(oInput, 'name', 'ddOption');
             oInput.defaultChecked = i == initialValue;
             let oLabel = ui.CreateElementWithClass('label', 'ddOption');
-            ui.AddElementAttributes(oLabel, ['for', 'data-txt'], [options[i], options[i]]);
+            ui.AddElementAttributes(oLabel, ['for', 'data-txt'], [options[i] + componentTitle, options[i]]);
             // push to arrays
             this.#optionsDivs.push(oDiv);
             this.#optionsInputs.push(oInput);
@@ -89,6 +89,7 @@ export class DropdownList extends TitledComponent {
     gg = 0;
 
     #updateSelection() {
+        console.log(this.selection);
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
     }
 
@@ -98,6 +99,11 @@ export class DropdownList extends TitledComponent {
             console.warn(`WARNING: can't assign invalid selection ${sel}`);
             return;
         }
+        // first, check labels
+        for (let i = 0; i < this.#optionsLabels.length; i++) {
+            this.#optionsLabels[i].checked = ui.GetAttribute(this.#optionsLabels[i], 'data-txt') == sel;
+        }
+        // if not found, check input IDs, just in case we're using technical name
         for (let i = 0; i < this.#optionsInputs.length; i++) {
             this.#optionsInputs[i].checked = this.#optionsInputs[i].id == sel;
         }
@@ -120,7 +126,8 @@ export class DropdownList extends TitledComponent {
     get selection() {
         let i = this.selectionIndex;
         if (i == -1) { return null; }
-        return this.#optionsInputs[i].id;
+        // return this.#optionsInputs[i].id;
+        return ui.GetAttribute(this.#optionsLabels[i], 'data-txt');
     }
 
     /** returns the index of the current selection 
