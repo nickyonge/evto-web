@@ -9,7 +9,8 @@ export const isBlank = str => !str || !str.trim();
 
 /** 
  * Gets the CSS stylesheet for the page.
- * Remember to use `.value` when accessing `style` (eg, `style.value.getPropertyValue`)
+ * 
+ * Remember!!! Use `.value` when accessing `style` (eg, `style.value.getPropertyValue`)
  * @type {CSSStyleDeclaration}
  */
 export const style = {
@@ -23,9 +24,22 @@ export const style = {
         return _style;
     }
 };
-/** local style reference for utils
+/** local {@link style} reference for utils
  * @type {CSSStyleDeclaration} */
 let _style;
+
+/**
+ * Gets a CSS variable from loaded stylesheets
+ * @param {string} varName Name of variable. Should start with `--`, but if not, it will be added
+ * @returns Value of the given variable
+ */
+export function GetCSSVariable(varName) {
+    if (isBlank(varName)) { return; }
+    if (!varName.startsWith('--')) {
+        varName = `${varName.startsWith('-') ? '-' : '--'}${varName}`;
+    }
+    return style.value.getPropertyValue(varName);
+}
 
 /**
  * Removes non-numeric chars from a string and returns the resulting number. 
