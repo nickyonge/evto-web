@@ -45,6 +45,8 @@
         calc(var(--ui-component-toggle-knob-size) - (
             var(--ui-component-toggle-knob-border) * 2));
 
+    --ui-component-dropdown-max-height: 169px;
+
 
     --ui-data-sidebar-tabs-width: 110px;
 

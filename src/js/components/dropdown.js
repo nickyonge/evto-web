@@ -1,6 +1,7 @@
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
 import { ObserveNode, ObserverCallbackOnAdded } from "../mutationObserver";
+import { GetCSSVariable } from "../lilutils";
 const initialValue = 0;
 
 export class DropdownList extends TitledComponent {
@@ -40,7 +41,7 @@ export class DropdownList extends TitledComponent {
         this.#optionsInputs = [];
         this.#optionsLabels = [];
         this._optionsContainer = ui.CreateDivWithClass('ddOptions');
-        ObserverCallbackOnAdded(this._optionsContainer, this.AddedToPage)
+        ObserverCallbackOnAdded(this._optionsContainer, this.DropdownAddedToPage)
         // iterate thru options 
         for (let i = 0; i < options.length; i++) {
             // create elements
@@ -89,14 +90,14 @@ export class DropdownList extends TitledComponent {
         }.bind(this));
     }
 
-    AddedToPage(target) {
-        
-        console.log("T: " + target);
-        // determine CSS height
-        console.log("H: " + target.offsetHeight);
+    DropdownAddedToPage(target) {
+        // determine if window height exceeds max, and if so, add scrollbar
+        let targetHeight = target.offsetHeight;
+        let maxHeight = parseInt(GetCSSVariable('--ui-component-dropdown-max-height'), 10);
+        if (targetHeight > maxHeight) {
+            target.style.setProperty('overflow-y', 'scroll');
+        }
     }
-
-    gg = 0;
 
     #updateSelection() {
         console.log(this.selection);
