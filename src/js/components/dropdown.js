@@ -15,7 +15,6 @@ export class DropdownList extends TitledComponent {
     constructor(componentTitle, onSelectCallback, options, icons) {
         super(componentTitle);
 
-        this.div = ui.CreateDivWithClass('dropdownContainer');
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
         this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
         this.#dropdown = ui.CreateDivWithClass('dropdown');
@@ -44,11 +43,12 @@ export class DropdownList extends TitledComponent {
         for (let i = 0; i < options.length; i++) {
             // create elements
             let oDiv = ui.CreateDiv();
-            let oInput = ui.CreateInputWithID('radio', options[i] + componentTitle);
+            let uniqueName = `${this.uniqueComponentName}_o${i}`;
+            let oInput = ui.CreateInputWithID('radio', uniqueName);
             ui.AddElementAttribute(oInput, 'name', 'ddOption');
             oInput.defaultChecked = i == initialValue;
             let oLabel = ui.CreateElementWithClass('label', 'ddOption');
-            ui.AddElementAttributes(oLabel, ['for', 'data-txt'], [options[i] + componentTitle, options[i]]);
+            ui.AddElementAttributes(oLabel, ['for', 'data-txt'], [uniqueName, options[i]]);
             // push to arrays
             this.#optionsDivs.push(oDiv);
             this.#optionsInputs.push(oInput);
