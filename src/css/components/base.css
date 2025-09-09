@@ -3,14 +3,11 @@
 }
 
 .uiComponent .componentTitle {
-  color: var(--ui-component-color-text);
+    color: var(--ui-component-color-text);
 }
 
 .uiComponent .componentTitle.listTitle {
-  /* color: #e2e1e3; */
-  display: flex;
-  font-size: 12pt;
-  margin: 4px;
+    display: flex;
 }
 
 /* 

@@ -2,7 +2,6 @@
 https://uiverse.io/nickyonge/soft-zebra-63 */
 
 .dropdownContainer {
-    position: fixed;
     width: 200px;
     height: 50px;
     display: block;
@@ -16,14 +15,15 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
 .dropdown {
     display: inline-flex;
     flex-direction: column;
-    z-index: 100;
+    z-index: 10;
+    /* z-index: 100; */
     /* font-size: 10.5pt; */
     cursor: pointer;
-    position: relative;
+    position: fixed;
     transition: 300ms;
     color: var(--ui-component-color-input);
     transition: 300ms;
-    width: 100%;
+    width: 200px;
     max-height: 30px;
     border-radius: 5px;
     overflow: hidden;
@@ -35,7 +35,8 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     margin-bottom: 3px;
     border-radius: 5px;
     position: relative;
-    z-index: 10000;
+    z-index: 21;
+    /* z-index: 10000; */
     display: flex;
     /* width: 100%; */
     align-items: center;
@@ -45,6 +46,7 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
 }
 
 .ddSelected::before {
+    z-index: 22;
     content: attr(data-label);
     /* max-width: max-content; */
     margin-right: -22px;
@@ -61,10 +63,11 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     /* top: 50px; */
     height: 10px;
     transform: rotate(-90deg);
+    z-index: 11;
     width: 25px;
     fill: var(--ui-component-color-input);
     /* opacity: 1; */
-    z-index: 10000;
+    /* z-index: 10000; */
     transition: 300ms;
     /* flex-shrink: 0; */
 }
@@ -81,30 +84,46 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     flex-direction: column;
     border-radius: 5px;
     padding: 4px 2px;
+    position: relative;
+    z-index: 11;
+    /* z-index: 10000; */
     /* padding-bottom: 4px; */
     background-color: var(--ui-component-color-bg);
-    position: relative;
-    top: -100px;
+    /* top: -100px; */
+    /* min-height: min-content; */
+    /* max-height: 200px; */
+    /* min-height: 100px; */
+    /* max-height: 200px; */
+    /* width: 100%; */
     opacity: 0;
-    transition: 300ms;
     gap: 2px;
+    /* height: min-content; */
+    /* max-height: 250px; */
+    overflow-y: none;
+    transition: 300ms;
 }
 
 .dropdown:focus-visible,
 .dropdown:has(:focus-visible),
 .dropdown:hover {
-    max-height: 100vh;
+    max-height: 169px;
+    /* max-height: fit-content; */
     /* background-color: red; */
     transition: 300ms;
+    z-index: 20;
 }
 
 .dropdown:focus-visible > .ddOptions,
 .ddSelected:focus-visible > .ddOptions,
 .dropdown:has(:focus-visible) > .ddOptions,
 .dropdown:hover > .ddOptions {
+    /* min-height: 60px; */
+    max-height: 169px;
     /* :has(:focus-visible) seems to emulate :focus-visible-within, cuz why not */
     opacity: 1;
-    top: 0;
+    /* top: 0; */
+    transition: 300ms;
+    overflow-y: hidden;
 }
 .dropdown:focus-visible > .ddSelected .ddArrow,
 .ddSelected:focus-visible > .ddSelected .ddArrow,

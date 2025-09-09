@@ -74,6 +74,10 @@ export class DropdownList extends TitledComponent {
         this.#selected.appendChild(this.#svg);
         this.#dropdown.appendChild(this.#optionsContainer);
 
+        // determine CSS height
+        console.log("H: " + this.#optionsContainer.offsetHeight);
+
+        // TESTING 
         document.addEventListener('keydown', function (event) {
             // Check which key was pressed
             if (event.key === 'g') {
