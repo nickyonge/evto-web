@@ -3,8 +3,17 @@ import { isBlank } from "../lilutils";
 
 export class BasicComponent {
     div;
-    constructor() { 
+    static componentCount = 0;
+    constructor() {
         this.div = ui.CreateDivWithClass("uiComponent");
+        ui.AddElementAttribute(this.div, 'uniqueComponentID', BasicComponent.componentCount);
+        BasicComponent.componentCount++;
+    }
+    get uniqueComponentID() {
+        return ui.GetAttribute(this.div, 'uniqueComponentID');
+    }
+    get uniqueComponentName() {
+        return `_uiComponent${this.uniqueComponentID}`;
     }
 }
 export class TitledComponent extends BasicComponent {
