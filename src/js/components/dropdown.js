@@ -1,5 +1,6 @@
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
+import { ObserveNode } from "../mutationObserver";
 const initialValue = 0;
 
 export class DropdownList extends TitledComponent {
@@ -39,6 +40,7 @@ export class DropdownList extends TitledComponent {
         this.#optionsInputs = [];
         this.#optionsLabels = [];
         this.#optionsContainer = ui.CreateDivWithClass('ddOptions');
+        ObserveNode(this.#optionsContainer,false,true,false);
         // iterate thru options 
         for (let i = 0; i < options.length; i++) {
             // create elements
