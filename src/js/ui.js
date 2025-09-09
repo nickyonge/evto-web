@@ -102,7 +102,7 @@ export function AddElementTo(domElement, newElement) {
 }
 
 // ------------------------------------------------------------------ 
-// -----------------------------------  CLASSES AND ATTRIBUTES  ----- 
+// ------------------------------------------  CLASSES AND IDs  ----- 
 // ------------------------------------------------------------------ 
 
 /**
@@ -185,6 +185,12 @@ export function RemoveClassFromDOMs(cssClass, ...domElements) {
     }
 }
 
+// ------------------------------------------------------------------ 
+// -----------------------------------------------  ATTRIBUTES  ----- 
+// ------------------------------------------------------------------ 
+
+
+
 /**
  * Sets the given attributes on the given HTMLElement (attTypes and attValues lengths must match)
  * @param {HTMLElement} element HTMLElement to add attributes to
@@ -229,6 +235,21 @@ export function RemoveElementAttributes(element, attTypes) {
         element.removeAttribute(attTypes[i]);
     }
 }
+
+/**
+ * Get the given attribute's value on the given element. 
+ * If attribute isn't found, returns `null`.
+ * @param {HTMLElement} element 
+ * @param {string} attType 
+ * @returns 
+ */
+export function GetAttribute(element, attType) {
+    if (!HasAttribute(element, attType)) {
+        return null;
+    }
+    return element.getAttribute(attType);
+}
+
 /**
  * Checks if the given attribute is present on the given HTMLElement
  * @param {HTMLElement} element 
