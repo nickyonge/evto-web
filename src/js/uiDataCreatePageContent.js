@@ -24,10 +24,10 @@ function CreatePageSize(page) {
     page.appendChild(dd1.div);
     page.appendChild(dd.div);
 
-    // let mo = new MutliOptionList('multi', mCallback, ['a','b','c']);
-    // function mCallback() { console.log(`changed: ${mo.selection}`); }
-    // // function mCallback(selection) { console.log(`changed: ${selection}`); }
-    // page.appendChild(mo.div);
+    let mo = new MutliOptionList('multi', mCallback, ['a','b','c']);
+    function mCallback() { console.log(`changed: ${mo.selection}`); }
+    // function mCallback(selection) { console.log(`changed: ${selection}`); }
+    page.appendChild(mo.div);
 
     let tg = new Toggle("toggle", tCallback);
     // function tCallback() { console.log('checked: ' + tg.checked); }

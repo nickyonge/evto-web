@@ -4,10 +4,12 @@
 
 .uiComponent .componentTitle {
     color: var(--ui-component-color-text);
+    margin: 0px 5px 0px 5px;
 }
 
 .uiComponent .componentTitle.listTitle {
     display: flex;
+    height: 18px;
 }
 
 /* 

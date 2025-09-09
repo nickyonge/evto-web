@@ -17,12 +17,10 @@
     cursor: pointer;
 }
 
-.toggle .componentTitle {
-    margin-right: 5px;
-    margin-left: 5px;
+/* .toggle .componentTitle {
     opacity: 0.8;
     transition: opacity 0.2s;
-}
+} */
 
 .toggle .toggleSwitch {
     position: relative;

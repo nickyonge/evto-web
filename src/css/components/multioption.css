@@ -18,18 +18,19 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
 .listselect .value {
     background-color: transparent;
     border: none;
-    padding: 4px;
+    padding: 0px 3px;
     margin-left: -1px;
     color: white;
-    font-size: 10pt;
+    /* font-size: 10pt; */
     display: flex;
     align-items: center;
-    gap: 5px;
+    /* gap: 1px; */
     position: relative;
     width: calc(100% + 2px);
     cursor: pointer;
     border-radius: 5px;
     transition: all 150ms;
+    height: 24px;
 }
 
 .listselect .value p {
@@ -52,6 +53,8 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
 
 .listselect input[type="radio"]:checked + .value {
     background-color: #1a1f24;
+    border-radius: 3px 5px 5px 3px;
+    transition: all 200ms;
 }
 .listselect input[type="radio"]:checked + .value svg {
     transition: all 200ms;
@@ -62,11 +65,11 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
     content: "";
     position: absolute;
     top: 22%;
-    left: -12px;
-    width: 5px;
+    left: -6.9px;
+    width: 7px;
     height: 60%;
-    background-color: #2f81f7;
-    border-radius: 5px;
+    background-color: var(--ui-component-color-enabled-light);
+    border-radius: 5px 2px 2px 5px;
     opacity: 0;
     transition: all 150ms;
     z-index: 1;
@@ -74,8 +77,8 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
 
 .listselect input[type="radio"]:checked + .value::before {
     opacity: 1;
-    top: 10%;
-    height: 80%;
+    top: 0%;
+    height: 100%;
     transition: all 690ms;
 }
 

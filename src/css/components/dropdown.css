@@ -7,11 +7,6 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     display: block;
 }
 
-.dropdownContainer .listTitle {
-    margin-left: 5px;
-    height: 18px;
-}
-
 .dropdown {
     display: inline-flex;
     flex-direction: column;
