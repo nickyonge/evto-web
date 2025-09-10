@@ -2,13 +2,14 @@
 https://uiverse.io/nickyonge/mighty-hound-30 */
 
 .multichoicelist {
-    width: 169px;
+    width: 100%;
 }
 
 .listselect {
     width: 100%;
-    background-color: #262830;
-    border-radius: 6.9px;
+    background-color: var(--ui-component-color-bg);
+    border-radius: var(--ui-component-border-radius);
+    cursor: pointer;
 }
 
 .listselect input[type="radio"] {
@@ -18,19 +19,22 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
 .listselect .value {
     background-color: transparent;
     border: none;
-    padding: 0px 3px;
-    margin-left: -1px;
-    color: white;
+    /* padding: 0px 3px; */
+    padding-left: 3px;
+    margin-left: 0px;
+    margin-top: 1px;
+    margin-bottom: 1px;
+    color: var(--ui-component-color-input);
     /* font-size: 10pt; */
     display: flex;
     align-items: center;
     /* gap: 1px; */
     position: relative;
-    width: calc(100% + 2px);
+    width: calc(100% - 3px);
     cursor: pointer;
-    border-radius: 5px;
+    border-radius: var(--ui-component-border-radius);
     transition: all 150ms;
-    height: 24px;
+    height: 22px;
 }
 
 .listselect .value p {
@@ -48,12 +52,12 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
 }
 
 .value:hover {
-    background-color: #21262c;
+    background-color: var(--ui-component-color-bg-highlight);
 }
 
 .listselect input[type="radio"]:checked + .value {
-    background-color: #1a1f24;
-    border-radius: 3px 5px 5px 3px;
+    background-color: var(--ui-component-color-bg-highlight);
+    border-radius: calc(var(--ui-component-border-radius) / 2) var(--ui-component-border-radius) var(--ui-component-border-radius) calc(var(--ui-component-border-radius) / 2);
     transition: all 200ms;
 }
 .listselect input[type="radio"]:checked + .value svg {
@@ -69,7 +73,7 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
     width: 7px;
     height: 60%;
     background-color: var(--ui-component-color-enabled-light);
-    border-radius: 5px 2px 2px 5px;
+    border-radius: var(--ui-component-border-radius) calc(var(--ui-component-border-radius) / 2) calc(var(--ui-component-border-radius) / 2) var(--ui-component-border-radius);
     opacity: 0;
     transition: all 150ms;
     z-index: 1;

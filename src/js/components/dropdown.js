@@ -1,7 +1,7 @@
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
 import { ObserveNode, ObserverCallbackOnAdded } from "../mutationObserver";
-import { GetCSSVariable } from "../lilutils";
+import { GetCSSVariable, GetSiblingWithClass } from "../lilutils";
 const initialValue = 0;
 
 export class DropdownList extends TitledComponent {
@@ -9,17 +9,25 @@ export class DropdownList extends TitledComponent {
     #dropdown;
     #selected;
     #svg;
-    _optionsContainer;
+    #optionsContainer;
     #optionsDivs;
     #optionsInputs;
     #optionsLabels;
 
+    static _dropdownMaxHeight = -1;
+
     constructor(componentTitle, onSelectCallback, options, icons) {
         super(componentTitle);
+
+        if (DropdownList._dropdownMaxHeight < 0) {
+            DropdownList._dropdownMaxHeight = parseInt(GetCSSVariable('--ui-component-dropdown-max-height'), 10);
+        }
 
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
         this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
         this.#dropdown = ui.CreateDivWithClass('dropdown');
+        ObserverCallbackOnAdded(this.#dropdown, this.DropdownAddedToPage);
+        // ObserverCallbackOnAdded(this.#dropdown, this.DropdownAddedToPage);
         this.#selected = ui.CreateDivWithClass('ddSelected');
         ui.MakeTabbable(this.#dropdown);
         if (options && options.length >= initialValue + 1) {
@@ -40,8 +48,8 @@ export class DropdownList extends TitledComponent {
         this.#optionsDivs = [];
         this.#optionsInputs = [];
         this.#optionsLabels = [];
-        this._optionsContainer = ui.CreateDivWithClass('ddOptions');
-        ObserverCallbackOnAdded(this._optionsContainer, this.DropdownAddedToPage)
+        this.#optionsContainer = ui.CreateDivWithClass('ddOptions');
+        ObserverCallbackOnAdded(this.#optionsContainer, this.OptionsAddedToPage);
         // iterate thru options 
         for (let i = 0; i < options.length; i++) {
             // create elements
@@ -60,7 +68,7 @@ export class DropdownList extends TitledComponent {
             // add children to parents 
             oDiv.appendChild(oInput);
             oDiv.appendChild(oLabel);
-            this._optionsContainer.appendChild(oDiv);
+            this.#optionsContainer.appendChild(oDiv);
 
             // create callback
             oInput.addEventListener('change', (event) => {
@@ -75,32 +83,33 @@ export class DropdownList extends TitledComponent {
         this.div.appendChild(this.#dropdown);
         this.#dropdown.appendChild(this.#selected);
         this.#selected.appendChild(this.#svg);
-        this.#dropdown.appendChild(this._optionsContainer);
+        this.#dropdown.appendChild(this.#optionsContainer);
 
-        // TESTING 
-        document.addEventListener('keydown', function (event) {
-            // Check which key was pressed
-            if (event.key === 'g') {
-                this.gg++;
-                if (this.gg > 2) { this.gg = 0; }
-                // this.selectionIndex = this.gg;
-                this.selection = 'b';
-            }
-
+        // add resize event 
+        window.addEventListener('resize', function () {
+            // re-fire size assignment events on page resize
+            this.DropdownAddedToPage(this.#dropdown);
+            this.OptionsAddedToPage(this.#optionsContainer);
         }.bind(this));
     }
 
-    DropdownAddedToPage(target) {
+    DropdownAddedToPage(target) { // this.#dropdown 
+        // let listTitle = GetSiblingWithClass(target, 'listTitle');
+        target.style.width = `${target.parentElement.offsetWidth - 4.5}px`;
+    }
+    OptionsAddedToPage(target) { // this.#optionsContainer 
         // determine if window height exceeds max, and if so, add scrollbar
         let targetHeight = target.offsetHeight;
-        let maxHeight = parseInt(GetCSSVariable('--ui-component-dropdown-max-height'), 10);
-        if (targetHeight > maxHeight) {
+        if (targetHeight > DropdownList._dropdownMaxHeight) {
             target.style.setProperty('overflow-y', 'scroll');
         }
     }
 
+    #updateSize() {
+    }
+
+
     #updateSelection() {
-        console.log(this.selection);
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
     }
 

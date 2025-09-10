@@ -32,8 +32,10 @@
     --ui-component-color-bg-highlight: #424143;
     --ui-component-color-text: #2a292b;
     --ui-component-color-input: #ffffff;
-    --ui-component-color-enabled-light: #26a079;
-    --ui-component-color-enabled-dark: #a3e6d1;
+    --ui-component-color-enabled-light: #32b38a;
+    --ui-component-color-enabled-dark: #26a079;
+
+    --ui-component-border-radius: 6.9px;
 
     --ui-component-toggle-width: 36px;
     --ui-component-toggle-height: 24px;
