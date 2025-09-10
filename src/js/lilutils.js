@@ -61,6 +61,36 @@ export function AddAlphaToHex(color, opacity) {
     return color + _opacity.toString(16).toUpperCase();
 }
 
+
+/**
+ * Get all sibling elements to the given element
+ * @param {HTMLElement} element 
+ * @returns {HTMLElement[]}
+ */
+export function GetAllSiblings(element) {
+    if (!element || !element.parentNode) { return []; }
+    return Array.from(element.parentNode.children).
+        filter(sibling => sibling !== element);
+}
+/**
+ * Returns the first sibling of the given element with the given class found. 
+ * If none are found, returns null 
+ * @param {HTMLElement} element source element to search siblings 
+ * @param {string} cssClass class name to check for
+ * @returns {HTMLElement} first found element with class, or null
+ */
+export function GetSiblingWithClass(element, cssClass) {
+    let siblings = GetAllSiblings(element);
+    if (siblings.length == 0) { return null; }
+    for (let i = 0; i < siblings.length; i++) {
+        if (siblings[i].classList.contains(cssClass)) {
+            return siblings[i];
+        }
+    }
+    return null;
+}
+
+
 /**
  * Deselects (and optionally blurs) the given HTMLElement AND all its children
  * @param {HTMLElement} element HTMLElement to deselect
