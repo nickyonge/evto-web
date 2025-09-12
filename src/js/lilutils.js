@@ -97,6 +97,8 @@ export function GetSiblingWithClass(element, cssClass) {
  * @param {boolean} [alsoBlur=true] also blur (unfocus) the element, or any focused children of the element?  
  */
 export function DeselectElement(element, alsoBlur = true) {
+    // ensure element is non-null
+    if (element == null) { return; }
     // get selection 
     const selection = window.getSelection();
     // ensure that selection(s) exist
