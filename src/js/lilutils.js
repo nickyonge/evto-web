@@ -77,17 +77,43 @@ export function GetAllSiblings(element) {
  * If none are found, returns null 
  * @param {HTMLElement} element source element to search siblings 
  * @param {string} cssClass class name to check for
- * @returns {HTMLElement} first found element with class, or null
+ * @returns {HTMLElement|null} first found sibling element with class, or null
  */
 export function GetSiblingWithClass(element, cssClass) {
     let siblings = GetAllSiblings(element);
     if (siblings.length == 0) { return null; }
     for (let i = 0; i < siblings.length; i++) {
-        if (siblings[i].classList.contains(cssClass)) {
+        if (ElementHasClass(siblings[i], cssClass)) {
             return siblings[i];
         }
     }
     return null;
+}
+
+/**
+ * Returns the first child of the given element with the given class found. 
+ * If none are found, returns null 
+ * @param {HTMLElement} parentElement source parent element to search the children of 
+ * @param {string} cssClass class name to check for 
+ * @returns {HTMLElement|null} first found child element with class, or null
+ */
+export function GetChildWithClass(parentElement, cssClass) {
+    parentElement.children.forEach(child => {
+        if (ElementHasClass(child, cssClass)) {
+            return child;
+        }
+    });
+    return null;
+}
+
+/**
+ * Convenience method, just checks if the given element has the given CSS class
+ * @param {Element} element 
+ * @param {string} cssClass 
+ * @returns {boolean}
+ */
+export function ElementHasClass(element, cssClass) {
+    return element.classList.contains(cssClass);
 }
 
 
