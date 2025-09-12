@@ -4,6 +4,7 @@ import { CreateHeaderFooter } from "./uiHdFt";
 import { CreateDataWindow } from "./uiData";
 import * as ui from './ui';
 import { CreateArtWindow } from "./uiArt";
+import { InitializeOverlay } from "./uiOverlay";
 
 const _useDemoBGColors = false;
 
@@ -42,6 +43,8 @@ export function BuildUI() {
     CreateHeaderFooter(topBar, btmBar);
     CreateDataWindow();
     CreateArtWindow();
+    
+    InitializeOverlay();
 
     if (_dataWindowOnTop) {
         ui.AddClassToDOMs('dataOnTop', container, artWindow, dataWindow);

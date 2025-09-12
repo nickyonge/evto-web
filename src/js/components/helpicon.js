@@ -1,7 +1,7 @@
 import * as ui from "../ui";
 import iconHelp from '../../assets/svg/icons-white/icon-help.svg';
 import * as txt from "../text";
-import { ShowOverlay } from "../uiOverlay";
+import { ToggleOverlay } from "../uiOverlay";
 
 const rightJustifyDefaultIcons = true;
 
@@ -48,6 +48,6 @@ export class HelpIcon {
 
     displayHelpText() {
         // console.log("HELP: " + this.helpText);
-        ShowOverlay("HELP: " + this.helpText);
+        ToggleOverlay("HELP: " + this.helpText, this.#helpDiv);
     }
 }
