@@ -20,6 +20,12 @@
 
     --color-ui-active: #beeeef;
 
+    --ui-overlay-color-title: #403c8a;
+    --ui-overlay-color-text: #081a3e;
+    --ui-overlay-margin-vertical: 12px;
+    --ui-overlay-margin-horizontal: 10px;
+    --ui-overlay-margin-titlegap: 6px;
+
     --color-bg-solid: #beeeef;
     /* TODO: wide/short replace bg solid with linear gradient */
     --color-bg-gradient-1: #4e89db;

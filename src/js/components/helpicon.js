@@ -48,6 +48,6 @@ export class HelpIcon {
     }
 
     displayHelpText() {
-        ToggleOverlay("HELP: " + this.helpText, this.#helpDiv);
+        ToggleOverlay(txt.LIPSUM, this.helpText, this.#helpDiv);
     }
 }
