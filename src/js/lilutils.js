@@ -133,6 +133,31 @@ export function DeselectAll(alsoBlur = true) {
 }
 
 /**
+ * Selects the given HTMLElement (convenience method, just calls `.focus()`)
+ * @param {HTMLElement} element 
+ */
+export function SelectFocusElement(element) {
+    element.focus();
+}
+
+/**
+ * Returns the current active element (convenience method, just calls `document.activeElement`)
+ * @returns {Element|null}
+ */
+export function GetActiveElement() {
+    return document.activeElement;
+}
+/**
+ * Returns true if the given element is the currently active element
+ * @param {Element} element 
+ * @returns {boolean}
+ */
+export function IsActiveElement(element) {
+    if (!element) { return false }
+    return element == GetActiveElement();
+}
+
+/**
  * Enables or disables the given HTML element by doing the following:
  * - On Enable...
  *   - Setting `pointerEvents` attribute to `'auto'`
