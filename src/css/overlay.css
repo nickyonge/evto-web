@@ -10,8 +10,13 @@
 .overlayBox {
     border-radius: 12px;
     box-shadow: 0px 6px 9px -2.13px var(--ui-data-window-bg-shadow);
-    width: 300px;
-    height: 100px;
+
+    min-width: 250px;
+    min-height: 100px;
+    max-width: 80%;
+    max-height: 80%;
+    width: fit-content;
+    height: fit-content;
     position: fixed;
     left: 50%;
     top: 50%;

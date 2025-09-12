@@ -96,6 +96,8 @@
     top: 20px;
     left: -15px;
     /* --- end modifications --- */
+
+    z-index: 75;
 }
 
 .burger input {
