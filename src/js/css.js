@@ -5,6 +5,7 @@ import(/* webpackPreload: true */ './../css/artwindow.css');
 import(/* webpackPreload: true */ './../css/datawindow.css');
 import(/* webpackPreload: true */ './../css/threejs.css');
 import(/* webpackPreload: true */ './../css/components/base.css');
+import(/* webpackPreload: true */ './../css/components/canvassize.css');
 import(/* webpackPreload: true */ './../css/components/dropdown.css');
 import(/* webpackPreload: true */ './../css/components/hbbtn.css');
 import(/* webpackPreload: true */ './../css/components/helpicon.css');
