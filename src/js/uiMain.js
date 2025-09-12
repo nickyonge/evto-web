@@ -19,6 +19,8 @@ let container = null;
 
 /** Header (top bar) element @type Element */
 let topBar = null;
+/** Overlay container for popups/info/etc @type HTMLElement */
+export let overlay = null;
 /** Art window, where the canvas rendering goes @type Element */
 export let artWindow = null;
 /** Data window, where the tabs and info window goes @type Element */
@@ -32,6 +34,7 @@ export function BuildUI() {
     container = ui.CreateDivWithID('container');
 
     topBar = ui.AddElementWithClassTo(container, 'header');
+    overlay = ui.AddElementWithClassTo(container, 'overlay');
     artWindow = ui.AddElementWithClassTo(container, 'artWindow');
     dataWindow = ui.AddElementWithClassTo(container, 'dataWindow');
     btmBar = ui.AddElementWithClassTo(container, 'footer');
