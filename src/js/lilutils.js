@@ -89,7 +89,6 @@ export function GetSiblingWithClass(element, cssClass) {
     }
     return null;
 }
-
 /**
  * Returns the first child of the given element with the given class found. 
  * If none are found, returns null 
@@ -98,14 +97,13 @@ export function GetSiblingWithClass(element, cssClass) {
  * @returns {HTMLElement|null} first found child element with class, or null
  */
 export function GetChildWithClass(parentElement, cssClass) {
-    parentElement.children.forEach(child => {
+    for (const child of parentElement.children) {
         if (ElementHasClass(child, cssClass)) {
             return child;
         }
-    });
+    }
     return null;
 }
-
 /**
  * Convenience method, just checks if the given element has the given CSS class
  * @param {Element} element 
