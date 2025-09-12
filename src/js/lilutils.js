@@ -135,11 +135,13 @@ export function DeselectAll(alsoBlur = true) {
 }
 
 /**
- * Selects the given HTMLElement (convenience method, just calls `.focus()`)
- * @param {HTMLElement} element 
+ * Selects the given Element, with optional config parameters
+ * @param {HTMLElement} element element to select
+ * @param {boolean} [focusVisible = true] 
+ * @param {boolean} [preventScroll = false] 
  */
-export function SelectFocusElement(element) {
-    element.focus();
+export function SelectFocusElement(element, focusVisible = true, preventScroll = false) {
+    element.focus({ focusVisible: focusVisible, preventScroll: preventScroll });
 }
 
 /**

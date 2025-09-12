@@ -1,4 +1,4 @@
-import { DeselectElement, IsActiveElement } from './lilutils';
+import { DeselectElement, IsActiveElement, LapCheckInterval, SelectFocusElement } from './lilutils';
 import * as ui from './ui';
 import { overlay } from './uiMain';
 
@@ -6,26 +6,35 @@ let overlayBG;
 let overlayBox;
 
 let _sourceDiv;
+let _initialized = false;
+
+const _showInterval = 50;
 
 export function InitializeOverlay() {
+    if (_initialized) { return; }
     if (!overlayBG) {
         overlayBG = ui.CreateDivWithClass('overlayBG');
         ui.AddElementAttribute(overlayBG, 'show', 'false');
         overlay.appendChild(overlayBG);
-        overlay.addEventListener('click', SelectOverlay);
+        overlay.addEventListener('click', () => {
+            if (IsOverlayDisplayed()) {
+                HideOverlay();
+            }
+        });
     }
     if (!overlayBox) {
         overlayBox = ui.CreateDivWithClass('overlayBox');
         ui.AddElementAttribute(overlayBox, 'show', 'false');
         overlay.appendChild(overlayBox);
     }
-}
-
-function SelectOverlay() {
-    InitializeOverlay();
-    if (IsOverlayDisplayed()) {
-        SetOverlayShow(false);
-    }
+    // keydown event
+    document.addEventListener('keydown', (e) => {
+        if (e.repeat) { return; }
+        if (IsOverlayDisplayed()) {
+            HideOverlay();
+        }
+    })
+    _initialized = true;
 }
 
 export function ToggleOverlay(overlayText, sourceDiv = null) {
@@ -33,18 +42,29 @@ export function ToggleOverlay(overlayText, sourceDiv = null) {
     // determine show / hide 
     if (!IsOverlayDisplayed() || sourceDiv == null || sourceDiv != _sourceDiv) {
         // show overlay 
-        SetOverlayShow(true);
         _sourceDiv = sourceDiv;
+        ShowOverlay();
     } else {
         // hide overlay
-        _sourceDiv = sourceDiv;
+        HideOverlay();
+    }
+}
+
+function ShowOverlay() {
+    if (LapCheckInterval('overlay', _showInterval)) {
+        DeselectElement(_sourceDiv);
+        SetOverlayShow(true);
+    }
+}
+function HideOverlay() {
+    if (LapCheckInterval('overlay', _showInterval)) {
         SetOverlayShow(false);
+        SelectFocusElement(_sourceDiv, false);
     }
 }
 
 function SetOverlayShow(set) {
     ui.AddElementAttribute(overlayBG, 'show', `${set}`);
-    ui.AddElementAttribute(overlayBox, 'show', `${set}`);
     ui.AddElementAttribute(overlayBox, 'show', `${set}`);
 }
 
