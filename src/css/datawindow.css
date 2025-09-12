@@ -80,6 +80,8 @@ dataWindow .content .page {
     inset: 0px;
     padding: var(--ui-data-page-padding);
     margin-right: var(--ui-data-page-margin-right);
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 dataWindow .content h2 {

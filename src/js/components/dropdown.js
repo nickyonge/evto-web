@@ -1,8 +1,10 @@
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
 import { ObserveNode, ObserverCallbackOnAdded } from "../mutationObserver";
-import { GetCSSVariable, GetSiblingWithClass } from "../lilutils";
+import { GetChildWithClass, GetCSSVariable, GetSiblingWithClass } from "../lilutils";
 const initialValue = 0;
+
+const _smootherScroll = true;
 
 export class DropdownList extends TitledComponent {
 
@@ -27,6 +29,7 @@ export class DropdownList extends TitledComponent {
         this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
         this.#dropdown = ui.CreateDivWithClass('dropdown');
         ObserverCallbackOnAdded(this.#dropdown, this.DropdownAddedToPage);
+        ObserverCallbackOnAdded(this.div, this.DivAddedToPage);
         // ObserverCallbackOnAdded(this.#dropdown, this.DropdownAddedToPage);
         this.#selected = ui.CreateDivWithClass('ddSelected');
         ui.MakeTabbable(this.#dropdown);
@@ -96,6 +99,29 @@ export class DropdownList extends TitledComponent {
         this._addHelpIcon(`help me! ${componentTitle}`);
     }
 
+    DivAddedToPage(target) { // this.div
+        // add scroll event
+        if (_smootherScroll) {
+            target.parentElement.addEventListener('scroll', () => {
+                requestAnimationFrame(() => {
+                    const title = GetChildWithClass(target, 'componentTitle');
+                    const dropdown = GetChildWithClass(target, 'dropdown');
+                    const titleRect = title.getBoundingClientRect();
+                    dropdown.style.top = `${titleRect.bottom}px`;
+                });
+            });
+        } else {
+            target.parentElement.addEventListener('scroll', function () {
+                // ui.GetAttribute(target, 'uniqueComponentID')
+                let title = GetChildWithClass(target, 'componentTitle');
+                let dropdown = GetChildWithClass(target, 'dropdown');
+                let titleRect = title.getBoundingClientRect();
+                dropdown.style.top = `${titleRect.bottom}px`;
+                // dropdown.style.top = `0px`;
+                // dropdown.style.transform = `translateY(${titleRect.bottom}px)`;
+            });
+        }
+    }
     DropdownAddedToPage(target) { // this.#dropdown 
         // let listTitle = GetSiblingWithClass(target, 'listTitle');
         target.style.width = `${target.parentElement.offsetWidth - 4.5}px`;
@@ -107,10 +133,6 @@ export class DropdownList extends TitledComponent {
             target.style.setProperty('overflow-y', 'scroll');
         }
     }
-
-    #updateSize() {
-    }
-
 
     #updateSelection() {
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
