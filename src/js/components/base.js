@@ -67,7 +67,12 @@ export class TitledComponent extends BasicComponent {
 
     _addHelpIcon(helpText, togglePos = false) {
         // this.#helpIcon = new HelpIcon(this.div, helpText, togglePos);
-        this.#helpIcon = new HelpIcon(this.#titleElement, helpText, togglePos);
+        if (togglePos) {
+            this.#helpIcon = new HelpIcon(this.div, helpText, togglePos);
+        } else {
+            // this.#helpIcon = new HelpIcon(this.div, helpText, togglePos);
+            this.#helpIcon = new HelpIcon(this.#titleElement, helpText, togglePos);
+        }
 
     }
 }

@@ -28,8 +28,8 @@
     left: calc(100% - var(--ui-helpIcon-size) - var(--ui-helpIcon-borderWidth));
 }
 .helpDiv.togglePos {
-    position: absolute;
-    margin-left: calc(var(--ui-component-toggle-width) + var(--ui-helpIcon-leftMargin-toggle));
+    position: relative;
+    /* margin-left: calc(var(--ui-component-toggle-width) + var(--ui-helpIcon-leftMargin-toggle)); */
 }
 
 .helpQIcon {
@@ -46,13 +46,13 @@
     height: var(--ui-helpIcon-size);
 }
 
-.helpDiv:focus,
+.helpDiv:focus-visible,
 .helpDiv:hover {
     opacity: 0.9;
     border-width: var(--ui-helpIcon-borderWidth-hover);
 }
 
-.helpDiv:focus > .helpQIcon,
+.helpDiv:focus-visible > .helpQIcon,
 .helpDiv:hover > .helpQIcon {
     font-weight: bold;
 }

@@ -5,16 +5,23 @@ import * as txt from "../text";
 const rightJustifyDefaultIcons = true;
 
 export class HelpIcon {
+
     #helpDiv;
     #iconImg;
     #helpQIconDiv;
+
+    helpText;
+
     constructor(parentDiv, helpText, togglePos = false) {
+
+        this.helpText = helpText;
+
         this.#helpDiv = togglePos ?
             ui.CreateDivWithClass('helpDiv', 'togglePos') :
             rightJustifyDefaultIcons ?
-            ui.CreateDivWithClass('helpDiv', 'rightJustify') :
+                ui.CreateDivWithClass('helpDiv', 'rightJustify') :
                 ui.CreateDivWithClass('helpDiv');
-        
+
         //create icon
         // this.#iconImg = ui.CreateImage(iconHelp, txt.HELPICON_ALT);
         // ui.AddClassToDOMs('helpIcon', this.#iconImg);
@@ -24,6 +31,21 @@ export class HelpIcon {
         this.#helpQIconDiv.innerHTML = '?';
         this.#helpDiv.appendChild(this.#helpQIconDiv);
 
+        // prevent event propogation
+        this.#helpDiv.addEventListener('click', e => {
+            e.stopPropagation();
+            e.preventDefault();
+            // selected help icon 
+            this.displayHelpText();
+        });
+
         parentDiv.appendChild(this.#helpDiv);
+
+        ui.MakeTabbableWithInputTo(this.#helpDiv, this.#helpDiv);
+
+    }
+
+    displayHelpText() {
+        console.log("HELP: " + this.helpText);
     }
 }
