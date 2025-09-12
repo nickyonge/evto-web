@@ -224,4 +224,121 @@ export function SetElementDisabled(element) {
     SetElementEnabled(element, false);
 }
 
+
+/** local array of intervals and timers @type {Array<Array<string,number>>} */
+let _intervals = [];
+/**
+ * sets a given interval timer label to timestamp of `performance.now()`
+ * @param {string} label reference label for the given interval timer 
+ */
+export function SetInterval(label) {
+    SetIntervalTo(label, performance.now());
+}
+/**
+ * sets a given interval timer label to the given timestamp
+ * @param {string} label reference label for the given interval timer  
+ * @param {number} timestamp numeric timestamp to assign
+ */
+export function SetIntervalTo(label, timestamp) {
+    if (isBlank(label)) {
+        console.error(`ERROR: invalid interval label name, can't be null/blank`)
+        return;
+    }
+    for (let i = 0; i < _intervals.length; i++) {
+        if (_intervals[i][0] == label) {
+            _intervals[i][1] = timestamp;
+            return;
+        }
+    }
+    _intervals.push([label, timestamp]);
+}
+/**
+ * returns the stored value for the given interval timer label
+ * @param {string} label reference label for the given interval timer 
+ * @returns {number} stored value for interval, or `-1` if `label` is null/not found
+ */
+export function GetInterval(label) {
+    if (!label) { return -1; }
+    for (let i = 0; i < _intervals.length; i++) {
+        if (_intervals[i][0] == label) { return _intervals[i][1]; }
+    }
+    return -1;
+}
+/**
+ * checks if the given interval timer label exists
+ * @param {string} label reference label for the given interval timer 
+ * @returns {boolean}
+ */
+export function DoesIntervalExist(label) {
+    for (let i = 0; i < _intervals.length; i++) {
+        if (_intervals[i][0] == label) { return true; }
+    }
+    return false;
+}
+/**
+ * gets the time in ms between the given time interval label's stored value and now
+ * @param {string} label reference label for the given interval timer 
+ * @returns {number} time in ms, or -1 if label isn't found or is invalid
+ */
+export function TimeSinceLastInterval(label) {
+    let interval = GetInterval(label);
+    if (interval == -1) { return -1; }
+    return TimeBetweenTimestampAndNow(interval);
+}
+/**
+ * returns true if the given interval timer label's time between its stored value
+ * and now is greater than the given lapTime 
+ * @param {string} label reference label for the given interval timer 
+ * @param {number} lapTime time, in ms, to check between the label interval's stored time and now
+ * @returns {boolean} true if equal/more time in ms as `lapTime` has passed
+ */
+export function HasIntervalLapped(label, lapTime) {
+    let timeSince = TimeSinceLastInterval(label);
+    if (timeSince == -1) { return false; }
+    return timeSince >= lapTime;
+}
+/**
+ * Checks if the given interval timer label's time in ms since last update
+ * is the given lapTime or more. If false, returns `false`. If true, updates
+ * the interval label's value to now, and returns `true`. If label wasn't already
+ * defined, creates it via {@link SetInterval} and returns the value of `returnOnNew`
+ * @param {string} label reference label for the given interval timer 
+ * @param {number} lapTime time, in ms, to check between the label interval's stored time and now
+ * @param {boolean} [returnOnNew = true] value to return if label doesn't already exist and is newly created 
+ * @returns {boolean} true if "lap" has passed, false if not, `returnOnNew` if newly created label 
+ */
+export function LapCheckInterval(label, lapTime, returnOnNew = true) {
+    if (!DoesIntervalExist(label)) {
+        SetInterval(label);
+        return returnOnNew;
+    }
+    if (HasIntervalLapped(label, lapTime)) {
+        // TODO: account for time diff between lapTime and now
+        SetInterval(label);
+        return true;
+    }
+    return false;
+}
+/**
+ * Returns the time, in ms, between the given timestamp and `performance.now`
+ * @param {number} timestamp timestamp to compare 
+ * @returns {number} time, in ms, between the given timestamp and now
+ */
+export function TimeBetweenTimestampAndNow(timestamp) {
+    return TimeBetweenTwoTimestamps(timestamp, performance.now())
+}
+/**
+ * Returns the time, in ms, between the two given timestamps. 
+ * Ensures absolute time, doesn't matter which timestamp is larger. 
+ * @param {number} timestampA 
+ * @param {number} timestampB 
+ * @returns {number} time, in ms, between the two given timestamps
+ */
+export function TimeBetweenTwoTimestamps(timestampA, timestampB) {
+    if (timestampB >= timestampA) {
+        return timestampB - timestampA;
+    }
+    return timestampA - timestampB;
+}
+
 // TODO: organize this class better, so similar utilities are grouped 
