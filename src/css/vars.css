@@ -49,10 +49,14 @@
 
     --ui-component-dropdown-max-height: 169px;
 
-    --ui-helpIcon-size: 16px;
+    --ui-helpIcon-size: 12px;
     --ui-helpIcon-leftMargin: 4px;
     --ui-helpIcon-leftMargin-toggle: 10px;
-    --ui-helpIcon-leftMargin-rightJustify: -8px;
+    --ui-helpIcon-leftMargin-rightJustify: -10px;
+    --ui-helpIcon-bottomPadding: 0px;
+    --ui-helpIcon-qText: 10px;
+    --ui-helpIcon-borderWidth: 1px;
+    --ui-helpIcon-borderWidth-hover: 2px;
 
     --ui-data-sidebar-tabs-width: 110px;
 
