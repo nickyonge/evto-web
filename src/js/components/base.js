@@ -1,5 +1,6 @@
 import * as ui from "../ui";
 import { isBlank } from "../lilutils";
+import { HelpIcon } from "./helpicon";
 
 export class BasicComponent {
     div;
@@ -20,6 +21,8 @@ export class TitledComponent extends BasicComponent {
 
     #titleElement;
     #titleText;
+
+    #helpIcon;
 
     constructor(componentTitle) {
         super();
@@ -61,4 +64,9 @@ export class TitledComponent extends BasicComponent {
 
     /** Reassigns `title` to itself, re-invoking the setter method */
     _updateTitle() { this.title = this.title; }
+
+    _addHelpIcon(helpText, togglePos = false) {
+        // this.#helpIcon = new HelpIcon(this.div, helpText);
+        this.#helpIcon = new HelpIcon(this.#titleElement, helpText, togglePos);
+    }
 }

@@ -54,7 +54,6 @@ export class MutliOptionList extends TitledComponent {
             }
         }
 
-
         // add to document 
         this.div.appendChild(this._titleElement);
         this.div.appendChild(this.#listSelect);
@@ -63,6 +62,9 @@ export class MutliOptionList extends TitledComponent {
             this.#listSelect.appendChild(this.#inputs[i]);
             this.#listSelect.appendChild(this.#labels[i]);
         }
+        
+        // add help component
+        this._addHelpIcon(`help me! ${componentTitle}`);
     }
 
     set selection(sel) {

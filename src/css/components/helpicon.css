@@ -1,0 +1,33 @@
+.helpDiv {
+    position: relative;
+    display: inline-block;
+    z-index: 1000000;
+    margin-left: var(--ui-helpIcon-leftMargin);
+    /* left: 100%; */
+    /* right: -100%; */
+    /* top: 0px; */
+    /* left: calc(100% - 24px); */
+    width: var(--ui-helpIcon-size);
+    height: var(--ui-helpIcon-size);
+    /* float:left; */
+    /* align-self:flex-start; */
+    /* align-self:flex-end; */
+    /* justify-self: right; */
+}
+.helpDiv.rightJustify {
+    position: absolute;
+    margin-left: var(--ui-helpIcon-leftMargin-rightJustify);
+    display: flex;
+    left: calc(100% - (var(--ui-helpIcon-size)));
+}
+.helpDiv.togglePos {
+    position: absolute;
+    margin-left: calc(var(--ui-component-toggle-width) + var(--ui-helpIcon-leftMargin-toggle));
+}
+
+.helpIcon {
+    width: var(--ui-helpIcon-size);
+    height: var(--ui-helpIcon-size);
+    /* width: 100%; */
+    /* height: 100%; */
+}

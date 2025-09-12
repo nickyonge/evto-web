@@ -49,6 +49,10 @@
 
     --ui-component-dropdown-max-height: 169px;
 
+    --ui-helpIcon-size: 16px;
+    --ui-helpIcon-leftMargin: 4px;
+    --ui-helpIcon-leftMargin-toggle: 10px;
+    --ui-helpIcon-leftMargin-rightJustify: -8px;
 
     --ui-data-sidebar-tabs-width: 110px;
 

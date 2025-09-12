@@ -91,6 +91,9 @@ export class DropdownList extends TitledComponent {
             this.DropdownAddedToPage(this.#dropdown);
             this.OptionsAddedToPage(this.#optionsContainer);
         }.bind(this));
+
+        // add help component
+        this._addHelpIcon(`help me! ${componentTitle}`);
     }
 
     DropdownAddedToPage(target) { // this.#dropdown 

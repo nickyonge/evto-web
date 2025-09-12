@@ -17,11 +17,6 @@
     cursor: pointer;
 }
 
-/* .toggle .componentTitle {
-    opacity: 0.8;
-    transition: opacity 0.2s;
-} */
-
 .toggle .toggleSwitch {
     position: relative;
     width: var(--ui-component-toggle-width);
