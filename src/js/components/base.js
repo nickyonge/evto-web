@@ -5,16 +5,26 @@ import { HelpIcon } from "./helpicon";
 export class BasicComponent {
     div;
     static componentCount = 0;
+    static allComponents = [];
     constructor() {
         this.div = ui.CreateDivWithClass("uiComponent");
         ui.AddElementAttribute(this.div, 'uniqueComponentID', BasicComponent.componentCount);
         BasicComponent.componentCount++;
+        BasicComponent.allComponents.push(this.div);
     }
     get uniqueComponentID() {
         return ui.GetAttribute(this.div, 'uniqueComponentID');
     }
     get uniqueComponentName() {
         return `_uiComponent${this.uniqueComponentID}`;
+    }
+    static GetComponentByUniqueID(uniqueID) {
+        for (let i = 0; i < BasicComponent.allComponents.length; i++) {
+            if (ui.GetAttribute(BasicComponent.allComponents[i], 'uniqueComponentID') == uniqueID) {
+                return BasicComponent.allComponents[i];
+            }
+        }
+        return null;
     }
 }
 export class TitledComponent extends BasicComponent {
