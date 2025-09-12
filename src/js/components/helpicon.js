@@ -31,6 +31,7 @@ export class HelpIcon {
         this.#helpQIconDiv = ui.CreateDivWithClass('helpQIcon');
         this.#helpQIconDiv.innerHTML = '?';
         this.#helpDiv.appendChild(this.#helpQIconDiv);
+        ui.DisableContentSelection(this.#helpQIconDiv);
 
         // prevent event propogation
         this.#helpDiv.addEventListener('click', e => {
@@ -47,7 +48,6 @@ export class HelpIcon {
     }
 
     displayHelpText() {
-        // console.log("HELP: " + this.helpText);
         ToggleOverlay("HELP: " + this.helpText, this.#helpDiv);
     }
 }

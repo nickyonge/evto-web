@@ -13,28 +13,34 @@
     position: fixed;
     left: 50%;
     top: 50%;
-    /* left: 0px;
-    top: 0px; */
     z-index: 1000;
     background-color: bisque;
     transform-origin: center center;
     transform: translate(-50%, -50%);
 }
 
-.overlayBG[show="false"] {
+.overlayBG[show="false"],
+.overlayBox[show="false"] {
     opacity: 0;
     pointer-events: none;
     user-select: none;
     -ms-user-select: none;
     -moz-user-select: none;
     -webkit-user-select: none;
+    transition: opacity 250ms ease-out;
 }
 
+.overlayBox[show="true"] {
+    opacity: 1;
+    transition: opacity 125ms ease-out;
+}
 .overlayBG[show="true"] {
+    cursor:default;
     opacity: 0.69;
     pointer-events:initial;
     user-select: text;
     -ms-user-select: text;
     -moz-user-select: text;
     -webkit-user-select: text;
+    transition: opacity 125ms ease-out;
 }
