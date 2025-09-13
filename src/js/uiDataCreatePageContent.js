@@ -2,7 +2,7 @@
 // just didn't like how long uiData.js was getting
 import * as ui from "./ui";
 import * as txt from './text';
-import { Toggle, MutliOptionList, DropdownList } from "./components";
+import { Toggle, MutliOptionList, DropdownList, TextField } from "./components";
 // import { Toggle, MutliOptionList, DropdownList } from "./components/base";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentData";
 import { GetPageNumberByID } from "./uiData";
@@ -16,26 +16,19 @@ function CreatePageIntro(page) {
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
 
-    // let dd = new DropdownList('dropdown', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam']);
-    let dd1 = new DropdownList('dropdown1', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam']);
-    let dd = new DropdownList('dropdown2', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam', 'a', 'b', 'c', '1235387235897293859823598729387592359792837598', 'test', 'ewbai']);
-    // function dCallback() { console.log(`changed: ${dd.selection}`); }
-    function dCallback(selection) { console.log(`changed: ${selection}`); }
-    page.appendChild(dd1.div);
-    page.appendChild(dd.div);
+    let moSize = new MutliOptionList('Size', null, ['Small', 'Medium', 'Large']);
+    page.appendChild(moSize.div);
 
-    let mo = new MutliOptionList('multi', mCallback, ['a','b','c']);
-    function mCallback() { console.log(`changed: ${mo.selection}`); }
-    // function mCallback(selection) { console.log(`changed: ${selection}`); }
-    page.appendChild(mo.div);
+    let tgBoost = new Toggle('Size Boost', null, false);
+    page.appendChild(tgBoost.div);
 
-    let tg = new Toggle("toggle", tCallback);
-    // function tCallback() { console.log('checked: ' + tg.checked); }
-    function tCallback(checked) { console.log('checked: ' + checked); }
-    page.appendChild(tg.div);
+    let txInfo = new TextField(txt.LIPSUM_FULL);
+    page.appendChild(txInfo.div);
+
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE ----- 
+    DemoPageContent(page);
 }
 function CreatePagePattern(page) {
     // ----------------------------- CREATE COLOUR & PATTERN PAGE ----- 
@@ -83,4 +76,25 @@ export function CreatePageContent(page) {
             throw new Error(`ERROR: invalid page ID, can't create page content. Page ID: ${page.id}, index: ${i}`);
 
     }
+}
+
+function DemoPageContent(page) {
+
+    // let dd = new DropdownList('dropdown', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam']);
+    let dd1 = new DropdownList('dropdown1', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam']);
+    let dd = new DropdownList('dropdown2', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam', 'a', 'b', 'c', '1235387235897293859823598729387592359792837598', 'test', 'ewbai']);
+    // function dCallback() { console.log(`changed: ${dd.selection}`); }
+    function dCallback(selection) { console.log(`changed: ${selection}`); }
+    page.appendChild(dd1.div);
+    page.appendChild(dd.div);
+
+    let mo = new MutliOptionList('multi', mCallback, ['a','b','c']);
+    function mCallback() { console.log(`changed: ${mo.selection}`); }
+    // function mCallback(selection) { console.log(`changed: ${selection}`); }
+    page.appendChild(mo.div);
+
+    let tg = new Toggle("toggle", tCallback);
+    // function tCallback() { console.log('checked: ' + tg.checked); }
+    function tCallback(checked) { console.log('checked: ' + checked); }
+    page.appendChild(tg.div);
 }
