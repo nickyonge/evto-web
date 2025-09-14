@@ -14,10 +14,21 @@
 }
 
 .uiComponent .cost {
+    /* display: inline-block; */
+    /* float: right; */
+    /* float: inline-end; */
+    /* vertical-align: middle; */
     text-align: center;
     align-content: center;
+    /* align-items: center; */
     margin-left: auto;
+    /* justify-content: start; */
+    /* align-self: flex-start; */
     margin-right: 5px;
+    /* line-height: 0; */
+    /* top: 10px; */
+    /* margin-top: 0;
+    margin-bottom: auto; */
     /* background-color: red; */
     height: 15px;
     border-radius: 100%;
@@ -25,6 +36,12 @@
     border: 1px var(--color-ui-costToken) solid;
     box-sizing: border-box;
     overflow: hidden;
+    /* z-index: 5; */
+}
+.uiComponent .cost .floating {
+    position: absolute;
+    right: 0;
+    transform: translate(0px, -100%);
 }
 .uiComponent .cost > p {
     font-size: 8pt;

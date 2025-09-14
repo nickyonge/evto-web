@@ -88,7 +88,7 @@ function DemoPageContent(page) {
     page.appendChild(dd1.div);
     page.appendChild(dd.div);
 
-    let mo = new MutliOptionList('multi', mCallback, ['a','b','c']);
+    let mo = new MutliOptionList('multi', mCallback, ['a','b','c'], [1,2,3]);
     function mCallback() { console.log(`changed: ${mo.selection}`); }
     // function mCallback(selection) { console.log(`changed: ${selection}`); }
     page.appendChild(mo.div);

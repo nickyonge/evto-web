@@ -82,7 +82,7 @@ export class DropdownList extends TitledComponent {
                 let oCost = ui.CreateDivWithClass('cost');
                 oCost.innerHTML = `<p>${costs[i]}</p>`;
                 this.#optionsCosts.push(oCost);
-                oDiv.appendChild(oCost);
+                oLabel.appendChild(oCost);
             }
             // add option div to options container
             this.#optionsContainer.appendChild(oDiv);
