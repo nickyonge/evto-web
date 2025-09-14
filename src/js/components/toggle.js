@@ -11,9 +11,9 @@ export class Toggle extends TitledComponent {
         super(componentTitle);
 
         ui.AddClassesToDOM(this.div, 'toggle');
-        this.#input = ui.CreateInputWithID('checkbox', 'checkboxInput');
+        this.#input = ui.CreateInputWithID('checkbox', this.uniqueComponentID, 'toggle');
         this.#label = ui.CreateElementWithClass('label', 'toggleLabel');
-        ui.AddElementAttribute(this.#label, 'for', 'checkboxInput');
+        ui.AddElementAttribute(this.#label, 'for', this.uniqueComponentID);
         this._titleElement = ui.CreateElement('span');
         this.#switch = ui.CreateElementWithClass('span', 'toggleSwitch');
 
