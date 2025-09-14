@@ -58,12 +58,14 @@ export class DropdownList extends TitledComponent {
         // iterate thru options 
         for (let i = 0; i < options.length; i++) {
             // create elements
+            let hasCost = (costs && costs.length > i);
             let oDiv = ui.CreateDiv();
             let uniqueName = `${this.uniqueComponentName}_o${i}`;
             let oInput = ui.CreateInputWithID('radio', uniqueName);
             ui.AddElementAttribute(oInput, 'name', 'ddOption');
             oInput.defaultChecked = i == initialValue;
             let oLabel = ui.CreateElementWithClass('label', 'ddOption');
+            if (hasCost) { ui.AddClassToDOMs('withCost', oLabel); }
             ui.AddElementAttributes(oLabel, ['for', 'data-txt'], [uniqueName, options[i]]);
             // push to arrays
             this.#optionsDivs.push(oDiv);
@@ -74,12 +76,12 @@ export class DropdownList extends TitledComponent {
             oDiv.appendChild(oInput);
             oDiv.appendChild(oLabel);
             // add costs field 
-            if (costs && costs.length > i) {
+            if (hasCost) {
                 if (costs[i] == null) {
                     this.#optionsCosts.push(null);
                     continue;
                 }
-                let oCost = ui.CreateDivWithClass('cost');
+                let oCost = ui.CreateDivWithClass('cost', 'floating');
                 oCost.innerHTML = `<p>${costs[i]}</p>`;
                 this.#optionsCosts.push(oCost);
                 oLabel.appendChild(oCost);

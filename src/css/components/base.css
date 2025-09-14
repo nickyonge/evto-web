@@ -38,7 +38,7 @@
     overflow: hidden;
     /* z-index: 5; */
 }
-.uiComponent .cost .floating {
+.uiComponent .cost.floating {
     position: absolute;
     right: 0;
     transform: translate(0px, -100%);

@@ -38,7 +38,9 @@
     --color-bg-gradient-2: #a4d4f3; */
 
     --ui-component-color-bg: #323133;
+    --ui-component-color-bg-border: #3b3a3d;
     --ui-component-color-bg-highlight: #424143;
+    --ui-component-color-bg-highlight-transparent: #42414300;
     --ui-component-color-text: #2a292b;
     --ui-component-color-input: #ffffff;
     --ui-component-color-enabled-light: #32b38a;

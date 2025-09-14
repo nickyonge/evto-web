@@ -72,10 +72,11 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     top: -50px;
     position: relative;
     z-index: 11;
-    background-color: var(--ui-component-color-bg);
+    background: linear-gradient(0deg, var(--ui-component-color-bg-border) 0%, var(--ui-component-color-bg) 100%);
     opacity: 0;
     gap: 2px;
     transition: 300ms;
+    box-sizing: border-box;
 }
 
 .dropdown:focus-visible,
@@ -117,7 +118,7 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     border-radius: 5px;
     padding: 5px 5px;
     transition: 300ms;
-    background-color: var(--ui-component-color-bg);
+    background-color: var(--ui-component-color-bg-highlight-transparent);
 }
 .ddOptions input[type="radio"] {
     display: none;
@@ -129,6 +130,12 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     width: calc(100% - 10px);
     cursor: pointer;
     color: var(--ui-component-color-input);
+}
+.ddOptions label.withCost {
+    width: calc(100% - 30px);
+    padding-right: 25px;
+    /* margin-right: 300px; */
+
 }
 
 .ddOptions label::before {
