@@ -20,6 +20,9 @@
 
     --color-ui-active: #beeeef;
 
+    --color-ui-costToken: #90e88f;
+    --color-ui-costToken-dark: #5584b9;
+
     --ui-overlay-color-title: #403c8a;
     --ui-overlay-color-text: #081a3e;
     --ui-overlay-margin-vertical: 12px;

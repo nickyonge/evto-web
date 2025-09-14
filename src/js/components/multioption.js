@@ -7,8 +7,9 @@ export class MutliOptionList extends TitledComponent {
     #listSelect;
     #inputs;
     #labels;
+    #costs;
 
-    constructor(componentTitle, onSelectCallback, options, icons) {
+    constructor(componentTitle, onSelectCallback, options, costs, icons) {
         super(componentTitle);
 
         ui.AddClassesToDOM(this.div, 'multichoicelist');
@@ -17,6 +18,7 @@ export class MutliOptionList extends TitledComponent {
 
         this.#inputs = [];
         this.#labels = [];
+        this.#costs = [];
 
         if (!options) {
             console.warn("WARNING: creating a multi-option list without any options array");
@@ -43,6 +45,17 @@ export class MutliOptionList extends TitledComponent {
             let text = ui.CreateElement('p');
             text.innerHTML = options[i];
             label.appendChild(text);
+            // add costs field 
+            if (costs && costs.length > i) {
+                if (costs[i] == null) {
+                    this.#costs.push(null);
+                    continue;
+                }
+                let oCost = ui.CreateDivWithClass('cost');
+                oCost.innerHTML = `<p>${costs[i]}</p>`;
+                this.#costs.push(oCost);
+                label.appendChild(oCost);
+            }
 
             ui.DisableContentSelection(text);
             ui.MakeTabbableWithInputTo(label, input);
@@ -62,7 +75,7 @@ export class MutliOptionList extends TitledComponent {
             this.#listSelect.appendChild(this.#inputs[i]);
             this.#listSelect.appendChild(this.#labels[i]);
         }
-        
+
         // add help component
         this._addHelpIcon(`help me! ${componentTitle}`);
     }

@@ -13,6 +13,28 @@
     height: 18px;
 }
 
+.uiComponent .cost {
+    text-align: center;
+    align-content: center;
+    margin-left: auto;
+    margin-right: 5px;
+    /* background-color: red; */
+    height: 15px;
+    border-radius: 100%;
+    aspect-ratio: 1;
+    border: 1px var(--color-ui-costToken) solid;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+.uiComponent .cost > p {
+    font-size: 8pt;
+    color: var(--color-ui-costToken);
+    inset: 0px;
+    margin: 0px;
+    line-height: 0px;
+    transition: none;
+}
+
 /* 
 .toggleLabel {
   display: flex;

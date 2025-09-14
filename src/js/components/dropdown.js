@@ -15,10 +15,11 @@ export class DropdownList extends TitledComponent {
     #optionsDivs;
     #optionsInputs;
     #optionsLabels;
+    #optionsCosts;
 
     static _dropdownMaxHeight = -1;
 
-    constructor(componentTitle, onSelectCallback, options, icons) {
+    constructor(componentTitle, onSelectCallback, options, costs, icons) {
         super(componentTitle);
 
         if (DropdownList._dropdownMaxHeight < 0) {
@@ -51,6 +52,7 @@ export class DropdownList extends TitledComponent {
         this.#optionsDivs = [];
         this.#optionsInputs = [];
         this.#optionsLabels = [];
+        this.#optionsCosts = [];
         this.#optionsContainer = ui.CreateDivWithClass('ddOptions');
         ObserverCallbackOnAdded(this.#optionsContainer, this.OptionsAddedToPage);
         // iterate thru options 
@@ -71,6 +73,18 @@ export class DropdownList extends TitledComponent {
             // add children to parents 
             oDiv.appendChild(oInput);
             oDiv.appendChild(oLabel);
+            // add costs field 
+            if (costs && costs.length > i) {
+                if (costs[i] == null) {
+                    this.#optionsCosts.push(null);
+                    continue;
+                }
+                let oCost = ui.CreateDivWithClass('cost');
+                oCost.innerHTML = `<p>${costs[i]}</p>`;
+                this.#optionsCosts.push(oCost);
+                oDiv.appendChild(oCost);
+            }
+            // add option div to options container
             this.#optionsContainer.appendChild(oDiv);
 
             // create callback
@@ -80,6 +94,7 @@ export class DropdownList extends TitledComponent {
                     onSelectCallback(event.target.id);
                 }
             });
+
         }
         // add elements 
         this.div.appendChild(this._titleElement);
