@@ -20,16 +20,13 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
 .listselect .value {
     background-color: transparent;
     border: none;
-    /* padding: 0px 3px; */
     padding-left: 3px;
     margin-left: 0px;
     margin-top: 1px;
     margin-bottom: 1px;
     color: var(--ui-component-color-input);
-    /* font-size: 10pt; */
     display: flex;
     align-items: center;
-    /* gap: 1px; */
     position: relative;
     width: calc(100% - 3px);
     cursor: pointer;

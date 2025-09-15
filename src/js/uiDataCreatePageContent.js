@@ -4,7 +4,6 @@ import * as ui from "./ui";
 import * as txt from './text';
 import * as cost from './costs';
 import { Toggle, MutliOptionList, DropdownList, TextField } from "./components";
-// import { Toggle, MutliOptionList, DropdownList } from "./components/base";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentData";
 import { GetPageNumberByID } from "./uiData";
 
@@ -19,10 +18,7 @@ function CreatePageSize(page) {
 
     let txInfo = new TextField(txt.LIPSUM);
     page.appendChild(txInfo.div);
-
-    let mo1 = new MutliOptionList('test1', null, ['a', 'b', 'c'], [1, 2, 3], null, 1);
-    page.appendChild(mo1.div);
-    // return;
+    
     let moSize = new MutliOptionList('Size', null,
         [ // sizing and labels 
             `${txt.SIZE_SM}, <i>10x20"</i>`,
