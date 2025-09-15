@@ -18,7 +18,7 @@ function CreatePageSize(page) {
 
     let txInfo = new TextField(txt.LIPSUM);
     page.appendChild(txInfo.div);
-    
+
     let moSize = new MutliOptionList('Size', null,
         [ // sizing and labels 
             `${txt.SIZE_SM}, <i>10x20"</i>`,
@@ -37,8 +37,53 @@ function CreatePageSize(page) {
 
 }
 function CreatePageFeatures(page) {
-    // ----------------------------- CREATE FEATURES PAGE ----- 
+    // ----------------------------- CREATE FEATURES PAGE -----
     // DemoPageContent(page);
+
+    let featuresGrid = ui.CreateDivWithClass('grid');
+    page.appendChild(featuresGrid);
+
+    let moLandDetail = new MutliOptionList(
+        'Land Detail', null,
+        ['a', 'b', 'c'],
+        [1, 2, 3],
+        null, 0
+    );
+    let moGCSLines = new MutliOptionList(
+        'GCS Lines', null,
+        ['a', 'b', 'c'],
+        [1, 2, 3],
+        null, 0
+    );
+    let moLabelling = new MutliOptionList(
+        'Labelling', null,
+        ['a', 'b', 'c'],
+        [1, 2, 3],
+        null, 0
+    );
+    let moTitleBox = new MutliOptionList(
+        'Title Box', null,
+        ['a', 'b', 'c'],
+        [1, 2, 3],
+        null, 0
+    );
+    let moLandLines = new MutliOptionList(
+        'Land Lines', null,
+        ['a', 'b', 'c'],
+        [1, 2, 3],
+        null, 0
+    );
+
+    featuresGrid.appendChild(moLandDetail.div);
+    featuresGrid.appendChild(moGCSLines.div);
+    featuresGrid.appendChild(moLabelling.div);
+    featuresGrid.appendChild(moTitleBox.div);
+    featuresGrid.appendChild(moLandLines.div);
+
+    // for (let i = 0; i < 6; i++) {
+    //     let div = ui.CreateDivWithClass(i == 0 || i == 3 || i == 4 ? 'divA' : 'divB');
+    //     featuresGrid.appendChild(div);
+    // }
 }
 function CreatePagePattern(page) {
     // ----------------------------- CREATE COLOUR & PATTERN PAGE ----- 
