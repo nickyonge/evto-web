@@ -82,6 +82,9 @@ dataWindow .content .page {
     margin-right: var(--ui-data-page-margin-right);
     overflow-x: hidden;
     overflow-y: auto;
+    /* scrollbar-gutter: stable; */
+    scrollbar-width: thin;
+    /* scroll-margin-block-start: 10px ; */
 }
 
 dataWindow .content h2 {
