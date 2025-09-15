@@ -2,6 +2,7 @@
 // just didn't like how long uiData.js was getting
 import * as ui from "./ui";
 import * as txt from './text';
+import * as cost from './costs';
 import { Toggle, MutliOptionList, DropdownList, TextField } from "./components";
 // import { Toggle, MutliOptionList, DropdownList } from "./components/base";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentData";
@@ -23,14 +24,19 @@ function CreatePageSize(page) {
     page.appendChild(mo1.div);
     // return;
     let moSize = new MutliOptionList('Size', null,
-        [
+        [ // sizing and labels 
             `${txt.SIZE_SM}, <i>10x20"</i>`,
             `&nbsp;&nbsp;${txt.SIZE_SMP}, <i>12x24"</i>`,
             `${txt.SIZE_MD}, <i>16x32"</i>`,
             `&nbsp;&nbsp;${txt.SIZE_MDP}, <i>18x36"</i>`,
             `${txt.SIZE_LG}, <i>20x40"</i>`,
             `&nbsp;&nbsp;${txt.SIZE_LGP}, <i>24x48"</i>`,
-        ], [1, 2, 3, 4, 5, 6]);
+        ],
+        [ // costs 
+            cost.SIZE_SM, cost.SIZE_SMP,
+            cost.SIZE_MD, cost.SIZE_MDP,
+            cost.SIZE_LG, cost.SIZE_LGP
+        ]);
     page.appendChild(moSize.div);
 
 }
