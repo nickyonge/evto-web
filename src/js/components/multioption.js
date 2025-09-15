@@ -28,7 +28,7 @@ export class MutliOptionList extends TitledComponent {
         for (let i = 0; i < options.length; i++) {
             // create input 
             let input = ui.CreateInputWithID('radio', options[i]);
-            ui.AddElementAttribute(input, 'name', 'menu');
+            ui.AddElementAttribute(input, 'name', this.uniqueComponentName);
             input.defaultChecked = i == initialValue;
             this.#inputs.push(input);
             // create label

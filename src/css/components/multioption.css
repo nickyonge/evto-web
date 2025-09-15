@@ -35,10 +35,13 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
     cursor: pointer;
     border-radius: var(--ui-component-border-radius);
     transition: all 150ms;
-    height: 22px;
+    min-height: 22px;
+    max-height: 60px;
+    height: auto;
 }
 
 .listselect .value > p {
+    margin: 0px;
     transform-origin: 4px 50%;
     padding-left: 8px;
     transition: all 150ms;
