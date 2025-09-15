@@ -23,11 +23,14 @@
     transition-property: opacity, border-width;
     transition-duration: 200ms, 150ms;
 }
-.helpDiv.rightJustify {
-    position: absolute;
-    margin-left: var(--ui-helpIcon-leftMargin-rightJustify);
-    left: calc(100% - var(--ui-helpIcon-size) - var(--ui-helpIcon-borderWidth));
+
+.helpExpansionDiv {
+    display: flex;
+    height: 100%;
+    flex: 1;
+    background-color: red;
 }
+
 .helpDiv.togglePos {
     position: relative;
     /* margin-left: calc(var(--ui-component-toggle-width) + var(--ui-helpIcon-leftMargin-toggle)); */

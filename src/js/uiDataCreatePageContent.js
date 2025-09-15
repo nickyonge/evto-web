@@ -38,7 +38,7 @@ function CreatePageSize(page) {
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE -----
-    // DemoPageContent(page);
+    
 
     let featuresGrid = ui.CreateDivWithClass('grid');
     page.appendChild(featuresGrid);
@@ -87,6 +87,7 @@ function CreatePageFeatures(page) {
 }
 function CreatePagePattern(page) {
     // ----------------------------- CREATE COLOUR & PATTERN PAGE ----- 
+    DemoPageContent(page);
 }
 function CreatePageSave(page) {
     // ----------------------------- CREATE SAVE & LOAD PAGE ----- 

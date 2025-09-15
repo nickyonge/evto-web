@@ -6,6 +6,8 @@
 .uiComponent .componentTitle {
     color: var(--ui-component-color-text);
     margin: 0px 5px 0px 5px;
+    white-space: nowrap;
+    display: flex;
 }
 
 .uiComponent .componentTitle.listTitle {

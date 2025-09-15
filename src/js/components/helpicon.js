@@ -8,6 +8,7 @@ const rightJustifyDefaultIcons = true;
 export class HelpIcon {
 
     #helpDiv;
+    #helpExpansionDiv;
     #iconImg;
     #helpQIconDiv;
 
@@ -17,10 +18,16 @@ export class HelpIcon {
 
         this.helpText = helpText;
 
+        if (rightJustifyDefaultIcons) {
+            this.#helpExpansionDiv = ui.CreateDivWithClass('helpExpansionDiv');
+            parentDiv.appendChild(this.#helpExpansionDiv);
+            // this.#titleElement.appendChild(ui.CreateDivWithClass('expansionDiv'));
+        }
+
         this.#helpDiv = togglePos ?
             ui.CreateDivWithClass('helpDiv', 'togglePos') :
-            rightJustifyDefaultIcons ?
-                ui.CreateDivWithClass('helpDiv', 'rightJustify') :
+            // rightJustifyDefaultIcons ?
+            //     ui.CreateDivWithClass('helpDiv', 'rightJustify') :
                 ui.CreateDivWithClass('helpDiv');
 
         //create icon
