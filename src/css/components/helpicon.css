@@ -8,6 +8,7 @@
     margin-left: var(--ui-helpIcon-leftMargin);
     width: calc(var(--ui-helpIcon-size) + var(--ui-helpIcon-borderWidth));
     height: calc(var(--ui-helpIcon-size) + var(--ui-helpIcon-borderWidth));
+    aspect-ratio: 1;
     padding-bottom: var(--ui-helpIcon-bottomPadding);
     padding-left: calc(var(--ui-helpIcon-bottomPadding) * 0.5);
     padding-right: calc(var(--ui-helpIcon-bottomPadding) * 0.5);

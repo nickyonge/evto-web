@@ -16,6 +16,9 @@
     /* flex-direction: row-reverse; */
     cursor: pointer;
 }
+.toggle .toggleLabel .componentTitle {
+    white-space: nowrap;
+}
 
 .toggle .toggleSwitch {
     position: relative;
