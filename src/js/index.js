@@ -4,23 +4,29 @@ import { SetupDataWindow } from './contentData';
 import { SetupArtWindow } from './contentArt';
 import { DisconnectObserver, StartObservation } from './mutationObserver';
 
+let _onLoadCompleteCallbacks = [];
+
 window.addEventListener('load', function () {
     // initial window load
     StartObservation();
     BuildUI();
     SetupDataWindow();
     SetupArtWindow();
-    // DemoLabel();
 
+    // load complete 
+    for (let i = 0; i < _onLoadCompleteCallbacks.length; i++) {
+        _onLoadCompleteCallbacks[i]();
+    }
+    _onLoadCompleteCallbacks = [];
+
+    // post-load timeout 
     this.setTimeout(() => {
         // one tick after loading
         DisconnectObserver();
     }, 0);
 });
 
-function DemoLabel() {
-    console.log("Creating demo label");
-    var label = document.createElement("Label");
-    label.innerHTML = "Hello world! 0123456789";
-    document.body.appendChild(label);
+export function CallOnLoadComplete(callback) {
+    if (!callback) { return; }
+    _onLoadCompleteCallbacks.push(callback);
 }
