@@ -73,6 +73,23 @@ export function GetAllSiblings(element) {
         filter(sibling => sibling !== element);
 }
 /**
+ * Get all parent elements to the given element
+ * @param {HTMLElement} element 
+ * @returns {HTMLElement[]}
+ */
+export function GetAllParents(element) {
+    if (element == null || element.parentElement == null) { return []; }
+    let parents = [];
+    let currentElement = element;
+    while (currentElement && currentElement !== document.body && currentElement !== document.documentElement) {
+        currentElement = currentElement.parentNode;
+        if (currentElement) { // Ensure currentElement is not null before pushing
+            parents.push(currentElement);
+        }
+    }
+    return parents;
+}
+/**
  * Returns the first sibling of the given element with the given class found. 
  * If none are found, returns null 
  * @param {HTMLElement} element source element to search siblings 
@@ -100,6 +117,23 @@ export function GetChildWithClass(parentElement, cssClass) {
     for (const child of parentElement.children) {
         if (ElementHasClass(child, cssClass)) {
             return child;
+        }
+    }
+    return null;
+}
+/**
+ * Returns the first parent of the given element with the given class found. 
+ * If none are found, returns null 
+ * @param {HTMLElement} childElement source child element to search the parents of 
+ * @param {string} cssClass class name to check for 
+ * @returns {HTMLElement|null} first found parent element with class, or null
+ */
+export function GetParentWithClass(childElement, cssClass) {
+    let parents = GetAllParents(childElement);
+    if (parents == []) { return null; }
+    for (let i = 0; i < parents.length; i++) {
+        if (ElementHasClass(parents[i], cssClass)) {
+            return parents[i];
         }
     }
     return null;
