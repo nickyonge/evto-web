@@ -113,15 +113,12 @@ dataWindow .page.features > .grid {
     position: relative;
     width: 100%;
     height: 100%;
-    /* background-color: red; */
-
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(3, 1fr);
     grid-column-gap: 10px;
     grid-row-gap: 0px;
 }
-
-dataWindow .page.features .grid .divA {
-    background-color: blue;
+dataWindow .page.features > .grid[singleColumn="true"] {
+    grid-template-columns: repeat(1, 1fr);
+    grid-column-gap: 0px;
 }

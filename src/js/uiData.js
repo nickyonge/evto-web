@@ -5,7 +5,7 @@ import * as txt from './text';
 import { PAGE_NAMES } from "./text";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE, PageOpened, PageClosed } from "./contentData";
 import { dataWindow } from "./uiMain";
-import { style, AddAlphaToHex, DeselectElement, SetElementEnabled } from "./lilutils";
+import { style, AddAlphaToHex, DeselectElement, SetElementEnabled, GetChildWithClass } from "./lilutils";
 
 import iconArt from '../assets/svg/icons-red/icon-art.svg';
 import iconFeatures from '../assets/svg/icons-red/icon-features.svg';
@@ -18,6 +18,7 @@ import { CallOnLoadComplete } from ".";
 export const initialTab = 2;
 
 const maxTitleHeight = 30;
+const maxTwoColumnWidth = 269;
 const bgFadeAlpha = 0.82;
 const useSeparators = false;
 
@@ -106,10 +107,11 @@ function CreatePages() {
     }
     // add resize event 
     window.addEventListener('resize', function () {
-        UpdatePageTitles();
+        // resize pages 
+        UpdatePages()
     });
     // callback on added
-    CallOnLoadComplete(UpdatePageTitles);
+    CallOnLoadComplete(UpdatePages);
 }
 
 /** creates the gradient fade element that sits atop the solid colour background */
@@ -119,6 +121,21 @@ function CreateFadeBG() {
 }
 
 // ------------------------------------- SPECIFIC METHODS ----------------
+
+function UpdatePages() {
+    UpdatePageLayouts();
+    UpdatePageTitles();
+}
+function UpdatePageLayouts() {
+    let singleColumn = content.offsetWidth < maxTwoColumnWidth;
+    console.log("CONTENT W: " + singleColumn);
+    for (let i = 0; i < pages.length; i++) {
+        let gridLayout = GetChildWithClass(pages[i], 'grid');
+        if (gridLayout) {
+            ui.AddElementAttribute(gridLayout, 'singleColumn', singleColumn);
+        }
+    }
+}
 
 function UpdatePageTitles() {
     // update the title, and iterate thru alt shorter titles 
