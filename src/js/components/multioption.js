@@ -1,6 +1,5 @@
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
-const initialValue = 0;
 
 export class MutliOptionList extends TitledComponent {
 
@@ -9,7 +8,7 @@ export class MutliOptionList extends TitledComponent {
     #labels;
     #costs;
 
-    constructor(componentTitle, onSelectCallback, options, costs, icons) {
+    constructor(componentTitle, onSelectCallback, options, costs, icons, initialValue = 0) {
         super(componentTitle);
 
         ui.AddClassesToDOM(this.div, 'multichoicelist');

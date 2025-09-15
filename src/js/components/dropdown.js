@@ -2,7 +2,7 @@ import * as ui from "../ui";
 import { TitledComponent } from "./base";
 import { ObserveNode, ObserverCallbackOnAdded } from "../mutationObserver";
 import { GetChildWithClass, GetCSSVariable, GetSiblingWithClass, isBlank } from "../lilutils";
-const initialValue = 0;
+// const initialValue = 0;
 
 const _smootherScroll = true;
 
@@ -23,7 +23,7 @@ export class DropdownList extends TitledComponent {
 
     #initialChange = false;
 
-    constructor(componentTitle, onSelectCallback, options, costs, icons) {
+    constructor(componentTitle, onSelectCallback, options, costs, icons, initialValue = 0) {
         super(componentTitle);
 
         if (DropdownList._dropdownMaxHeight < 0) {

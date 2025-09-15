@@ -15,10 +15,13 @@ function CreatePageIntro(page) {
 }
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
-    
+
     let txInfo = new TextField(txt.LIPSUM);
     page.appendChild(txInfo.div);
 
+    let mo1 = new MutliOptionList('test1', null, ['a', 'b', 'c'], [1, 2, 3], null, 1);
+    page.appendChild(mo1.div);
+    // return;
     let moSize = new MutliOptionList('Size', null,
         [
             `${txt.SIZE_SM}, <i>10x20"</i>`,
@@ -33,7 +36,7 @@ function CreatePageSize(page) {
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE ----- 
-    DemoPageContent(page);
+    // DemoPageContent(page);
 }
 function CreatePagePattern(page) {
     // ----------------------------- CREATE COLOUR & PATTERN PAGE ----- 
