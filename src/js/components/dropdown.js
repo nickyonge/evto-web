@@ -26,6 +26,9 @@ export class DropdownList extends TitledComponent {
             DropdownList._dropdownMaxHeight = parseInt(GetCSSVariable('--ui-component-dropdown-max-height'), 10);
         }
 
+        // TODO: fix initial option appearance
+        // TODO: token display in selected dropdown option 
+
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
         this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
         this.#dropdown = ui.CreateDivWithClass('dropdown');
