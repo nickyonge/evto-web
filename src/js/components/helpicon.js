@@ -3,8 +3,6 @@ import iconHelp from '../../assets/svg/icons-white/icon-help.svg';
 import * as txt from "../text";
 import { ToggleOverlay } from "../uiOverlay";
 
-const rightJustifyDefaultIcons = true;
-
 export class HelpIcon {
 
     #helpDiv;
@@ -14,11 +12,11 @@ export class HelpIcon {
 
     helpText;
 
-    constructor(parentDiv, helpText, togglePos = false) {
+    constructor(parentDiv, helpText, togglePos = false, rightJustify = true) {
 
         this.helpText = helpText;
 
-        if (rightJustifyDefaultIcons) {
+        if (rightJustify) {
             this.#helpExpansionDiv = ui.CreateDivWithClass('helpExpansionDiv');
             parentDiv.appendChild(this.#helpExpansionDiv);
             // this.#titleElement.appendChild(ui.CreateDivWithClass('expansionDiv'));
@@ -26,8 +24,6 @@ export class HelpIcon {
 
         this.#helpDiv = togglePos ?
             ui.CreateDivWithClass('helpDiv', 'togglePos') :
-            // rightJustifyDefaultIcons ?
-            //     ui.CreateDivWithClass('helpDiv', 'rightJustify') :
                 ui.CreateDivWithClass('helpDiv');
 
         //create icon

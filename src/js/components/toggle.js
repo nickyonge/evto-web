@@ -44,7 +44,7 @@ export class Toggle extends TitledComponent {
                 onChangeCallback(event.target.checked);
             });
         }
-        this._addHelpIcon(`help me! ${1}`, true);
+        this._addHelpIcon(`help me! ${1}`, true, false);
     }
 
     // function exampleOnChangeCallback(isChecked) {

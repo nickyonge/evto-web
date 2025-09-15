@@ -75,13 +75,13 @@ export class TitledComponent extends BasicComponent {
     /** Reassigns `title` to itself, re-invoking the setter method */
     _updateTitle() { this.title = this.title; }
 
-    _addHelpIcon(helpText, togglePos = false) {
+    _addHelpIcon(helpText, togglePos = false, rightJustify = true) {
         // this.#helpIcon = new HelpIcon(this.div, helpText, togglePos);
         if (togglePos) {
-            this.#helpIcon = new HelpIcon(this.div, helpText, togglePos);
+            this.#helpIcon = new HelpIcon(this.div, helpText, togglePos, rightJustify);
         } else {
             // this.#helpIcon = new HelpIcon(this.div, helpText, togglePos);
-            this.#helpIcon = new HelpIcon(this.#titleElement, helpText, togglePos);
+            this.#helpIcon = new HelpIcon(this.#titleElement, helpText, togglePos, rightJustify);
         }
 
     }
