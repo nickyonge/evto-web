@@ -1,7 +1,7 @@
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
 import { ObserveNode, ObserverCallbackOnAdded } from "../mutationObserver";
-import { GetChildWithClass, GetCSSVariable, GetSiblingWithClass } from "../lilutils";
+import { GetChildWithClass, GetCSSVariable, GetSiblingWithClass, isBlank } from "../lilutils";
 const initialValue = 0;
 
 const _smootherScroll = true;
@@ -10,6 +10,7 @@ export class DropdownList extends TitledComponent {
 
     #dropdown;
     #selected;
+    #selectedCost;
     #svg;
     #optionsContainer;
     #optionsDivs;
@@ -38,6 +39,9 @@ export class DropdownList extends TitledComponent {
         ObserverCallbackOnAdded(this.div, this.DivAddedToPage);
         // ObserverCallbackOnAdded(this.#dropdown, this.DropdownAddedToPage);
         this.#selected = ui.CreateDivWithClass('ddSelected');
+        this.#selectedCost = ui.CreateDivWithClass('cost', 'inline', 'floating');
+        // this.#selectedCost.style.opacity = 0;
+        this.#selected.appendChild(this.#selectedCost);
         ui.MakeTabbable(this.#dropdown);
         if (options && options.length >= initialValue + 1) {
             ui.AddElementAttribute(this.#selected, 'data-label', options[initialValue]);
@@ -74,7 +78,7 @@ export class DropdownList extends TitledComponent {
             oInput.checked = isChecked;
             let oLabel = ui.CreateElementWithClass('label', 'ddOption');
             if (hasCost) { ui.AddClassToDOMs('withCost', oLabel); }
-            ui.AddElementAttributes(oLabel, ['for', 'data-txt'], [uniqueName, options[i]]);
+            ui.AddElementAttributes(oLabel, ['for', 'data-txt', 'data-cost'], [uniqueName, options[i], hasCost ? costs[i] : '']);
             // ensure correct checked background
             if (isChecked) {
                 oLabel.style.backgroundColor = GetCSSVariable('--ui-component-color-enabled-dark');
@@ -91,20 +95,21 @@ export class DropdownList extends TitledComponent {
             if (hasCost) {
                 if (costs[i] == null) {
                     this.#optionsCosts.push(null);
-                    continue;
-                }
-                let oCost = ui.CreateDivWithClass('cost', 'floating');
-                let oCostP = ui.CreateElement('p');
-                oCost.appendChild(oCostP);
-                oCostP.innerHTML = `${costs[i]}`;
-                this.#optionsCosts.push(oCost);
-                this.#optionsCostsP.push(oCostP);
-                oLabel.appendChild(oCost);
-                if (isChecked) {
-                    oCost.style.backgroundColor = GetCSSVariable('--color-ui-costToken-selected-bg-inner');
-                    oCost.style.borderColor = GetCSSVariable('--color-ui-costToken-selected');
-                    oCost.style.boxShadow = `0px 0px 0.69px 1.5px ${GetCSSVariable('--color-ui-costToken-selected-bg-outer')}`;
-                    oCostP.style.color = GetCSSVariable('--color-ui-costToken-selected');
+                    // continue;
+                } else {
+                    let oCost = ui.CreateDivWithClass('cost', 'floating');
+                    let oCostP = ui.CreateElement('p');
+                    oCost.appendChild(oCostP);
+                    oCostP.innerHTML = `${costs[i]}`;
+                    this.#optionsCosts.push(oCost);
+                    this.#optionsCostsP.push(oCostP);
+                    oLabel.appendChild(oCost);
+                    if (isChecked) {
+                        oCost.style.backgroundColor = GetCSSVariable('--color-ui-costToken-selected-bg-inner');
+                        oCost.style.borderColor = GetCSSVariable('--color-ui-costToken-selected');
+                        oCost.style.boxShadow = `0px 0px 0.69px 1.5px ${GetCSSVariable('--color-ui-costToken-selected-bg-outer')}`;
+                        oCostP.style.color = GetCSSVariable('--color-ui-costToken-selected');
+                    }
                 }
             }
             // add option div to options container
@@ -187,6 +192,16 @@ export class DropdownList extends TitledComponent {
 
     #updateSelection() {
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
+        console.log(this.selectionCost)
+        if (this.selectionCost === 'null' ||
+            isBlank(this.selectionCost)) {
+            this.#selected.style.marginRight = '-20px';
+            this.#selectedCost.style.opacity = 0;
+        } else {
+            this.#selectedCost.innerHTML = `<p>${this.selectionCost}</p>`;
+            this.#selectedCost.style.opacity = 1;
+            this.#selected.style.marginRight = '0px';
+        }
     }
 
     set selection(sel) { // this.optionsInputs[i]
@@ -228,6 +243,12 @@ export class DropdownList extends TitledComponent {
         if (i == -1) { return null; }
         // return this.#optionsInputs[i].id;
         return ui.GetAttribute(this.#optionsLabels[i], 'data-txt');
+    }
+
+    get selectionCost() {
+        let i = this.selectionIndex;
+        if (i == -1) { return null; }
+        return ui.GetAttribute(this.#optionsLabels[i], 'data-cost');
     }
 
     /** returns the index of the current selection 

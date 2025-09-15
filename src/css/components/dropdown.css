@@ -27,6 +27,8 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     padding: 5px;
     margin-bottom: 3px;
     border-radius: 5px;
+    /* margin-right: -25px; */
+    margin-right: -22px;
     position: relative;
     z-index: 21;
     display: flex;
@@ -38,7 +40,7 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
 .ddSelected::before {
     z-index: 22;
     content: attr(data-label);
-    margin-right: -22px;
+    /* margin-right: inherit; */
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
