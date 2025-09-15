@@ -7,6 +7,8 @@ import { Toggle, MutliOptionList, DropdownList, TextField } from "./components";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentData";
 import { pageHeaders } from "./uiData";
 
+const languageDropdown = true;
+
 function CreatePageIntro(page) {
     // ----------------------------- CREATE INTRO PAGE -----
     let p1 = ui.CreateElement('p');
@@ -78,6 +80,15 @@ function CreatePageFeatures(page) {
     featuresGrid.appendChild(moLabelling.div);
     featuresGrid.appendChild(moTitleBox.div);
     featuresGrid.appendChild(moLandLines.div);
+
+    if (languageDropdown) {
+        let ddLanguage = new DropdownList(
+            'Language', null,
+            ['a', 'b', 'c'],
+            null, null, 0
+        );
+        featuresGrid.appendChild(ddLanguage.div);
+    }
 
     // for (let i = 0; i < 6; i++) {
     //     let div = ui.CreateDivWithClass(i == 0 || i == 3 || i == 4 ? 'divA' : 'divB');

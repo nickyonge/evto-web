@@ -1,5 +1,5 @@
 import * as ui from "../ui";
-import { isBlank } from "../lilutils";
+import { GetParentWithClass, isBlank } from "../lilutils";
 import { HelpIcon } from "./helpicon";
 
 export class BasicComponent {

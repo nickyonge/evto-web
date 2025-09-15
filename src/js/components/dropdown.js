@@ -1,7 +1,7 @@
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
 import { ObserveNode, ObserverCallbackOnAdded } from "../mutationObserver";
-import { GetChildWithClass, GetCSSVariable, GetSiblingWithClass, isBlank } from "../lilutils";
+import { GetChildWithClass, GetCSSVariable, GetParentWithClass, GetSiblingWithClass, isBlank } from "../lilutils";
 // const initialValue = 0;
 
 const _smootherScroll = true;
@@ -144,8 +144,14 @@ export class DropdownList extends TitledComponent {
         // add resize event 
         window.addEventListener('resize', function () {
             // re-fire size assignment events on page resize
-            this.DropdownAddedToPage(this.#dropdown);
-            this.OptionsAddedToPage(this.#optionsContainer);
+            // update appearance after one-tick delay
+            window.setTimeout(() => {
+                // one tick delay
+                this.DivAddedToPage(this.div);
+                this.DropdownAddedToPage(this.#dropdown);
+                this.OptionsAddedToPage(this.#optionsContainer);
+            }, 0);
+            // this.DropdownAddedToPage(this.#dropdown);
         }.bind(this));
 
         // add help component
@@ -157,6 +163,7 @@ export class DropdownList extends TitledComponent {
 
     DivAddedToPage(target) { // this.div
         // add scroll event
+        let page = GetParentWithClass(target, 'page');
         if (_smootherScroll) {
             target.parentElement.addEventListener('scroll', () => {
                 requestAnimationFrame(() => {
@@ -178,8 +185,8 @@ export class DropdownList extends TitledComponent {
             });
         }
     }
-    DropdownAddedToPage(target) { // this.#dropdown 
-        // let listTitle = GetSiblingWithClass(target, 'listTitle');
+    DropdownAddedToPage(target) { // this.#dropdown
+        // ensure dropdown width fits page 
         target.style.width = `${target.parentElement.offsetWidth - 4.5}px`;
     }
     OptionsAddedToPage(target) { // this.#optionsContainer 

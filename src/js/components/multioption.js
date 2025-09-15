@@ -27,13 +27,14 @@ export class MutliOptionList extends TitledComponent {
         // create options
         for (let i = 0; i < options.length; i++) {
             // create input 
-            let input = ui.CreateInputWithID('radio', options[i]);
+            let uniqueName = `${this.uniqueComponentName}_o${i}`;
+            let input = ui.CreateInputWithID('radio', uniqueName);
             ui.AddElementAttribute(input, 'name', this.uniqueComponentName);
             input.defaultChecked = i == initialValue;
             this.#inputs.push(input);
             // create label
             let label = ui.CreateElementWithClass('label', 'value');
-            ui.AddElementAttribute(label, 'for', options[i]);
+            ui.AddElementAttribute(label, 'for', uniqueName);
             this.#labels.push(label);
             // create svg
             if (icons && icons.length >= i + 1 && icons[i]) {
