@@ -14,7 +14,8 @@ import iconSave from '../assets/svg/icons-red/icon-save.svg';
 import iconScale from '../assets/svg/icons-red/icon-scale.svg';
 import { CreatePageContent } from "./uiDataCreatePageContent";
 
-export const initialTab = 1;
+export const initialTab = 2;
+
 const bgFadeAlpha = 0.82;
 
 const useSeparators = false;

@@ -16,8 +16,11 @@ export class DropdownList extends TitledComponent {
     #optionsInputs;
     #optionsLabels;
     #optionsCosts;
+    #optionsCostsP;
 
     static _dropdownMaxHeight = -1;
+
+    #initialChange = false;
 
     constructor(componentTitle, onSelectCallback, options, costs, icons) {
         super(componentTitle);
@@ -26,7 +29,6 @@ export class DropdownList extends TitledComponent {
             DropdownList._dropdownMaxHeight = parseInt(GetCSSVariable('--ui-component-dropdown-max-height'), 10);
         }
 
-        // TODO: fix initial option appearance
         // TODO: token display in selected dropdown option 
 
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
@@ -56,20 +58,27 @@ export class DropdownList extends TitledComponent {
         this.#optionsInputs = [];
         this.#optionsLabels = [];
         this.#optionsCosts = [];
+        this.#optionsCostsP = [];
         this.#optionsContainer = ui.CreateDivWithClass('ddOptions');
         ObserverCallbackOnAdded(this.#optionsContainer, this.OptionsAddedToPage);
         // iterate thru options 
         for (let i = 0; i < options.length; i++) {
             // create elements
+            let isChecked = i == initialValue;
             let hasCost = (costs && costs.length > i);
             let oDiv = ui.CreateDiv();
             let uniqueName = `${this.uniqueComponentName}_o${i}`;
             let oInput = ui.CreateInputWithID('radio', uniqueName);
             ui.AddElementAttribute(oInput, 'name', 'ddOption');
-            oInput.defaultChecked = i == initialValue;
+            oInput.defaultChecked = isChecked;
+            oInput.checked = isChecked;
             let oLabel = ui.CreateElementWithClass('label', 'ddOption');
             if (hasCost) { ui.AddClassToDOMs('withCost', oLabel); }
             ui.AddElementAttributes(oLabel, ['for', 'data-txt'], [uniqueName, options[i]]);
+            // ensure correct checked background
+            if (isChecked) {
+                oLabel.style.backgroundColor = GetCSSVariable('--ui-component-color-enabled-dark');
+            }
             // push to arrays
             this.#optionsDivs.push(oDiv);
             this.#optionsInputs.push(oInput);
@@ -85,21 +94,40 @@ export class DropdownList extends TitledComponent {
                     continue;
                 }
                 let oCost = ui.CreateDivWithClass('cost', 'floating');
-                oCost.innerHTML = `<p>${costs[i]}</p>`;
+                let oCostP = ui.CreateElement('p');
+                oCost.appendChild(oCostP);
+                oCostP.innerHTML = `${costs[i]}`;
                 this.#optionsCosts.push(oCost);
+                this.#optionsCostsP.push(oCostP);
                 oLabel.appendChild(oCost);
+                if (isChecked) {
+                    oCost.style.backgroundColor = GetCSSVariable('--color-ui-costToken-selected-bg-inner');
+                    oCost.style.borderColor = GetCSSVariable('--color-ui-costToken-selected');
+                    oCost.style.boxShadow = `0px 0px 0.69px 1.5px ${GetCSSVariable('--color-ui-costToken-selected-bg-outer')}`;
+                    oCostP.style.color = GetCSSVariable('--color-ui-costToken-selected');
+                }
             }
             // add option div to options container
             this.#optionsContainer.appendChild(oDiv);
 
-            // create callback
+            // create change callback
             oInput.addEventListener('change', (event) => {
                 this.#updateSelection();
                 if (onSelectCallback) {
                     onSelectCallback(event.target.id);
                 }
+                if (!this.#initialChange) {
+                    // initial option wasn't appearing as selected, manually set and un-set appearance 
+                    this.#optionsLabels[initialValue].style.backgroundColor = null;
+                    this.#initialChange = true;
+                    if (this.#optionsCosts != null && this.#optionsCosts.length > initialValue && this.#optionsCosts[initialValue] != null) {
+                        this.#optionsCosts[initialValue].style.backgroundColor = null;
+                        this.#optionsCosts[initialValue].style.borderColor = null;
+                        this.#optionsCosts[initialValue].style.boxShadow = null;
+                        this.#optionsCostsP[initialValue].style.color = null;
+                    }
+                }
             });
-
         }
         // add elements 
         this.div.appendChild(this._titleElement);
@@ -117,6 +145,9 @@ export class DropdownList extends TitledComponent {
 
         // add help component
         this._addHelpIcon(`help me! ${componentTitle}`);
+
+        // set initial selection 
+        this.#forceSelectionIndex = initialValue;
     }
 
     DivAddedToPage(target) { // this.div
@@ -158,7 +189,7 @@ export class DropdownList extends TitledComponent {
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
     }
 
-    set selection(sel) {
+    set selection(sel) { // this.optionsInputs[i]
         if (sel == this.selection) { return; }
         if (!this.#isValidSelection(sel)) {
             console.warn(`WARNING: can't assign invalid selection ${sel}`);
@@ -185,6 +216,10 @@ export class DropdownList extends TitledComponent {
         }
         this.#updateSelection();
     }
+    set #forceSelectionIndex(index) {
+        this.#_forceSI = true;
+        this.selectionIndex = index;
+    }
 
     /** returns the text of the current selection 
      * @returns {string} text value of the current selection, or `null` if none/invalid */
@@ -198,6 +233,7 @@ export class DropdownList extends TitledComponent {
     /** returns the index of the current selection 
      * @returns {number} integer index of the current selection, or `-1` if none/invalid */
     get selectionIndex() {
+        if (this.#_forceSI) { this.#_forceSI = false; return -1; }
         if (!this.#optionsInputs) {
             return -1;
         }
@@ -208,6 +244,7 @@ export class DropdownList extends TitledComponent {
         }
         return -1;
     }
+    #_forceSI = false;
 
     #isValidSelection(s) {
         for (let i = 0; i < this.#optionsInputs.length; i++) {

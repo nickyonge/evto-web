@@ -22,7 +22,7 @@ function CreatePageSize(page) {
     let tgBoost = new Toggle('Size Boost', null, false);
     page.appendChild(tgBoost.div);
 
-    let txInfo = new TextField(txt.LIPSUM_FULL);
+    let txInfo = new TextField(txt.LIPSUM);
     page.appendChild(txInfo.div);
 
 }
