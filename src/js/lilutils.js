@@ -107,6 +107,23 @@ export function GetSiblingWithClass(element, cssClass) {
     return null;
 }
 /**
+ * Returns all siblings of the given element with the given class found.
+ * @param {HTMLElement} element source element to search siblings 
+ * @param {string} cssClass class name to check for
+ * @returns {HTMLElement[]} all sibling elements with class
+ */
+export function GetAllSiblingsWithClass(element, cssClass) {
+    let siblings = GetAllSiblings(element);
+    if (siblings.length == 0) { return null; }
+    let siblingsWithClass = [];
+    for (let i = 0; i < siblings.length; i++) {
+        if (ElementHasClass(siblings[i], cssClass)) {
+            siblingsWithClass.push(siblings[i]);
+        }
+    }
+    return siblingsWithClass;
+}
+/**
  * Returns the first child of the given element with the given class found. 
  * If none are found, returns null 
  * @param {HTMLElement} parentElement source parent element to search the children of 
@@ -120,6 +137,21 @@ export function GetChildWithClass(parentElement, cssClass) {
         }
     }
     return null;
+}
+/**
+ * Returns all children of the given element with the given class found
+ * @param {HTMLElement} parentElement source parent element to search the children of 
+ * @param {string} cssClass class name to check for 
+ * @returns {HTMLElement[]} child elements with class
+ */
+export function GetAllChildrenWithClass(parentElement, cssClass) {
+    let children = [];
+    for (const child of parentElement.children) {
+        if (ElementHasClass(child, cssClass)) {
+            children.push(child);
+        }
+    }
+    return children;
 }
 /**
  * Returns the first parent of the given element with the given class found. 
@@ -137,6 +169,23 @@ export function GetParentWithClass(childElement, cssClass) {
         }
     }
     return null;
+}
+/**
+ * Returns all parents of the given element with the given class found. 
+ * @param {HTMLElement} childElement source child element to search the parents of 
+ * @param {string} cssClass class name to check for 
+ * @returns {HTMLElement[]} parent elements with class, or null
+ */
+export function GetAllParentsWithClass(childElement, cssClass) {
+    let parents = GetAllParents(childElement);
+    if (parents == []) { return null; }
+    let parentsWithClass = [];
+    for (let i = 0; i < parents.length; i++) {
+        if (ElementHasClass(parents[i], cssClass)) {
+            parentsWithClass.push(parents[i]);
+        }
+    }
+    return parentsWithClass;
 }
 /**
  * Convenience method, just checks if the given element has the given CSS class
