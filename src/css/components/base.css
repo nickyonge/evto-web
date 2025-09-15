@@ -14,22 +14,10 @@
 }
 
 .uiComponent .cost {
-    /* display: inline-block; */
-    /* float: right; */
-    /* float: inline-end; */
-    /* vertical-align: middle; */
     text-align: center;
     align-content: center;
-    /* align-items: center; */
     margin-left: auto;
-    /* justify-content: start; */
-    /* align-self: flex-start; */
     margin-right: 5px;
-    /* line-height: 0; */
-    /* top: 10px; */
-    /* margin-top: 0;
-    margin-bottom: auto; */
-    /* background-color: red; */
     height: 15px;
     border-radius: 100%;
     aspect-ratio: 1;
@@ -41,29 +29,24 @@
     -moz-user-select: none;
     -webkit-user-select: none;
     transition: 100ms;
-    /* z-index: 5; */
+    background-color: var(--color-ui-costToken-default-bg-inner);
+    box-shadow: 0px 0px 0.69px 1.5px var(--color-ui-costToken-default-bg-outer);
 }
 .uiComponent .cost.floating {
-    /* display: none; */
     position: absolute;
     right: 0;
     transform: translate(0px, -100%);
 }
 .uiComponent .cost.inline {
-    /* position: relative; */
     display: inline-block;
-    /* display: none; */
     height: 16px;
     vertical-align: -3px;
     margin-left: 5px;
     margin-right: 0px;
-    /* align-self: flex-start; */
-    /* right: 0; */
-    /* transform: translate(0px, -100%); */
 }
 .uiComponent .cost.darkBG {
-    background-color: var(--color-ui-costToken-default-bg-inner);
-    box-shadow: 0px 0px 0.69px 1.5px var(--color-ui-costToken-default-bg-outer);
+    background-color: var(--color-ui-costToken-default-bg-inner-dark);
+    box-shadow: 0px 0px 0.69px 1.5px var(--color-ui-costToken-default-bg-outer-dark);
 }
 .uiComponent .cost > p {
     font-size: 8pt;
@@ -73,52 +56,24 @@
     line-height: 0px;
     transition: none;
 }
-/* [type="radio"] */
-.uiComponent input:checked ~ label .cost.darkBG {
-    background-color: var(--color-ui-costToken-selected-bg-inner);
-    box-shadow: 0px 0px 0.69px 1.5px var(--color-ui-costToken-selected-bg-outer);
-}
 .uiComponent input:checked ~ label .cost.floating,
 .uiComponent input:checked ~ label .cost.inline,
 .uiComponent input[type="radio"]:checked + label .cost {
+    background-color: var(--color-ui-costToken-selected-bg-inner);
     border-color: var(--color-ui-costToken-selected);
+    box-shadow: 0px 0px 0.69px 1.5px var(--color-ui-costToken-selected-bg-outer);
 }
 .uiComponent input:checked ~ label .cost.floating > p,
 .uiComponent input:checked ~ label .cost.inline > p,
 .uiComponent input[type="radio"]:checked + label .cost > p {
     color: var(--color-ui-costToken-selected);
 }
-
-/* 
-.toggleLabel {
-  display: flex;
-  align-items: center;
-  cursor: pointer;
+.uiComponent input:checked ~ label .cost.darkBG {
+    background-color: var(--color-ui-costToken-selected-bg-inner-dark);
+    box-shadow: 0px 0px 0.69px 1.5px var(--color-ui-costToken-selected-bg-outer-dark);
 }
-.switchtitle {
-  color: #e2e1e3;
-  font-size: 12pt;
-  margin-right: 8px;
-  opacity: 0.8;
-  transition: opacity 0.2s;
-}
-
-.listtitle {
-  color: #e2e1e3;
-  
-  display: flex;
-  font-size: 12pt;
-  margin: 4px;
-}
-
-
-
-.select {
-  width: fit-content;
-  cursor: pointer;
-  position: relative;
-  transition: 300ms;
-  color: white;
-  overflow: hidden;
-} 
-*/
+/* cost inidicators: in general, 
+ - normal: basic everywhere + multioption, 
+ - floating: dropdown,
+ - inline + darkBG: toggle,
+ - input[type="radio"] + label: multioption */
