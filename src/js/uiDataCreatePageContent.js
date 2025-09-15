@@ -15,15 +15,20 @@ function CreatePageIntro(page) {
 }
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
-
-    let moSize = new MutliOptionList('Size', null, ['Small', 'Medium', 'Large'], [1, 2, 3]);
-    page.appendChild(moSize.div);
-
-    let tgBoost = new Toggle('Size Boost', null, false);
-    page.appendChild(tgBoost.div);
-
+    
     let txInfo = new TextField(txt.LIPSUM);
     page.appendChild(txInfo.div);
+
+    let moSize = new MutliOptionList('Size', null,
+        [
+            `${txt.SIZE_SM}, <i>10x20"</i>`,
+            `&nbsp;&nbsp;${txt.SIZE_SMP}, <i>12x24"</i>`,
+            `${txt.SIZE_MD}, <i>16x32"</i>`,
+            `&nbsp;&nbsp;${txt.SIZE_MDP}, <i>18x36"</i>`,
+            `${txt.SIZE_LG}, <i>20x40"</i>`,
+            `&nbsp;&nbsp;${txt.SIZE_LGP}, <i>24x48"</i>`,
+        ], [1, 2, 3, 4, 5, 6]);
+    page.appendChild(moSize.div);
 
 }
 function CreatePageFeatures(page) {
@@ -81,14 +86,14 @@ export function CreatePageContent(page) {
 function DemoPageContent(page) {
 
     // let dd = new DropdownList('dropdown', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam']);
-    let dd1 = new DropdownList('dropdown1', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam'], [1,null,0]);
+    let dd1 = new DropdownList('dropdown1', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam'], [1, null, 0]);
     let dd = new DropdownList('dropdown2', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam', 'a', 'b', 'c', '1235387235897293859823598729387592359792837598', 'test', 'ewbai']);
     // function dCallback() { console.log(`changed: ${dd.selection}`); }
     function dCallback(selection) { console.log(`changed: ${selection}`); }
     page.appendChild(dd1.div);
     page.appendChild(dd.div);
 
-    let mo = new MutliOptionList('multi', mCallback, ['a','b','c'], [1,2,3]);
+    let mo = new MutliOptionList('multi', mCallback, ['a', 'b', 'c'], [1, 2, 3]);
     function mCallback() { console.log(`changed: ${mo.selection}`); }
     // function mCallback(selection) { console.log(`changed: ${selection}`); }
     page.appendChild(mo.div);
