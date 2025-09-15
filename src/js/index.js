@@ -14,14 +14,16 @@ window.addEventListener('load', function () {
     SetupArtWindow();
 
     // load complete 
-    for (let i = 0; i < _onLoadCompleteCallbacks.length; i++) {
-        _onLoadCompleteCallbacks[i]();
-    }
-    _onLoadCompleteCallbacks = [];
 
     // post-load timeout 
     this.setTimeout(() => {
         // one tick after loading
+        // on load complete callbacks 
+        for (let i = 0; i < _onLoadCompleteCallbacks.length; i++) {
+            _onLoadCompleteCallbacks[i]();
+        }
+        _onLoadCompleteCallbacks = [];
+        // disconnect mutation observer
         DisconnectObserver();
     }, 0);
 });
