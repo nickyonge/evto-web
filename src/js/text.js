@@ -26,9 +26,11 @@ export const SLIDING_BUTTON = "Live now on Kickstarter!";
 
 // --------- INTRO PAGE -----------------------
 export const PG_TITLE_INTRO = "<i>Everywhere Together</i> Canvas Visualizer";
+export const PG_TITLE_INTRO_SHORTER = ["Canvas Visualizer", "Visualizer", "Intro"];
 
 // --------- SIZE PAGE ------------------------
-export const PG_TITLE_SIZE = "Canvas Size";
+export const PG_TITLE_SIZE = "Canvas Size Selection";
+export const PG_TITLE_SIZE_SHORTER = ["Canvas Size", "Map Size", "Size"];
 export const SIZE_SM = "Small";
 export const SIZE_SMP = "Small Plus";
 export const SIZE_MD = "Medium";
@@ -38,12 +40,15 @@ export const SIZE_LGP = "Large Plus";
 
 // --------- FEATURES PAGE --------------------
 export const PG_TITLE_FEATURES = "Map Features & Details";
+export const PG_TITLE_FEATURES_SHORTER = ["Features & Details", "Map Features", "Features"];
 
 // --------- COLOUR & PATTERN PAGE ------------
-export const PG_TITLE_PATTERN = "Map Colours & Design";
+export const PG_TITLE_PATTERN = "Map Colours & Design Pattern";
+export const PG_TITLE_PATTERN_SHORTER = ["Colours & Design Pattern", "Colours & Pattern", "Design Pattern", "Map Pattern", "Pattern"]
 
 // --------- SAVE & LOAD PAGE -----------------
 export const PG_TITLE_SAVE = "Save & Load Map Info";
+export const PG_TITLE_SAVE_SHORTER = ["Save & Load Map", "Save & Load", "Save/Load", "Save"];
 
 // --------- SIDEBAR / TABS -------------------
 /** total pages count: intro, size, features, colour/pattern, save/load */
@@ -52,6 +57,7 @@ export const PAGES_COUNT = PAGE_NAMES.length;
 // TODO: replace txt.PAGES_COUNT with somethinig better. theoretically the number of pages overall shouldn't be defined by text class, but whatever, it works
 
 export const PAGE_TITLES = [PG_TITLE_INTRO, PG_TITLE_SIZE, PG_TITLE_FEATURES, PG_TITLE_PATTERN, PG_TITLE_SAVE];
+export const PAGE_TITLES_SHORTER = [PG_TITLE_INTRO_SHORTER, PG_TITLE_SIZE_SHORTER, PG_TITLE_FEATURES_SHORTER, PG_TITLE_PATTERN_SHORTER, PG_TITLE_SAVE_SHORTER];
 
 // ============= ART WINDOW ==============================
 

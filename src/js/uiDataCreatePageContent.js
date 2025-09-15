@@ -5,12 +5,12 @@ import * as txt from './text';
 import * as cost from './costs';
 import { Toggle, MutliOptionList, DropdownList, TextField } from "./components";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentData";
-import { GetPageNumberByID } from "./uiData";
+import { pageHeaders } from "./uiData";
 
 function CreatePageIntro(page) {
     // ----------------------------- CREATE INTRO PAGE -----
     let p1 = ui.CreateElement('p');
-    p1.innerHTML = "Lorem ipsum doler set amit";
+    p1.innerHTML = txt.LIPSUM;
     page.appendChild(p1);
 }
 function CreatePageSize(page) {
@@ -38,7 +38,6 @@ function CreatePageSize(page) {
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE -----
-    
 
     let featuresGrid = ui.CreateDivWithClass('grid');
     page.appendChild(featuresGrid);
@@ -69,8 +68,8 @@ function CreatePageFeatures(page) {
     );
     let moLandLines = new MutliOptionList(
         'Land Lines', null,
-        ['a', 'b', 'c'],
-        [1, 2, 3],
+        ['a', 'b', 'c', 'd', 'e'],
+        [1, 2, 3, 4, 5],
         null, 0
     );
 
@@ -107,7 +106,7 @@ export function CreatePageContent(page) {
 
     // universal page header
     let header = ui.CreateElement('h2');
-    header.innerHTML = txt.PAGE_TITLES[GetPageNumberByID(page.id)];
+    pageHeaders.push(header);
     page.appendChild(header);
 
     // separate functions for each so I don't have to worry about variable name conflicts 
@@ -130,7 +129,6 @@ export function CreatePageContent(page) {
 
         default:
             throw new Error(`ERROR: invalid page ID, can't create page content. Page ID: ${page.id}, index: ${i}`);
-
     }
 }
 

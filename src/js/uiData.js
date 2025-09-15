@@ -13,11 +13,12 @@ import iconHome from '../assets/svg/icons-red/icon-home.svg';
 import iconSave from '../assets/svg/icons-red/icon-save.svg';
 import iconScale from '../assets/svg/icons-red/icon-scale.svg';
 import { CreatePageContent } from "./uiDataCreatePageContent";
+import { CallOnLoadComplete } from ".";
 
 export const initialTab = 2;
 
+const maxTitleHeight = 30;
 const bgFadeAlpha = 0.82;
-
 const useSeparators = false;
 
 const iconArray = [iconHome, iconScale, iconFeatures, iconArt, iconSave];
@@ -29,6 +30,7 @@ let currentPage = -1;
 let tabs;
 let content;
 let pages = [];
+export let pageHeaders = [];
 
 
 // ----------------------------------------------------- UI CREATION ----- 
@@ -90,6 +92,8 @@ function CreatePages() {
     content = ui.CreateDivWithClass('content');
     dataWindow.appendChild(content);
     // create pages
+    pages = [];
+    pageHeaders = [];
     for (let i = 0; i < txt.PAGES_COUNT; i++) {
         let page = ui.CreateDivWithClass('page', pageIDs[i], tabColors[i]);
         // page.id = `page${i}`; // page ID is numeric
@@ -100,6 +104,12 @@ function CreatePages() {
         // external page content creation function
         CreatePageContent(page);
     }
+    // add resize event 
+    window.addEventListener('resize', function () {
+        UpdatePageTitles();
+    });
+    // callback on added
+    CallOnLoadComplete(UpdatePageTitles);
 }
 
 /** creates the gradient fade element that sits atop the solid colour background */
@@ -108,6 +118,32 @@ function CreateFadeBG() {
     dataWindow.appendChild(fadeBG);
 }
 
+// ------------------------------------- SPECIFIC METHODS ----------------
+
+function UpdatePageTitles() {
+    // update the title, and iterate thru alt shorter titles 
+    //   until a single-line one is found
+    for (let i = 0; i < pageHeaders.length; i++) {
+        pageHeaders[i].innerHTML = txt.PAGE_TITLES[i];
+        pageHeaders[i].style.whiteSpace = 'normal';
+        if (TooTall()) {
+            for (let j = 0; j < txt.PAGE_TITLES_SHORTER[i].length; j++) {
+                pageHeaders[i].innerHTML = txt.PAGE_TITLES_SHORTER[i][j];
+                if (j == txt.PAGE_TITLES_SHORTER[i].length - 1) {
+                    pageHeaders[i].style.whiteSpace = 'nowrap';
+                } else {
+                    if (!TooTall()) {
+                        break;
+                    }
+                }
+            }
+        }
+        // determine if height is too tall 
+        function TooTall() {
+            return pageHeaders[i].offsetHeight > maxTitleHeight;
+        }
+    }
+}
 
 // ------------------------------------- UI SELECTION AND NAVIGATION ----- 
 
