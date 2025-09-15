@@ -39,7 +39,7 @@ export class DropdownList extends TitledComponent {
         ObserverCallbackOnAdded(this.div, this.DivAddedToPage);
         // ObserverCallbackOnAdded(this.#dropdown, this.DropdownAddedToPage);
         this.#selected = ui.CreateDivWithClass('ddSelected');
-        this.#selectedCost = ui.CreateDivWithClass('cost', 'inline', 'floating');
+        this.#selectedCost = ui.CreateDivWithClass('cost', 'inline', 'floating', 'forceSelected');
         // this.#selectedCost.style.opacity = 0;
         this.#selected.appendChild(this.#selectedCost);
         ui.MakeTabbable(this.#dropdown);
