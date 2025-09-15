@@ -73,14 +73,14 @@ export function GetAllSiblings(element) {
         filter(sibling => sibling !== element);
 }
 /**
- * Get all parent elements to the given element
- * @param {HTMLElement} element 
+ * Get all parent elements to the given child element
+ * @param {HTMLElement} child 
  * @returns {HTMLElement[]}
  */
-export function GetAllParents(element) {
-    if (element == null || element.parentElement == null) { return []; }
+export function GetAllParents(child) {
+    if (child == null || child.parentElement == null) { return []; }
     let parents = [];
-    let currentElement = element;
+    let currentElement = child;
     while (currentElement && currentElement !== document.body && currentElement !== document.documentElement) {
         currentElement = currentElement.parentNode;
         if (currentElement) { // Ensure currentElement is not null before pushing
@@ -88,6 +88,23 @@ export function GetAllParents(element) {
         }
     }
     return parents;
+}
+/**
+ * Get all children of the given element, optionally recursively getting subsequent children
+ * @param {HTMLElement} parent parent element
+ * @param {boolean} [recursive = true] include children of children? default true
+ * @returns {HTMLElement[]}
+ */
+export function GetAllChildren(parent, recursive = true) {
+    if (!recursive) { return [...parent.children]; }
+    let children = [];
+    for (const child of parent.children) {
+        children.push(child);
+        if (child.children.length > 0) {
+            children = children.concat(GetAllChildren(child, true));
+        }
+    }
+    return children;
 }
 /**
  * Returns the first sibling of the given element with the given class found. 
@@ -114,7 +131,7 @@ export function GetSiblingWithClass(element, cssClass) {
  */
 export function GetAllSiblingsWithClass(element, cssClass) {
     let siblings = GetAllSiblings(element);
-    if (siblings.length == 0) { return null; }
+    if (siblings.length == 0) { return []; }
     let siblingsWithClass = [];
     for (let i = 0; i < siblings.length; i++) {
         if (ElementHasClass(siblings[i], cssClass)) {
@@ -145,13 +162,15 @@ export function GetChildWithClass(parentElement, cssClass) {
  * @returns {HTMLElement[]} child elements with class
  */
 export function GetAllChildrenWithClass(parentElement, cssClass) {
-    let children = [];
-    for (const child of parentElement.children) {
-        if (ElementHasClass(child, cssClass)) {
-            children.push(child);
+    let children = GetAllChildren(parentElement);
+    if (children == []) { return null; }
+    let childrenWithClass = [];
+    for (let i = 0; i < children.length; i++) {
+        if (ElementHasClass(children[i], cssClass)) {
+            childrenWithClass.push(children[i]);
         }
     }
-    return children;
+    return childrenWithClass;
 }
 /**
  * Returns the first parent of the given element with the given class found. 
@@ -178,7 +197,7 @@ export function GetParentWithClass(childElement, cssClass) {
  */
 export function GetAllParentsWithClass(childElement, cssClass) {
     let parents = GetAllParents(childElement);
-    if (parents == []) { return null; }
+    if (parents == []) { return []; }
     let parentsWithClass = [];
     for (let i = 0; i < parents.length; i++) {
         if (ElementHasClass(parents[i], cssClass)) {
