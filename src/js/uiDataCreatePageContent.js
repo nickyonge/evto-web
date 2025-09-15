@@ -93,8 +93,11 @@ function DemoPageContent(page) {
     // function mCallback(selection) { console.log(`changed: ${selection}`); }
     page.appendChild(mo.div);
 
-    let tg = new Toggle("toggle", tCallback);
+    let tg = new Toggle("toggle", tCallback, 0);
     // function tCallback() { console.log('checked: ' + tg.checked); }
     function tCallback(checked) { console.log('checked: ' + checked); }
     page.appendChild(tg.div);
+    let tg2 = new Toggle("toggle2", tCallback, 0);
+    // function tCallback() { console.log('checked: ' + tg.checked); }
+    page.appendChild(tg2.div);
 }

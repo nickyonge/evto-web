@@ -21,7 +21,11 @@
     --color-ui-active: #beeeef;
 
     --color-ui-costToken: #90e88f;
-    --color-ui-costToken-dark: #5584b9;
+    --color-ui-costToken-bg-inner: #4b585c;
+    --color-ui-costToken-bg-outer: #4f7e4e69;
+    --color-ui-costToken-selected: #90e88f;
+    --color-ui-costToken-selected-bg-inner: #4b585c;
+    --color-ui-costToken-selected-bg-outer: #4f7e4e69;
 
     --ui-overlay-color-title: #403c8a;
     --ui-overlay-color-text: #081a3e;
@@ -30,6 +34,7 @@
     --ui-overlay-margin-titlegap: 6px;
 
     --color-bg-solid: #beeeef;
+    --color-bg-solid-semitransparent: #beeeef69;
     /* TODO: wide/short replace bg solid with linear gradient */
     --color-bg-gradient-1: #4e89db;
     --color-bg-gradient-2: #4680db;

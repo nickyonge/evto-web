@@ -6,6 +6,7 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
 }
 
 .listselect {
+    padding: 0px;
     width: 100%;
     background-color: var(--ui-component-color-bg);
     border-radius: var(--ui-component-border-radius);
