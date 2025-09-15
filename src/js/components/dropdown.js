@@ -81,7 +81,7 @@ export class DropdownList extends TitledComponent {
                     this.#optionsCosts.push(null);
                     continue;
                 }
-                let oCost = ui.CreateDivWithClass('cost', 'floating');
+                let oCost = ui.CreateDivWithClass('cost', 'floating', 'darkBG');
                 oCost.innerHTML = `<p>${costs[i]}</p>`;
                 this.#optionsCosts.push(oCost);
                 oLabel.appendChild(oCost);
