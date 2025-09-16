@@ -88,6 +88,7 @@ h3 {
 
 header {
     grid-area: header;
+    pointer-events: none;
 }
 artWindow {
     grid-area: artWindow;
@@ -97,6 +98,13 @@ dataWindow {
 }
 footer {
     grid-area: footer;
+    pointer-events: none;
+}
+header > .hdrContent {
+    pointer-events: auto;
+}
+footer > .ftrContent {
+    pointer-events: auto;
 }
 
 

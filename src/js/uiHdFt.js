@@ -6,6 +6,7 @@ import svgBluesky from '../assets/svg/bluesky.svg';
 
 import * as ui from './ui';
 import * as txt from './text';
+import { GetAllChildren } from './lilutils';
 
 /**
  * Creates the Header (topBar) and Footer (btmBar) for the page
@@ -32,16 +33,13 @@ function CreateTopBar(topBar) {
 }
 
 function CreateHamburgerButton() {
-    let btn = document.createElement('label');
-    btn.setAttribute('class', 'burger');
-    btn.setAttribute('for', 'burger');
-    let input = document.createElement('input');
-    input.setAttribute('type', 'checkbox');
-    input.setAttribute('id', 'burger');
+    let btn = ui.CreateElementWithClass('label', 'burger', 'hdrContent');
+    ui.AddElementAttribute(btn, 'for', 'burger');
+    let input = ui.CreateInputWithID('checkbox', 'burger');
     btn.appendChild(input);
-    btn.appendChild(document.createElement('span'));
-    btn.appendChild(document.createElement('span'));
-    btn.appendChild(document.createElement('span'));
+    btn.appendChild(ui.CreateElement('span'));
+    btn.appendChild(ui.CreateElement('span'));
+    btn.appendChild(ui.CreateElement('span'));
     ui.MakeTabbableWithInputTo(btn, input);
     return btn;
 }
@@ -71,6 +69,10 @@ function CreateBottomBar(btmBar) {
     btmBar.appendChild(mailGroup);
     // create sliding button
     btmBar.appendChild(CreateSlidingButton());
+    // iterate thru all footer content
+    ui.AddClassToDOMs('ftrContent', ...GetAllChildren(btmBar, false));
+    // GetAllChildren(btmBar, false).forEach(child => {
+    // });
 }
 function CreateSocialButton(name) {
     let li = ui.CreateElementWithClass('li', 'icon', name.toLowerCase());
