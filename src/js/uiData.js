@@ -126,7 +126,6 @@ function CreateFadeBG() {
 // ------------------------------------- SPECIFIC METHODS ----------------
 
 function PagesCreated() {
-    console.log("pages created");
     pageComponents = new Array(pages.length);
     pages.forEach(page => {
         // record all components 
@@ -136,26 +135,16 @@ function PagesCreated() {
         for (let i = 0; i < componentDivs.length; i++) {
             components.push(BasicComponent.GetComponentByDiv(componentDivs[i]));
         }
-        console.log("COMPONENTS ON PAGE " + page.id + ": " + components);
         pageComponents[pageNumber] = components;
-        // console.log("COMP: " + pageComponents);
-        // add scroll events 
         page.addEventListener('scroll', OnScroll);
     });
-
-    console.log(pageComponents);
-
     UpdatePages();
 }
 
 function OnScroll(e) {
-    // console.log(e.target);
     let pageNumber = GetPageNumberByID(e.target.id);
     pageComponents[pageNumber].forEach(component => {
-        console.log("Scrolled on comp: " + component);
-        console.log("Scrolled ONSCROLL: " + component.onScroll);
-        if (component.onScroll != undefined) {
-            console.log("HECK");
+        if (component.onScroll) {
             component.onScroll();
         }
     });

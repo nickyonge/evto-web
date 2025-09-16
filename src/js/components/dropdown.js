@@ -37,7 +37,6 @@ export class DropdownList extends TitledComponent {
         this.#dropdown = ui.CreateDivWithClass('dropdown');
         ObserverCallbackOnAdded(this.#dropdown, this.DropdownAddedToPage);
         ObserverCallbackOnAdded(this.div, this.DivAddedToPage);
-        // ObserverCallbackOnAdded(this.#dropdown, this.DropdownAddedToPage);
         this.#selected = ui.CreateDivWithClass('ddSelected');
         this.#selectedCost = ui.CreateDivWithClass('cost', 'inline', 'floating', 'forceSelected');
         // this.#selectedCost.style.opacity = 0;
@@ -115,6 +114,11 @@ export class DropdownList extends TitledComponent {
             // add option div to options container
             this.#optionsContainer.appendChild(oDiv);
 
+            // add animation complete callback
+            this.#optionsContainer.addEventListener('transitionend', () => {
+                this.PositionUpdate(this.div);
+            });
+
             // create change callback
             oInput.addEventListener('change', (event) => {
                 this.#updateSelection();
@@ -147,7 +151,8 @@ export class DropdownList extends TitledComponent {
             // update appearance after one-tick delay
             window.setTimeout(() => {
                 // one tick delay
-                this.DivAddedToPage(this.div);
+                this.PositionUpdate(this.div);
+                // this.DivAddedToPage(this.div);
                 this.DropdownAddedToPage(this.#dropdown);
                 this.OptionsAddedToPage(this.#optionsContainer);
             }, 0);
@@ -157,20 +162,50 @@ export class DropdownList extends TitledComponent {
         // add help component
         this._addHelpIcon(`help me! ${componentTitle}`);
 
-        // this.onScroll = () => { console.log("HECK") };
-        this.onScroll = this.Test;
+        this.onScroll = () => { this.PositionUpdate(this.div); };
 
         // set initial selection 
         this.#forceSelectionIndex = initialValue;
     }
 
-    Test() { console.log("HI"); }
+    PositionUpdate(div) { // this.div
+        const title = GetChildWithClass(div, 'componentTitle');
+        const dropdown = GetChildWithClass(div, 'dropdown');
+        const titleRect = title.getBoundingClientRect();
+        dropdown.style.top = `${titleRect.bottom}px`;
 
+        const ddSelected = GetChildWithClass(dropdown, 'ddSelected');
+        // parent page 
+        let page = GetParentWithClass(div, 'page');
+        let ddSelRect = ddSelected.getBoundingClientRect();
+        let pageRect = page.getBoundingClientRect();
+
+        let clip = ddSelRect.bottom - pageRect.bottom;
+
+        let dropdownPointerEvents = 'auto';
+        let ddSelPointerEvents = 'auto';
+        if (clip < 0) {
+            // fully displayed
+            clip = 0;
+        } else if (clip > ddSelRect.height) {
+            // fully hidden 
+            clip = ddSelRect.height;
+            dropdownPointerEvents = 'none';
+            ddSelPointerEvents = 'none';
+        } else {
+            // middle of transition 
+            dropdownPointerEvents = 'none';
+        }
+        dropdown.style.pointerEvents = dropdownPointerEvents;
+        ddSelected.style.pointerEvents = ddSelPointerEvents;
+        ddSelected.style.clipPath = `inset(0px 0px ${clip}px 0px)`;
+    }
     DivAddedToPage(target) { // this.div
         // add scroll event
         if (_smootherScroll) {
             target.parentElement.addEventListener('scroll', () => {
                 requestAnimationFrame(() => {
+                    this.PositionUpdate(target);
                     const title = GetChildWithClass(target, 'componentTitle');
                     const dropdown = GetChildWithClass(target, 'dropdown');
                     const titleRect = title.getBoundingClientRect();
@@ -203,7 +238,6 @@ export class DropdownList extends TitledComponent {
 
     #updateSelection() {
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
-        console.log(this.selectionCost)
         if (this.selectionCost === 'null' ||
             isBlank(this.selectionCost)) {
             this.#selected.style.marginRight = '-20px';
