@@ -5,7 +5,9 @@ import * as txt from './text';
 import * as cost from './costs';
 import { Toggle, MutliOptionList, DropdownList, TextField } from "./components";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentData";
-import { pageHeaders } from "./uiData";
+import { GetPageNumberByID, pageComponents, pageHeaders } from "./uiData";
+import { GetAllChildrenWithClass } from "./lilutils";
+import { basicComponentClass } from "./components/base";
 
 const languageDropdown = true;
 
@@ -89,11 +91,6 @@ function CreatePageFeatures(page) {
         );
         featuresGrid.appendChild(ddLanguage.div);
     }
-
-    // for (let i = 0; i < 6; i++) {
-    //     let div = ui.CreateDivWithClass(i == 0 || i == 3 || i == 4 ? 'divA' : 'divB');
-    //     featuresGrid.appendChild(div);
-    // }
 }
 function CreatePagePattern(page) {
     // ----------------------------- CREATE COLOUR & PATTERN PAGE ----- 
@@ -115,8 +112,11 @@ export function CreatePageContent(page) {
         throw new Error("ERROR: can't CreatePageContent, page is null");
     } else if (!page.id) { throw new Error(`ERROR: can't CreatePageContent, page.id is null, page: ${page}`); }
 
+    let pageNumber = GetPageNumberByID(page.id);
+
     // universal page header
     let header = ui.CreateElement('h2');
+    header.innerHTML = '';
     pageHeaders.push(header);
     page.appendChild(header);
 

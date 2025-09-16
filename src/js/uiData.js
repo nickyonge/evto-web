@@ -5,7 +5,7 @@ import * as txt from './text';
 import { PAGE_NAMES } from "./text";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE, PageOpened, PageClosed } from "./contentData";
 import { dataWindow } from "./uiMain";
-import { style, AddAlphaToHex, DeselectElement, SetElementEnabled, GetChildWithClass } from "./lilutils";
+import { style, AddAlphaToHex, DeselectElement, SetElementEnabled, GetChildWithClass, GetAllChildrenWithClass } from "./lilutils";
 
 import iconArt from '../assets/svg/icons-red/icon-art.svg';
 import iconFeatures from '../assets/svg/icons-red/icon-features.svg';
@@ -14,6 +14,7 @@ import iconSave from '../assets/svg/icons-red/icon-save.svg';
 import iconScale from '../assets/svg/icons-red/icon-scale.svg';
 import { CreatePageContent } from "./uiDataCreatePageContent";
 import { CallOnLoadComplete } from ".";
+import { BasicComponent, basicComponentClass } from "./components/base";
 
 export const initialTab = 2;
 
@@ -32,6 +33,7 @@ let tabs;
 let content;
 let pages = [];
 export let pageHeaders = [];
+export let pageComponents = [];
 
 
 // ----------------------------------------------------- UI CREATION ----- 
@@ -95,6 +97,7 @@ function CreatePages() {
     // create pages
     pages = [];
     pageHeaders = [];
+    pageComponents = [];
     for (let i = 0; i < txt.PAGES_COUNT; i++) {
         let page = ui.CreateDivWithClass('page', pageIDs[i], tabColors[i]);
         // page.id = `page${i}`; // page ID is numeric
@@ -111,7 +114,7 @@ function CreatePages() {
         UpdatePages()
     });
     // callback on added
-    CallOnLoadComplete(UpdatePages);
+    CallOnLoadComplete(PagesCreated);
 }
 
 /** creates the gradient fade element that sits atop the solid colour background */
@@ -122,13 +125,48 @@ function CreateFadeBG() {
 
 // ------------------------------------- SPECIFIC METHODS ----------------
 
+function PagesCreated() {
+    console.log("pages created");
+    pageComponents = new Array(pages.length);
+    pages.forEach(page => {
+        // record all components 
+        let pageNumber = GetPageNumberByID(page.id);
+        let componentDivs = GetAllChildrenWithClass(page, basicComponentClass);
+        let components = [];
+        for (let i = 0; i < componentDivs.length; i++) {
+            components.push(BasicComponent.GetComponentByDiv(componentDivs[i]));
+        }
+        console.log("COMPONENTS ON PAGE " + page.id + ": " + components);
+        pageComponents[pageNumber] = components;
+        // console.log("COMP: " + pageComponents);
+        // add scroll events 
+        page.addEventListener('scroll', OnScroll);
+    });
+
+    console.log(pageComponents);
+
+    UpdatePages();
+}
+
+function OnScroll(e) {
+    // console.log(e.target);
+    let pageNumber = GetPageNumberByID(e.target.id);
+    pageComponents[pageNumber].forEach(component => {
+        console.log("Scrolled on comp: " + component);
+        console.log("Scrolled ONSCROLL: " + component.onScroll);
+        if (component.onScroll != undefined) {
+            console.log("HECK");
+            component.onScroll();
+        }
+    });
+}
+
 function UpdatePages() {
     UpdatePageLayouts();
     UpdatePageTitles();
 }
 function UpdatePageLayouts() {
     let singleColumn = content.offsetWidth < maxTwoColumnWidth;
-    console.log("CONTENT W: " + singleColumn);
     for (let i = 0; i < pages.length; i++) {
         let gridLayout = GetChildWithClass(pages[i], 'grid');
         if (gridLayout) {

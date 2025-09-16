@@ -2,15 +2,20 @@ import * as ui from "../ui";
 import { GetParentWithClass, isBlank } from "../lilutils";
 import { HelpIcon } from "./helpicon";
 
+export const basicComponentClass = '__UICOMP';
+
 export class BasicComponent {
     div;
+    onScroll;
     static componentCount = 0;
     static allComponents = [];
+    static allComponentDivs = [];
     constructor() {
-        this.div = ui.CreateDivWithClass("uiComponent");
-        ui.AddElementAttribute(this.div, 'uniqueComponentID', BasicComponent.componentCount);
         BasicComponent.componentCount++;
-        BasicComponent.allComponents.push(this.div);
+        this.div = ui.CreateDivWithClass(basicComponentClass,'uiComponent');
+        ui.AddElementAttribute(this.div, 'uniqueComponentID', BasicComponent.componentCount);
+        BasicComponent.allComponents.push(this);
+        BasicComponent.allComponentDivs.push(this.div);
     }
     get uniqueComponentID() {
         return ui.GetAttribute(this.div, 'uniqueComponentID');
@@ -19,12 +24,17 @@ export class BasicComponent {
         return `_uiComponent${this.uniqueComponentID}`;
     }
     static GetComponentByUniqueID(uniqueID) {
-        for (let i = 0; i < BasicComponent.allComponents.length; i++) {
-            if (ui.GetAttribute(BasicComponent.allComponents[i], 'uniqueComponentID') == uniqueID) {
+        for (let i = 0; i < BasicComponent.allComponentDivs.length; i++) {
+            if (ui.GetAttribute(BasicComponent.allComponentDivs[i], 'uniqueComponentID') == uniqueID) {
                 return BasicComponent.allComponents[i];
             }
         }
         return null;
+    }
+    static GetComponentByDiv(div) {
+        let divID = ui.GetAttribute(div, 'uniqueComponentID');
+        if (!divID) { return null; }
+        return BasicComponent.GetComponentByUniqueID(divID);
     }
 }
 export class TitledComponent extends BasicComponent {

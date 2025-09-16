@@ -157,13 +157,17 @@ export class DropdownList extends TitledComponent {
         // add help component
         this._addHelpIcon(`help me! ${componentTitle}`);
 
+        // this.onScroll = () => { console.log("HECK") };
+        this.onScroll = this.Test;
+
         // set initial selection 
         this.#forceSelectionIndex = initialValue;
     }
 
+    Test() { console.log("HI"); }
+
     DivAddedToPage(target) { // this.div
         // add scroll event
-        let page = GetParentWithClass(target, 'page');
         if (_smootherScroll) {
             target.parentElement.addEventListener('scroll', () => {
                 requestAnimationFrame(() => {
