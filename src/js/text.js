@@ -31,12 +31,12 @@ export const PG_TITLE_INTRO_SHORTER = ["Canvas Visualizer", "Visualizer", "Intro
 // --------- SIZE PAGE ------------------------
 export const PG_TITLE_SIZE = "Canvas Size Selection";
 export const PG_TITLE_SIZE_SHORTER = ["Canvas Size", "Map Size", "Size"];
-export const SIZE_SM = "Small";
-export const SIZE_SMP = "Small Plus";
-export const SIZE_MD = "Medium";
-export const SIZE_MDP = "Medium Plus";
-export const SIZE_LG = "Large";
-export const SIZE_LGP = "Large Plus";
+export const PG_SIZE_SM = "Small";
+export const PG_SIZE_SMP = "Small Plus";
+export const PG_SIZE_MD = "Medium";
+export const PG_SIZE_MDP = "Medium Plus";
+export const PG_SIZE_LG = "Large";
+export const PG_SIZE_LGP = "Large Plus";
 
 // --------- FEATURES PAGE --------------------
 export const PG_TITLE_FEATURES = "Map Features & Details";

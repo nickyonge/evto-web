@@ -25,12 +25,12 @@ function CreatePageSize(page) {
 
     let moSize = new MutliOptionList('Size', null,
         [ // sizing and labels 
-            `${txt.SIZE_SM}, <i>10x20"</i>`,
-            `&nbsp;&nbsp;${txt.SIZE_SMP}, <i>12x24"</i>`,
-            `${txt.SIZE_MD}, <i>16x32"</i>`,
-            `&nbsp;&nbsp;${txt.SIZE_MDP}, <i>18x36"</i>`,
-            `${txt.SIZE_LG}, <i>20x40"</i>`,
-            `&nbsp;&nbsp;${txt.SIZE_LGP}, <i>24x48"</i>`,
+            `${txt.PG_SIZE_SM}, <i>10x20"</i>`,
+            `&nbsp;&nbsp;${txt.PG_SIZE_SMP}, <i>12x24"</i>`,
+            `${txt.PG_SIZE_MD}, <i>16x32"</i>`,
+            `&nbsp;&nbsp;${txt.PG_SIZE_MDP}, <i>18x36"</i>`,
+            `${txt.PG_SIZE_LG}, <i>20x40"</i>`,
+            `&nbsp;&nbsp;${txt.PG_SIZE_LGP}, <i>24x48"</i>`,
         ],
         [ // costs 
             cost.SIZE_SM, cost.SIZE_SMP,
