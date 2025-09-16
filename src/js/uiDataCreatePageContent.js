@@ -47,32 +47,32 @@ function CreatePageFeatures(page) {
     page.appendChild(featuresGrid);
 
     let moLandDetail = new MutliOptionList(
-        'Land Detail', null,
-        ['a', 'b', 'c'],
+        txt.PG_FEAT_LANDDETAIL, null,
+        txt.PG_FEAT_LANDDETAIL_OPTIONS,
         [1, 2, 3],
         null, 0
     );
     let moGCSLines = new MutliOptionList(
-        'GCS Lines', null,
-        ['a', 'b', 'c'],
+        txt.PG_FEAT_GCSLINES, null,
+        txt.PG_FEAT_GCSLINES_OPTIONS,
         [1, 2, 3],
         null, 0
     );
     let moLabelling = new MutliOptionList(
-        'Labelling', null,
-        ['a', 'b', 'c'],
+        txt.PG_FEAT_LABELLING, null,
+        txt.PG_FEAT_LABELLING_OPTIONS,
         [1, 2, 3],
         null, 0
     );
     let moTitleBox = new MutliOptionList(
-        'Title Box', null,
-        ['a', 'b', 'c'],
+        txt.PG_FEAT_TITLEBOX, null,
+        txt.PG_FEAT_TITLEBOX_OPTIONS,
         [1, 2, 3],
         null, 0
     );
     let moLandLines = new MutliOptionList(
-        'Land Lines', null,
-        ['a', 'b', 'c', 'd', 'e'],
+        txt.PG_FEAT_LANDLINES, null,
+        txt.PG_FEAT_LANDLINES_OPTIONS,
         [1, 2, 3, 4, 5],
         null, 0
     );
@@ -85,8 +85,8 @@ function CreatePageFeatures(page) {
 
     if (languageDropdown) {
         let ddLanguage = new DropdownList(
-            'Language', null,
-            ['a', 'b', 'c'],
+           txt.PG_FEAT_LANGUAGE, null,
+            txt.PG_FEAT_LANGUAGE_OPTIONS,
             null, null, 0
         );
         featuresGrid.appendChild(ddLanguage.div);

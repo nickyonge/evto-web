@@ -42,6 +42,23 @@ export const PG_SIZE_LGP = "Large Plus";
 export const PG_TITLE_FEATURES = "Map Features & Details";
 export const PG_TITLE_FEATURES_SHORTER = ["Features & Details", "Map Features", "Features"];
 
+export const PG_FEAT_LANDDETAIL = 'Land Detail';
+export const PG_FEAT_GCSLINES = 'GCS Lines';
+export const PG_FEAT_LABELLING = 'Labelling';
+export const PG_FEAT_TITLEBOX = 'Title Box';
+export const PG_FEAT_LANDLINES = 'Land Lines';
+export const PG_FEAT_LANGUAGE = 'Language';
+
+export const PG_FEAT_LANDDETAIL_OPTIONS = ['Basic', 'Advanced', 'Complex'];
+export const PG_FEAT_GCSLINES_OPTIONS = ['None', 'Included', 'Extended'];
+export const PG_FEAT_LABELLING_OPTIONS = ['None', 'Basic', 'Extended'];
+export const PG_FEAT_TITLEBOX_OPTIONS = ['None', 'Basic', 'Detailed'];
+export const PG_FEAT_LANDLINES_OPTIONS = ['None', 'Horizontal', 'Vertical', 'Latitudinal', 'Longitudinal'];
+export const PG_FEAT_LANGUAGE_OPTIONS = ['English', 'French'];
+
+
+// export const 
+
 // --------- COLOUR & PATTERN PAGE ------------
 export const PG_TITLE_PATTERN = "Map Colours & Design Pattern";
 export const PG_TITLE_PATTERN_SHORTER = ["Colours & Design Pattern", "Colours & Pattern", "Design Pattern", "Map Pattern", "Pattern"]
