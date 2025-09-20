@@ -9,7 +9,7 @@ import { GetPageNumberByID, pageComponents, pageHeaders } from "./uiData";
 import { GetAllChildrenWithClass } from "./lilutils";
 import { basicComponentClass } from "./components/base";
 
-const languageDropdown = true;
+const languageDropdown = false;
 
 function CreatePageIntro(page) {
     // ----------------------------- CREATE INTRO PAGE -----

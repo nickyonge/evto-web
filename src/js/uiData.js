@@ -16,7 +16,7 @@ import { CreatePageContent } from "./uiDataCreatePageContent";
 import { CallOnLoadComplete } from ".";
 import { BasicComponent, basicComponentClass } from "./components/base";
 
-export const initialTab = 2;
+export const initialTab = 1;
 
 const maxTitleHeight = 30;
 const maxTwoColumnWidth = 269;
