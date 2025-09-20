@@ -4,18 +4,18 @@ import { currentSize, Size } from "./contentData";
 
 // ============= SIZING ===============================
 
-export const SIZE_CANVAS = [
-    [0, 1], // small, small plus
-    [2, 3], // meduim, med plus 
-    [4, 5]  // large, large plus 
-];
+export const SIZE_SM = 0;  // small  
+export const SIZE_SMP = 1; // small plus
+export const SIZE_MD = 2;  // medium 
+export const SIZE_MDP = 3; // medium plus 
+export const SIZE_LG = 4;  // large 
+export const SIZE_LGP = 5; // large plus 
 
-export const SIZE_SM = 0;
-export const SIZE_SMP = 1;
-export const SIZE_MD = 2;
-export const SIZE_MDP = 3;
-export const SIZE_LG = 4;
-export const SIZE_LGP = 5;
+export const SIZE_CANVAS = [
+    [SIZE_SM, SIZE_SMP], // small, small plus
+    [SIZE_MD, SIZE_MDP], // meduim, med plus 
+    [SIZE_LG, SIZE_LGP]  // large, large plus 
+];
 
 // ============= FEATURES =============================
 
@@ -32,6 +32,12 @@ export const FEAT_LANDLINES = [];
 export const FEAT_LANGUAGE = [];
 
 // ============= COLOUR & PATTERN =====================
+
+
+
+
+
+// ============= GETTER LOGIC =========================
 
 /**
  * Gets the cost value of the given costValues group, using {@link currentSize}, and for the given index

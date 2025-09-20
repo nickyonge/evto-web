@@ -3,6 +3,7 @@
 import * as ui from "./ui";
 import * as txt from './text';
 import * as cost from './costs';
+import { currentSize, Size } from "./contentData";
 import { Toggle, MutliOptionList, DropdownList, TextField } from "./components";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentData";
 import { GetPageNumberByID, pageComponents, pageHeaders } from "./uiData";
@@ -23,6 +24,10 @@ function CreatePageSize(page) {
     let txInfo = new TextField(txt.LIPSUM);
     page.appendChild(txInfo.div);
 
+    let sm = cost.GetCostArrayForSize(cost.SIZE_CANVAS, Size.Small);
+    let md = cost.GetCostArrayForSize(cost.SIZE_CANVAS, Size.Medium);
+    let lg = cost.GetCostArrayForSize(cost.SIZE_CANVAS, Size.Large);
+
     let moSize = new MutliOptionList('Size', null,
         [ // sizing and labels 
             `${txt.PG_SIZE_SM}, <i>10x20"</i>`,
@@ -33,9 +38,9 @@ function CreatePageSize(page) {
             `&nbsp;&nbsp;${txt.PG_SIZE_LGP}, <i>24x48"</i>`,
         ],
         [ // costs 
-            cost.SIZE_SM, cost.SIZE_SMP,
-            cost.SIZE_MD, cost.SIZE_MDP,
-            cost.SIZE_LG, cost.SIZE_LGP
+            sm[0], sm[1],
+            md[0], md[1],
+            lg[0], lg[1]
         ]);
     page.appendChild(moSize.div);
 
@@ -49,7 +54,6 @@ function CreatePageFeatures(page) {
     let moLandDetail = new MutliOptionList(
         txt.PG_FEAT_LANDDETAIL, null,
         txt.PG_FEAT_LANDDETAIL_OPTIONS,
-        [1, 2, 3],
         null, 0
     );
     let moGCSLines = new MutliOptionList(
@@ -85,7 +89,7 @@ function CreatePageFeatures(page) {
 
     if (languageDropdown) {
         let ddLanguage = new DropdownList(
-           txt.PG_FEAT_LANGUAGE, null,
+            txt.PG_FEAT_LANGUAGE, null,
             txt.PG_FEAT_LANGUAGE_OPTIONS,
             null, null, 0
         );
