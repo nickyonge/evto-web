@@ -68,9 +68,7 @@ export function AddAlphaToHex(color, opacity) {
  * or 0 if invalid/error 
  */
 export function MaxLength2DArray(arrays) {
-    if (!arrays) { return 0; }
-    if (!Array.isArray(arrays)) { return 0; }
-    if (arrays.length == 0) { return 0; }
+    if (!Is2DArray(arrays)) { return 0; }
     let max = 0;
     for (let i = 0; i < arrays.length; i++) {
         if (!Array.isArray(arrays[i])) { continue; }
@@ -78,6 +76,59 @@ export function MaxLength2DArray(arrays) {
         if (len > max) { max = len; }
     }
     return max;
+}
+
+/**
+ * Determine if the given `arrays` value is, in fact, a 2D array
+ * @param {Array<Array<any>>} arrays 2d array 
+ * @param {boolean} [checkAllArrayIndices = true] check all indices?
+ * if true, returns `false` if any indices ARE NOT an array. if false,
+ * returns `true` if any indices ARE an array.
+ * @returns {boolean}
+ */
+export function Is2DArray(arrays, checkAllArrayIndices = true) {
+    if (!arrays) { return false; }
+    if (!Array.isArray(arrays)) { return false; }
+    if (arrays.length == 0) { return false; }
+    for (let i = 0; i < arrays.length; i++) {
+        if (checkAllArrayIndices) {
+            if (!Array.isArray(arrays[i])) {
+                return false;
+            }
+        } else {
+            if (Array.isArray(arrays[i])) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+/**
+ * Takes an array or 2D array, and ensures all its indices are also arrays. 
+ * Eg, [[1],2,3,[4,5]] will become [[1],[2],[3],[4,5]]
+ * @param {Array<Array<any>>|Array<any>} array array to convert into 2d array
+ * @returns {Array<Array<any>>} 2d array version of input array 
+ */
+export function ConvertArrayIndicesTo2DArray(array) {
+    if (!array) { return null; }
+    if (!Array.isArray(array)) { return null; }
+    if (array.length == 0) { return array; }
+    let newArray = [];
+    for (let i = 0; i < array.length; i++) {
+        if (array[i] == null || array[i] == undefined) {
+            // null/undefined value, push empty array
+            // newArray.push([null]);
+            newArray.push([]);
+        } else if (Array.isArray(array[i])) {
+            // already an array, push into new array 
+            newArray.push(array[i]);
+        } else {
+            // not an array, push new value in its own array into array
+            newArray.push([array[i]]);
+        }
+    }
+    return newArray;
 }
 
 

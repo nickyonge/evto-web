@@ -1,5 +1,6 @@
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
+import * as cost from '../costs';
 
 export class MutliOptionList extends TitledComponent {
 
@@ -78,6 +79,10 @@ export class MutliOptionList extends TitledComponent {
 
         // add help component
         this._addHelpIcon(`help me! ${componentTitle}`);
+    }
+
+    loadCosts() {
+        cost.GetCostArray();
     }
 
     set selection(sel) {
