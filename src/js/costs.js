@@ -45,6 +45,67 @@ export function GetCost(costValues, index) {
     return GetCostForSize(costValues, currentSize, index);
 }
 
+export function GetCostArray(costValues) {
+    return GetCostArrayForSize(costValues, currentSize);
+}
+
+export function GetCostArrayForSize(costValues, size) {
+    // determine cost value types 
+    switch (typeof costValues) {
+        case 'number':
+            // just a number, return it 
+            return [costValues];
+        case 'object':
+            // check if an array:
+            if (Array.isArray(costValues)) {
+                // yup, it's an array - is it an array of arrays?
+                if (costValues.length == 0) {
+                    console.warn(`WARNING: costValues array is empty, can't get cost value, returning -1`);
+                    return -1;
+                }
+                if (size == null) {
+                    if (index == null) {
+                        // no size nor index
+                        console.warn(`WARNING: costValues size and index are null, returning first found value in costVales ${costValues}`);
+                        if (Array.isArray(costValues[0]))
+                            return costValues[0][0];
+                        return costValues[0];
+                    } else {
+                        // index, no size, ensure not 2d array
+                        if (Array.isArray(costValues[0])) {
+                            console.warn(`WARNING: costValues ${costValues} is 2D array but only index ${index} provided, size null, returning costValues[0][Math.min(costValues.length - 1, index)]`);
+                            return costValues[0][Math.min(costValues.length - 1, index)];
+                        }
+                        // 1d array, presume that size doesn't matter
+                        return costValues[Math.min(costValues.length - 1, index)];
+                    }
+                } else {
+                    if (index == null) {
+                        // size, no index, ensure not 2d array
+                        if (Array.isArray(costValues[0])) {
+                            console.warn(`WARNING: costValues ${costValues} is 2D array but only size ${size} provided, index null, returning costValues[size][0]`);
+                            return costValues[size][0];
+                        }
+                        // 1d array, presume that index doesn't matter 
+                        return costValues[size];
+                    } else {
+                        // size and index
+                        let s = Math.min(costValues.length - 1, size);
+                        if (Array.isArray(costValues[s])) {
+                            let i = Math.min(costValues[s].length - 1, index);
+                            return costValues[s][i];
+                        }
+                        return costValues[s];
+                    }
+                }
+            }
+            break;
+    }
+    console.warn(`WARNING: invalid type ${typeof costValues} for costValues ${costValues}, ` +
+        `can't process cost value, size: ${size}, index: ${index}, returning -1`);
+    return -1;
+}
+
 /**
  * Gets the cost value of the given costValues group, for the given size and index
  * @param {number|Array<number>|Array<Array<number>>} costValues Cost, or array of costs per size, 
