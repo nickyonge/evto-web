@@ -61,6 +61,25 @@ export function AddAlphaToHex(color, opacity) {
     return color + _opacity.toString(16).toUpperCase();
 }
 
+/**
+ * Gets the longest length array found in a given 2d array
+ * @param {Array<Array<any>>} arrays 2d array 
+ * @returns {number} max length found of all arrays in 2d array, 
+ * or 0 if invalid/error 
+ */
+export function MaxLength2DArray(arrays) {
+    if (!arrays) { return 0; }
+    if (!Array.isArray(arrays)) { return 0; }
+    if (arrays.length == 0) { return 0; }
+    let max = 0;
+    for (let i = 0; i < arrays.length; i++) {
+        if (!Array.isArray(arrays[i])) { continue; }
+        let len = arrays[i].length;
+        if (len > max) { max = len; }
+    }
+    return max;
+}
+
 
 /**
  * Get all sibling elements to the given element
