@@ -49,12 +49,13 @@ function CreatePageFeatures(page) {
     let moLandDetail = new MutliOptionList(
         txt.PG_FEAT_LANDDETAIL, null,
         txt.PG_FEAT_LANDDETAIL_OPTIONS,
+        cost.FEAT_LANDDETAIL,
         null, 0
     );
     let moGCSLines = new MutliOptionList(
         txt.PG_FEAT_GCSLINES, null,
         txt.PG_FEAT_GCSLINES_OPTIONS,
-        [1, 2, 3],
+        cost.FEAT_GCSLINES,
         null, 0
     );
     let moLabelling = new MutliOptionList(
@@ -66,7 +67,7 @@ function CreatePageFeatures(page) {
     let moTitleBox = new MutliOptionList(
         txt.PG_FEAT_TITLEBOX, null,
         txt.PG_FEAT_TITLEBOX_OPTIONS,
-        [1, 2, 3],
+        cost.FEAT_GCSLINES,
         null, 0
     );
     let moLandLines = new MutliOptionList(

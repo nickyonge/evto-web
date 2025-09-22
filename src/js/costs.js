@@ -7,9 +7,9 @@ import { currentSize, Size } from "./contentData";
 export const SIZE_SM = 0;  // small  
 export const SIZE_SMP = 1; // small plus
 export const SIZE_MD = 2;  // medium 
-export const SIZE_MDP = 3; // medium plus 
-export const SIZE_LG = 4;  // large 
-export const SIZE_LGP = 5; // large plus
+export const SIZE_MDP = 10; // medium plus 
+export const SIZE_LG = 11;  // large 
+export const SIZE_LGP = 12; // large plus
 
 export const SIZE_CANVAS = [
     [SIZE_SM, SIZE_SMP, SIZE_MD, SIZE_MDP, SIZE_LG, SIZE_LGP],
@@ -21,15 +21,35 @@ export const SIZE_CANVAS = [
 
 //TODO: make these accommodate cost differences in sm/md/lg 
 export const FEAT_LANDDETAIL = [
-    [0, 0, 0],
-    [1, 2, 3],
-    [3, 4, 5]
+    [0, 0, 0], // small
+    [1, 2, 3], // med
+    [3, 4, 5]  // large
 ];
-export const FEAT_GCSLINES = [];
-export const FEAT_LABELLING = [];
-export const FEAT_TITLEBOX = [];
-export const FEAT_LANDLINES = [];
-export const FEAT_LANGUAGE = [];
+export const FEAT_GCSLINES = [
+    [0, 0, 0], // small
+    [1, 2, 3], // med
+    [3, 4, 5]  // large
+];
+export const FEAT_LABELLING = [
+    [0, 0, 0], // small
+    [1, 2, 3], // med
+    [3, 4, 5]  // large
+];
+export const FEAT_TITLEBOX = [
+    [0, 0, 0], // small
+    [1, 2, 3], // med
+    [3, 4, 5]  // large
+];
+export const FEAT_LANDLINES = [
+    [0, 0, 0, 0, 0], // small
+    [1, 2, 3, 4, 5], // med
+    [6, 7, 8, 9, 10]  // large
+];
+export const FEAT_LANGUAGE = [
+    [0, 0, 0], // small
+    [1, 2, 3], // med
+    [3, 4, 5]  // large
+];
 
 // ============= COLOUR & PATTERN =====================
 
