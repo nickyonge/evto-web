@@ -8,6 +8,8 @@ export class MutliOptionList extends TitledComponent {
     #inputs;
     #labels;
     #costs;
+    #costsP;
+    #costArray;
 
     constructor(componentTitle, onSelectCallback, options, costs, icons, initialValue = 0) {
         super(componentTitle);
@@ -19,6 +21,9 @@ export class MutliOptionList extends TitledComponent {
         this.#inputs = [];
         this.#labels = [];
         this.#costs = [];
+        this.#costsP = [];
+
+        this.#costArray = costs;
 
         if (!options) {
             console.warn("WARNING: creating a multi-option list without any options array");
@@ -46,17 +51,15 @@ export class MutliOptionList extends TitledComponent {
             let text = ui.CreateElement('p');
             text.innerHTML = options[i];
             label.appendChild(text);
-            // add costs field 
-            if (costs && costs.length > i) {
-                if (costs[i] == null) {
-                    this.#costs.push(null);
-                    continue;
-                }
-                let oCost = ui.CreateDivWithClass('cost');
-                oCost.innerHTML = `<p>${costs[i]}</p>`;
-                this.#costs.push(oCost);
-                label.appendChild(oCost);
-            }
+
+            // add costs tokens
+            let oCost = ui.CreateDivWithClass('cost');
+            let oCostP = ui.CreateElement('p');
+            oCost.appendChild(oCostP);
+            this.#costs.push(oCost);
+            this.#costsP.push(oCostP);
+            label.appendChild(oCost);
+            oCost.hidden = true;
 
             ui.DisableContentSelection(text);
             ui.MakeTabbableWithInputTo(label, input);
@@ -79,10 +82,40 @@ export class MutliOptionList extends TitledComponent {
 
         // add help component
         this._addHelpIcon(`help me! ${componentTitle}`);
+
+        // load initial costs 
+        this.loadCosts();
     }
 
+    /**
+     * Load or reload cost values based on the current size 
+     */
     loadCosts() {
-        cost.GetCostArray();
+        let costArray = cost.GetCostArray(this.#costArray);
+        if (costArray == null || !Array.isArray(costArray)) {
+            return;
+        }
+        
+        let len = this.#costsP.length;
+        if (costArray.length != this.#costsP.length) {
+            console.warn("WARNING: array size mismatch between costs and cost token paragraphs, can only update SOME tokens");
+            len = Math.min(this.#costsP.length, costArray.length);
+        }
+
+        for (let i = 0; i < len; i++) {
+            if (costArray[i] == null) {
+                this.#costs[i].hidden = true;
+            } else {
+                this.#costs[i].hidden = false;
+                let cost = costArray[i];
+                if (cost < 0 || cost > 9) {
+                    ui.AddClassToDOMs('smallText', this.#costs[i]);
+                } else {
+                    ui.RemoveClassFromDOMs('smallText', this.#costs[i]);
+                }
+                this.#costsP[i].innerText = cost;
+            }
+        }
     }
 
     set selection(sel) {

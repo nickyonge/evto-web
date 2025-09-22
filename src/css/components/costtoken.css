@@ -1,11 +1,10 @@
-
-
 .uiComponent .cost {
     text-align: center;
     align-content: center;
     margin-left: auto;
     margin-right: 5px;
     height: 15px;
+    min-width: 15px;
     border-radius: 100%;
     aspect-ratio: 1;
     border: 1px var(--color-ui-costToken-default) solid;
@@ -47,6 +46,9 @@
     margin: 0px;
     line-height: 0px;
     transition: none;
+}
+.uiComponent .cost.smallText > p {
+    font-size: 6.9pt;
 }
 .uiComponent .cost.forceSelected,
 .uiComponent input:checked ~ label .cost.floating,

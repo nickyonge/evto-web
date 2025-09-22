@@ -26,8 +26,6 @@ function CreatePageSize(page) {
     let txInfo = new TextField(txt.LIPSUM);
     page.appendChild(txInfo.div);
 
-    let costArray = cost.GetCostArray(cost.SIZE_CANVAS);
-    
     let moSize = new MutliOptionList('Size', null,
         [ // sizing and labels 
             `${txt.PG_SIZE_SM}, <i>${txt.DATA_SIZE_SM}</i>`,
@@ -36,8 +34,7 @@ function CreatePageSize(page) {
             `&nbsp;&nbsp;${txt.PG_SIZE_MDP}, <i>${txt.DATA_SIZE_MDP}</i>`,
             `${txt.PG_SIZE_LG}, <i>${txt.DATA_SIZE_LG}</i>`,
             `&nbsp;&nbsp;${txt.PG_SIZE_LGP}, <i>${txt.DATA_SIZE_LGP}</i>`,
-        ],
-        costArray);
+        ], cost.SIZE_CANVAS);
     page.appendChild(moSize.div);
 
 }
