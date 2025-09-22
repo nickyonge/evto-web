@@ -10,7 +10,8 @@ import { GetPageNumberByID, pageComponents, pageHeaders } from "./uiData";
 import { GetAllChildrenWithClass } from "./lilutils";
 import { basicComponentClass } from "./components/base";
 
-const languageDropdown = false;
+/** show the languauges dropdown? */
+const languageDropdown = false;// TODO: Languages in language dropdown 
 
 function CreatePageIntro(page) {
     // ----------------------------- CREATE INTRO PAGE -----
@@ -25,10 +26,7 @@ function CreatePageSize(page) {
     page.appendChild(txInfo.div);
 
     let costArray = cost.GetCostArray(cost.SIZE_CANVAS);
-    // let sm = cost.GetCostArrayForSize(cost.SIZE_CANVAS, Size.Small);
-    // let md = cost.GetCostArrayForSize(cost.SIZE_CANVAS, Size.Medium);
-    // let lg = cost.GetCostArrayForSize(cost.SIZE_CANVAS, Size.Large);
-
+    
     let moSize = new MutliOptionList('Size', null,
         [ // sizing and labels 
             `${txt.PG_SIZE_SM}, <i>${txt.DATA_SIZE_SM}</i>`,
