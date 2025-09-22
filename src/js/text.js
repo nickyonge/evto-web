@@ -4,6 +4,14 @@
 
 export const HELPICON_ALT = "Help";
 
+// --------- CANVAS SIZES -----------------------
+export const DATA_SIZE_SM = '10x20"';
+export const DATA_SIZE_SMP = '12x24"';
+export const DATA_SIZE_MD = '16x32"';
+export const DATA_SIZE_MDP = '18x36"';
+export const DATA_SIZE_LG = '20x40"';
+export const DATA_SIZE_LGP = '24x48"';
+
 // ============= HEADER & FOOTER =========================
 
 // --------- HEADER -----------------------
