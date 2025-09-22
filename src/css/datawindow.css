@@ -11,7 +11,7 @@ dataWindow {
     z-index: -1;
 }
 
-/* TODO: narrower sidebar when window is tall (esp on left) */
+/* TODO: narrower tab sidebar when window is tall (esp on left) */
 
 /* tall dataWindow [] */
 @media screen and (min-aspect-ratio: 1.2) {

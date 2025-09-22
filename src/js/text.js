@@ -79,7 +79,7 @@ export const PG_TITLE_SAVE_SHORTER = ["Save & Load Map", "Save & Load", "Save/Lo
 /** total pages count: intro, size, features, colour/pattern, save/load */
 export const PAGE_NAMES = ["Intro", "Size", "Features", "Colour & Pattern", "Save & Load"];
 export const PAGES_COUNT = PAGE_NAMES.length;
-// TODO: replace txt.PAGES_COUNT with somethinig better. theoretically the number of pages overall shouldn't be defined by text class, but whatever, it works
+// TODO: replace txt.PAGES_COUNT, the number of pages overall shouldn't be defined by text class
 
 export const PAGE_TITLES = [PG_TITLE_INTRO, PG_TITLE_SIZE, PG_TITLE_FEATURES, PG_TITLE_PATTERN, PG_TITLE_SAVE];
 export const PAGE_TITLES_SHORTER = [PG_TITLE_INTRO_SHORTER, PG_TITLE_SIZE_SHORTER, PG_TITLE_FEATURES_SHORTER, PG_TITLE_PATTERN_SHORTER, PG_TITLE_SAVE_SHORTER];
@@ -98,4 +98,4 @@ export const LIPSUM = "Lorem ipsum dolor sit amet";
 export const LIPSUM_FULL = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
 
 
-// TODO - localization
+// TODO - text localization

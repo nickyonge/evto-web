@@ -242,7 +242,7 @@ export function SelectTab(tabNum, snap = false) {
             } else {
                 tabInput.checked = false;
             }
-            // TODO: set directly to final state (noticeable when using non-0 initial tab)
+            // TODO: snap directly to final state (noticeable when using non-0 initial tab)
         }
     }
 }

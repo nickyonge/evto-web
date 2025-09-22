@@ -511,7 +511,7 @@ export function LapCheckInterval(label, lapTime, returnOnNew = true) {
         return returnOnNew;
     }
     if (HasIntervalLapped(label, lapTime)) {
-        // TODO: account for time diff between lapTime and now
+        // TODO: account for time difference between lapTime and now
         SetInterval(label);
         return true;
     }
@@ -539,4 +539,4 @@ export function TimeBetweenTwoTimestamps(timestampA, timestampB) {
     return timestampA - timestampB;
 }
 
-// TODO: organize this class better, so similar utilities are grouped 
+// TODO: organize lilutils better, so similar utilities are grouped 

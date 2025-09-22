@@ -387,7 +387,7 @@ export function CreateSVG(paths, attributes, ...cssClasses) {
                     let path = CreateElement('path');
                     if (paths[i].length >= 2) {
                         // assume [d,fill]
-                        // TODO: accommodate more path attributes than just d and fill
+                        // TODO: accommodate more svg path attributes than just d and fill
                         AddElementAttributes(path, ['d', 'fill'], [paths[i][0],
                         paths[i][1] ? paths[i][1] : '#ffffff']);
                     } else if (paths[i].length == 1) {
@@ -498,5 +498,5 @@ export function AllowContentSelectionWithTextIndicator(...domElements) {
     RemoveClassFromDOMs('preventSelect', ...domElements); // default selection type
 }
 
-// TODO: add enter input to elements that only function on spacebar (eg, rn the "Subscribe" btn works for Spacebar but not Enter)
-// TODO: add keyboard input to social media buttons (they don't respond in CSS to keyboard at all)
+// TODO: add Enter input to elements that only function on spacebar (eg, rn the "Subscribe" btn works for Spacebar but not Enter)
+// TODO: add keyboard input to social media buttons (they don't respond in CSS to keyboard)

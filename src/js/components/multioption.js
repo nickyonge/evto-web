@@ -45,7 +45,7 @@ export class MutliOptionList extends TitledComponent {
             // create svg
             if (icons && icons.length >= i + 1 && icons[i]) {
                 // found valid icon
-                // TODO: add SVG to label
+                // TODO: add SVG functionality to label (if needed)
             }
             // create text 
             let text = ui.CreateElement('p');

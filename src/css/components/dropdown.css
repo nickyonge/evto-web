@@ -49,7 +49,7 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     overflow: hidden;
 }
 
-/* TODO: this isn't appearing for some unknown reason? make arrow appear as per UIVerse demo linked at top */
+/* TODO: dropdown arrow isn't appearing for some unknown reason? make arrow appear as per UIVerse demo linked at top */
 .ddArrow {
     /* display: block; */
     position: relative;

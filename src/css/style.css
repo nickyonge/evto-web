@@ -43,7 +43,7 @@ h3 {
     opacity: 0.8;
 }
 
-/* TODO: switch to linear gradient */
+/* TODO: switch ultrawide BG to linear gradient, or remove */
 @media screen and (min-aspect-ratio: 3) {
     body {
         background-image: none;

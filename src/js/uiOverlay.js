@@ -44,7 +44,7 @@ export function InitializeOverlay() {
     }
     // keydown event
     document.addEventListener('keydown', (e) => {
-        // TODO: key repeat is blocked when enabling overlay, but not on disabling (it will reopen)
+        // TODO: key repeat is blocked when enabling overlay, but not on disabling (eg, help will reopen on close)
         if (e.repeat) { return; }
         if (IsOverlayDisplayed()) {
             HideOverlay();

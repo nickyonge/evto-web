@@ -68,7 +68,7 @@ export function UpdateCamera() {
         }
     }
     // update camera
-    // TODO: instead of re-instancing the camera, just reset the properties if camera is non-null
+    // TODO: instead of re-instancing 3js camera, just reset the properties if camera is non-null
     if (useOrthographicCamera) {
         camera = new THREE.OrthographicCamera(sceneWidth() / - camOrthoDivFactor, sceneWidth() / camOrthoDivFactor, sceneHeight() / camOrthoDivFactor, sceneHeight() / - camOrthoDivFactor, cameraNearClip, cameraFarClip);
     } else {

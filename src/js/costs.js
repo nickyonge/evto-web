@@ -19,7 +19,7 @@ export const SIZE_CANVAS = [
 
 // ============= FEATURES =============================
 
-//TODO: make these accommodate cost differences in sm/md/lg 
+//TODO: make costs accommodate cost differences in sm/md/lg 
 export const FEAT_LANDDETAIL = [
     [0, 0, 0], // small
     [1, 2, 3], // med

@@ -158,7 +158,7 @@ module.exports = {
     },
     output: {
         filename: '[name].bundle.js',
-        // TODO: cleanup filenames in dist, create subdirectories
+        // TODO: cleanup filenames in /dist, create asset subdirectories
         path: path.resolve(__dirname, 'dist'),
         assetModuleFilename: "[name][ext]",
         clean: true,

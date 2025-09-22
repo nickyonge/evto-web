@@ -30,7 +30,7 @@ export class DropdownList extends TitledComponent {
             DropdownList._dropdownMaxHeight = parseInt(GetCSSVariable('--ui-component-dropdown-max-height'), 10);
         }
 
-        // TODO: token display in selected dropdown option 
+        // TODO: token display in current selected dropdown option 
 
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
         this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
@@ -48,7 +48,7 @@ export class DropdownList extends TitledComponent {
             ui.AddElementAttribute(this.#selected, 'data-label', '');
         }
         // create dropdown arrow SVG
-        // TODO: arrow SVG path is not appearing
+        // TODO: dropdown arrow SVG path is not appearing
         this.#svg = ui.CreateSVG(
             [[arrowSVGPath, '#ffffff']],
             [
