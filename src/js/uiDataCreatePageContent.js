@@ -12,6 +12,7 @@ import { basicComponentClass } from "./components/base";
 
 /** show the languauges dropdown? */
 const languageDropdown = false;// TODO: Languages in language dropdown 
+                               // Issue URL: https://github.com/nickyonge/evto-web/issues/1
 
 function CreatePageIntro(page) {
     // ----------------------------- CREATE INTRO PAGE -----
