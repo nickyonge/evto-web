@@ -45,6 +45,7 @@ export function InitializeOverlay() {
     // keydown event
     document.addEventListener('keydown', (e) => {
         // TODO: key repeat is blocked when enabling overlay, but not on disabling (eg, help will reopen on close)
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/18
         if (e.repeat) { return; }
         if (IsOverlayDisplayed()) {
             HideOverlay();

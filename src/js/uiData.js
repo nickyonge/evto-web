@@ -243,6 +243,7 @@ export function SelectTab(tabNum, snap = false) {
                 tabInput.checked = false;
             }
             // TODO: snap directly to final state (noticeable when using non-0 initial tab)
+            // Issue URL: https://github.com/nickyonge/evto-web/issues/17
         }
     }
 }

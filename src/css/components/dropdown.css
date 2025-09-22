@@ -50,6 +50,7 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
 }
 
 /* TODO: dropdown arrow isn't appearing for some unknown reason? make arrow appear as per UIVerse demo linked at top */
+/\* Issue URL: https://github.com/nickyonge/evto-web/issues/3 \*/
 .ddArrow {
     /* display: block; */
     position: relative;

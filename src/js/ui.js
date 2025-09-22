@@ -388,6 +388,7 @@ export function CreateSVG(paths, attributes, ...cssClasses) {
                     if (paths[i].length >= 2) {
                         // assume [d,fill]
                         // TODO: accommodate more svg path attributes than just d and fill
+                        // Issue URL: https://github.com/nickyonge/evto-web/issues/16
                         AddElementAttributes(path, ['d', 'fill'], [paths[i][0],
                         paths[i][1] ? paths[i][1] : '#ffffff']);
                     } else if (paths[i].length == 1) {
@@ -499,4 +500,5 @@ export function AllowContentSelectionWithTextIndicator(...domElements) {
 }
 
 // TODO: add Enter input to elements that only function on spacebar (eg, rn the "Subscribe" btn works for Spacebar but not Enter)
-// TODO: add keyboard input to social media buttons (they don't respond in CSS to keyboard)
+// Issue URL: https://github.com/nickyonge/evto-web/issues/15
+// TODO: add keyboard input to social media buttons (they don't respond in CSS to keyboard)// Issue URL: https://github.com/nickyonge/evto-web/issues/14

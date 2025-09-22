@@ -159,6 +159,7 @@ module.exports = {
     output: {
         filename: '[name].bundle.js',
         // TODO: cleanup filenames in /dist, create asset subdirectories
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/19
         path: path.resolve(__dirname, 'dist'),
         assetModuleFilename: "[name][ext]",
         clean: true,

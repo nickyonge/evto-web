@@ -31,6 +31,7 @@ export class DropdownList extends TitledComponent {
         }
 
         // TODO: token display in current selected dropdown option 
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/6
 
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
         this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
@@ -49,6 +50,7 @@ export class DropdownList extends TitledComponent {
         }
         // create dropdown arrow SVG
         // TODO: dropdown arrow SVG path is not appearing
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/5
         this.#svg = ui.CreateSVG(
             [[arrowSVGPath, '#ffffff']],
             [

@@ -46,6 +46,7 @@ export class MutliOptionList extends TitledComponent {
             if (icons && icons.length >= i + 1 && icons[i]) {
                 // found valid icon
                 // TODO: add SVG functionality to label (if needed)
+                // Issue URL: https://github.com/nickyonge/evto-web/issues/7
             }
             // create text 
             let text = ui.CreateElement('p');
