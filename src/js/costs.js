@@ -9,12 +9,18 @@ export const SIZE_SMP = 1; // small plus
 export const SIZE_MD = 2;  // medium 
 export const SIZE_MDP = 3; // medium plus 
 export const SIZE_LG = 4;  // large 
-export const SIZE_LGP = 5; // large plus 
+export const SIZE_LGP = 5; // large plus
+
+// export const SIZE_CANVAS = [
+//     [SIZE_SM, SIZE_SMP], // small, small plus
+//     [SIZE_MD, SIZE_MDP], // meduim, med plus
+//     [SIZE_LG, SIZE_LGP]  // large, large plus
+// ];
 
 export const SIZE_CANVAS = [
-    [SIZE_SM, SIZE_SMP], // small, small plus
-    [SIZE_MD, SIZE_MDP], // meduim, med plus 
-    [SIZE_LG, SIZE_LGP]  // large, large plus 
+    [SIZE_SM, SIZE_SMP, SIZE_MD, SIZE_MDP, SIZE_LG, SIZE_LGP],
+    [SIZE_SM, SIZE_SMP, SIZE_MD, SIZE_MDP, SIZE_LG, SIZE_LGP],
+    [SIZE_SM, SIZE_SMP, SIZE_MD, SIZE_MDP, SIZE_LG, SIZE_LGP]
 ];
 
 // ============= FEATURES =============================

@@ -24,9 +24,10 @@ function CreatePageSize(page) {
     let txInfo = new TextField(txt.LIPSUM);
     page.appendChild(txInfo.div);
 
-    let sm = cost.GetCostArrayForSize(cost.SIZE_CANVAS, Size.Small);
-    let md = cost.GetCostArrayForSize(cost.SIZE_CANVAS, Size.Medium);
-    let lg = cost.GetCostArrayForSize(cost.SIZE_CANVAS, Size.Large);
+    let costArray = cost.GetCostArray(cost.SIZE_CANVAS);
+    // let sm = cost.GetCostArrayForSize(cost.SIZE_CANVAS, Size.Small);
+    // let md = cost.GetCostArrayForSize(cost.SIZE_CANVAS, Size.Medium);
+    // let lg = cost.GetCostArrayForSize(cost.SIZE_CANVAS, Size.Large);
 
     let moSize = new MutliOptionList('Size', null,
         [ // sizing and labels 
@@ -37,11 +38,7 @@ function CreatePageSize(page) {
             `${txt.PG_SIZE_LG}, <i>${txt.DATA_SIZE_LG}</i>`,
             `&nbsp;&nbsp;${txt.PG_SIZE_LGP}, <i>${txt.DATA_SIZE_LGP}</i>`,
         ],
-        [ // costs 
-            sm[0], sm[1],
-            md[0], md[1],
-            lg[0], lg[1]
-        ]);
+        costArray);
     page.appendChild(moSize.div);
 
 }
