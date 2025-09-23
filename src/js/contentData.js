@@ -37,6 +37,13 @@ export function SetupDataWindow() {
     });
 }
 
+export function SelectSize(selectedSize) {
+    currentSize = NumberToSize(selectedSize, true);
+    console.log(`currentSize: ${currentSize}`);
+}
+
+
+
 /**
  * Called the moment a page is opened (prior to any animations firing)
  * 
@@ -80,4 +87,32 @@ export function PageClosed(page) {
         case PG_SAVE:
             break;
     }
+}
+
+/**
+ * Get {@link Size} of canvas from the given number input 
+ * @param {Number} num canvas size num, should be 0-2 (or 0-5 if including plus sizing)
+ * @param {boolean} [includePlusSizing = false] include plus sizing? Eg, 0/1 = small, 2/3 = md, 4/5 = lg 
+ * @returns {Size} Size enum for canvas, or null if `num` is invalid 
+ */
+function NumberToSize(num, includePlusSizing = false) {
+    switch (num) {
+        case 0:
+            return Size.SM;
+        case 1:
+            return includePlusSizing ? Size.SM : Size.MD;
+        case 2:
+            return includePlusSizing ? Size.MD : Size.LG;
+        case 3:
+            if (includePlusSizing) { return Size.MD; }
+            break;
+        case 4:
+            if (includePlusSizing) { return Size.LG; }
+            break;
+        case 5:
+            if (includePlusSizing) { return Size.LG; }
+            break;
+    }
+    console.warn(`WARNING: invalid size num ${num}, can't parse to Size, inclPlusSize: ${includePlusSizing}, returning null`);
+    return null;
 }

@@ -67,7 +67,8 @@ export class MutliOptionList extends TitledComponent {
 
             if (onSelectCallback) {
                 input.addEventListener('change', (event) => {
-                    onSelectCallback(event.target.id);
+                    // callback has two params: option index, and fully unique id of the option label 
+                    onSelectCallback(i, event.target.id);
                 });
             }
         }
@@ -92,11 +93,11 @@ export class MutliOptionList extends TitledComponent {
      * Load or reload cost values based on the current size 
      */
     loadCosts() {
-        let costArray = cost.GetCostArray(this.#costArray);
-        if (costArray == null || !Array.isArray(costArray)) {
+        
+        if (this.#costArray == null || !Array.isArray(this.#costArray)) {
             return;
         }
-        
+        let costArray = cost.GetCostArray(this.#costArray);
         let len = this.#costsP.length;
         if (costArray.length != this.#costsP.length) {
             console.warn("WARNING: array size mismatch between costs and cost token paragraphs, can only update SOME tokens");

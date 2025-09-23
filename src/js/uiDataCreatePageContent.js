@@ -3,10 +3,10 @@
 import * as ui from "./ui";
 import * as txt from './text';
 import * as cost from './costs';
-import { currentSize, Size } from "./contentData";
+import { currentSize, Size, SelectSize } from "./contentData";
 import { Toggle, MutliOptionList, DropdownList, TextField } from "./components";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentData";
-import { GetPageNumberByID, pageComponents, pageHeaders } from "./uiData";
+import { GetPageNumberByID, pageHeaders } from "./uiData";
 import { GetAllChildrenWithClass } from "./lilutils";
 import { basicComponentClass } from "./components/base";
 
@@ -26,7 +26,7 @@ function CreatePageSize(page) {
     let txInfo = new TextField(txt.LIPSUM);
     page.appendChild(txInfo.div);
 
-    let moSize = new MutliOptionList('Size', null,
+    let moSize = new MutliOptionList('Size', SelectSize,
         [ // sizing and labels 
             `${txt.PG_SIZE_SM}, <i>${txt.DATA_SIZE_SM}</i>`,
             `&nbsp;&nbsp;${txt.PG_SIZE_SMP}, <i>${txt.DATA_SIZE_SMP}</i>`,
@@ -36,7 +36,6 @@ function CreatePageSize(page) {
             `&nbsp;&nbsp;${txt.PG_SIZE_LGP}, <i>${txt.DATA_SIZE_LGP}</i>`,
         ], cost.SIZE_CANVAS);
     page.appendChild(moSize.div);
-
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE -----
