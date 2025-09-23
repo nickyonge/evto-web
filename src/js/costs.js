@@ -1,6 +1,7 @@
 // [ [ [ [  [  [   [ TOKEN COST VALUES ]   ]  ]  ] ] ] ]
 
 import { currentSize, Size } from "./contentData";
+import { Is2DArray } from "./lilutils";
 
 // ============= SIZING ===============================
 
@@ -72,51 +73,6 @@ export function GetCost(costValues, index) {
     return GetCostForSize(costValues, currentSize, index);
 }
 /**
- * Gets the cost value of the given costValues group, for the given size, as an array of values for given size
- * @param {number|Array<number>|Array<Array<number>>} costValues Cost, or array of costs per size, 
- * or array of array of costs per size per index value (eg Sm/Md/Lg + Low/Med/High Detail) 
- * @param {Size} size Canvas size cost value
- * @returns {Array<number>|null} Given cost value array, or null if invalid / error
- */
-export function GetCostArrayForSize(costValues, size) {
-    // determine cost value types 
-    switch (typeof costValues) {
-        case 'number':
-            // just a number, return it 
-            return [costValues];
-        case 'object':
-            // check if an array:
-            if (Array.isArray(costValues)) {
-                // yup, it's an array - is it an array of arrays?
-                if (costValues.length == 0) {
-                    console.warn(`WARNING: costValues array is empty, can't get cost value, returning []`);
-                    return [];
-                }
-                if (size == null) {
-                    // no size
-                    console.warn(`WARNING: size is null, returning costValues[0] (${costValues[0]}) array in costValues ${costValues}`);
-                    return costValues[0];
-                } else {
-                    return costValues[size];
-                }
-            }
-            break;
-    }
-    console.warn(`WARNING: invalid type ${typeof costValues} for costValues ${costValues}, ` +
-        `can't process cost value as array, size: ${size}, returning null`);
-    return null;
-}
-
-/**
- * Gets the cost value of the given costValues group, using {@link currentSize}, as an array of values for that size
- * @param {number|Array<number>|Array<Array<number>>} costValues Cost, or array of costs per size, 
- * or array of array of costs per size per index value (eg Sm/Md/Lg + Low/Med/High Detail) 
- * @returns {Array<number>|null} Given cost value array, or null if invalid / error
- */
-export function GetCostArray(costValues) {
-    return GetCostArrayForSize(costValues, currentSize);
-}
-/**
  * Gets the cost value of the given costValues group, for the given size and index
  * @param {number|Array<number>|Array<Array<number>>} costValues Cost, or array of costs per size, 
  * or array of array of costs per size per index value (eg Sm/Md/Lg + Low/Med/High Detail) 
@@ -179,4 +135,58 @@ export function GetCostForSize(costValues, size, index) {
     console.warn(`WARNING: invalid type ${typeof costValues} for costValues ${costValues}, ` +
         `can't process cost value, size: ${size}, index: ${index}, returning -1`);
     return -1;
+}
+
+/**
+ * Gets the cost value of the given costValues group, using {@link currentSize}, as an array of values for that size
+ * @param {number|Array<number>|Array<Array<number>>} costValues Cost, or array of costs per size, 
+ * or array of array of costs per size per index value (eg Sm/Md/Lg + Low/Med/High Detail) 
+ * @returns {Array<number>|null} Given cost value array, or null if invalid / error
+ */
+export function GetCostArray(costValues) {
+    return GetCostArrayForSize(costValues, currentSize);
+}
+/**
+ * Gets the cost value of the given costValues group, for the given size, as an array of values for given size
+ * @param {number|Array<number>|Array<Array<number>>} costValues Cost, or array of costs per size, 
+ * or array of array of costs per size per index value (eg Sm/Md/Lg + Low/Med/High Detail) 
+ * @param {Size} size Canvas size cost value
+ * @returns {Array<number>|null} Given cost value array, or null if invalid / error
+ */
+export function GetCostArrayForSize(costValues, size) {
+    // nullchecks 
+    if (costValues == null || costValues == undefined) {
+        return null;
+    }
+    // determine cost value types 
+    switch (typeof costValues) {
+        case 'number':
+            // just a number, return it 
+            return [costValues];
+        case 'object':
+            // check if an array:
+            if (Array.isArray(costValues)) {
+                // yup, it's an array - is it valid?
+                if (costValues.length == 0) {
+                    console.warn(`WARNING: costValues array is empty, can't get cost value, returning []`);
+                    return [];
+                }
+                // is it an array of arrays?
+                if (!Is2DArray(costValues)) {
+                    // not a 2D array, just return cost values itself
+                    return costValues;
+                }
+                if (size == null) {
+                    // no size
+                    console.warn(`WARNING: size is null, returning costValues[0] (${costValues[0]}) array in costValues ${costValues}`);
+                    return costValues[0];
+                } else {
+                    return costValues[size];
+                }
+            }
+            break;
+    }
+    console.warn(`WARNING: invalid type ${typeof costValues} for costValues ${costValues}, ` +
+        `can't process cost value as array, size: ${size}, returning null`);
+    return null;
 }
