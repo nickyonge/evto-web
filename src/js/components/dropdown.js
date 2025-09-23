@@ -162,15 +162,10 @@ export class DropdownList extends TitledComponent {
 
         this.onScroll = () => { this.PositionUpdate(this.div); };
 
-        // set initial selection 
-        // this.#forceSelectionIndex = initialValue;
-
         // update costs 
         this.UpdateCosts();
     }
     #updateSelectedCost() {
-        console.log(this.selection);
-        console.log(this.selectionIndex);
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
         if (this.selectionCost === 'null' ||
             isBlank(this.selectionCost)) {
@@ -309,26 +304,17 @@ export class DropdownList extends TitledComponent {
     }
     set selectionIndex(index) {
         if (index == this.selectionIndex) {
-            if (this.#_forceSI) {
-                // forcing, ignore
-            } else {
                 return;
-            }
         }
         if (!this.#isValidSelectionIndex(index)) {
             console.warn(`WARNING: can't assign invalid selection index ${index}`);
             return;
         }
-        this.#_forceSI = false;
         for (let i = 0; i < this.#optionsInputs.length; i++) {
             this.#optionsInputs[i].checked = i == index;
         }
         this.selectionIndex = index;
         this.#updateSelectedCost();
-    }
-    set #forceSelectionIndex(index) {
-        this.#_forceSI = true;
-        this.selectionIndex = index;
     }
 
     /** returns the text of the current selection 
@@ -349,7 +335,6 @@ export class DropdownList extends TitledComponent {
     /** returns the index of the current selection 
      * @returns {number} integer index of the current selection, or `-1` if none/invalid */
     get selectionIndex() {
-        if (this.#_forceSI) { this.#_forceSI = false; return -1; }
         if (!this.#optionsInputs) {
             return -1;
         }
@@ -360,7 +345,6 @@ export class DropdownList extends TitledComponent {
         }
         return -1;
     }
-    #_forceSI = false;
 
     #isValidSelection(s) {
         for (let i = 0; i < this.#optionsInputs.length; i++) {
