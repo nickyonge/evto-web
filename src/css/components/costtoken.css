@@ -36,29 +36,6 @@
     margin-right: 5px;
 }
 
-/* TODO: test CSS issue 9 */
-/\* Issue URL: https://github.com/nickyonge/evto-web/issues/33 \*/
-
-/* TODO: test CSS issue 8 */
-/* Issue URL: https://github.com/nickyonge/evto-web/issues/31 */
-
-/* TODO: test CSS issue 7 */
-/\* Issue URL: https://github.com/nickyonge/evto-web/issues/30 \*/
-
-/* TODO: test CSS issue 6 */
-/* Issue URL: https://github.com/nickyonge/evto-web/issues/29 */
-
-/* TODO: test CSS issue 5 */
-/\* Issue URL: https://github.com/nickyonge/evto-web/issues/28 \*/
-
-/* TODO: test CSS issue 4 */
-/\* Issue URL: https://github.com/nickyonge/evto-web/issues/27 \*/
-
-/* TODO: test CSS issue 3 */
-/\* Issue URL: https://github.com/nickyonge/evto-web/issues/26 \*/
-/\* Issue URL: https://github.com/nickyonge/evto-web/issues/25 \*/
-
-
 .uiComponent .cost.darkBG {
     background-color: var(--color-ui-costToken-default-bg-inner-dark);
     box-shadow: 0px 0px 0.69px 1.5px var(--color-ui-costToken-default-bg-outer-dark);
