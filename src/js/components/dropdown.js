@@ -44,7 +44,7 @@ export class DropdownList extends TitledComponent {
         ObserverCallbackOnAdded(this.div, this.DivAddedToPage);
         this.#selected = ui.CreateDivWithClass('ddSelected');
         this.#selectedCost = ui.CreateDivWithClass('cost', 'inline', 'floating', 'forceSelected');
-        // this.#selectedCost.style.opacity = 0;
+        this.#selectedCost.style.opacity = 0;
         this.#selected.appendChild(this.#selectedCost);
         ui.MakeTabbable(this.#dropdown);
         if (options && options.length >= initialValue + 1) {
@@ -119,7 +119,7 @@ export class DropdownList extends TitledComponent {
 
             // create change callback
             oInput.addEventListener('change', (event) => {
-                this.#updateSelection();
+                this.#updateSelectedCost();
                 if (onSelectCallback) {
                     onSelectCallback(i, event.target.id);
                 }
@@ -168,6 +168,20 @@ export class DropdownList extends TitledComponent {
         // update costs 
         this.UpdateCosts();
     }
+    #updateSelectedCost() {
+        console.log(this.selection);
+        console.log(this.selectionIndex);
+        ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
+        if (this.selectionCost === 'null' ||
+            isBlank(this.selectionCost)) {
+            this.#selected.style.marginRight = '-20px';
+            this.#selectedCost.style.opacity = 0;
+        } else {
+            this.#selectedCost.innerHTML = `<p>${this.selectionCost}</p>`;
+            this.#selectedCost.style.opacity = 1;
+            this.#selected.style.marginRight = '0px';
+        }
+    }
 
     UpdateCosts() {
 
@@ -205,7 +219,7 @@ export class DropdownList extends TitledComponent {
             }
         }
 
-        this.#updateSelection();
+        this.#updateSelectedCost();
     }
 
     PositionUpdate(div) { // this.div
@@ -277,23 +291,6 @@ export class DropdownList extends TitledComponent {
         }
     }
 
-    #updateSelection() {
-        console.log("UPDATING SELECTIONNNN");
-        // console.log(this.#selected);
-        console.log(this.selection);
-        console.log(this.selectionIndex);
-        ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
-        if (this.selectionCost === 'null' ||
-            isBlank(this.selectionCost)) {
-            this.#selected.style.marginRight = '-20px';
-            this.#selectedCost.style.opacity = 0;
-        } else {
-            this.#selectedCost.innerHTML = `<p>${this.selectionCost}</p>`;
-            this.#selectedCost.style.opacity = 1;
-            this.#selected.style.marginRight = '0px';
-        }
-    }
-
     set selection(sel) { // this.optionsInputs[i]
         if (sel == this.selection) { return; }
         if (!this.#isValidSelection(sel)) {
@@ -308,7 +305,7 @@ export class DropdownList extends TitledComponent {
         for (let i = 0; i < this.#optionsInputs.length; i++) {
             this.#optionsInputs[i].checked = this.#optionsInputs[i].id == sel;
         }
-        this.#updateSelection();
+        this.#updateSelectedCost();
     }
     set selectionIndex(index) {
         if (index == this.selectionIndex) {
@@ -327,7 +324,7 @@ export class DropdownList extends TitledComponent {
             this.#optionsInputs[i].checked = i == index;
         }
         this.selectionIndex = index;
-        this.#updateSelection();
+        this.#updateSelectedCost();
     }
     set #forceSelectionIndex(index) {
         this.#_forceSI = true;
