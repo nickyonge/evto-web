@@ -32,8 +32,17 @@ let currentPage = -1;
 let tabs;
 let content;
 let pages = [];
+
+/** array of all headers for each of the pages 
+ @type {HTMLElement[]} 
+ */
 export let pageHeaders = [];
-export let pageComponents = [];
+/** 2D array of components arragned per page, 
+ * eg [0] is an array of components found on page 0, etc 
+ @type {Array<Array<BasicComponent>>}
+ @see {@link BasicComponent.allComponents}, static array of all loaded components 
+ */
+export let perPageComponents = [];
 
 
 // ----------------------------------------------------- UI CREATION ----- 
@@ -97,7 +106,7 @@ function CreatePages() {
     // create pages
     pages = [];
     pageHeaders = [];
-    pageComponents = [];
+    perPageComponents = [];
     for (let i = 0; i < txt.PAGES_COUNT; i++) {
         let page = ui.CreateDivWithClass('page', pageIDs[i], tabColors[i]);
         // page.id = `page${i}`; // page ID is numeric
@@ -126,7 +135,7 @@ function CreateFadeBG() {
 // ------------------------------------- SPECIFIC METHODS ----------------
 
 function PagesCreated() {
-    pageComponents = new Array(pages.length);
+    perPageComponents = new Array(pages.length);
     pages.forEach(page => {
         // record all components 
         let pageNumber = GetPageNumberByID(page.id);
@@ -135,7 +144,7 @@ function PagesCreated() {
         for (let i = 0; i < componentDivs.length; i++) {
             components.push(BasicComponent.GetComponentByDiv(componentDivs[i]));
         }
-        pageComponents[pageNumber] = components;
+        perPageComponents[pageNumber] = components;
         page.addEventListener('scroll', OnScroll);
     });
     UpdatePages();
@@ -143,7 +152,7 @@ function PagesCreated() {
 
 function OnScroll(e) {
     let pageNumber = GetPageNumberByID(e.target.id);
-    pageComponents[pageNumber].forEach(component => {
+    perPageComponents[pageNumber].forEach(component => {
         if (component.onScroll) {
             component.onScroll();
         }

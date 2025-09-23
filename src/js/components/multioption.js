@@ -93,14 +93,13 @@ export class MutliOptionList extends TitledComponent {
      * Load or reload cost values based on the current size 
      */
     loadCosts() {
-        
         if (this.#costArray == null || !Array.isArray(this.#costArray)) {
             return;
         }
         let costArray = cost.GetCostArray(this.#costArray);
         let len = this.#costsP.length;
         if (costArray.length != this.#costsP.length) {
-            console.warn("WARNING: array size mismatch between costs and cost token paragraphs, can only update SOME tokens");
+            console.warn(`WARNING: array size mismatch between costsArray (${costArray.length}) and cost paragraphs (${this.#costsP.length}), can only update SOME tokens`);
             len = Math.min(this.#costsP.length, costArray.length);
         }
 

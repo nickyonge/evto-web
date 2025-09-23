@@ -4,6 +4,7 @@ import * as txt from './text';
 import { StringToNumber } from "./lilutils";
 import { dataWindow } from './uiMain';
 import { initialTab, SelectTab } from './uiData';
+import { BasicComponent } from './components/base';
 
 /**
  * Canvas Sizes Enum
@@ -39,7 +40,11 @@ export function SetupDataWindow() {
 
 export function SelectSize(selectedSize) {
     currentSize = NumberToSize(selectedSize, true);
-    console.log(`currentSize: ${currentSize}`);
+    BasicComponent.allComponents.forEach(component => {
+        if (component.loadCosts) {
+            component.loadCosts();
+        }
+    });
 }
 
 
