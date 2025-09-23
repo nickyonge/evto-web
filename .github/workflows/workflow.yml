@@ -23,7 +23,7 @@ jobs:
       - uses: "actions/checkout@v4"
 
       - name: "TODO to Issue"
-        uses: "alstr/todo-to-issue-action@v5"
+        uses: "nickyonge/todo-to-issue-action"
         with:
           CLOSE_ISSUES: "true"
           INSERT_ISSUE_URLS: "true"
