@@ -41,8 +41,8 @@ export function SetupDataWindow() {
 export function SelectSize(selectedSize) {
     currentSize = NumberToSize(selectedSize, true);
     BasicComponent.allComponents.forEach(component => {
-        if (component.loadCosts) {
-            component.loadCosts();
+        if (component.UpdateCosts) {
+            component.UpdateCosts();
         }
     });
 }

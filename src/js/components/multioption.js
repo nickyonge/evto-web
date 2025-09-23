@@ -86,13 +86,13 @@ export class MutliOptionList extends TitledComponent {
         this._addHelpIcon(`help me! ${componentTitle}`);
 
         // load initial costs 
-        this.loadCosts();
+        this.UpdateCosts();
     }
 
     /**
      * Load or reload cost values based on the current size 
      */
-    loadCosts() {
+    UpdateCosts() {
         if (this.#costArray == null || !Array.isArray(this.#costArray)) {
             return;
         }
