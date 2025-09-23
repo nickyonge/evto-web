@@ -142,13 +142,14 @@ export function CreatePageContent(page) {
 
 function DemoPageContent(page) {
 
-    // let dd = new DropdownList('dropdown', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam']);
-    let dd1 = new DropdownList('dropdown1', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam'], [[1,2,3],[4,5,6],[7,8,9]]);
-    let dd = new DropdownList('dropdown2', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam', 'a', 'b', 'c', '1235387235897293859823598729387592359792837598', 'test', 'ewbai']);
-    // function dCallback() { console.log(`changed: ${dd.selection}`); }
     function dCallback(selection) { console.log(`changed: ${selection}`); }
-    page.appendChild(dd1.div);
+    // function dCallback() { console.log(`changed: ${dd.selection}`); }
+    
+    // let dd = new DropdownList('dropdown', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam']);
+    let dd = new DropdownList('dropdown2', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam', 'a', 'b', 'c', '1235387235897293859823598729387592359792837598', 'test', 'ewbai']);
     page.appendChild(dd.div);
+    let dd1 = new DropdownList('dropdown1', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam'], [[1,2,3],[4,5,6],[7,8,9]]);
+    page.appendChild(dd1.div);
 
     let mo = new MutliOptionList('multi', mCallback, ['a', 'b', 'c'], [1, 2, 3]);
     function mCallback() { console.log(`changed: ${mo.selection}`); }

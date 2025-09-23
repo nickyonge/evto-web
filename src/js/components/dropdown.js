@@ -121,7 +121,7 @@ export class DropdownList extends TitledComponent {
             oInput.addEventListener('change', (event) => {
                 this.#updateSelection();
                 if (onSelectCallback) {
-                    onSelectCallback(event.target.id);
+                    onSelectCallback(i, event.target.id);
                 }
                 if (!this.#initialChange) {
                     // initial option wasn't appearing as selected, manually set and un-set appearance 
@@ -162,14 +162,14 @@ export class DropdownList extends TitledComponent {
 
         this.onScroll = () => { this.PositionUpdate(this.div); };
 
-        this.UpdateCosts();
-
         // set initial selection 
-        this.#forceSelectionIndex = initialValue;
+        // this.#forceSelectionIndex = initialValue;
+
+        // update costs 
+        this.UpdateCosts();
     }
 
     UpdateCosts() {
-
 
         if (this.#costArray == null || !Array.isArray(this.#costArray)) {
             return;
@@ -183,9 +183,14 @@ export class DropdownList extends TitledComponent {
 
         for (let i = 0; i < len; i++) {
             if (costArray[i] == null) {
+                // hidden, don't display 
                 this.#optionsCosts[i].hidden = true;
+                ui.RemoveClassFromDOMs('withCost', this.#optionsLabels[i]);
+                ui.AddElementAttribute(this.#optionsLabels[i], 'data-cost', '');
             } else {
+                // visible, display 
                 this.#optionsCosts[i].hidden = false;
+                ui.AddClassToDOMs('withCost', this.#optionsLabels[i]);
                 let cost = costArray[i];
                 if (cost < -99) { cost = -99; } else if (cost > 999) { cost = 999; }
                 if (cost < -9 || cost > 99) {
@@ -196,42 +201,11 @@ export class DropdownList extends TitledComponent {
                     ui.RemoveClassesFromDOM(this.#optionsCosts[i], 'smallText', 'tinyText');
                 }
                 this.#optionsCostsP[i].innerText = cost;
-            }
-            // update based on visibility 
-            if (this.#optionsCosts[i].hidden) {
-                // hidden, don't display 
-                ui.RemoveClassFromDOMs('withCost', this.#optionsLabels[i]);
-            } else {
-                // visible, display 
-                ui.AddClassToDOMs('withCost', this.#optionsLabels[i]);
+                ui.AddElementAttribute(this.#optionsLabels[i], 'data-cost', cost);
             }
         }
 
-            // ui.AddElementAttributes(oLabel, ['for', 'data-txt', 'data-cost'], [uniqueName, options[i], hasCost ? costs[i] : '']);
-
-        // add costs field 
-        // let hasCost = (costs && costs.length > i);
-        // if (hasCost) { ui.AddClassToDOMs('withCost', oLabel); }
-        // if (hasCost) {
-        //     if (costs[i] == null) {
-        //         this.#optionsCosts.push(null);
-        //         // continue;
-        //     } else {
-        //         let oCost = ui.CreateDivWithClass('cost', 'floating');
-        //         let oCostP = ui.CreateElement('p');
-        //         oCost.appendChild(oCostP);
-        //         oCostP.innerHTML = `${costs[i]}`;
-        //         this.#optionsCosts.push(oCost);
-        //         this.#optionsCostsP.push(oCostP);
-        //         oLabel.appendChild(oCost);
-        //         if (isChecked) {
-        //             oCost.style.backgroundColor = GetCSSVariable('--color-ui-costToken-selected-bg-inner');
-        //             oCost.style.borderColor = GetCSSVariable('--color-ui-costToken-selected');
-        //             oCost.style.boxShadow = `0px 0px 0.69px 1.5px ${GetCSSVariable('--color-ui-costToken-selected-bg-outer')}`;
-        //             oCostP.style.color = GetCSSVariable('--color-ui-costToken-selected');
-        //         }
-        //     }
-        // }
+        this.#updateSelection();
     }
 
     PositionUpdate(div) { // this.div
@@ -304,6 +278,10 @@ export class DropdownList extends TitledComponent {
     }
 
     #updateSelection() {
+        console.log("UPDATING SELECTIONNNN");
+        // console.log(this.#selected);
+        console.log(this.selection);
+        console.log(this.selectionIndex);
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
         if (this.selectionCost === 'null' ||
             isBlank(this.selectionCost)) {
@@ -333,14 +311,22 @@ export class DropdownList extends TitledComponent {
         this.#updateSelection();
     }
     set selectionIndex(index) {
-        if (index == this.selectionIndex) { return; }
+        if (index == this.selectionIndex) {
+            if (this.#_forceSI) {
+                // forcing, ignore
+            } else {
+                return;
+            }
+        }
         if (!this.#isValidSelectionIndex(index)) {
             console.warn(`WARNING: can't assign invalid selection index ${index}`);
             return;
         }
+        this.#_forceSI = false;
         for (let i = 0; i < this.#optionsInputs.length; i++) {
             this.#optionsInputs[i].checked = i == index;
         }
+        this.selectionIndex = index;
         this.#updateSelection();
     }
     set #forceSelectionIndex(index) {
