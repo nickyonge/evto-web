@@ -12,7 +12,7 @@ dataWindow {
 }
 
 /* TODO: narrower tab sidebar when window is tall (esp on left) */
-/\* Issue URL: https://github.com/nickyonge/evto-web/issues/4 \*/
+/* Issue URL: https://github.com/nickyonge/evto-web/issues/4 */
 
 /* tall dataWindow [] */
 @media screen and (min-aspect-ratio: 1.2) {
