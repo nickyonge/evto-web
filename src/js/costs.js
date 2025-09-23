@@ -19,8 +19,6 @@ export const SIZE_CANVAS = [
 
 // ============= FEATURES =============================
 
-//TODO: make costs accommodate cost differences in sm/md/lg 
-//Issue URL: https://github.com/nickyonge/evto-web/issues/9
 export const FEAT_LANDDETAIL = [
     [0, 0, 0], // small
     [1, 2, 3], // med
