@@ -58,19 +58,19 @@ function CreatePageFeatures(page) {
     let moLabelling = new MutliOptionList(
         txt.PG_FEAT_LABELLING, null,
         txt.PG_FEAT_LABELLING_OPTIONS,
-        [1, 2, 3],
+        cost.FEAT_LABELLING,
         null, 0
     );
     let moTitleBox = new MutliOptionList(
         txt.PG_FEAT_TITLEBOX, null,
         txt.PG_FEAT_TITLEBOX_OPTIONS,
-        cost.FEAT_GCSLINES,
+        cost.FEAT_TITLEBOX,
         null, 0
     );
     let moLandLines = new MutliOptionList(
         txt.PG_FEAT_LANDLINES, null,
         txt.PG_FEAT_LANDLINES_OPTIONS,
-        [1, 2, 3, 4, 5],
+        cost.FEAT_LANDLINES,
         null, 0
     );
 
