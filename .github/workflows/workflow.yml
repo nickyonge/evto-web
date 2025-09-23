@@ -22,32 +22,39 @@ jobs:
     steps:
       - uses: "actions/checkout@v4"
 
-      - name: "Run TODO-to-Issue for all languages"
-        run: |
-          # Define language groups with their comment character and glob
-          declare -A LANG_MAP
-          LANG_MAP["css_js_ts"]="/*:*.css,*.js,*.ts"
-          LANG_MAP["python_yaml"]="#:*.py,*.yml,*.yaml"
+      # ---------------------------
+      # CSS / JS / TS (block comments)
+      # ---------------------------
+      - name: "TODO to Issue (CSS/JS/TS)"
+        uses: "alstr/todo-to-issue-action@v5"
+        with:
+          CLOSE_ISSUES: "true"
+          INSERT_ISSUE_URLS: "true"
+          COMMENT_CHAR: "/*"
+          INCLUDE: "*.css,*.js,*.ts"
+        env:
+          MANUAL_COMMIT_REF: ${{ github.event.inputs.MANUAL_COMMIT_REF }}
+          MANUAL_BASE_REF: ${{ github.event.inputs.MANUAL_BASE_REF }}
+          FULL_REPO: ${{ github.event.inputs.MANUAL_COMMIT_REF == '' && github.event.inputs.MANUAL_BASE_REF == '' && 'true' || 'false' }}
 
-          for lang in "${!LANG_MAP[@]}"; do
-            COMMENT_AND_GLOB="${LANG_MAP[$lang]}"
-            COMMENT_CHAR="${COMMENT_AND_GLOB%%:*}"
-            INCLUDE_GLOB="${COMMENT_AND_GLOB##*:}"
+      # ---------------------------
+      # Python / YAML / other (# comments)
+      # ---------------------------
+      - name: "TODO to Issue (Python/YAML)"
+        uses: "alstr/todo-to-issue-action@v5"
+        with:
+          CLOSE_ISSUES: "true"
+          INSERT_ISSUE_URLS: "true"
+          COMMENT_CHAR: "#"
+          INCLUDE: "*.py,*.yml,*.yaml"
+        env:
+          MANUAL_COMMIT_REF: ${{ github.event.inputs.MANUAL_COMMIT_REF }}
+          MANUAL_BASE_REF: ${{ github.event.inputs.MANUAL_BASE_REF }}
+          FULL_REPO: ${{ github.event.inputs.MANUAL_COMMIT_REF == '' && github.event.inputs.MANUAL_BASE_REF == '' && 'true' || 'false' }}
 
-            echo "Processing $lang files ($INCLUDE_GLOB) with comment $COMMENT_CHAR"
-
-            # Run the todo-to-issue-action for this language group
-            gh workflow run -f MANUAL_COMMIT_REF="${{ github.event.inputs.MANUAL_COMMIT_REF }}" \
-                             -f MANUAL_BASE_REF="${{ github.event.inputs.MANUAL_BASE_REF }}" \
-                             --repo "${GITHUB_REPOSITORY}" \
-                             --raw "alstr/todo-to-issue-action@v5" \
-                             --input "CLOSE_ISSUES=true" \
-                             --input "INSERT_ISSUE_URLS=true" \
-                             --input "COMMENT_CHAR=$COMMENT_CHAR" \
-                             --input "INCLUDE=$INCLUDE_GLOB" \
-                             --input "FULL_REPO=true"
-          shell: bash
-
+      # ---------------------------
+      # Git config and commit changes
+      # ---------------------------
       - name: Set Git user
         if: github.event_name == 'push'
         run: |
