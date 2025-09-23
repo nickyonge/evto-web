@@ -18,3 +18,4 @@ import(/* webpackPreload: true */ './../css/components/slidebtn.css');
 import(/* webpackPreload: true */ './../css/components/tabs.css');
 import(/* webpackPreload: true */ './../css/components/textfield.css');
 import(/* webpackPreload: true */ './../css/components/toggle.css');
+import(/* webpackPreload: true */ '@melloware/coloris/dist/coloris.css');
