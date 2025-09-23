@@ -39,7 +39,7 @@
 
     --color-bg-solid: #beeeef;
     --color-bg-solid-semitransparent: #beeeef69;
-    /* TODO: change ultrawide bg solid to linear gradient, or remove altogether */
+    /* TO/DO test cancel: change ultrawide bg solid to linear gradient, or remove altogether */
     --color-bg-gradient-1: #4e89db;
     --color-bg-gradient-2: #4680db;
     --color-bg-gradient-3: #225bc8;

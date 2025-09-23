@@ -43,13 +43,12 @@ h3 {
     opacity: 0.8;
 }
 
-/* TODO: change ultrawide BG to linear gradient, or remove altogether */
-
-@media screen and (min-aspect-ratio: 3) {
+/* TO/DO test cancel: change ultrawide BG to linear gradient, or remove altogether */
+/* @media screen and (min-aspect-ratio: 3) {
     body {
         background-image: none;
     }
-}
+} */
 
 #container {
     z-index: -1;
