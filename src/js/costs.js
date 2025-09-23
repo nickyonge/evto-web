@@ -1,7 +1,6 @@
 // [ [ [ [  [  [   [ TOKEN COST VALUES ]   ]  ]  ] ] ] ]
 
 import { currentSize, Size } from "./contentData";
-import { Is2DArray } from "./lilutils";
 
 // ============= SIZING ===============================
 
@@ -171,11 +170,7 @@ export function GetCostArrayForSize(costValues, size) {
                     console.warn(`WARNING: costValues array is empty, can't get cost value, returning []`);
                     return [];
                 }
-                // is it an array of arrays?
-                if (!Is2DArray(costValues)) {
-                    // not a 2D array, just return cost values itself
-                    return costValues;
-                }
+                // is size valid?
                 if (size == null) {
                     // no size
                     console.warn(`WARNING: size is null, returning costValues[0] (${costValues[0]}) array in costValues ${costValues}`);

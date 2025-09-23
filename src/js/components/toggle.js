@@ -1,17 +1,21 @@
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
+import * as cost from '../costs';
 
 export class Toggle extends TitledComponent {
 
     #input;
     #label;
     #cost;
+    #costP;
     #switch;
 
-    constructor(componentTitle, onChangeCallback, cost = null, initialState = false) {
+    #costArray;
+
+    constructor(componentTitle, onChangeCallback, cost, initialState = false) {
         super(componentTitle);
 
-        let useCost = (cost || cost === 0 || cost === '0');
+        this.#costArray = cost;
 
         ui.AddClassesToDOM(this.div, 'toggle');
         this.#input = ui.CreateInputWithID('checkbox', this.uniqueComponentID, 'toggle');
@@ -24,27 +28,51 @@ export class Toggle extends TitledComponent {
 
         this.#input.checked = initialState;
 
-        if (useCost) {
+        // add costs field 
+        this.#cost = ui.CreateDivWithClass('cost', 'inline', 'darkBG');
+        this.#costP = ui.CreateElement('p');
+        this.#cost.appendChild(this.#costP);
+        this._titleElement.appendChild(this.#cost);
+        this.#cost.hidden = true;
 
-            // add costs field 
-            this.#cost = ui.CreateDivWithClass('cost', 'inline', 'darkBG');
-            this.#cost.innerHTML = `<p>${cost}</p>`;
-            this._titleElement.appendChild(this.#cost);
-            
-            
-        }
-        
         this.div.appendChild(this.#input);
         this.div.appendChild(this.#label);
         this.#label.appendChild(this._titleElement);
         this.#label.appendChild(this.#switch);
-        
+
         if (onChangeCallback) {
             this.#input.addEventListener('change', (event) => {
                 onChangeCallback(event.target.checked);
             });
         }
         this._addHelpIcon(`help me! ${1}`, true, false);
+
+        this.UpdateCosts();
+    }
+
+    UpdateCosts() {
+        if (this.#costArray == null || !Array.isArray(this.#costArray)) {
+            return;
+        }
+        let costArray = cost.GetCostArray(this.#costArray);
+        console.log("cost array before: " + this.#costArray);
+        console.log("cost array after: " + costArray);
+
+        if (costArray == null) {
+            this.#cost.hidden = true;
+        } else {
+            this.#cost.hidden = false;
+            let cost = costArray;
+            if (cost < -99) { cost = -99; } else if (cost > 999) { cost = 999; }
+            if (cost < -9 || cost > 99) {
+                ui.AddClassToDOMs('tinyText', this.#cost);
+            } else if (cost < 0 || cost > 9) {
+                ui.AddClassToDOMs('smallText', this.#cost);
+            } else {
+                ui.RemoveClassesFromDOM(this.#cost, 'smallText', 'tinyText');
+            }
+            this.#costP.innerText = cost;
+        }
     }
 
     // function exampleOnChangeCallback(isChecked) {
