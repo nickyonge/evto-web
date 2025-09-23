@@ -2,6 +2,7 @@ import * as ui from "../ui";
 import { BasicComponent, TitledComponent } from "./base";
 import { ObserveNode, ObserverCallbackOnAdded } from "../mutationObserver";
 import { GetChildWithClass, GetCSSVariable, GetParentWithClass, GetSiblingWithClass, isBlank } from "../lilutils";
+import * as cost from '../costs';
 // const initialValue = 0;
 
 const _smootherScroll = true;
@@ -18,6 +19,7 @@ export class DropdownList extends TitledComponent {
     #optionsLabels;
     #optionsCosts;
     #optionsCostsP;
+    #costArray;
 
     static _dropdownMaxHeight = -1;
 
@@ -30,8 +32,10 @@ export class DropdownList extends TitledComponent {
             DropdownList._dropdownMaxHeight = parseInt(GetCSSVariable('--ui-component-dropdown-max-height'), 10);
         }
 
-        // TODO: token display in current selected dropdown option 
+        // TODO: token display in current selected dropdown option
         // Issue URL: https://github.com/nickyonge/evto-web/issues/6
+
+        this.#costArray = costs;
 
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
         this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
@@ -70,7 +74,6 @@ export class DropdownList extends TitledComponent {
         for (let i = 0; i < options.length; i++) {
             // create elements
             let isChecked = i == initialValue;
-            let hasCost = (costs && costs.length > i);
             let oDiv = ui.CreateDiv();
             let uniqueName = `${this.uniqueComponentName}_o${i}`;
             let oInput = ui.CreateInputWithID('radio', uniqueName);
@@ -78,8 +81,7 @@ export class DropdownList extends TitledComponent {
             oInput.defaultChecked = isChecked;
             oInput.checked = isChecked;
             let oLabel = ui.CreateElementWithClass('label', 'ddOption');
-            if (hasCost) { ui.AddClassToDOMs('withCost', oLabel); }
-            ui.AddElementAttributes(oLabel, ['for', 'data-txt', 'data-cost'], [uniqueName, options[i], hasCost ? costs[i] : '']);
+            ui.AddElementAttributes(oLabel, ['for', 'data-txt', 'data-cost'], [uniqueName, options[i], '']);
             // ensure correct checked background
             if (isChecked) {
                 oLabel.style.backgroundColor = GetCSSVariable('--ui-component-color-enabled-dark');
@@ -93,26 +95,20 @@ export class DropdownList extends TitledComponent {
             oDiv.appendChild(oInput);
             oDiv.appendChild(oLabel);
             // add costs field 
-            if (hasCost) {
-                if (costs[i] == null) {
-                    this.#optionsCosts.push(null);
-                    // continue;
-                } else {
-                    let oCost = ui.CreateDivWithClass('cost', 'floating');
-                    let oCostP = ui.CreateElement('p');
-                    oCost.appendChild(oCostP);
-                    oCostP.innerHTML = `${costs[i]}`;
-                    this.#optionsCosts.push(oCost);
-                    this.#optionsCostsP.push(oCostP);
-                    oLabel.appendChild(oCost);
-                    if (isChecked) {
-                        oCost.style.backgroundColor = GetCSSVariable('--color-ui-costToken-selected-bg-inner');
-                        oCost.style.borderColor = GetCSSVariable('--color-ui-costToken-selected');
-                        oCost.style.boxShadow = `0px 0px 0.69px 1.5px ${GetCSSVariable('--color-ui-costToken-selected-bg-outer')}`;
-                        oCostP.style.color = GetCSSVariable('--color-ui-costToken-selected');
-                    }
-                }
+            let oCost = ui.CreateDivWithClass('cost', 'floating');
+            let oCostP = ui.CreateElement('p');
+            oCost.appendChild(oCostP);
+            this.#optionsCosts.push(oCost);
+            this.#optionsCostsP.push(oCostP);
+            oLabel.appendChild(oCost);
+            if (isChecked) {
+                oCost.style.backgroundColor = GetCSSVariable('--color-ui-costToken-selected-bg-inner');
+                oCost.style.borderColor = GetCSSVariable('--color-ui-costToken-selected');
+                oCost.style.boxShadow = `0px 0px 0.69px 1.5px ${GetCSSVariable('--color-ui-costToken-selected-bg-outer')}`;
+                oCostP.style.color = GetCSSVariable('--color-ui-costToken-selected');
             }
+            oCost.hidden = true;
+
             // add option div to options container
             this.#optionsContainer.appendChild(oDiv);
 
@@ -166,8 +162,68 @@ export class DropdownList extends TitledComponent {
 
         this.onScroll = () => { this.PositionUpdate(this.div); };
 
+        this.UpdateCosts();
+
         // set initial selection 
         this.#forceSelectionIndex = initialValue;
+    }
+
+    UpdateCosts() {
+
+
+        if (this.#costArray == null || !Array.isArray(this.#costArray)) {
+            return;
+        }
+        let costArray = cost.GetCostArray(this.#costArray);
+        let len = this.#optionsCostsP.length;
+        if (costArray.length != this.#optionsCostsP.length) {
+            console.warn(`WARNING: array size mismatch between costsArray (${costArray.length}) and cost paragraphs (${this.#optionsCostsP.length}), can only update SOME tokens`);
+            len = Math.min(this.#optionsCostsP.length, costArray.length);
+        }
+
+        for (let i = 0; i < len; i++) {
+            if (costArray[i] == null) {
+                this.#optionsCosts[i].hidden = true;
+            } else {
+                this.#optionsCosts[i].hidden = false;
+                let cost = costArray[i];
+                if (cost < -99) { cost = -99; } else if (cost > 999) { cost = 999; }
+                if (cost < -9 || cost > 99) {
+                    ui.AddClassToDOMs('tinyText', this.#optionsCosts[i]);
+                } else if (cost < 0 || cost > 9) {
+                    ui.AddClassToDOMs('smallText', this.#optionsCosts[i]);
+                } else {
+                    ui.RemoveClassesFromDOM(this.#optionsCosts[i], 'smallText', 'tinyText');
+                }
+                this.#optionsCosts[i].innerText = cost;
+            }
+        }
+
+            // ui.AddElementAttributes(oLabel, ['for', 'data-txt', 'data-cost'], [uniqueName, options[i], hasCost ? costs[i] : '']);
+
+        // add costs field 
+        // let hasCost = (costs && costs.length > i);
+        // if (hasCost) { ui.AddClassToDOMs('withCost', oLabel); }
+        // if (hasCost) {
+        //     if (costs[i] == null) {
+        //         this.#optionsCosts.push(null);
+        //         // continue;
+        //     } else {
+        //         let oCost = ui.CreateDivWithClass('cost', 'floating');
+        //         let oCostP = ui.CreateElement('p');
+        //         oCost.appendChild(oCostP);
+        //         oCostP.innerHTML = `${costs[i]}`;
+        //         this.#optionsCosts.push(oCost);
+        //         this.#optionsCostsP.push(oCostP);
+        //         oLabel.appendChild(oCost);
+        //         if (isChecked) {
+        //             oCost.style.backgroundColor = GetCSSVariable('--color-ui-costToken-selected-bg-inner');
+        //             oCost.style.borderColor = GetCSSVariable('--color-ui-costToken-selected');
+        //             oCost.style.boxShadow = `0px 0px 0.69px 1.5px ${GetCSSVariable('--color-ui-costToken-selected-bg-outer')}`;
+        //             oCostP.style.color = GetCSSVariable('--color-ui-costToken-selected');
+        //         }
+        //     }
+        // }
     }
 
     PositionUpdate(div) { // this.div
