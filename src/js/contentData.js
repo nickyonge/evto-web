@@ -5,9 +5,6 @@ import { StringToNumber } from "./lilutils";
 import { dataWindow } from './uiMain';
 import { initialTab, SelectTab } from './uiData';
 import { BasicComponent } from './components/base';
-import * as ui from './ui';
-import Coloris from "@melloware/coloris";
-
 
 /**
  * Canvas Sizes Enum
@@ -65,11 +62,6 @@ export function PageOpened(page, wasSnapped) {
         case PG_INTRO:
             break;
         case PG_SIZE:
-    let _col = ui.CreateInput('text');
-    ui.AddElementAttribute(_col, 'data-coloris', '');
-    page.appendChild(_col);
-    Coloris.init();
-    Coloris({ el: "#coloris" });
             break;
         case PG_FEATURES:
             break;

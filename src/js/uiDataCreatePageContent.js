@@ -126,6 +126,12 @@ export function CreatePageContent(page) {
             break;
         case PG_SIZE:
             CreatePageSize(page);
+
+    let _col = ui.CreateInput('text');
+    ui.AddElementAttribute(_col, 'data-coloris', '');
+    page.appendChild(_col);
+    Coloris.init();
+    Coloris({ el: "#coloris" });
             break;
         case PG_FEATURES:
             CreatePageFeatures(page);
