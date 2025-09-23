@@ -1,0 +1,17 @@
+[
+  {
+    "language": "CSS",
+    "extensions": [
+      ".css"
+    ],
+    "markers": [
+      {
+        "type": "block",
+        "pattern": {
+          "start": "/\\*",
+          "end": "\\*/"
+        }
+      }
+    ]
+  }
+]
