@@ -12,7 +12,7 @@ on:
         required: false
 
 jobs:
-  todo:
+  build:
     runs-on: "ubuntu-latest"
     permissions:
       contents: write
@@ -22,39 +22,17 @@ jobs:
     steps:
       - uses: "actions/checkout@v4"
 
-      # ---------------------------
-      # CSS / JS / TS (block comments)
-      # ---------------------------
-      - name: "TODO to Issue (CSS/JS/TS)"
+      - name: "TODO to Issue"
         uses: "alstr/todo-to-issue-action@v5"
         with:
           CLOSE_ISSUES: "true"
           INSERT_ISSUE_URLS: "true"
-          COMMENT_CHAR: "/*"
-          INCLUDE: "*.css,*.js,*.ts"
         env:
           MANUAL_COMMIT_REF: ${{ github.event.inputs.MANUAL_COMMIT_REF }}
           MANUAL_BASE_REF: ${{ github.event.inputs.MANUAL_BASE_REF }}
+          # If no commit inputs provided, scan whole repo
           FULL_REPO: ${{ github.event.inputs.MANUAL_COMMIT_REF == '' && github.event.inputs.MANUAL_BASE_REF == '' && 'true' || 'false' }}
 
-      # ---------------------------
-      # Python / YAML / other (# comments)
-      # ---------------------------
-      - name: "TODO to Issue (Python/YAML)"
-        uses: "alstr/todo-to-issue-action@v5"
-        with:
-          CLOSE_ISSUES: "true"
-          INSERT_ISSUE_URLS: "true"
-          COMMENT_CHAR: "#"
-          INCLUDE: "*.py,*.yml,*.yaml"
-        env:
-          MANUAL_COMMIT_REF: ${{ github.event.inputs.MANUAL_COMMIT_REF }}
-          MANUAL_BASE_REF: ${{ github.event.inputs.MANUAL_BASE_REF }}
-          FULL_REPO: ${{ github.event.inputs.MANUAL_COMMIT_REF == '' && github.event.inputs.MANUAL_BASE_REF == '' && 'true' || 'false' }}
-
-      # ---------------------------
-      # Git config and commit changes
-      # ---------------------------
       - name: Set Git user
         if: github.event_name == 'push'
         run: |
