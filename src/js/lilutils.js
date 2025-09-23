@@ -101,7 +101,7 @@ export function Is2DArray(arrays, checkAllArrayIndices = true) {
             }
         }
     }
-    return false;
+    return checkAllArrayIndices;
 }
 
 /**
