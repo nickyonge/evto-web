@@ -52,6 +52,9 @@
 .uiComponent .cost.smallText > p {
     font-size: 6.9pt;
 }
+.uiComponent .cost.tinyText > p {
+    font-size: 5pt;
+}
 .uiComponent .cost.forceSelected,
 .uiComponent input:checked ~ label .cost.floating,
 .uiComponent input:checked ~ label .cost.inline,

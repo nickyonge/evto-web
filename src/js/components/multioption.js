@@ -109,10 +109,13 @@ export class MutliOptionList extends TitledComponent {
             } else {
                 this.#costs[i].hidden = false;
                 let cost = costArray[i];
-                if (cost < 0 || cost > 9) {
+                if (cost < -99) { cost = -99; } else if (cost > 999) { cost = 999; }
+                if (cost < -9 || cost > 99) {
+                    ui.AddClassToDOMs('tinyText', this.#costs[i]);
+                } else if (cost < 0 || cost > 9) {
                     ui.AddClassToDOMs('smallText', this.#costs[i]);
                 } else {
-                    ui.RemoveClassFromDOMs('smallText', this.#costs[i]);
+                    ui.RemoveClassesFromDOM(this.#costs[i], 'smallText', 'tinyText');
                 }
                 this.#costsP[i].innerText = cost;
             }
