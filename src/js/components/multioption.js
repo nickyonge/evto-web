@@ -9,7 +9,9 @@ export class MutliOptionList extends TitledComponent {
     #labels;
     #costs;
     #costsP;
+
     #costArray;
+    #currentCost;
 
     constructor(componentTitle, onSelectCallback, options, costs, icons, initialValue = 0) {
         super(componentTitle);
@@ -24,6 +26,7 @@ export class MutliOptionList extends TitledComponent {
         this.#costsP = [];
 
         this.#costArray = costs;
+        this.#currentCost = 0;
 
         if (!options) {
             console.warn("WARNING: creating a multi-option list without any options array");
@@ -106,20 +109,28 @@ export class MutliOptionList extends TitledComponent {
         for (let i = 0; i < len; i++) {
             if (costArray[i] == null) {
                 this.#costs[i].hidden = true;
+                this.#currentCost = 0;
             } else {
                 this.#costs[i].hidden = false;
-                let cost = costArray[i];
-                if (cost < -99) { cost = -99; } else if (cost > 999) { cost = 999; }
-                if (cost < -9 || cost > 99) {
+                let _cost = costArray[i];
+                if (_cost < -99) { _cost = -99; } else if (_cost > 999) { _cost = 999; }
+                if (_cost < -9 || _cost > 99) {
                     ui.AddClassToDOMs('tinyText', this.#costs[i]);
-                } else if (cost < 0 || cost > 9) {
+                } else if (_cost < 0 || _cost > 9) {
                     ui.AddClassToDOMs('smallText', this.#costs[i]);
                 } else {
                     ui.RemoveClassesFromDOM(this.#costs[i], 'smallText', 'tinyText');
                 }
-                this.#costsP[i].innerText = cost;
+                this.#costsP[i].innerText = _cost;
+                this.#currentCost = _cost;
             }
         }
+    }
+
+    /** current token cost for this component 
+     * @returns {number} */
+    get cost() {
+        return this.#currentCost;
     }
 
     set selection(sel) {

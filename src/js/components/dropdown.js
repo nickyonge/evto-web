@@ -19,7 +19,9 @@ export class DropdownList extends TitledComponent {
     #optionsLabels;
     #optionsCosts;
     #optionsCostsP;
+
     #costArray;
+    #currentCost;
 
     static _dropdownMaxHeight = -1;
 
@@ -36,6 +38,7 @@ export class DropdownList extends TitledComponent {
         // Issue URL: https://github.com/nickyonge/evto-web/issues/6
 
         this.#costArray = costs;
+        this.#currentCost = 0;
 
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
         this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
@@ -167,12 +170,13 @@ export class DropdownList extends TitledComponent {
     }
     #updateSelectedCost() {
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
-        if (this.selectionCost === 'null' ||
-            isBlank(this.selectionCost)) {
+        let _cost = this.costByDiv;
+        if (_cost === 'null' ||
+            (typeof _cost === 'string' && isBlank(_cost))) {
             this.#selected.style.marginRight = '-20px';
             this.#selectedCost.style.opacity = 0;
         } else {
-            this.#selectedCost.innerHTML = `<p>${this.selectionCost}</p>`;
+            this.#selectedCost.innerHTML = `<p>${_cost}</p>`;
             this.#selectedCost.style.opacity = 1;
             this.#selected.style.marginRight = '0px';
         }
@@ -196,21 +200,23 @@ export class DropdownList extends TitledComponent {
                 this.#optionsCosts[i].hidden = true;
                 ui.RemoveClassFromDOMs('withCost', this.#optionsLabels[i]);
                 ui.AddElementAttribute(this.#optionsLabels[i], 'data-cost', '');
+                this.#currentCost = 0;
             } else {
                 // visible, display 
                 this.#optionsCosts[i].hidden = false;
                 ui.AddClassToDOMs('withCost', this.#optionsLabels[i]);
-                let cost = costArray[i];
-                if (cost < -99) { cost = -99; } else if (cost > 999) { cost = 999; }
-                if (cost < -9 || cost > 99) {
+                let _cost = costArray[i];
+                if (_cost < -99) { _cost = -99; } else if (_cost > 999) { _cost = 999; }
+                if (_cost < -9 || _cost > 99) {
                     ui.AddClassToDOMs('tinyText', this.#optionsCosts[i]);
-                } else if (cost < 0 || cost > 9) {
+                } else if (_cost < 0 || _cost > 9) {
                     ui.AddClassToDOMs('smallText', this.#optionsCosts[i]);
                 } else {
                     ui.RemoveClassesFromDOM(this.#optionsCosts[i], 'smallText', 'tinyText');
                 }
-                this.#optionsCostsP[i].innerText = cost;
-                ui.AddElementAttribute(this.#optionsLabels[i], 'data-cost', cost);
+                this.#optionsCostsP[i].innerText = _cost;
+                ui.AddElementAttribute(this.#optionsLabels[i], 'data-cost', _cost);
+                this.#currentCost = _cost;
             }
         }
 
@@ -326,7 +332,14 @@ export class DropdownList extends TitledComponent {
         return ui.GetAttribute(this.#optionsLabels[i], 'data-txt');
     }
 
-    get selectionCost() {
+    /** current token cost for this component 
+     * @returns {number} */
+    get cost() {
+        return this.#currentCost;
+    }
+    /** current token cost for this component, returned via div attribute as a string 
+     * @returns {string} */
+    get costByDiv() {
         let i = this.selectionIndex;
         if (i == -1) { return null; }
         return ui.GetAttribute(this.#optionsLabels[i], 'data-cost');

@@ -11,11 +11,13 @@ export class Toggle extends TitledComponent {
     #switch;
 
     #costArray;
+    #currentCost;
 
     constructor(componentTitle, onChangeCallback, cost, initialState = false) {
         super(componentTitle);
 
         this.#costArray = cost;
+        this.#currentCost = 0;
 
         ui.AddClassesToDOM(this.div, 'toggle');
         this.#input = ui.CreateInputWithID('checkbox', this.uniqueComponentID, 'toggle');
@@ -60,28 +62,28 @@ export class Toggle extends TitledComponent {
 
         if (costArray == null) {
             this.#cost.hidden = true;
+            this.#currentCost = 0;
         } else {
             this.#cost.hidden = false;
-            let cost = costArray;
-            if (cost < -99) { cost = -99; } else if (cost > 999) { cost = 999; }
-            if (cost < -9 || cost > 99) {
+            let _cost = costArray;
+            if (_cost < -99) { _cost = -99; } else if (_cost > 999) { _cost = 999; }
+            if (_cost < -9 || _cost > 99) {
                 ui.AddClassToDOMs('tinyText', this.#cost);
-            } else if (cost < 0 || cost > 9) {
+            } else if (_cost < 0 || _cost > 9) {
                 ui.AddClassToDOMs('smallText', this.#cost);
             } else {
                 ui.RemoveClassesFromDOM(this.#cost, 'smallText', 'tinyText');
             }
-            this.#costP.innerText = cost;
+            this.#costP.innerText = _cost;
+            this.#currentCost = _cost;
         }
     }
 
-    // function exampleOnChangeCallback(isChecked) {
-    //     console.log(`toggle state changed, checked: ${isChecked}`);
-    // }
-
-    // function exampleOnChangeCallbackNoParameters() {
-    //     console.log(`checked: ${myToggle.checked}`);
-    // }
+    /** current token cost for this component 
+     * @returns {number} */
+    get cost() {
+        return this.#currentCost;
+    }
 
     get checked() {
         if (!this.#input) {
@@ -89,8 +91,6 @@ export class Toggle extends TitledComponent {
         }
         return this.#input.checked;
     }
-
-    // this.div = ui.CreateDivWithClass("switchContainer");
 
     /* Example HTML
 
