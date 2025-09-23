@@ -1,5 +1,5 @@
 import * as ui from "../ui";
-import { TitledComponent } from "./base";
+import { BasicComponent, TitledComponent } from "./base";
 import { ObserveNode, ObserverCallbackOnAdded } from "../mutationObserver";
 import { GetChildWithClass, GetCSSVariable, GetParentWithClass, GetSiblingWithClass, isBlank } from "../lilutils";
 // const initialValue = 0;
@@ -207,7 +207,8 @@ export class DropdownList extends TitledComponent {
         if (_smootherScroll) {
             target.parentElement.addEventListener('scroll', () => {
                 requestAnimationFrame(() => {
-                    this.PositionUpdate(target);
+                    let component = BasicComponent.GetComponentByDiv(target);
+                    component.PositionUpdate(target);
                     const title = GetChildWithClass(target, 'componentTitle');
                     const dropdown = GetChildWithClass(target, 'dropdown');
                     const titleRect = title.getBoundingClientRect();
