@@ -338,7 +338,7 @@ export class DropdownList extends TitledComponent {
         return this.#currentCost;
     }
     /** current token cost for this component, returned via div attribute as a string 
-     * @returns {string} */
+     * @returns  */
     get costByDiv() {
         let i = this.selectionIndex;
         if (i == -1) { return null; }
