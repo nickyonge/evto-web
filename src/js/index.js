@@ -3,6 +3,7 @@ import { BuildUI } from './uiMain';
 import { SetupDataWindow } from './contentData';
 import { SetupArtWindow } from './contentArt';
 import { DisconnectObserver, StartObservation } from './mutationObserver';
+import Coloris from "@melloware/coloris";
 
 let _onLoadCompleteCallbacks = [];
 
@@ -25,6 +26,8 @@ window.addEventListener('load', function () {
         _onLoadCompleteCallbacks = [];
         // disconnect mutation observer
         DisconnectObserver();
+        // init coloris
+        Coloris.init();
     }, 0);
 });
 

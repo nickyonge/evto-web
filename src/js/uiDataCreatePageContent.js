@@ -4,7 +4,7 @@ import * as ui from "./ui";
 import * as txt from './text';
 import * as cost from './costs';
 import { currentSize, Size, SelectSize } from "./contentData";
-import { Toggle, MutliOptionList, DropdownList, TextField } from "./components";
+import { Toggle, MutliOptionList, DropdownList, TextField, ColorPicker } from "./components";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentData";
 import { GetPageNumberByID, pageHeaders } from "./uiData";
 import { GetAllChildrenWithClass } from "./lilutils";
@@ -126,12 +126,6 @@ export function CreatePageContent(page) {
             break;
         case PG_SIZE:
             CreatePageSize(page);
-
-    let _col = ui.CreateInput('text');
-    ui.AddElementAttribute(_col, 'data-coloris', '');
-    page.appendChild(_col);
-    Coloris.init();
-    Coloris({ el: "#coloris" });
             break;
         case PG_FEATURES:
             CreatePageFeatures(page);
@@ -172,5 +166,8 @@ function DemoPageContent(page) {
     let tg2 = new Toggle("toggle2", tCallback, [99, null, 999]);
     // function tCallback() { console.log('checked: ' + tg.checked); }
     page.appendChild(tg2.div);
+
+    let cp = new ColorPicker('color picker');
+    page.appendChild(cp.div);
 
 }
