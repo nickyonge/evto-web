@@ -195,7 +195,15 @@ export class DropdownList extends TitledComponent {
                 } else {
                     ui.RemoveClassesFromDOM(this.#optionsCosts[i], 'smallText', 'tinyText');
                 }
-                this.#optionsCosts[i].innerText = cost;
+                this.#optionsCostsP[i].innerText = cost;
+            }
+            // update based on visibility 
+            if (this.#optionsCosts[i].hidden) {
+                // hidden, don't display 
+                ui.RemoveClassFromDOMs('withCost', this.#optionsLabels[i]);
+            } else {
+                // visible, display 
+                ui.AddClassToDOMs('withCost', this.#optionsLabels[i]);
             }
         }
 
