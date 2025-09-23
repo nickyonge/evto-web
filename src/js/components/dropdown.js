@@ -34,9 +34,6 @@ export class DropdownList extends TitledComponent {
             DropdownList._dropdownMaxHeight = parseInt(GetCSSVariable('--ui-component-dropdown-max-height'), 10);
         }
 
-        // TODO: token display in current selected dropdown option
-        // Issue URL: https://github.com/nickyonge/evto-web/issues/6
-
         this.#costArray = costs;
         this.#currentCost = 0;
 
@@ -338,7 +335,7 @@ export class DropdownList extends TitledComponent {
         return this.#currentCost;
     }
     /** current token cost for this component, returned via div attribute as a string 
-     * @returns  */
+     * @returns {string} */
     get costByDiv() {
         let i = this.selectionIndex;
         if (i == -1) { return null; }
