@@ -57,8 +57,6 @@ export class Toggle extends TitledComponent {
             return;
         }
         let costArray = cost.GetCostArray(this.#costArray);
-        console.log("cost array before: " + this.#costArray);
-        console.log("cost array after: " + costArray);
 
         if (costArray == null) {
             this.#cost.hidden = true;

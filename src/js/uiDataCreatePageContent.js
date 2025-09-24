@@ -167,7 +167,7 @@ function DemoPageContent(page) {
     // function tCallback() { console.log('checked: ' + tg.checked); }
     page.appendChild(tg2.div);
 
-    let cp = new ColorPicker('color picker');
+    let cp = new ColorPicker('color picker', '#ff0000');
     page.appendChild(cp.div);
 
 }

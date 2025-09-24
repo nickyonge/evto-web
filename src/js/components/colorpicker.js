@@ -5,7 +5,10 @@ import Coloris from "@melloware/coloris";
 export class ColorPicker extends TitledComponent {
 
     #button;
-    #text;
+    #input;
+
+    // enable alpha
+    // 
 
     constructor(componentTitle, initialValue, onChangeCallback) {
         super(componentTitle);
@@ -13,11 +16,27 @@ export class ColorPicker extends TitledComponent {
         ui.AddClassesToDOM(this.div, 'colorPicker', 'clr-field');
         this.#button = ui.CreateElement('button');
         ui.AddElementAttributes(this.#button, ['type', 'aria-labelledby'], ['button', 'clr-open-label']);
-        this.#text = ui.CreateInputWithID('text', `${this.uniqueComponentName}_tx`);
-        ui.AddElementAttribute(this.#text, 'data-coloris', '');
+        this.#input = ui.CreateInputWithID('text', `${this.uniqueComponentName}_tx`);
+        ui.AddElementAttribute(this.#input, 'data-coloris', '');
         this.div.appendChild(this.#button);
-        this.div.appendChild(this.#text);
+        this.div.appendChild(this.#input);
 
+        this.#input.addEventListener('click', e => {
+            Coloris({
+            });
+            this.UpdateColor();
+        })
+
+        if (initialValue) {
+            this.#input.value = initialValue;
+            this.UpdateColor();
+        }
+
+    }
+
+    UpdateColor() {
+        console.log("update color");
+        this.#input.dispatchEvent(new Event('input', { bubbles: true }));
     }
 }
 

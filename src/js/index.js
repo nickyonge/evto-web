@@ -28,6 +28,10 @@ window.addEventListener('load', function () {
         DisconnectObserver();
         // init coloris
         Coloris.init();
+        Coloris({
+            themeMode: 'polaroid',
+            alpha: false
+        });
     }, 0);
 });
 
