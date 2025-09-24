@@ -4,6 +4,7 @@ import { SetupDataWindow } from './contentData';
 import { SetupArtWindow } from './contentArt';
 import { DisconnectObserver, StartObservation } from './mutationObserver';
 import Coloris from "@melloware/coloris";
+import { BasicComponent } from './components/base';
 
 let _onLoadCompleteCallbacks = [];
 
@@ -29,9 +30,19 @@ window.addEventListener('load', function () {
         // init coloris
         Coloris.init();
         Coloris({
+            margin: 3,
             themeMode: 'polaroid',
-            alpha: false
+            alpha: false,
+            defaultColor: '#beeeef',
+            formatToggle: true,
         });
+        // call DocumentLoaded on all components
+        BasicComponent.allComponents.forEach(component => {
+            if (component.DocumentLoaded) {
+                component.DocumentLoaded();
+            }
+        });
+        
     }, 0);
 });
 

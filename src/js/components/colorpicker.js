@@ -34,8 +34,12 @@ export class ColorPicker extends TitledComponent {
 
     }
 
+    DocumentLoaded() {
+        this.UpdateColor();
+    }
+
+    /** manually update the color, ensure the thumbnail icon matches the color input */
     UpdateColor() {
-        console.log("update color");
         this.#input.dispatchEvent(new Event('input', { bubbles: true }));
     }
 }
