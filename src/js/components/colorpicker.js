@@ -7,11 +7,16 @@ export class ColorPicker extends TitledComponent {
     #button;
     #input;
 
-    // enable alpha
-    // 
+    #enableAlpha
 
-    constructor(componentTitle, initialValue, onChangeCallback) {
+    // default color
+    // enable alpha
+    // swatches
+
+    constructor(componentTitle, onChangeCallback, defaultColor = '#beeeef', enableAlpha = false) {
         super(componentTitle);
+
+        this.#enableAlpha = enableAlpha;
 
         ui.AddClassesToDOM(this.div, 'colorPicker', 'clr-field');
         this.#button = ui.CreateElement('button');
@@ -21,17 +26,18 @@ export class ColorPicker extends TitledComponent {
         this.div.appendChild(this.#button);
         this.div.appendChild(this.#input);
 
-        this.#input.addEventListener('click', e => {
+        this.#input.addEventListener('click', function () {
             Coloris({
+                alpha: this.#enableAlpha,
             });
             this.UpdateColor();
-        })
+        }.bind(this));
 
-        if (initialValue) {
-            this.#input.value = initialValue;
-            this.UpdateColor();
+        if (defaultColor) {
+            this.#input.value = defaultColor;
         }
-
+        
+        this.UpdateColor();
     }
 
     DocumentLoaded() {

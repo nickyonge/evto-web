@@ -34,6 +34,7 @@ window.addEventListener('load', function () {
             themeMode: 'polaroid',
             alpha: false,
             defaultColor: '#beeeef',
+            selectInput: true,
             formatToggle: true,
         });
         // call DocumentLoaded on all components
