@@ -7,6 +7,7 @@ import(/* webpackPreload: true */ './../css/style.css');
 import(/* webpackPreload: true */ './../css/threejs.css');
 import(/* webpackPreload: true */ './../css/components/base.css');
 import(/* webpackPreload: true */ './../css/components/canvassize.css');
+import(/* webpackPreload: true */ './../css/components/colorpicker.css');
 import(/* webpackPreload: true */ './../css/components/costtoken.css');
 import(/* webpackPreload: true */ './../css/components/dropdown.css');
 import(/* webpackPreload: true */ './../css/components/hbbtn.css');

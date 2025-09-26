@@ -1,0 +1,25 @@
+/* Coloris CSS, overrides initial CSS 
+ - see: https://github.com/melloware/coloris-npm/blob/main/src/coloris.css
+ - original repo (not NPM): https://github.com/mdbassit/Coloris
+*/
+
+/* color picker full */
+.colorPicker.clr-field {
+    /* display:none; */
+}
+
+/* text field */
+.colorPicker.clr-field input,
+.colorPicker.clr-field input[type='text'] {
+    /* display: none; */
+}
+
+/* color preview button (base) */
+.colorPicker.clr-field button {
+    /* display: none; */
+}
+
+/* color preview button (color overlay) */
+.colorPicker.clr-field button:after {
+    /* display: none; */
+}

@@ -15,8 +15,6 @@ export class TextField extends BasicComponent {
         
     }
 
-    // this.div = ui.CreateDivWithClass("switchContainer");
-
     /* Example HTML
 
 <div class="switchContainer">
