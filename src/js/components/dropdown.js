@@ -38,7 +38,6 @@ export class DropdownList extends TitledComponent {
         this.#currentCost = 0;
 
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
-        this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
         this.#dropdown = ui.CreateDivWithClass('dropdown');
         ObserverCallbackOnAdded(this.#dropdown, this.DropdownAddedToPage);
         ObserverCallbackOnAdded(this.div, this.DivAddedToPage);
@@ -137,7 +136,6 @@ export class DropdownList extends TitledComponent {
             });
         }
         // add elements 
-        this.div.appendChild(this._titleElement);
         this.div.appendChild(this.#dropdown);
         this.#dropdown.appendChild(this.#selected);
         this.#selected.appendChild(this.#svg);

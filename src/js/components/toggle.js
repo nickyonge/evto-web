@@ -14,7 +14,7 @@ export class Toggle extends TitledComponent {
     #currentCost;
 
     constructor(componentTitle, onChangeCallback, cost, initialState = false) {
-        super(componentTitle);
+        super(componentTitle, false);
 
         this.#costArray = cost;
         this.#currentCost = 0;

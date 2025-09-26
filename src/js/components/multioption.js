@@ -17,7 +17,6 @@ export class MutliOptionList extends TitledComponent {
         super(componentTitle);
 
         ui.AddClassesToDOM(this.div, 'multichoicelist');
-        this._titleElement = ui.CreateDivWithClass('componentTitle', 'listTitle');
         this.#listSelect = ui.CreateDivWithClass('listselect');
 
         this.#inputs = [];
@@ -77,7 +76,6 @@ export class MutliOptionList extends TitledComponent {
         }
 
         // add to document 
-        this.div.appendChild(this._titleElement);
         this.div.appendChild(this.#listSelect);
 
         for (let i = 0; i < options.length; i++) {

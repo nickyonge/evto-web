@@ -12,7 +12,7 @@ export class BasicComponent {
     static allComponentDivs = [];
     constructor() {
         BasicComponent.componentCount++;
-        this.div = ui.CreateDivWithClass(basicComponentClass,'uiComponent');
+        this.div = ui.CreateDivWithClass(basicComponentClass, 'uiComponent');
         ui.AddElementAttribute(this.div, 'uniqueComponentID', BasicComponent.componentCount);
         BasicComponent.allComponents.push(this);
         BasicComponent.allComponentDivs.push(this.div);
@@ -44,12 +44,21 @@ export class TitledComponent extends BasicComponent {
 
     #helpIcon;
 
-    constructor(componentTitle) {
+    /**
+     * TitledComponent constructor, auto-compiling the 
+     * @param {string} componentTitle 
+     * @param {boolean} [createTitleDiv = true] auto-create title div? 
+     * @param {string[]} [titleClasses=['componentTitle', 'listTitle']] CSS classes to apply to title div (if `createTitleDiv` is true)
+     */
+    constructor(componentTitle, createTitleDiv = true, titleClasses = ['componentTitle', 'listTitle']) {
         super();
         if (componentTitle) {
             this.title = componentTitle;
         }
-        
+        if (createTitleDiv) {
+            this._titleElement = ui.CreateDivWithClass(titleClasses);
+            this.div.appendChild(this._titleElement);
+        }
     }
 
     /** Get/set the title text for this toggle switch. Automatically updates HTML.
