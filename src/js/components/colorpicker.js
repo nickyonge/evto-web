@@ -2,8 +2,13 @@ import * as ui from "../ui";
 import { BasicComponent, TitledComponent } from "./base";
 import Coloris from "@melloware/coloris";
 
+/** if true, inserts an intermediary container between coloris and div */
+const useColorisContainer = false;
+
 export class ColorPicker extends TitledComponent {
 
+
+    #coloris;
     #button;
     #input;
 
@@ -18,13 +23,23 @@ export class ColorPicker extends TitledComponent {
 
         this.#enableAlpha = enableAlpha;
 
-        ui.AddClassesToDOM(this.div, 'colorPicker', 'clr-field');
+
         this.#button = ui.CreateElement('button');
         ui.AddElementAttributes(this.#button, ['type', 'aria-labelledby'], ['button', 'clr-open-label']);
         this.#input = ui.CreateInputWithID('text', `${this.uniqueComponentName}_tx`);
         ui.AddElementAttribute(this.#input, 'data-coloris', '');
-        this.div.appendChild(this.#button);
-        this.div.appendChild(this.#input);
+
+        if (useColorisContainer) {
+            ui.AddClassesToDOM(this.div, 'colorPicker', 'clr-container');
+            this.#coloris = ui.CreateDivWithClass('colorPicker', 'clr-field');
+            this.#coloris.appendChild(this.#button);
+            this.#coloris.appendChild(this.#input);
+            this.div.appendChild(this.#coloris);
+        } else {
+            ui.AddClassesToDOM(this.div, 'colorPicker', 'clr-field');
+            this.div.appendChild(this.#button);
+            this.div.appendChild(this.#input);
+        }
 
         this.#input.addEventListener('click', function () {
             Coloris({
