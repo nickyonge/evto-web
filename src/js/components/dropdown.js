@@ -177,6 +177,13 @@ export class DropdownList extends TitledComponent {
         }
     }
 
+    DocumentLoaded() {
+        this.DivAddedToPage(this.div);
+        this.PositionUpdate(this.div);
+        this.DropdownAddedToPage(this.#dropdown);
+        this.OptionsAddedToPage(this.#optionsContainer);
+    }
+
     UpdateCosts() {
 
         if (this.#costArray == null || !Array.isArray(this.#costArray)) {
@@ -305,7 +312,7 @@ export class DropdownList extends TitledComponent {
     }
     set selectionIndex(index) {
         if (index == this.selectionIndex) {
-                return;
+            return;
         }
         if (!this.#isValidSelectionIndex(index)) {
             console.warn(`WARNING: can't assign invalid selection index ${index}`);
