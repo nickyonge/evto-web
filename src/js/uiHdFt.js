@@ -56,6 +56,7 @@ function CreateBottomBar(btmBar) {
     btmBar.appendChild(ul);
     // ------------------------------ create mailing list join 
     // TODO: add email icon to newsletter bar 
+    // Issue URL: https://github.com/nickyonge/evto-web/issues/38
     let mailGroup = ui.CreateDivWithClass('minput-group');
     let mailInput = ui.CreateElementWithClass('input', 'minput');
     mailInput.setAttribute('id', 'Email');
