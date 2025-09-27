@@ -144,17 +144,20 @@ export function CreatePageContent(page) {
 
 function DemoPageContent(page) {
 
-    function dCallback(selection) { console.log(`changed: ${selection}`); }
+    function ddCallback(selection) { console.log(`changed: ${selection}`); }
+    function cpCallback(color, colorPicker) { console.log(`color changed, ${color}, colorPicker: ${colorPicker.uniqueComponentName}`); }
     // function dCallback() { console.log(`changed: ${dd.selection}`); }
-    
-        let cp = new ColorPicker('color picker', null, '#ff0000', false);
-        page.appendChild(cp.div);
+
+    let cp1 = new ColorPicker('color picker 1', null, '#ffbb00', false);
+    page.appendChild(cp1.div);
+    let cp2 = new ColorPicker('color picker 2', cpCallback, '#00bbff', false);
+    page.appendChild(cp2.div);
 
 
     // let dd = new DropdownList('dropdown', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam']);
-    let dd = new DropdownList('dropdown2', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam', 'a', 'b', 'c', '1235387235897293859823598729387592359792837598', 'test', 'ewbai']);
+    let dd = new DropdownList('dropdown2', ddCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam', 'a', 'b', 'c', '1235387235897293859823598729387592359792837598', 'test', 'ewbai']);
     page.appendChild(dd.div);
-    let dd1 = new DropdownList('dropdown1', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam'], [[1, 2, 3], [4, null, 6], [7, 8, 9]]);
+    let dd1 = new DropdownList('dropdown1', ddCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam'], [[1, 2, 3], [4, null, 6], [7, 8, 9]]);
     page.appendChild(dd1.div);
 
     let mo = new MutliOptionList('multi', mCallback, ['a', 'b', 'c'], [[1, 1, 1], [2, 2, 2], [3, 3, 3]]);

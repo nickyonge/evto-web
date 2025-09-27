@@ -7,7 +7,6 @@ const useColorisContainer = true;
 
 export class ColorPicker extends TitledComponent {
 
-
     #coloris;
     #button;
     #input;
@@ -18,11 +17,20 @@ export class ColorPicker extends TitledComponent {
     // enable alpha
     // swatches
 
+
+    get color() {
+        return this.#input.value;
+    }
+    set color(c) {
+        if (c == this.color) { return; }
+        this.#input.value = c;
+        this.UpdateColor();
+    }
+
     constructor(componentTitle, onChangeCallback, defaultColor = '#beeeef', enableAlpha = false) {
         super(componentTitle);
 
         this.#enableAlpha = enableAlpha;
-
 
         this.#button = ui.CreateElement('button');
         ui.AddElementAttributes(this.#button, ['type', 'aria-labelledby'], ['button', 'clr-open-label']);
@@ -41,20 +49,26 @@ export class ColorPicker extends TitledComponent {
             this.div.appendChild(this.#input);
         }
 
+        // on change callback returns 2 params, the color changed to, and a reference to this ColorPicker component 
         this.#input.addEventListener('click', function () {
             Coloris({
                 alpha: this.#enableAlpha,
+                onChange: onChangeCallback ? (color) => { onChangeCallback(color, this); } : undefined,
             });
             this.UpdateColor();
         }.bind(this));
 
-        if (defaultColor) {
-            this.#input.value = defaultColor;
-        }
-        
+        // see https://github.com/mdbassit/Coloris?tab=readme-ov-file#events
+        // this.#input.addEventListener('open', event => { }); // colorPicker opened
+        // this.#input.addEventListener('close', event => { }); // colorPicker closed
+        // this.#input.addEventListener('input', event => { }); // new color value is selected
+        // this.#input.addEventListener('change', event => { }); // colorPicker closed AND changed
+
         this._addHelpIcon(`help me! ${componentTitle}`);
-        
-        this.UpdateColor();
+
+        if (defaultColor) {
+            this.color = defaultColor;
+        }
     }
 
     DocumentLoaded() {
