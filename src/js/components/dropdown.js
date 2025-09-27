@@ -240,8 +240,6 @@ export class DropdownList extends TitledComponent {
         let clipBtm = ddSelRect.bottom - pageRect.bottom;
         let clipTop = ddSelRect.top - pageRect.top;
 
-        console.log("ClipTop: " + clipTop);
-
         let dropdownPointerEvents = 'auto';
         let ddSelPointerEvents = 'auto';
 

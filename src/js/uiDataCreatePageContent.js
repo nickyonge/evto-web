@@ -154,10 +154,10 @@ function DemoPageContent(page) {
     // let dd = new DropdownList('dropdown', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam']);
     let dd = new DropdownList('dropdown2', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam', 'a', 'b', 'c', '1235387235897293859823598729387592359792837598', 'test', 'ewbai']);
     page.appendChild(dd.div);
-    // let dd1 = new DropdownList('dropdown1', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam'], [[1, 2, 3], [4, null, 6], [7, 8, 9]]);
-    // page.appendChild(dd1.div);
+    let dd1 = new DropdownList('dropdown1', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam'], [[1, 2, 3], [4, null, 6], [7, 8, 9]]);
+    page.appendChild(dd1.div);
 
-    let mo = new MutliOptionList('multi', mCallback, ['a', 'b', 'c', 4,5,6,7,8,9,10,11,12,13,14,15], [[1, 1, 1], [2, 2, 2], [3, 3, 3]]);
+    let mo = new MutliOptionList('multi', mCallback, ['a', 'b', 'c'], [[1, 1, 1], [2, 2, 2], [3, 3, 3]]);
     function mCallback() { console.log(`changed: ${mo.selection}`); }
     // function mCallback(selection) { console.log(`changed: ${selection}`); }
     page.appendChild(mo.div);
