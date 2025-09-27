@@ -3,7 +3,7 @@ import { BasicComponent, TitledComponent } from "./base";
 import Coloris from "@melloware/coloris";
 
 /** if true, inserts an intermediary container between coloris and div */
-const useColorisContainer = false;
+const useColorisContainer = true;
 
 export class ColorPicker extends TitledComponent {
 
@@ -51,6 +51,8 @@ export class ColorPicker extends TitledComponent {
         if (defaultColor) {
             this.#input.value = defaultColor;
         }
+        
+        this._addHelpIcon(`help me! ${componentTitle}`);
         
         this.UpdateColor();
     }

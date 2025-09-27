@@ -1,5 +1,5 @@
 import * as ui from "../ui";
-import iconHelp from '../../assets/svg/icons-white/icon-help.svg';
+// import iconHelp from '../../assets/svg/icons-white/icon-help.svg';
 import * as txt from "../text";
 import { ToggleOverlay } from "../uiOverlay";
 
@@ -7,14 +7,16 @@ export class HelpIcon {
 
     #helpDiv;
     #helpExpansionDiv;
-    #iconImg;
+    // #iconImg;
     #helpQIconDiv;
 
-    helpText;
+    helpTextTitle;
+    helpTextBody;
 
-    constructor(parentDiv, helpText, togglePos = false, rightJustify = true) {
+    constructor(parentDiv, helpTextTitle, togglePos = false, rightJustify = true) {
 
-        this.helpText = helpText;
+        // TODO: help text should load text from txt dictionary, maybe based on component title?
+        this.setText(helpTextTitle);
 
         if (rightJustify) {
             this.#helpExpansionDiv = ui.CreateDivWithClass('helpExpansionDiv');
@@ -24,7 +26,7 @@ export class HelpIcon {
 
         this.#helpDiv = togglePos ?
             ui.CreateDivWithClass('helpDiv', 'togglePos') :
-                ui.CreateDivWithClass('helpDiv');
+            ui.CreateDivWithClass('helpDiv');
 
         //create icon
         // this.#iconImg = ui.CreateImage(iconHelp, txt.HELPICON_ALT);
@@ -50,7 +52,29 @@ export class HelpIcon {
 
     }
 
+    setText(title, body) {
+        if (title == null) { title = txt.HELPICON_ALT; }
+        if (body == null) { body = txt.LIPSUM_FULL; }
+        this.titleText = title;
+        this.bodyText = body;
+        // oops i wrote getters and setters before i remembered
+        // that the overlay updates the html, not this element. oh well!
+    }
+
+    set titleText(text) {
+        this.helpTextTitle = text;
+    }
+    set bodyText(text) {
+        this.helpTextBody = text;
+    }
+    get titleText() {
+        return this.helpTextTitle;
+    }
+    get bodyText() {
+        return this.helpTextBody;
+    }
+
     displayHelpText() {
-        ToggleOverlay(txt.LIPSUM_FULL, this.helpText, this.#helpDiv);
+        ToggleOverlay(this.helpTextBody, this.helpTextTitle, this.#helpDiv);
     }
 }

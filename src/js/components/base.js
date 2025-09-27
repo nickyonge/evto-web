@@ -95,6 +95,14 @@ export class TitledComponent extends BasicComponent {
     _updateTitle() { this.title = this.title; }
 
     _addHelpIcon(helpText, togglePos = false, rightJustify = true) {
+
+        if (this.#helpIcon) {
+            console.warn(`help icon already exists, just updating its values instead, element: ${this.#helpIcon}`)
+            // TODO: replace help text reset with actual text, not null/lipsum
+            this.#helpIcon.setText(helpText, null);
+            return;
+        }
+
         // this.#helpIcon = new HelpIcon(this.div, helpText, togglePos);
         if (togglePos) {
             this.#helpIcon = new HelpIcon(this.div, helpText, togglePos, rightJustify);
