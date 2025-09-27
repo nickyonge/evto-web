@@ -131,7 +131,11 @@
     --ui-art-window-ratio: 0.8fr;
 
     --ui-footer-email-bar-width: 250px;
+    --ui-footer-email-bar-height: 30px;
+    --ui-footer-email-bar-border-radius-text: calc(var(--ui-footer-email-bar-height) * 0.5) 0px 0px calc(var(--ui-footer-email-bar-height) * 0.5);
+    --ui-footer-email-bar-border-radius-button: 0px calc(var(--ui-footer-email-bar-height) * 0.5) calc(var(--ui-footer-email-bar-height) * 0.5) 0px;
     --ui-footer-email-bar-iconspace: 32px;
+    --ui-footer-email-bar-gap: 10px;
     --ui-footer-emali-btn-width: 100px;
     --ui-footer-kickstarter-width: 220px;
     --ui-footer-kickstarter-wrap-bottom: calc(9px + var(--ui-footer-height));

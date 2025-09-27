@@ -55,6 +55,7 @@ function CreateBottomBar(btmBar) {
     ul.appendChild(CreateSocialButton('Bluesky'));
     btmBar.appendChild(ul);
     // ------------------------------ create mailing list join 
+    // TODO: add email icon to newsletter bar 
     let mailGroup = ui.CreateDivWithClass('minput-group');
     let mailInput = ui.CreateElementWithClass('input', 'minput');
     mailInput.setAttribute('id', 'Email');

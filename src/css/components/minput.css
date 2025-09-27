@@ -19,15 +19,16 @@ https://uiverse.io/alexruix/evil-parrot-59 */
     padding: 0;
     display: inline;
     position: relative;
-    height: 30px;
+    height: var(--ui-footer-email-bar-height);
     width: calc(var(--ui-footer-email-bar-width) - var(--ui-footer-email-bar-iconspace) - 10px);
     max-width: calc(100vw - 335px);
     padding-left: var(--ui-footer-email-bar-iconspace);
-    padding-right: 10px;
+    /* text-indent: -5px; */
+    padding-right: var(--ui-footer-email-bar-gap);
     color: var(--color-ui-ultralight);
     font-size: 10pt;
     border: none;
-    border-radius: 12px 0 0 12px;
+    border-radius: var(--ui-footer-email-bar-border-radius-text);
     background-color: #183e8569;
     font-family: 'Inclusive Sans', 'Helvetica Neue', Helvetica, sans-serif;
 }
@@ -52,15 +53,16 @@ https://uiverse.io/alexruix/evil-parrot-59 */
     font-family: 'Inclusive Sans', 'Helvetica Neue', Helvetica, sans-serif;
     display: inline;
     position: relative;
-    height: 30px;
+    height: var(--ui-footer-email-bar-height);;
     /* contain: size; */
     overflow: hidden;
     width: 100px;
     border: none;
-    border-radius: 0 12px 12px 0;
+    border-radius: var(--ui-footer-email-bar-border-radius-button);
     background-color: var(--color-ui-light);
     color: var(--color-ui-ultradark);
     font-size: 10pt;
+    text-indent: -6.9px;
     cursor: pointer;
     transition: all 0.169s ease-out;
 }
