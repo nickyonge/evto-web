@@ -15,15 +15,19 @@
 .colorPicker.clr-field {
     /* display: none; */
     display: flex;
-    width: 100%;
+    width: calc(100% - 1px);
     height: auto;
+    border-radius: var(--ui-component-border-radius);
+    background-color: var(--ui-component-color-bg);
 }
 
 /* text field */
 .colorPicker.clr-field input,
 .colorPicker.clr-field input[type='text'] {
     /* display: none; */
-    width: calc(100% - 1px);
+    background-color: transparent;
+    width: 100%;
+    z-index: 3;
     /* height: 100%;
     border: 0;
     padding: 0; */
@@ -34,7 +38,7 @@
     min-width: 30px;
     width: 69%;
     max-width: calc(100% - 69px);
-    right: 0;
+    right: -1px;
     height: calc(100% - 0px);
     border-radius: 1px 6.9px 6.9px 0px;
     overflow: hidden;
@@ -42,6 +46,7 @@
     transform: none;
     background-image: none;
     background-color: transparent;
+    z-index: 2;
 }
 
 /* color preview button (color overlay) */
