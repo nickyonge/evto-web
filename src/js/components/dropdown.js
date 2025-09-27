@@ -257,6 +257,7 @@ export class DropdownList extends TitledComponent {
             // middle of transition
             clipTop = -clipTop;
             // TODO: make dropdown CSS not clip out of page, on scroll dropdown out of page top, if ddSelPointerEvents is 'auto'
+            // Issue URL: https://github.com/nickyonge/evto-web/issues/37
             dropdownPointerEvents = 'none';
             ddSelPointerEvents = 'none';
         }
