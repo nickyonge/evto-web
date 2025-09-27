@@ -237,25 +237,46 @@ export class DropdownList extends TitledComponent {
         let ddSelRect = ddSelected.getBoundingClientRect();
         let pageRect = page.getBoundingClientRect();
 
-        let clip = ddSelRect.bottom - pageRect.bottom;
+        let clipBtm = ddSelRect.bottom - pageRect.bottom;
+        let clipTop = ddSelRect.top - pageRect.top;
+
+        console.log("ClipTop: " + clipTop);
 
         let dropdownPointerEvents = 'auto';
         let ddSelPointerEvents = 'auto';
-        if (clip < 0) {
+
+        if (clipTop > 0) {
             // fully displayed
-            clip = 0;
-        } else if (clip > ddSelRect.height) {
+            clipTop = 0;
+        } else if (clipTop < -ddSelRect.height) {
+            // fully hidden
+            clipTop = ddSelRect.height;
+            dropdownPointerEvents = 'none';
+            ddSelPointerEvents = 'none';
+        } else {
+            // middle of transition
+            clipTop = -clipTop;
+            // TODO: make dropdown CSS not clip out of page, on scroll dropdown out of page top, if ddSelPointerEvents is 'auto'
+            dropdownPointerEvents = 'none';
+            ddSelPointerEvents = 'none';
+        }
+
+        if (clipBtm < 0) {
+            // fully displayed
+            clipBtm = 0;
+        } else if (clipBtm > ddSelRect.height) {
             // fully hidden 
-            clip = ddSelRect.height;
+            clipBtm = ddSelRect.height;
             dropdownPointerEvents = 'none';
             ddSelPointerEvents = 'none';
         } else {
             // middle of transition 
             dropdownPointerEvents = 'none';
         }
+
         dropdown.style.pointerEvents = dropdownPointerEvents;
         ddSelected.style.pointerEvents = ddSelPointerEvents;
-        ddSelected.style.clipPath = `inset(0px 0px ${clip}px 0px)`;
+        ddSelected.style.clipPath = `inset(${clipTop}px 0px ${clipBtm}px 0px)`;
     }
     DivAddedToPage(target) { // this.div
         // add scroll event
