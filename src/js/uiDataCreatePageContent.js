@@ -144,9 +144,12 @@ export function CreatePageContent(page) {
 
 function DemoPageContent(page) {
 
-
     function dCallback(selection) { console.log(`changed: ${selection}`); }
     // function dCallback() { console.log(`changed: ${dd.selection}`); }
+
+
+    let cp = new ColorPicker('color picker', null, '#ff0000', true);
+    page.appendChild(cp.div);
 
     // let dd = new DropdownList('dropdown', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam']);
     let dd = new DropdownList('dropdown2', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam', 'a', 'b', 'c', '1235387235897293859823598729387592359792837598', 'test', 'ewbai']);
@@ -166,8 +169,5 @@ function DemoPageContent(page) {
     let tg2 = new Toggle("toggle2", tCallback, [99, null, 999]);
     // function tCallback() { console.log('checked: ' + tg.checked); }
     page.appendChild(tg2.div);
-
-    let cp = new ColorPicker('color picker', null, '#ff0000', true);
-    page.appendChild(cp.div);
 
 }

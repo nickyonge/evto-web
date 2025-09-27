@@ -30,7 +30,7 @@ window.addEventListener('load', function () {
         // init coloris
         Coloris.init();
         Coloris({
-            margin: 3,
+            margin: 6.9,
             themeMode: 'polaroid',
             alpha: false,
             defaultColor: '#beeeef',
