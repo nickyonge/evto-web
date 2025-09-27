@@ -133,6 +133,7 @@ export function AddClassesToDOM(domElement, ...cssClasses) {
     if (cssClasses.length == 0) {
         return;
     }
+    cssClasses = cssClasses.flat();
     if (domElement.classList.length == 0) {
         domElement.classList.add(...cssClasses);
         return;
@@ -149,6 +150,7 @@ export function AddClassesToDOM(domElement, ...cssClasses) {
  * @param  {...Element} domElements HTMLElement(s) to add the class to
  */
 export function AddClassToDOMs(cssClass, ...domElements) {
+    domElements = domElements.flat();
     for (let i = 0; i < domElements.length; i++) {
         if (!domElements[i].classList.contains(cssClass)) {
             domElements[i].classList.add(cssClass);
@@ -166,6 +168,7 @@ export function RemoveClassesFromDOM(domElement, ...cssClasses) {
     if (domElement.classList.length == 0) {
         return;
     }
+    cssClasses = cssClasses.flat();
     for (let i = 0; i < cssClasses.length; i++) {
         if (domElement.classList.contains(cssClasses[i])) {
             domElement.classList.remove(cssClasses[i]);
@@ -178,6 +181,7 @@ export function RemoveClassesFromDOM(domElement, ...cssClasses) {
  * @param  {...Element} domElements HTMLElement(s) to remove the class from
  */
 export function RemoveClassFromDOMs(cssClass, ...domElements) {
+    domElements = domElements.flat();
     for (let i = 0; i < domElements.length; i++) {
         if (domElements[i].classList.contains(cssClass)) {
             domElements[i].classList.remove(cssClass);
