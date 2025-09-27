@@ -505,4 +505,5 @@ export function AllowContentSelectionWithTextIndicator(...domElements) {
 
 // TODO: add Enter input to elements that only function on spacebar (eg, rn the "Subscribe" btn works for Spacebar but not Enter)
 // Issue URL: https://github.com/nickyonge/evto-web/issues/15
-// TODO: add keyboard input to social media buttons (they don't respond in CSS to keyboard)// Issue URL: https://github.com/nickyonge/evto-web/issues/14
+// TODO: add keyboard input to social media buttons (they don't respond in CSS to keyboard)
+// Issue URL: https://github.com/nickyonge/evto-web/issues/14
