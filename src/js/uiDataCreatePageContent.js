@@ -148,7 +148,7 @@ function DemoPageContent(page) {
     // function dCallback() { console.log(`changed: ${dd.selection}`); }
 
 
-    let cp = new ColorPicker('color picker', null, '#ff0000', true);
+    let cp = new ColorPicker('color picker', null, '#ff0000', false);
     page.appendChild(cp.div);
 
     // let dd = new DropdownList('dropdown', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam']);
