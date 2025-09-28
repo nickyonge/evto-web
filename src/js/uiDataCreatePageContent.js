@@ -10,8 +10,6 @@ import { GetPageNumberByID, pageHeaders } from "./uiData";
 import { GetAllChildrenWithClass } from "./lilutils";
 import { basicComponentClass } from "./components/base";
 
-import Coloris from "@melloware/coloris";
-
 /** show the languauges dropdown? */
 const languageDropdown = false;// TODO: Languages in language dropdown 
 // Issue URL: https://github.com/nickyonge/evto-web/issues/1
