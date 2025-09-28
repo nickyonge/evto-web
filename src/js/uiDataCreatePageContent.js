@@ -4,7 +4,7 @@ import * as ui from "./ui";
 import * as txt from './text';
 import * as cost from './costs';
 import { currentSize, Size, SelectSize } from "./contentData";
-import { Toggle, MutliOptionList, DropdownList, TextField, ColorPicker } from "./components";
+import * as cmp from './components';
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentData";
 import { GetPageNumberByID, pageHeaders } from "./uiData";
 import { GetAllChildrenWithClass } from "./lilutils";
@@ -25,10 +25,14 @@ function CreatePageIntro(page) {
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
 
-    let txInfo = new TextField(txt.LIPSUM);
-    page.appendChild(txInfo.div);
+    
+    let sizeGrid = ui.CreateDivWithClass('grid');
+    page.appendChild(sizeGrid);
 
-    let moSize = new MutliOptionList('Size', SelectSize,
+    let cs = new cmp.CanvasSize("Canvas Size");
+    sizeGrid.appendChild(cs.div);
+
+    let moSize = new cmp.MutliOptionList('Size', SelectSize,
         [ // sizing and labels 
             `${txt.PG_SIZE_SM}, <i>${txt.DATA_SIZE_SM}</i>`,
             `&nbsp;&nbsp;${txt.PG_SIZE_SMP}, <i>${txt.DATA_SIZE_SMP}</i>`,
@@ -37,7 +41,10 @@ function CreatePageSize(page) {
             `${txt.PG_SIZE_LG}, <i>${txt.DATA_SIZE_LG}</i>`,
             `&nbsp;&nbsp;${txt.PG_SIZE_LGP}, <i>${txt.DATA_SIZE_LGP}</i>`,
         ], cost.SIZE_CANVAS);
-    page.appendChild(moSize.div);
+    sizeGrid.appendChild(moSize.div);
+
+    let txInfo = new cmp.TextField(txt.LIPSUM);
+    sizeGrid.appendChild(txInfo.div);
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE -----
@@ -45,31 +52,31 @@ function CreatePageFeatures(page) {
     let featuresGrid = ui.CreateDivWithClass('grid');
     page.appendChild(featuresGrid);
 
-    let moLandDetail = new MutliOptionList(
+    let moLandDetail = new cmp.MutliOptionList(
         txt.PG_FEAT_LANDDETAIL, null,
         txt.PG_FEAT_LANDDETAIL_OPTIONS,
         cost.FEAT_LANDDETAIL,
         null, 0
     );
-    let moGCSLines = new MutliOptionList(
+    let moGCSLines = new cmp.MutliOptionList(
         txt.PG_FEAT_GCSLINES, null,
         txt.PG_FEAT_GCSLINES_OPTIONS,
         cost.FEAT_GCSLINES,
         null, 0
     );
-    let moLabelling = new MutliOptionList(
+    let moLabelling = new cmp.MutliOptionList(
         txt.PG_FEAT_LABELLING, null,
         txt.PG_FEAT_LABELLING_OPTIONS,
         cost.FEAT_LABELLING,
         null, 0
     );
-    let moTitleBox = new MutliOptionList(
+    let moTitleBox = new cmp.MutliOptionList(
         txt.PG_FEAT_TITLEBOX, null,
         txt.PG_FEAT_TITLEBOX_OPTIONS,
         cost.FEAT_TITLEBOX,
         null, 0
     );
-    let moLandLines = new MutliOptionList(
+    let moLandLines = new cmp.MutliOptionList(
         txt.PG_FEAT_LANDLINES, null,
         txt.PG_FEAT_LANDLINES_OPTIONS,
         cost.FEAT_LANDLINES,
@@ -83,7 +90,7 @@ function CreatePageFeatures(page) {
     featuresGrid.appendChild(moLandLines.div);
 
     if (languageDropdown) {
-        let ddLanguage = new DropdownList(
+        let ddLanguage = new cmp.DropdownList(
             txt.PG_FEAT_LANGUAGE, null,
             txt.PG_FEAT_LANGUAGE_OPTIONS,
             null, null, 0
@@ -148,28 +155,27 @@ function DemoPageContent(page) {
     function cpCallback(color, colorPicker) { console.log(`color changed, ${color}, colorPicker: ${colorPicker.uniqueComponentName}`); }
     // function dCallback() { console.log(`changed: ${dd.selection}`); }
 
-    let cp1 = new ColorPicker('color picker 1', null, '#ffbb00', false);
+    let cp1 = new cmp.ColorPicker('color picker 1', null, '#ffbb00', false);
     page.appendChild(cp1.div);
-    let cp2 = new ColorPicker('color picker 2', cpCallback, '#00bbff', false);
+    let cp2 = new cmp.ColorPicker('color picker 2', cpCallback, '#00bbff', false);
     page.appendChild(cp2.div);
 
 
-    // let dd = new DropdownList('dropdown', dCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam']);
-    let dd = new DropdownList('dropdown2', ddCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam', 'a', 'b', 'c', '1235387235897293859823598729387592359792837598', 'test', 'ewbai']);
-    page.appendChild(dd.div);
-    let dd1 = new DropdownList('dropdown1', ddCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam'], [[1, 2, 3], [4, null, 6], [7, 8, 9]]);
+    let dd1 = new cmp.DropdownList('dropdown1', ddCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam'], [[1, 2, 3], [4, null, 6], [7, 8, 9]]);
     page.appendChild(dd1.div);
+    let dd2 = new cmp.DropdownList('dropdown2', ddCallback, ['hello world', 'lorem ipsum dolor sit amet', 'woah black betty blampbalam', 'a', 'b', 'c', '1235387235897293859823598729387592359792837598', 'test', 'ewbai']);
+    page.appendChild(dd2.div);
 
-    let mo = new MutliOptionList('multi', mCallback, ['a', 'b', 'c'], [[1, 1, 1], [2, 2, 2], [3, 3, 3]]);
+    let mo = new cmp.MutliOptionList('multi', mCallback, ['a', 'b', 'c'], [[1, 1, 1], [2, 2, 2], [3, 3, 3]]);
     function mCallback() { console.log(`changed: ${mo.selection}`); }
     // function mCallback(selection) { console.log(`changed: ${selection}`); }
     page.appendChild(mo.div);
 
-    let tg = new Toggle("toggle", tCallback, [1, 2, 3]);
+    let tg = new cmp.Toggle("toggle", tCallback, [1, 2, 3]);
     // function tCallback() { console.log('checked: ' + tg.checked); }
     function tCallback(checked) { console.log('checked: ' + checked); }
     page.appendChild(tg.div);
-    let tg2 = new Toggle("toggle2", tCallback, [99, null, 999]);
+    let tg2 = new cmp.Toggle("toggle2", tCallback, [99, null, 999]);
     // function tCallback() { console.log('checked: ' + tg.checked); }
     page.appendChild(tg2.div);
 

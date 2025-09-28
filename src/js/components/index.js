@@ -1,4 +1,4 @@
-// export { CanvasSize } from "./canvassize.js";
+export { CanvasSize } from "./canvassize.js";
 export { ColorPicker } from "./colorpicker.js";
 export { DropdownList } from "./dropdown.js";
 export { HelpIcon } from "./helpicon.js";
