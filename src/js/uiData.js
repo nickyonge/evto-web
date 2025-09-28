@@ -168,11 +168,23 @@ function UpdatePageLayouts() {
     for (let i = 0; i < pages.length; i++) {
         let gridLayout = GetChildWithClass(pages[i], 'grid');
         if (gridLayout) {
-            // found grid, check for max grid width attb, or use default max width
-            let maxWidth = ui.GetAttribute(gridLayout, 'maxGridWidth');
-            if (maxWidth == null) { maxWidth = maxTwoColumnWidthDefault; }
-            // check if single column
-            let singleColumn = content.offsetWidth < maxWidth;
+            // found grid, check for single column, first checking aspect attb
+            let singleColumn = false;
+            let maxAspect = ui.GetAttribute(gridLayout, 'maxGridAspect');
+            console.log("MAX ASPECT:" + maxAspect);
+            if (maxAspect) {
+                // aspect ratio found, compare to content aspect
+                let contentAspect = content.offsetWidth / content.offsetHeight;
+                // console.log("content aspect: " + contentAspect);
+                singleColumn = contentAspect < maxAspect;
+            }
+            if (!singleColumn) {
+                // no aspect, check for max grid width attb, or use default max width
+                let maxWidth = ui.GetAttribute(gridLayout, 'maxGridWidth');
+                if (maxWidth == null) { maxWidth = maxTwoColumnWidthDefault; }
+                // check if single column
+                singleColumn = content.offsetWidth < maxWidth;
+            }
             ui.AddElementAttribute(gridLayout, 'singleColumn', singleColumn);
         }
     }

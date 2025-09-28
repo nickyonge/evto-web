@@ -25,7 +25,8 @@ function CreatePageSize(page) {
 
     
     let sizeGrid = ui.CreateDivWithClass('grid');
-    ui.AddElementAttribute(sizeGrid, 'maxGridWidth', 4000);
+    // ui.AddElementAttribute(sizeGrid, 'maxGridWidth', 500);
+    ui.AddElementAttribute(sizeGrid, 'maxGridAspect', 1.67);
     page.appendChild(sizeGrid);
 
     let cs = new cmp.CanvasSize("Canvas Size");
