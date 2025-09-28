@@ -5,7 +5,39 @@
 
 .canvasSize .imageContainer {
     /* display: none; */
+    position: relative;
     width: 100%;
     height: 100%;
-    background-color: red;
+    /* background-color: red; */
+    /* align-content: center; */
+    /* align-items: center; */
+    /* justify-content: center; */
+}
+
+.canvasSize .image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 100%;
+    max-height: 100%;
+}
+
+
+
+.canvasSize .image.all {
+    filter: drop-shadow(0 1px 2px #02010369);
+    -webkit-filter: drop-shadow(0 1px 2px #02010369);
+    /* 
+    filter:
+        drop-shadow(2px 0px 1px black) 
+        drop-shadow(0px -2px 1px black) 
+        drop-shadow(-2px 0px 1px black) 
+        drop-shadow(0px 2px 1px black);
+    -webkit-filter:
+        drop-shadow(2px 0px 1px black) 
+        drop-shadow(0px -2px 1px black) 
+        drop-shadow(-2px 0px 1px black) 
+        drop-shadow(0px 2px 1px black);
+    */
 }
