@@ -27,6 +27,7 @@ function CreatePageSize(page) {
 
     
     let sizeGrid = ui.CreateDivWithClass('grid');
+    ui.AddElementAttribute(sizeGrid, 'maxGridWidth', 4000);
     page.appendChild(sizeGrid);
 
     let cs = new cmp.CanvasSize("Canvas Size");
@@ -44,7 +45,7 @@ function CreatePageSize(page) {
     sizeGrid.appendChild(moSize.div);
 
     let txInfo = new cmp.TextField(txt.LIPSUM);
-    sizeGrid.appendChild(txInfo.div);
+    page.appendChild(txInfo.div); // add to page directly, not grid
 }
 function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE -----

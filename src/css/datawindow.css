@@ -112,7 +112,7 @@ dataWindow .fadeBG {
     z-index: -1;
 }
 
-dataWindow .page.features > .grid {
+dataWindow .page > .grid {
     position: relative;
     width: 100%;
     height: 100%;
@@ -121,7 +121,7 @@ dataWindow .page.features > .grid {
     grid-column-gap: 10px;
     grid-row-gap: 0px;
 }
-dataWindow .page.features > .grid[singleColumn="true"] {
+dataWindow .page > .grid[singleColumn="true"] {
     grid-template-columns: repeat(1, 1fr);
     grid-column-gap: 0px;
 }

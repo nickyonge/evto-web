@@ -16,10 +16,10 @@ import { CreatePageContent } from "./uiDataCreatePageContent";
 import { CallOnLoadComplete } from ".";
 import { BasicComponent, basicComponentClass } from "./components/base";
 
-export const initialTab = 3;
+export const initialTab = 1;
 
 const maxTitleHeight = 30;
-const maxTwoColumnWidth = 269;
+const maxTwoColumnWidthDefault = 269;
 const bgFadeAlpha = 0.82;
 const useSeparators = false;
 
@@ -164,10 +164,15 @@ function UpdatePages() {
     UpdatePageTitles();
 }
 function UpdatePageLayouts() {
-    let singleColumn = content.offsetWidth < maxTwoColumnWidth;
+    // iterate thru all pages looking for grids
     for (let i = 0; i < pages.length; i++) {
         let gridLayout = GetChildWithClass(pages[i], 'grid');
         if (gridLayout) {
+            // found grid, check for max grid width attb, or use default max width
+            let maxWidth = ui.GetAttribute(gridLayout, 'maxGridWidth');
+            if (maxWidth == null) { maxWidth = maxTwoColumnWidthDefault; }
+            // check if single column
+            let singleColumn = content.offsetWidth < maxWidth;
             ui.AddElementAttribute(gridLayout, 'singleColumn', singleColumn);
         }
     }
