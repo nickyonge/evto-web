@@ -270,11 +270,14 @@ export function HasAttribute(element, attType) {
  * @param {string} attType Type (qualifiedName) of attribute to check 
  * @param {any} attValue Value of the attribute, typically a `string`,
  * `number`, or `boolean`. 
+ * @param {boolean} [countNullAsEmpty=true] If true, if `attValue` is `null` or `undefined`, sets it to ''. 
+ * False casts to string, literally "null" or "undefined"
  * @returns {boolean}
  */
-export function HasAttributeWithValue(element, attType, attValue) {
+export function HasAttributeWithValue(element, attType, attValue, countNullAsEmpty = true) {
     if (!HasAttribute(element, attType)) { return false; }
-    return (element.getAttribute(attType) == attValue);
+    if (countNullAsEmpty && (attValue == null || attValue == undefined)) { attValue = ''; }
+    return element.getAttribute(attType) == String(attValue);
 }
 /**
  * Check if the given HTMLElement has any or all of the given attributes
