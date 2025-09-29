@@ -11,6 +11,9 @@ import { GetAllChildrenWithClass } from "./lilutils";
 import { basicComponentClass } from "./components/base";
 import { canvasDisplayAspectRatio } from "./components/canvassize";
 
+/** Multioption List for selecting canvas size @type {cmp.MutliOptionList} */
+export let moSizeSelector;
+
 /** show the languauges dropdown? */
 const languageDropdown = false;// TODO: Languages in language dropdown 
 // Issue URL: https://github.com/nickyonge/evto-web/issues/1
@@ -30,7 +33,7 @@ function CreatePageSize(page) {
     let cs = new cmp.CanvasSize("Canvas Size");
     sizeGrid.appendChild(cs.div);
 
-    let moSize = new cmp.MutliOptionList('Size', SelectSize,
+    moSizeSelector = new cmp.MutliOptionList('Size', SelectSize,
         [ // sizing and labels 
             `${txt.PG_SIZE_SM}, <i>${txt.DATA_SIZE_SM}</i>`,
             `&nbsp;&nbsp;${txt.PG_SIZE_SMP}, <i>${txt.DATA_SIZE_SMP}</i>`,
@@ -39,7 +42,7 @@ function CreatePageSize(page) {
             `${txt.PG_SIZE_LG}, <i>${txt.DATA_SIZE_LG}</i>`,
             `&nbsp;&nbsp;${txt.PG_SIZE_LGP}, <i>${txt.DATA_SIZE_LGP}</i>`,
         ], cost.SIZE_CANVAS);
-    sizeGrid.appendChild(moSize.div);
+    sizeGrid.appendChild(moSizeSelector.div);
 
     let txInfo = new cmp.TextField(txt.LIPSUM);
     page.appendChild(txInfo.div); // add to page directly, not grid

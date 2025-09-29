@@ -5,6 +5,7 @@ import { StringToNumber } from "./lilutils";
 import { dataWindow } from './uiMain';
 import { initialTab, SelectTab } from './uiData';
 import { BasicComponent } from './components/base';
+import { moSizeSelector } from './uiDataCreatePageContent';
 
 /**
  * Canvas Sizes Enum
@@ -52,6 +53,8 @@ export function SelectSize(selectedSize) {
             component.UpdateCosts();
         }
     });
+    // ensure multioption list value is correct if selected via canvas size graphic
+    moSizeSelector.selectionIndex = selectedSize;
 }
 
 
