@@ -1,5 +1,5 @@
 import * as ui from "../ui";
-import { GetParentWithClass, isBlank } from "../lilutils";
+import { ElementHasClass, GetParentWithClass, isBlank } from "../lilutils";
 import { HelpIcon } from "./helpicon";
 
 export const basicComponentClass = '__UICOMP';
@@ -7,7 +7,7 @@ export const basicComponentClass = '__UICOMP';
 export class BasicComponent {
     div;
     onScroll;
-    parentPage;
+    #parentPage;
     static componentCount = 0;
     static allComponents = [];
     static allComponentDivs = [];
@@ -23,6 +23,29 @@ export class BasicComponent {
     }
     get uniqueComponentName() {
         return `_uiComponent${this.uniqueComponentID}`;
+    }
+    /** page that this component has been added to. should only be accessed after UI has finished loading. 
+     * @type {HTMLElement} */
+    get parentPage() {
+        if (this.#parentPage == null) {
+            if (this.div == null || this.div.parentElement == null) {
+                console.warn(`WARNING: can't get parent page for component with null/unparented div, component: ${this.uniqueComponentName}`);
+                return null;
+            }
+            this.#parentPage = GetParentWithClass(this.div, 'page');
+            if (this.#parentPage == null) {
+                console.warn(`WARNING: can't get parent page for component ${this.uniqueComponentName}, no parent has css class 'page'`);
+                return null;
+            }
+        }
+        return this.#parentPage;
+    }
+    set parentPage(page) {
+        if (!ElementHasClass(page, 'page')) {
+            console.warn(`WARNING: can't set component ${this.uniqueComponentName} parent page, page div doesn't have class 'page', page div: ${page}`);
+            return;
+        }
+        this.#parentPage = page;
     }
     static GetComponentByUniqueID(uniqueID) {
         for (let i = 0; i < BasicComponent.allComponentDivs.length; i++) {
