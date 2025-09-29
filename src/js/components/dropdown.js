@@ -3,7 +3,6 @@ import { BasicComponent, TitledComponent } from "./base";
 import { ObserveNode, ObserverCallbackOnAdded } from "../mutationObserver";
 import { GetChildWithClass, GetCSSVariable, GetParentWithClass, GetSiblingWithClass, isBlank } from "../lilutils";
 import * as cost from '../costs';
-// const initialValue = 0;
 
 const _smootherScroll = true;
 
@@ -23,16 +22,20 @@ export class DropdownList extends TitledComponent {
     #costArray;
     #currentCost;
 
+    #initialValue;
+
     static _dropdownMaxHeight = -1;
 
     #initialChange = false;
 
     constructor(componentTitle, onSelectCallback, options, costs, icons, initialValue = 0) {
         super(componentTitle);
-
+        
         if (DropdownList._dropdownMaxHeight < 0) {
             DropdownList._dropdownMaxHeight = parseInt(GetCSSVariable('--ui-component-dropdown-max-height'), 10);
         }
+        
+        this.#initialValue = initialValue;
 
         this.#costArray = costs;
         this.#currentCost = 0;
@@ -76,7 +79,7 @@ export class DropdownList extends TitledComponent {
             let oDiv = ui.CreateDiv();
             let uniqueName = `${this.uniqueComponentName}_o${i}`;
             let oInput = ui.CreateInputWithID('radio', uniqueName);
-            ui.AddElementAttribute(oInput, 'name', 'ddOption');
+            ui.AddElementAttributes(oInput, ['name', 'labelValue'], ['ddOption', options[i]]);
             oInput.defaultChecked = isChecked;
             oInput.checked = isChecked;
             let oLabel = ui.CreateElementWithClass('label', 'ddOption');
@@ -185,10 +188,10 @@ export class DropdownList extends TitledComponent {
     }
 
     UpdateCosts() {
-
         if (this.#costArray == null || !Array.isArray(this.#costArray)) {
             return;
         }
+
         let costArray = cost.GetCostArray(this.#costArray);
         let len = this.#optionsCostsP.length;
         if (costArray.length != this.#optionsCostsP.length) {
@@ -374,9 +377,15 @@ export class DropdownList extends TitledComponent {
             return -1;
         }
         for (let i = 0; i < this.#optionsInputs.length; i++) {
+            console.log(`is option checked: ${this.#optionsInputs[i].checked}, label: ${ui.GetAttribute(this.#optionsInputs[i], 'labelValue')}`);
             if (this.#optionsInputs[i].checked) {
                 return i;
             }
+        }
+        // TODO: dropdown initial checked/defaultchecked state broken when multiple dropdowns present
+        // failsafe: if no value selected, initial value is NOT -1, and initial change is false, return initial valeu
+        if (this.#initialValue != -1 && !this.#initialChange) {
+            return this.#initialValue;// could also find this by comparing ddSelected data-txt attribute 
         }
         return -1;
     }
