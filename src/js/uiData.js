@@ -6,15 +6,16 @@ import { PAGE_NAMES } from "./text";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE, PageOpened, PageClosed } from "./contentData";
 import { dataWindow } from "./uiMain";
 import { style, AddAlphaToHex, DeselectElement, SetElementEnabled, GetChildWithClass, GetAllChildrenWithClass } from "./lilutils";
+import { CreatePage } from "./pages/uiDataPageBase";
+import { CallOnLoadComplete } from ".";
+import { BasicComponent, basicComponentClass } from "./components/base";
 
 import iconArt from '../assets/svg/icons-red/icon-art.svg';
 import iconFeatures from '../assets/svg/icons-red/icon-features.svg';
 import iconHome from '../assets/svg/icons-red/icon-home.svg';
 import iconSave from '../assets/svg/icons-red/icon-save.svg';
 import iconScale from '../assets/svg/icons-red/icon-scale.svg';
-import { CreatePageContent } from "./uiDataCreatePageContent";
-import { CallOnLoadComplete } from ".";
-import { BasicComponent, basicComponentClass } from "./components/base";
+
 
 export const initialTab = 1;
 
@@ -96,7 +97,7 @@ function CreateTabs() {
 /**
  * Creates the individual pages for the data window.
  * 
- * NOTE: See `uiDataCreatePageContent.js` for creation of the actual content 
+ * NOTE: See `uiDataPageBase.js` for creation of the actual content 
  * in the pages themselves (text, buttons, sliders, graphics, etc)
  */
 function CreatePages() {
@@ -115,7 +116,7 @@ function CreatePages() {
         pages.push(page);
         content.appendChild(page);
         // external page content creation function
-        CreatePageContent(page);
+        CreatePage(page);
     }
     // add resize event 
     window.addEventListener('resize', function () {

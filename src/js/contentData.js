@@ -5,7 +5,8 @@ import { StringToNumber } from "./lilutils";
 import { dataWindow } from './uiMain';
 import { initialTab, SelectTab } from './uiData';
 import { BasicComponent } from './components/base';
-import { moSizeSelector } from './uiDataCreatePageContent';
+// import { moSizeSelector } from './uiDataCreatePageContent';
+import { moSizeSelector } from './pages/uiDataPageSize';
 
 /**
  * Canvas Sizes Enum
