@@ -28,7 +28,7 @@
 }
 .canvasSize .image.frame {
     opacity: 0;
-    transition: opacity 0.2s;
+    transition: opacity 0.4s;
 }
 .canvasSize .image.frame:hover {
     opacity: 0.69;

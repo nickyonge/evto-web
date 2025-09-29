@@ -1,7 +1,7 @@
 import * as ui from "../ui";
 import { BasicComponent, TitledComponent } from "./base";
 import * as txt from '../text';
-import { currentSizeNumber } from "../contentData";
+import { currentSizeNumber, SelectSize } from "../contentData";
 
 import canvasBase from '../../assets/png/canvases/evto_paintings_plain_faded.png';
 // import canvasBase from '../../assets/png/canvases/evto_paintings_plain.png';
@@ -44,11 +44,19 @@ export class CanvasSize extends BasicComponent {
             let img = ui.CreateImage(canvasFramesArray[i]);
             ui.AddClassesToDOM(img, 'canvasSize', 'image', CanvasSize.canvasNumToName(i));
             if (i == 0) {
+                // base image
                 this.#imgBase = img;
             } else {
+                // canvas frame images
                 ui.AddClassToDOMs('frame', img);
                 this.#images.push(img);
+                // add event callback
+                img.addEventListener('click', function () {
+                    // selected size i - 1
+                    SelectSize(i - 1);
+                }.bind(this));
             }
+            // add to image container
             this.#imageContainer.appendChild(img);
         }
 
