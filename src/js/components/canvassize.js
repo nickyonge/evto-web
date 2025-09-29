@@ -62,7 +62,6 @@ export class CanvasSize extends BasicComponent {
                 // add event callback
                 img.addEventListener('click', function () {
                     // selected size i - 1
-                    console.log(i);
                     SelectSize(framesArrayInverted ? canvasFramesArray.length - i - 1 : i - 1);
                 }.bind(this));
                 ui.MakeTabbableWithInputTo(img, img);

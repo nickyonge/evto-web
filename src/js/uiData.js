@@ -172,11 +172,9 @@ function UpdatePageLayouts() {
             // found grid, check for single column, first checking aspect attb
             let singleColumn = false;
             let maxAspect = ui.GetAttribute(gridLayout, 'maxGridAspect');
-            console.log("MAX ASPECT:" + maxAspect);
             if (maxAspect) {
                 // aspect ratio found, compare to content aspect
                 let contentAspect = content.offsetWidth / content.offsetHeight;
-                // console.log("content aspect: " + contentAspect);
                 singleColumn = contentAspect < maxAspect;
             }
             if (!singleColumn) {

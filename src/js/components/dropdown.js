@@ -377,7 +377,6 @@ export class DropdownList extends TitledComponent {
             return -1;
         }
         for (let i = 0; i < this.#optionsInputs.length; i++) {
-            console.log(`is option checked: ${this.#optionsInputs[i].checked}, label: ${ui.GetAttribute(this.#optionsInputs[i], 'labelValue')}`);
             if (this.#optionsInputs[i].checked) {
                 return i;
             }
