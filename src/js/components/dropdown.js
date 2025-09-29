@@ -383,6 +383,7 @@ export class DropdownList extends TitledComponent {
             }
         }
         // TODO: dropdown initial checked/defaultchecked state broken when multiple dropdowns present
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/40
         // failsafe: if no value selected, initial value is NOT -1, and initial change is false, return initial valeu
         if (this.#initialValue != -1 && !this.#initialChange) {
             return this.#initialValue;// could also find this by comparing ddSelected data-txt attribute 
