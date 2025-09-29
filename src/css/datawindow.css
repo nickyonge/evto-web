@@ -122,6 +122,8 @@ dataWindow .page > .grid {
     grid-row-gap: 0px;
 }
 dataWindow .page > .grid[singleColumn="true"] {
+    /* display: none; */
     grid-template-columns: repeat(1, 1fr);
+    /* grid-template-rows: repeat(auto-fit, minmax(nub, 1fr)); */
     grid-column-gap: 0px;
 }

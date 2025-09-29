@@ -5,6 +5,7 @@ import { SetupArtWindow } from './contentArt';
 import { DisconnectObserver, StartObservation } from './mutationObserver';
 import Coloris from "@melloware/coloris";
 import { BasicComponent } from './components/base';
+import { GetParentWithClass } from './lilutils';
 
 let _onLoadCompleteCallbacks = [];
 
@@ -37,9 +38,10 @@ window.addEventListener('load', function () {
             selectInput: true,
             formatToggle: true,
         });
-        // call DocumentLoaded on all components
+        // assign parent page to all components, and call DocumentLoaded on them 
         BasicComponent.allComponents.forEach(component => {
             if (component.DocumentLoaded) {
+                component.parentPage = GetParentWithClass(component.div, 'page');
                 component.DocumentLoaded();
             }
         });

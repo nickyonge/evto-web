@@ -70,6 +70,8 @@
 
     --ui-component-dropdown-max-height: 169px;
 
+    --ui-component-canvas-inset: 2px;
+
     --ui-helpIcon-size: 12px;
     --ui-helpIcon-leftMargin: 4px;
     --ui-helpIcon-leftMargin-toggle: 10px;

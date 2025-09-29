@@ -1,5 +1,5 @@
 import * as ui from "../ui";
-import { TitledComponent } from "./base";
+import { BasicComponent, TitledComponent } from "./base";
 import * as txt from '../text';
 
 import canvasBase from '../../assets/png/canvases/evto_paintings_plain_faded.png';
@@ -14,7 +14,8 @@ import canvasSm from '../../assets/png/canvases/alpha_assets/cutouts_colour_fram
 
 let canvasFramesArray = [canvasBase, canvasLgP, canvasLg, canvasMdP, canvasMd, canvasSmP, canvasSm];
 
-export class CanvasSize extends TitledComponent {
+// export class CanvasSize extends TitledComponent {
+export class CanvasSize extends BasicComponent {
 
     /** container div for all the images @type {HTMLElement} */
     #imageContainer;
@@ -43,7 +44,26 @@ export class CanvasSize extends TitledComponent {
             this.#imageContainer.appendChild(img);
         }
 
-        this._addHelpIcon(`${componentTitle}`);
+        
+        // add resize event 
+        window.addEventListener('resize', function () {
+            // re-fire size assignment events on page resize
+            // update appearance after one-tick delay
+            window.setTimeout(() => {
+                // one tick delay
+                this.UpdateVisibility();
+            }, 0);
+        }.bind(this));
+
+        // this._addHelpIcon(`${componentTitle}`);
+    }
+
+    DocumentLoaded() {
+        this.UpdateVisibility();
+    }
+
+    UpdateVisibility() {
+        console.log(this.div.parentElement.getBoundingClientRect().height);
     }
 
     /**

@@ -22,11 +22,8 @@ function CreatePageIntro(page) {
 }
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
-
-    
     let sizeGrid = ui.CreateDivWithClass('grid');
-    // ui.AddElementAttribute(sizeGrid, 'maxGridWidth', 500);
-    ui.AddElementAttribute(sizeGrid, 'maxGridAspect', 1.67);
+    ui.AddElementAttribute(sizeGrid, 'maxGridAspect', 1.75);
     page.appendChild(sizeGrid);
 
     let cs = new cmp.CanvasSize("Canvas Size");
