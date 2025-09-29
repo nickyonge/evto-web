@@ -80,8 +80,6 @@ export class CanvasSize extends BasicComponent {
         let height = rect.height;
         let area = width * height;
 
-        console.log("Area: " + area);
-
         let showCanvases = true;
         if ((singleColumn && area < 30000) ||
             (singleColumn && height < 250) ||
@@ -95,7 +93,10 @@ export class CanvasSize extends BasicComponent {
         } else {
             ui.AddElementAttribute(this.#parentGrid, "forceSingleColumn", true);
         }
+    }
 
+    UpdateCosts() {
+        // size has been updated 
     }
 
     /**
