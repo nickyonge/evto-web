@@ -20,6 +20,7 @@ let canvasFramesArray = [canvasBase, canvasLgP, canvasLg, canvasMdP, canvasMd, c
 const framesArrayInverted = true;
 // inverting array makes tab indexing proceed correctly along canvas sizes 
 // TODO: tab highlight does not appear around highlighted canvas frame images properly. issue with clip-path
+// Issue URL: https://github.com/nickyonge/evto-web/issues/39
 
 // export class CanvasSize extends TitledComponent {
 export class CanvasSize extends BasicComponent {
