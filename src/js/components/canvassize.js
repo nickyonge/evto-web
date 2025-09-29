@@ -12,6 +12,8 @@ import canvasMd from '../../assets/png/canvases/alpha_assets/cutouts_colour_fram
 import canvasSmP from '../../assets/png/canvases/alpha_assets/cutouts_colour_frames/evto_canvas_frame_2smp.png';
 import canvasSm from '../../assets/png/canvases/alpha_assets/cutouts_colour_frames/evto_canvas_frame_1sm.png';
 
+export const canvasDisplayAspectRatio = 1.7;
+
 let canvasFramesArray = [canvasBase, canvasLgP, canvasLg, canvasMdP, canvasMd, canvasSmP, canvasSm];
 
 // export class CanvasSize extends TitledComponent {
@@ -23,6 +25,8 @@ export class CanvasSize extends BasicComponent {
     #imgBase;
     /** array of all frame images of the canvas @type {HTMLElement[]} */
     #images;
+
+    #parentGrid;
 
     constructor(componentTitle) {
         super(componentTitle);
@@ -44,7 +48,7 @@ export class CanvasSize extends BasicComponent {
             this.#imageContainer.appendChild(img);
         }
 
-        
+
         // add resize event 
         window.addEventListener('resize', function () {
             // re-fire size assignment events on page resize
@@ -63,7 +67,35 @@ export class CanvasSize extends BasicComponent {
     }
 
     UpdateVisibility() {
-        console.log(this.div.parentElement.getBoundingClientRect().height);
+        if (!this.#parentGrid) {
+            // ensure we have reference to the parent grid 
+            this.#parentGrid = this.div.parentElement;
+        }
+        let singleColumn = ui.HasAttributeWithValue(this.#parentGrid, 'singleColumn', true);
+
+        // hide if area is less than 30000, or single column and height is less than 250
+
+        let rect = this.parentPage.getBoundingClientRect();
+        let width = rect.width;
+        let height = rect.height;
+        let area = width * height;
+
+        console.log("Area: " + area);
+
+        let showCanvases = true;
+        if ((singleColumn && area < 30000) ||
+            (singleColumn && height < 250) ||
+            (!singleColumn && area < 50000)) {
+            showCanvases = false;
+        }
+
+        this.div.hidden = !showCanvases;
+        if (showCanvases) {
+            ui.RemoveElementAttribute(this.#parentGrid, "forceSingleColumn");
+        } else {
+            ui.AddElementAttribute(this.#parentGrid, "forceSingleColumn", true);
+        }
+
     }
 
     /**

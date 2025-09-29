@@ -1,8 +1,11 @@
 .canvasSize {
     flex-direction: column;
     display: flex;
-    background-color: cyan;
+    /* background-color: cyan; */
     height: 1fr;
+}
+.canvasSize[hidden] {
+    display: none;
 }
 
 .canvasSize .imageContainer {
@@ -29,7 +32,6 @@
     transform: translate(-50%, -50%);
     max-width: 100%;
     max-height: 100%;
-    /* min-height: 50px; */
 }
 
 

@@ -121,6 +121,7 @@ dataWindow .page > .grid {
     grid-column-gap: 10px;
     grid-row-gap: 0px;
 }
+dataWindow .page > .grid[forceSingleColumn="true"],
 dataWindow .page > .grid[singleColumn="true"] {
     /* display: none; */
     grid-template-columns: repeat(1, 1fr);

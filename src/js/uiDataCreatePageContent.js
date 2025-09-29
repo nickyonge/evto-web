@@ -9,6 +9,7 @@ import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE } from "./contentDa
 import { GetPageNumberByID, pageHeaders } from "./uiData";
 import { GetAllChildrenWithClass } from "./lilutils";
 import { basicComponentClass } from "./components/base";
+import { canvasDisplayAspectRatio } from "./components/canvassize";
 
 /** show the languauges dropdown? */
 const languageDropdown = false;// TODO: Languages in language dropdown 
@@ -23,7 +24,7 @@ function CreatePageIntro(page) {
 function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
     let sizeGrid = ui.CreateDivWithClass('grid');
-    ui.AddElementAttribute(sizeGrid, 'maxGridAspect', 1.75);
+    ui.AddElementAttribute(sizeGrid, 'maxGridAspect', canvasDisplayAspectRatio);
     page.appendChild(sizeGrid);
 
     let cs = new cmp.CanvasSize("Canvas Size");
