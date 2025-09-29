@@ -15,8 +15,11 @@ import canvasSm from '../../assets/png/canvases/alpha_assets/cutouts_colour_fram
 
 export const canvasDisplayAspectRatio = 1.7;
 
-// let canvasFramesArray = [canvasBase, canvasLgP, canvasLg, canvasMdP, canvasMd, canvasSmP, canvasSm];
-let canvasFramesArray = [canvasBase, canvasSm, canvasSmP, canvasMd, canvasMdP, canvasLg, canvasLgP];
+let canvasFramesArray = [canvasBase, canvasLgP, canvasLg, canvasMdP, canvasMd, canvasSmP, canvasSm];
+// let canvasFramesArray = [canvasBase, canvasSm, canvasSmP, canvasMd, canvasMdP, canvasLg, canvasLgP];
+const framesArrayInverted = true;
+// inverting array makes tab indexing proceed correctly along canvas sizes 
+// TODO: tab highlight does not appear around highlighted canvas frame images properly. issue with clip-path
 
 // export class CanvasSize extends TitledComponent {
 export class CanvasSize extends BasicComponent {
@@ -31,8 +34,6 @@ export class CanvasSize extends BasicComponent {
     #parentGrid;
 
     constructor(componentTitle) {
-
-        
         super(componentTitle);
 
         ui.AddClassToDOMs('canvasSize', this.div);
@@ -42,7 +43,14 @@ export class CanvasSize extends BasicComponent {
         this.#images = [];
         for (let i = 0; i < canvasFramesArray.length; i++) {
             let img = ui.CreateImage(canvasFramesArray[i]);
-            ui.AddClassesToDOM(img, 'canvasSize', 'image', CanvasSize.canvasNumToName(i));
+            let canvasName;
+            if (i == 0 || !framesArrayInverted) {
+                canvasName = CanvasSize.canvasNumToName(i);
+            } else {
+                canvasName = CanvasSize.canvasNumToName(canvasFramesArray.length - i);
+            }
+            ui.AddClassesToDOM(img, 'canvasSize', 'image', canvasName);
+            img.draggable = false;
             if (i == 0) {
                 // base image
                 this.#imgBase = img;
@@ -53,13 +61,14 @@ export class CanvasSize extends BasicComponent {
                 // add event callback
                 img.addEventListener('click', function () {
                     // selected size i - 1
-                    SelectSize(i - 1);
+                    console.log(i);
+                    SelectSize(framesArrayInverted ? canvasFramesArray.length - i - 1 : i - 1);
                 }.bind(this));
+                ui.MakeTabbableWithInputTo(img, img);
             }
             // add to image container
             this.#imageContainer.appendChild(img);
         }
-
 
         // add resize event 
         window.addEventListener('resize', function () {
@@ -111,12 +120,14 @@ export class CanvasSize extends BasicComponent {
     UpdateCosts() {
         // size has been updated 
         for (let i = 0; i < this.#images.length; i++) {
+            let img = framesArrayInverted ? this.#images[this.#images.length - i - 1] : this.#images[i];
+            // let img = this.#images[i];
             if (i == currentSizeNumber) {
                 // currently selected frame 
-                ui.AddElementAttribute(this.#images[i], 'selected');
+                ui.AddElementAttribute(img, 'selected');
             } else {
                 // not current frame
-                ui.RemoveElementAttribute(this.#images[i], 'selected');
+                ui.RemoveElementAttribute(img, 'selected');
             }
         }
     }

@@ -30,10 +30,16 @@
     opacity: 0;
     transition: opacity 0.4s;
 }
-.canvasSize .image.frame:hover {
-    opacity: 0.69;
+.canvasSize .image.frame:hover,
+.canvasSize .image.frame:focus-visible {
     cursor: pointer;
     transition: opacity 0s;
+}
+.canvasSize .image.frame:focus-visible {
+    opacity: 0.4;
+}
+.canvasSize .image.frame:hover {
+    opacity: 0.69;
 }
 .canvasSize .image.frame[selected] {
     opacity: 1;
