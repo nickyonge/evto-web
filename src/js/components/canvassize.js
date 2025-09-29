@@ -1,6 +1,7 @@
 import * as ui from "../ui";
 import { BasicComponent, TitledComponent } from "./base";
 import * as txt from '../text';
+import { currentSizeNumber } from "../contentData";
 
 import canvasBase from '../../assets/png/canvases/evto_paintings_plain_faded.png';
 // import canvasBase from '../../assets/png/canvases/evto_paintings_plain.png';
@@ -14,7 +15,8 @@ import canvasSm from '../../assets/png/canvases/alpha_assets/cutouts_colour_fram
 
 export const canvasDisplayAspectRatio = 1.7;
 
-let canvasFramesArray = [canvasBase, canvasLgP, canvasLg, canvasMdP, canvasMd, canvasSmP, canvasSm];
+// let canvasFramesArray = [canvasBase, canvasLgP, canvasLg, canvasMdP, canvasMd, canvasSmP, canvasSm];
+let canvasFramesArray = [canvasBase, canvasSm, canvasSmP, canvasMd, canvasMdP, canvasLg, canvasLgP];
 
 // export class CanvasSize extends TitledComponent {
 export class CanvasSize extends BasicComponent {
@@ -29,6 +31,8 @@ export class CanvasSize extends BasicComponent {
     #parentGrid;
 
     constructor(componentTitle) {
+
+        
         super(componentTitle);
 
         ui.AddClassToDOMs('canvasSize', this.div);
@@ -64,6 +68,7 @@ export class CanvasSize extends BasicComponent {
 
     DocumentLoaded() {
         this.UpdateVisibility();
+        this.UpdateCosts();
     }
 
     UpdateVisibility() {
@@ -97,6 +102,15 @@ export class CanvasSize extends BasicComponent {
 
     UpdateCosts() {
         // size has been updated 
+        for (let i = 0; i < this.#images.length; i++) {
+            if (i == currentSizeNumber) {
+                // currently selected frame 
+                ui.AddElementAttribute(this.#images[i], 'selected');
+            } else {
+                // not current frame
+                ui.RemoveElementAttribute(this.#images[i], 'selected');
+            }
+        }
     }
 
     /**
