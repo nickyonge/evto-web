@@ -79,6 +79,7 @@ export class MutliOptionList extends TitledComponent {
         if (horizontal) {
             ui.AddClassToDOMs('horizontal', this.div, this.#listSelect);
             //TODO: check horizontal with cost tokens (currently untested)
+            //Issue URL: https://github.com/nickyonge/evto-web/issues/42
         }
 
         // add to document 
