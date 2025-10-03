@@ -7,6 +7,8 @@ import Coloris from "@melloware/coloris";
 import { BasicComponent } from './components/base';
 import { GetParentWithClass } from './lilutils';
 
+import './doc'; // should be called after all other imports 
+
 let _onLoadCompleteCallbacks = [];
 
 window.addEventListener('load', function () {
