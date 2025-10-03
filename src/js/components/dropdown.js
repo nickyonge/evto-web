@@ -165,6 +165,8 @@ export class DropdownList extends TitledComponent {
 
         // update costs 
         this.UpdateCosts();
+
+        //TODO: when closing, dropdown z-index brieifly appears underneath other components & ddselect
     }
     #updateSelectedCost() {
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
