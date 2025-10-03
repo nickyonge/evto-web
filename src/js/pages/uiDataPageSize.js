@@ -7,6 +7,9 @@ import { SelectSize } from "../contentData";
 
 /** Multioption List for selecting canvas size @type {cmp.MutliOptionList} */
 export let moSizeSelector;
+
+/** Create the Size page
+ * @param {HTMLElement} page Element of the page itself */
 export function CreatePageSize(page) {
     // ----------------------------- CREATE SIZE PAGE -----
     let sizeGrid = ui.CreateDivWithClass('grid');
@@ -24,8 +27,8 @@ export function CreatePageSize(page) {
             `&nbsp;&nbsp;${txt.PG_SIZE_LGP}, <i>${txt.DATA_SIZE_LGP}</i>`,
         ], cost.SIZE_CANVAS);
 
-    page.appendChild(txInfo.div); // add to page directly, not grid
-    sizeGrid.appendChild(cs.div);
-    sizeGrid.appendChild(moSizeSelector.div);
+    page.appendChild(txInfo); // add to page directly, not grid
+    sizeGrid.appendChild(cs);
+    sizeGrid.appendChild(moSizeSelector);
     page.appendChild(sizeGrid);
 }

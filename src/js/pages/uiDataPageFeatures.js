@@ -8,6 +8,8 @@ const languageDropdown = false;// TODO: Languages in language dropdown
 // Issue URL: https://github.com/nickyonge/evto-web/issues/1
 
 
+/** Create the Features page
+ * @param {HTMLElement} page Element of the page itself */
 export function CreatePageFeatures(page) {
     // ----------------------------- CREATE FEATURES PAGE -----
 
@@ -45,11 +47,11 @@ export function CreatePageFeatures(page) {
         null, 0
     );
 
-    featuresGrid.appendChild(moLandDetail.div);
-    featuresGrid.appendChild(moGCSLines.div);
-    featuresGrid.appendChild(moLabelling.div);
-    featuresGrid.appendChild(moTitleBox.div);
-    featuresGrid.appendChild(moLandLines.div);
+    featuresGrid.appendChild(moLandDetail);
+    featuresGrid.appendChild(moGCSLines);
+    featuresGrid.appendChild(moLabelling);
+    featuresGrid.appendChild(moTitleBox);
+    featuresGrid.appendChild(moLandLines);
 
     if (languageDropdown) {
         let ddLanguage = new cmp.DropdownList(
@@ -57,6 +59,6 @@ export function CreatePageFeatures(page) {
             txt.PG_FEAT_LANGUAGE_OPTIONS,
             null, null, 0
         );
-        featuresGrid.appendChild(ddLanguage.div);
+        featuresGrid.appendChild(ddLanguage);
     }
 }
