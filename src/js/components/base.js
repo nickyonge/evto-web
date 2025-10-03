@@ -91,9 +91,9 @@ export class TitledComponent extends BasicComponent {
         this.#titleText = text;
         if (this.#titleElement) {
             if (!text || text.isBlank) {
-                this.#titleElement.style.visibility = 'hidden';
+                this.#titleElement.style.display = 'none';
             } else {
-                this.#titleElement.style.visibility = 'visible';
+                this.#titleElement.style.display = '';
                 this.#titleElement.innerHTML = text;
             }
         }
