@@ -13,7 +13,7 @@ export class MutliOptionList extends TitledComponent {
     #costArray;
     #currentCost;
 
-    constructor(componentTitle, onSelectCallback, options, costs, icons, initialValue = 0) {
+    constructor(componentTitle, onSelectCallback, options, costs, icons, initialValue = 0, horizontal = false) {
         super(componentTitle);
 
         ui.AddClassesToDOM(this.div, 'multichoicelist');
@@ -74,11 +74,18 @@ export class MutliOptionList extends TitledComponent {
                 });
             }
         }
+        
+        // check horizontal class
+        if (horizontal) {
+            ui.AddClassToDOMs('horizontal', this.div, this.#listSelect);
+            //TODO: check horizontal with cost tokens (currently untested)
+        }
 
         // add to document 
         this.div.appendChild(this.#listSelect);
 
         for (let i = 0; i < options.length; i++) {
+            // append inputs and labels
             this.#listSelect.appendChild(this.#inputs[i]);
             this.#listSelect.appendChild(this.#labels[i]);
         }
