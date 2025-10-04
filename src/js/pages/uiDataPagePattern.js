@@ -1,6 +1,7 @@
 import * as cmp from "../components";
 import { DemoPageContent } from "./uiDataPageBase";
 import * as ui from '../ui';
+import { SetElementEnabled } from "../lilutils";
 
 let patternPage = 0;
 
@@ -22,6 +23,16 @@ export function CreatePagePattern(page) {
     sectionPattern = ui.CreateDivWithClass('section', 'pattern');
     sectionColors = ui.CreateDivWithClass('section', 'colors');
 
+    // demo content
+    sectionPattern.innerHTML = "PATTERN";
+    sectionColors.innerHTML = "COLOURS";
+    sectionPattern.appendChild(new cmp.Toggle());
+    sectionPattern.appendChild(new cmp.Toggle());
+    sectionPattern.appendChild(new cmp.Toggle());
+    sectionColors.appendChild(new cmp.Toggle());
+    sectionColors.appendChild(new cmp.Toggle());
+    sectionColors.appendChild(new cmp.Toggle());
+
     // add elements to page 
     page.appendChild(sectionSelection);
     page.appendChild(sectionContainer);
@@ -34,6 +45,10 @@ export function CreatePagePattern(page) {
 
 function SelectPatternPage(num) {
     patternPage = num;
-    ui.AddClassToDOMs('active', num == 0 ? sectionPattern : sectionColors);
-    ui.RemoveClassFromDOMs('active', num == 0 ? sectionColors : sectionPattern);
+    let activePage = num == 0 ? sectionPattern : sectionColors;
+    let inactivePage = num == 0 ? sectionColors : sectionPattern;
+    ui.AddClassesToDOM(activePage, 'active');
+    ui.RemoveClassesFromDOM(inactivePage, 'active');
+    SetElementEnabled(activePage, true);
+    SetElementEnabled(inactivePage, false);
 }
