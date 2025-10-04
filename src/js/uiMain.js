@@ -18,15 +18,15 @@ const _dataWindowOnLeft = true;
 /** container div for all content on the page @type Element */
 let container = null;
 
-/** Header (top bar) element @type Element */
+/** Header (top bar) element @type HTMLElement */
 let topBar = null;
 /** Overlay container for popups/info/etc @type HTMLElement */
 export let overlay = null;
-/** Art window, where the canvas rendering goes @type Element */
+/** Art window, where the canvas rendering goes @type HTMLElement */
 export let artWindow = null;
-/** Data window, where the tabs and info window goes @type Element */
+/** Data window, where the tabs and info window goes @type HTMLElement */
 export let dataWindow = null;
-/** Footer (bottom bar) element @type Element */
+/** Footer (bottom bar) element @type HTMLElement */
 let btmBar = null;
 
 export function BuildUI() {
@@ -59,4 +59,9 @@ export function BuildUI() {
         ui.AddClassToDOMs('demoBG', topBar, btmBar, artWindow, dataWindow);
     }
 
+}
+
+export function DisplayUI() {
+    // done, fade in content 
+    dataWindow.style.opacity = 1;
 }

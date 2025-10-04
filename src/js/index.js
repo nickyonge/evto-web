@@ -1,5 +1,5 @@
 import './css'; // import css classes 
-import { BuildUI } from './uiMain';
+import { BuildUI, DisplayUI } from './uiMain';
 import { SetupDataWindow } from './contentData';
 import { SetupArtWindow } from './contentArt';
 import { DisconnectObserver, StartObservation } from './mutationObserver';
@@ -47,6 +47,9 @@ window.addEventListener('load', function () {
                 component.DocumentLoaded();
             }
         });
+
+        // display ui
+        DisplayUI();
         
     }, 0);
 });

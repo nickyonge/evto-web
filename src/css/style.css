@@ -89,6 +89,8 @@ artWindow {
 }
 dataWindow {
     grid-area: dataWindow;
+    opacity: 0;
+    transition: opacity 420ms ease-out 10ms;
 }
 footer {
     grid-area: footer;
