@@ -1,5 +1,4 @@
 import * as cmp from "../components";
-import { DemoPageContent } from "./uiDataPageBase";
 import * as ui from '../ui';
 import { SetElementEnabled } from "../lilutils";
 
@@ -22,16 +21,6 @@ export function CreatePagePattern(page) {
     sectionContainer = ui.CreateDivWithClass('sectionContainer');
     sectionPattern = ui.CreateDivWithClass('section', 'pattern');
     sectionColors = ui.CreateDivWithClass('section', 'colors');
-
-    // demo content
-    sectionPattern.innerHTML = "PATTERN";
-    sectionColors.innerHTML = "COLOURS";
-    sectionPattern.appendChild(new cmp.Toggle());
-    sectionPattern.appendChild(new cmp.Toggle());
-    sectionPattern.appendChild(new cmp.Toggle());
-    sectionColors.appendChild(new cmp.Toggle());
-    sectionColors.appendChild(new cmp.Toggle());
-    sectionColors.appendChild(new cmp.Toggle());
 
     // add elements to page 
     page.appendChild(sectionSelection);
