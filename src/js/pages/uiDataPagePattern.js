@@ -34,17 +34,6 @@ export function CreatePagePattern(page) {
 
 function SelectPatternPage(num) {
     patternPage = num;
-    
-}
-
-function GetPatternPageDiv(num) {
-    if (num == null || num == undefined) { num = patternPage; }
-    switch (patternPage) {
-        case 0:
-            return sectionPattern;
-        case 1:
-            return sectionColors;
-    }
-    console.warn(`WARNING: invalid GetPatternPageDiv ${num}, returning null`);
-    return null;
+    ui.AddClassToDOMs('active', num == 0 ? sectionPattern : sectionColors);
+    ui.RemoveClassFromDOMs('active', num == 0 ? sectionColors : sectionPattern);
 }
