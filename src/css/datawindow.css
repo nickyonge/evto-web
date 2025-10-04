@@ -128,3 +128,26 @@ dataWindow .page > .grid[singleColumn="true"] {
     /* grid-template-rows: repeat(auto-fit, minmax(nub, 1fr)); */
     grid-column-gap: 0px;
 }
+
+dataWindow .page .sectionContainer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin-top: 5px;
+    background-color: cyan;
+}
+
+dataWindow .page .section {
+    /* display: none; */
+    width: 100%;
+    height: 100%;
+    background-color: magenta;
+    position: absolute;
+}
+
+dataWindow .page .section.pattern {
+    background-color: #ff000088;
+}
+dataWindow .page .section.colors {
+    background-color: #0000ff88;
+}
