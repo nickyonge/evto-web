@@ -1,5 +1,6 @@
 import * as cmp from "../components";
 import * as ui from '../ui';
+import * as txt from '../text';
 import { SetElementEnabled } from "../lilutils";
 
 let patternPage = 0;
@@ -15,7 +16,7 @@ export function CreatePagePattern(page) {
     // DemoPageContent(page);
 
     // create div selection bar
-    let sectionSelection = new cmp.MutliOptionList('', SelectPatternPage, ['Pattern', 'Colours'], null, null, patternPage, true);
+    let sectionSelection = new cmp.MutliOptionList('', SelectPatternPage, txt.PG_PATTERN_SECTIONS, null, null, patternPage, true);
 
     // create page divs
     sectionContainer = ui.CreateDivWithClass('sectionContainer');

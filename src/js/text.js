@@ -70,6 +70,7 @@ export const PG_FEAT_LANGUAGE_OPTIONS = ['English', 'French'];
 // --------- COLOUR & PATTERN PAGE ------------
 export const PG_TITLE_PATTERN = "Map Colours & Design Pattern";
 export const PG_TITLE_PATTERN_SHORTER = ["Colours & Design Pattern", "Colours & Pattern", "Design Pattern", "Map Pattern", "Pattern"]
+export const PG_PATTERN_SECTIONS = ["Pattern", "Colour"];
 
 // --------- SAVE & LOAD PAGE -----------------
 export const PG_TITLE_SAVE = "Save & Load Map Info";
