@@ -17,7 +17,7 @@ import iconSave from '../assets/svg/icons-red/icon-save.svg';
 import iconScale from '../assets/svg/icons-red/icon-scale.svg';
 
 
-export const initialTab = 1;
+export const initialTab = 0;
 
 const maxTitleHeight = 30;
 const maxTwoColumnWidthDefault = 269;
