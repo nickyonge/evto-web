@@ -26,13 +26,13 @@ export function CreatePageFeatures(page) {
         txt.PG_FEAT_GCSLINES, null,
         txt.PG_FEAT_GCSLINES_OPTIONS,
         cost.FEAT_GCSLINES,
-        null, 0
+        null, 1
     );
     let moLabelling = new cmp.MutliOptionList(
         txt.PG_FEAT_LABELLING, null,
         txt.PG_FEAT_LABELLING_OPTIONS,
         cost.FEAT_LABELLING,
-        null, 0
+        null, 1
     );
     let moTitleBox = new cmp.MutliOptionList(
         txt.PG_FEAT_TITLEBOX, null,

@@ -3,5 +3,6 @@ export { ColorPicker } from "./colorpicker.js";
 export { DropdownList } from "./dropdown.js";
 export { HelpIcon } from "./helpicon.js";
 export { MutliOptionList } from "./multioption.js";
+export { Slider } from "./slider.js";
 export { TextField } from "./textfield.js";
 export { Toggle } from "./toggle.js";
