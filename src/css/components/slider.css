@@ -1,3 +1,9 @@
+@property --slider-value {
+    syntax: '<percentage>';
+    inherits: false;
+    initial-value: 50%;
+}
+
 .slider {
     /* slider variables */
     --slider-thumb-color: #5ffaed;
@@ -39,19 +45,16 @@
     height: var(--slider-track-height);
     border-radius: var(--slider-track-radius);
     /* simple slider: hard cutoff between highlight and base */
-    background: linear-gradient(
-        to right,
-        var(--slider-track-highlight-color, var(--slider-track-base-color))
-            attr(value type(number), 10%),
-        var(--slider-track-base-color) 0
-    );
+    background: linear-gradient(to right,
+            var(--slider-track-highlight-color, var(--slider-track-base-color)) var(--slider-value),
+            var(--slider-track-base-color) 0);
     /* gradient slider: for transparent thumbs, makes a gradient that appears inside the width of the slider thumb */
-/*     background: linear-gradient(
+    /*     background: linear-gradient(
         to right,
         var(--slider-track-highlight-color, var(--slider-track-base-color))
-            calc(attr(value %, 10%) - (var(--slider-thumb-size) / 4)),
+            calc(var(--slider-value) - (var(--slider-thumb-size) / 4)),
         var(--slider-track-base-color)
-            calc(attr(value %, 10%) + (var(--slider-thumb-size) / 4))
+            calc(var(--slider-value) + (var(--slider-thumb-size) / 4))
     ); */
     z-index: var(--slider-bg-z-index);
 }
@@ -84,9 +87,7 @@
 .slider .sinput::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    margin-top: calc(
-        (var(--slider-track-height) / 2) - (var(--slider-thumb-size) / 2)
-    );
+    margin-top: calc((var(--slider-track-height) / 2) - (var(--slider-thumb-size) / 2));
     background-color: var(--slider-thumb-color);
     border-radius: var(--slider-thumb-radius);
     height: var(--slider-thumb-size);
@@ -115,7 +116,8 @@
 /* FF slider thumb */
 .slider .sinput::-moz-range-thumb {
     background-color: var(--slider-thumb-color);
-    border: none; /*Removes extra border that FF applies*/
+    /*Removes extra border that FF applies*/
+    border: none;
     border-radius: var(--slider-thumb-radius);
     height: var(--slider-thumb-size);
     width: var(--slider-thumb-size);
