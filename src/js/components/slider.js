@@ -62,6 +62,7 @@ export class Slider extends TitledComponent {
         this._addHelpIcon(componentTitle, false, false);
 
         // TODO: slider.css vars move to vars.css
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/43
 
     }
 
