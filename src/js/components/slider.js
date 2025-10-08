@@ -63,13 +63,26 @@ export class Slider extends TitledComponent {
 
         // TODO: slider.css vars move to vars.css
         // Issue URL: https://github.com/nickyonge/evto-web/issues/43
-
     }
 
-    /* Example HTML
-<div class="slider container">
-    <input class="sinput" type="range" min="0" max="100" step="5" value="50" />
-    <span class="sbg" value="50"> </span>
-</div>
-*/
+    get value() {
+        if (!this.#input) { return null; }
+        return this.#input.value;
+    }
+    set value(v) {
+        if (!this.#input) { return; }
+        if (typeof v != 'number') { return; }
+        if (v < 0) { v = 0; } else if (v > 100) { v = 100; }
+        if (this.value == v) { return; }
+
+        this.#input.value = v;
+        this.#input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
 }
+
+/* Example HTML
+    <div class="slider container">
+        <input class="sinput" type="range" min="0" max="100" step="5" value="50" />
+        <span class="sbg" value="50"> </span>
+    </div>
+*/

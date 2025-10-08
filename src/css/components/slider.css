@@ -67,10 +67,10 @@
     display: flex;
 }
 
-.slider .sinput:focus {
-    /* removes the default focus outline */
-    /* outline: none; */
-}
+/* removes the default focus outline */
+/* .slider .sinput:focus {
+    outline: none;
+} */
 
 /******** Chrome, Safari, Opera and Edge Chromium styles ********/
 /* WK slider track */
@@ -149,7 +149,8 @@
 
 .slider .stickmarks {
     position: absolute;
-    top: 0; /* Position below the slider */
+    top: 0;
+    /* Position below the slider */
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -159,12 +160,10 @@
     /*     margin-top: calc(var(--slider-track-height) * 0.125);
     height: calc(var(--slider-track-height) * 0.75); */
     height: var(--slider-track-height);
-    background: linear-gradient(
-        to top,
-        #acc2b869 0%,
-        #affcf5db 69%,
-        #498582e3 100%
-    );
+    background: linear-gradient(to top,
+            #acc2b869 0%,
+            #affcf5db 69%,
+            #498582e3 100%);
     opacity: 0.15;
 }
 .slider .stickmarks span:first-child,
@@ -172,7 +171,7 @@
     visibility: hidden;
 }
 .slider .stickmarks span:nth-child(even):nth-last-child(even) {
-/* .slider .stickmarks span:nth-child(odd):nth-last-child(odd) { */
+    /* .slider .stickmarks span:nth-child(odd):nth-last-child(odd) { */
     opacity: 0.3;
 }
 .slider .stickmarks span:nth-child(1):nth-last-child(1),
