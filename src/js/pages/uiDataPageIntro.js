@@ -9,6 +9,12 @@ export function CreatePageIntro(page) {
     let txIntro = new cmp.TextField(txt.LIPSUM);
     page.appendChild(txIntro);
 
-    let slider = new cmp.Slider('Test Slider');
-    page.appendChild(slider);
+    let slider1 = new cmp.Slider('Test Slider 1');
+    page.appendChild(slider1);
+    
+    let slider2 = new cmp.Slider('Test Slider 2');
+    page.appendChild(slider2);
+    
+    let slider3 = new cmp.Slider('Test Slider 3');
+    page.appendChild(slider3);
 }

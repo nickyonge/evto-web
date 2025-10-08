@@ -6,9 +6,9 @@
 
 .slider {
     /* slider variables */
-    --slider-thumb-color: #5ffaed;
+    --slider-thumb-color: #b30570;
     --slider-track-base-color: #51565c;
-    --slider-track-highlight-color: #5ffaed;
+    --slider-track-highlight-color: #854a76;
 
     --slider-track-height: 10px;
     --slider-track-radius: calc(var(--slider-track-height) / 2);
@@ -26,8 +26,8 @@
 }
 
 .slider.container {
-    width: 200px;
-    height: 10px;
+    width: 100%;
+    height: minmax(32px, max-content);
     min-height: max(var(--slider-track-height), var(--slider-thumb-size));
     position: relative;
     border-radius: var(--slider-track-radius);
@@ -38,9 +38,7 @@
 .slider .sbg {
     position: absolute;
     left: calc(var(--slider-thumb-size) * 0.75);
-    top: 50%;
-    /*     margin-left: 7.5px; */
-    transform: translate(0%, -50%);
+    transform: translate(0%, -125%);
     width: calc(100% - (var(--slider-thumb-size) * 1.25));
     height: var(--slider-track-height);
     border-radius: var(--slider-track-radius);
