@@ -27,7 +27,7 @@
 
 .slider.container {
     width: 100%;
-    height: minmax(32px, max-content);
+    height: max-content;
     min-height: max(var(--slider-track-height), var(--slider-thumb-size));
     position: relative;
     border-radius: var(--slider-track-radius);
@@ -85,7 +85,9 @@
 .slider .sinput::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    margin-top: calc((var(--slider-track-height) / 2) - (var(--slider-thumb-size) / 2));
+    top: 0;
+    margin-top: calc(var(--slider-thumb-size) / -4);
+    /* margin-top: calc((var(--slider-track-height) / 2) - (var(--slider-thumb-size) / 2)); */
     background-color: var(--slider-thumb-color);
     border-radius: var(--slider-thumb-radius);
     height: var(--slider-thumb-size);
@@ -125,4 +127,61 @@
     outline: var(--slider-thumb-border-width) solid var(--slider-thumb-color);
     outline-offset: var(--slider-thumb-border-offset);
     transition: all var(--slider-thumb-border-appear-time) ease-out;
+}
+
+/* tickmarks */
+
+.slider .stickmarks {
+    position: absolute;
+    top: 0; /* Position below the slider */
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+.slider .stickmarks span {
+    width: 1px;
+    /*     margin-top: calc(var(--slider-track-height) * 0.125);
+    height: calc(var(--slider-track-height) * 0.75); */
+    height: var(--slider-track-height);
+    background: linear-gradient(
+        to top,
+        #00000069 0%,
+        #000000db 69%,
+        #696969db 100%
+    );
+    opacity: 0.213;
+}
+.slider .stickmarks span:first-child,
+.slider .stickmarks span:last-child {
+    visibility: hidden;
+}
+.slider .stickmarks span:nth-child(odd):nth-last-child(odd) {
+    opacity: 0.369;
+}
+.slider .stickmarks span:nth-child(1):nth-last-child(1),
+.slider .stickmarks span:nth-child(2):nth-last-child(2),
+.slider .stickmarks span:nth-child(3):nth-last-child(3),
+.slider .stickmarks span:nth-child(4):nth-last-child(4),
+.slider .stickmarks span:nth-child(5):nth-last-child(5),
+.slider .stickmarks span:nth-child(6):nth-last-child(6),
+.slider .stickmarks span:nth-child(7):nth-last-child(7),
+.slider .stickmarks span:nth-child(8):nth-last-child(8),
+.slider .stickmarks span:nth-child(9):nth-last-child(9),
+.slider .stickmarks span:nth-child(10):nth-last-child(10),
+.slider .stickmarks span:nth-child(11):nth-last-child(11),
+.slider .stickmarks span:nth-child(12):nth-last-child(12),
+.slider .stickmarks span:nth-child(13):nth-last-child(13),
+.slider .stickmarks span:nth-child(14):nth-last-child(14),
+.slider .stickmarks span:nth-child(15):nth-last-child(15),
+.slider .stickmarks span:nth-child(16):nth-last-child(16),
+.slider .stickmarks span:nth-child(17):nth-last-child(17),
+.slider .stickmarks span:nth-child(18):nth-last-child(18),
+.slider .stickmarks span:nth-child(19):nth-last-child(19),
+.slider .stickmarks span:nth-child(20):nth-last-child(20),
+.slider .stickmarks span:nth-child(21):nth-last-child(21),
+.slider .stickmarks span:nth-child(22):nth-last-child(22),
+.slider .stickmarks span:nth-child(23):nth-last-child(23),
+.slider .stickmarks span:nth-child(24):nth-last-child(24),
+.slider .stickmarks span:nth-child(25):nth-last-child(25) {
+    opacity: 0.69;
 }
