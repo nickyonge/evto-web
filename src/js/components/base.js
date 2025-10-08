@@ -47,6 +47,11 @@ export class BasicComponent {
         }
         this.#parentPage = page;
     }
+    /** Convenience method to bypass appendChild on component directly to its div 
+     * @param {Element} child */
+    appendChild(child) {
+        this.div.appendChild(child);
+    }
     static GetComponentByUniqueID(uniqueID) {
         for (let i = 0; i < BasicComponent.allComponentDivs.length; i++) {
             if (ui.GetAttribute(BasicComponent.allComponentDivs[i], 'uniqueComponentID') == uniqueID) {
