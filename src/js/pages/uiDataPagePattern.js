@@ -3,7 +3,7 @@ import * as ui from '../ui';
 import * as txt from '../text';
 import { SetElementEnabled } from "../lilutils";
 
-let patternPage = 0;
+let currentSectionNum = 0;
 
 let sectionContainer;
 let sectionPattern;
@@ -16,7 +16,7 @@ export function CreatePagePattern(page) {
     // DemoPageContent(page);
 
     // create div selection bar
-    let sectionSelection = new cmp.MutliOptionList('', SelectPatternPage, txt.PG_PATTERN_SECTIONS, null, null, patternPage, true);
+    let sectionSelection = new cmp.MutliOptionList('', SelectPatternPage, txt.PG_PATTERN_SECTIONS, null, null, currentSectionNum, true);
 
     // create page divs
     sectionContainer = ui.CreateDivWithClass('sectionContainer');
@@ -29,12 +29,26 @@ export function CreatePagePattern(page) {
     sectionContainer.appendChild(sectionPattern);
     sectionContainer.appendChild(sectionColors);
 
+    // prepare sections
+    let svgImage = new cmp.SVGImage('image');
+    sectionPattern.appendChild(svgImage);
+
+    /* REFERENCE PATTERNS 
+    Square (empty canvas): https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z
+    Horizontal Split: https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z%0AM0%2C5%20L20%2C5
+    Vertical Split: https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z%0AM10%2C0%20L10%2C10
+    Horizontal Wave (Line): https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z%0AM0%2C5%20C0%2C5%205%2C0%2010%2C5%20C10%2C5%2015%2C10%2020%2C5
+    Vertical Wave (Line): https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z%0AM10%2C0%20C10%2C0%205%2C2.5%2010%2C5%20C10%2C5%2015%2C7.5%2010%2C10
+    Horizontal Wave (Closed): https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z%0AM0%2C5%20C0%2C5%205%2C0%2010%2C5%20C10%2C5%2015%2C10%2020%2C5%20L20%2C10%20L0%2C10%20Z
+    Vertical Wave (Closed): https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z%0AM10%2C0%20C10%2C0%205%2C2.5%2010%2C5%20C10%2C5%2015%2C7.5%2010%2C10%20L20%2C10%20L20%2C0%20Z
+    */
+
     // initialize 
-    SelectPatternPage(patternPage);
+    SelectPatternPage(currentSectionNum);
 }
 
 function SelectPatternPage(num) {
-    patternPage = num;
+    currentSectionNum = num;
     let activePage = num == 0 ? sectionPattern : sectionColors;
     let inactivePage = num == 0 ? sectionColors : sectionPattern;
     ui.AddClassesToDOM(activePage, 'active');
