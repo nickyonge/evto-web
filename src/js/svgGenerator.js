@@ -9,14 +9,50 @@ const SVG_DEFAULT_FILL = '#beeeef';
 const SVG_DEFAULT_STROKE = 'none';
 
 export function CreatePath() {
-
 }
 
 export function CreateBox(x = SVG_DEFAULT_X, y = SVG_DEFAULT_Y, width = SVG_DEFAULT_WIDTH, height = SVG_DEFAULT_HEIGHT) {
-
 }
 
-export class svgRect {
+export class svgAsset {
+    class;
+    id;
+    definitions;
+    preserveAspectRatio;
+    viewBox = {
+        x: SVG_DEFAULT_X, y: SVG_DEFAULT_Y, width: SVG_DEFAULT_WIDTH, height: SVG_DEFAULT_HEIGHT,
+        get data() { return `${x} ${y} ${width} ${height}`; },
+        get value() { return `viewBow="${data}"`; }
+    }
+}
+
+class svgShape {
+    fill = SVG_DEFAULT_FILL;
+    stroke = SVG_DEFAULT_STROKE;
+}
+class svgRect extends svgShape {
+    x; y; width; height;
+}
+class svgCircle extends svgShape {
+    r; cx; cy;
+}
+class svgEllipse extends svgShape {
+    rx; ry; cx; cy;
+}
+class svgLine extends svgShape {
+    x1; y1; x2; y2;
+}
+class svgPolyline extends svgShape {
+    points;
+}
+class svgPolygon extends svgShape {
+    points;
+}
+class svgPath {
+    
+}
+
+export class svgBox {
     x = SVG_DEFAULT_X;
     y = SVG_DEFAULT_Y;
     width = SVG_DEFAULT_WIDTH;
@@ -60,7 +96,7 @@ export class svgFancyBox {
     horizontal = true;
 
     get ds() {
-        
+
         if (this.splitCount < 0 || this.splitCount > FANCYBOX_MAX_SPLITS) {
             console.warn(`WARNING: invalid split count ${this.splitCount}, must be between 0 and ${FANCYBOX_MAX_SPLITS} (inclusive), returning null`);
             return null;
