@@ -30,7 +30,7 @@ export function CreatePagePattern(page) {
     sectionContainer.appendChild(sectionColors);
 
     // prepare sections
-    let svgImage = new cmp.SVGImage('image');
+    let svgImage = new cmp.SVGImage();
     sectionPattern.appendChild(svgImage);
 
     /* REFERENCE PATTERNS 
