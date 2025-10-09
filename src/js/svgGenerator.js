@@ -21,35 +21,138 @@ export class svgAsset {
     preserveAspectRatio;
     viewBox = {
         x: SVG_DEFAULT_X, y: SVG_DEFAULT_Y, width: SVG_DEFAULT_WIDTH, height: SVG_DEFAULT_HEIGHT,
-        get data() { return `${x} ${y} ${width} ${height}`; },
-        get value() { return `viewBow="${data}"`; }
+        get html() { return `viewBow="${data}"`; },
+        get data() { return `${x} ${y} ${width} ${height}`; }
     }
+    shapes;
 }
 
 class svgShape {
+    type = null;
     fill = SVG_DEFAULT_FILL;
     stroke = SVG_DEFAULT_STROKE;
+    /** Additional attributes to include in the path, 
+     * in a 2D string array `[ [attr, value], ... ]`
+     * @type {Array<string[]>} */
+    extraAttributes;
+    constructor() { }
+    get html() {
+        if (this.type == null) {
+            console.error("ERROR: can't get svgShape of null type, specify shape via subclass, returning null");
+            return null;
+        }
+        return `<${this.type} ${this.data} />`;
+    }
+    // get data() { return `${fill != null ? ` fill="${fill}"` : ''}${stroke != null ? ` stroke="${stroke}"` : ''}` }
+    // get data() { return `${this._pd('fill', this.fill)}${this._pd('stroke', this.stroke)}` }
+    get data() {
+        return this._parse([
+            ['fill', this.fill],
+            ['stroke', this.stroke]]);
+    }
+    /**
+     * 
+     * @param {Array<[string, ...any]>} data 2d array of properties, `[name,value]` 
+     * @returns {string|null} */
+    _parse(data) {
+        let d = [];
+        data.forEach(datum => {
+            let out = this._pd(datum[0], datum[1]);
+            if (out != null) { d.push(out); }
+        });
+        return d.join(' ');
+    }
+    /** Parse individual property data for use as an SVG attribute
+     * @param {string} name 
+     * @param {*} value 
+     * @returns {string|null} */
+    _pd(name, value) { return `${value != null ? ` ${name}="${value}"` : ''}`; }
 }
 class svgRect extends svgShape {
     x; y; width; height;
+    constructor() { super(); this.type = 'rect'; }
+    get data() {
+        // cast this shape's unique properties to data string
+        let d = this._parse([
+            ['x', this.x],
+            ['y', this.y],
+            ['width', this.width],
+            ['height', this.height]]);
+        // combine both this data and superclass data to array, filter null values, join w/ space 
+        return [d, super.data()].filter(Boolean).join(' ');
+    }
 }
 class svgCircle extends svgShape {
     r; cx; cy;
+    constructor() { super(); this.type = 'circle'; }
+    get data() {
+        let d = this._parse([
+            ['r', this.r],
+            ['cx', this.cx],
+            ['cy', this.cy]]);
+        return [d, super.data()].filter(Boolean).join(' ');
+    }
 }
 class svgEllipse extends svgShape {
     rx; ry; cx; cy;
+    constructor() { super(); this.type = 'ellipse'; }
+    get data() {
+        let d = this._parse([
+            ['rx', this.rx],
+            ['ry', this.ry],
+            ['cx', this.cx],
+            ['cy', this.cy]]);
+        return [d, super.data()].filter(Boolean).join(' ');
+    }
 }
 class svgLine extends svgShape {
     x1; y1; x2; y2;
+    constructor() { super(); this.type = 'line'; }
+    get data() {
+        let d = this._parse([
+            ['x1', this.x1],
+            ['y1', this.y1],
+            ['x2', this.x2],
+            ['y2', this.y2]]);
+        return [d, super.data()].filter(Boolean).join(' ');
+    }
 }
 class svgPolyline extends svgShape {
+    /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {[number,number]} */
     points;
+    constructor() { super(); this.type = 'polyline'; }
+    get data() {
+        let pts = [];
+        if (this.points != null) {
+            this.points.forEach(pt => { pts.push(pt.join(',')); });
+        }
+        let d = this._parse([['points', pts.length > 0 ? pts.join(' ') : null]]);
+        return [d, super.data()].filter(Boolean).join(' ');
+    }
 }
 class svgPolygon extends svgShape {
+    /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {[number,number]} */
     points;
+    constructor() { super(); this.type = 'polygon'; }
+    get data() {
+        let pts = [];
+        if (this.points != null) {
+            this.points.forEach(pt => { pts.push(pt.join(',')); });
+        }
+        let d = this._parse([['points', pts.length > 0 ? pts.join(' ') : null]]);
+        return [d, super.data()].filter(Boolean).join(' ');
+    }
 }
 class svgPath {
-    
+    d;
+    pathLength;
+    constructor() { super(); this.type = 'path'; }
+    get data() {
+        let d = this._parse([
+            ['d', this.d],
+            ['pathLength', this.pathLength]]);
+        return [d, super.data()].filter(Boolean).join(' ');
+    }
 }
 
 export class svgBox {
