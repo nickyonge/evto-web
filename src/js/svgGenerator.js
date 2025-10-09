@@ -70,7 +70,7 @@ class svgRect extends svgShape {
             ['width', this.width],
             ['height', this.height]]);
         // combine both this data and superclass data to array, filter null values, join w/ space 
-        return [d, super.data()].filter(Boolean).join(' ');
+        return [d, super.data].filter(Boolean).join(' ');
     }
 }
 class svgCircle extends svgShape {
@@ -81,7 +81,7 @@ class svgCircle extends svgShape {
             ['r', this.r],
             ['cx', this.cx],
             ['cy', this.cy]]);
-        return [d, super.data()].filter(Boolean).join(' ');
+        return [d, super.data].filter(Boolean).join(' ');
     }
 }
 class svgEllipse extends svgShape {
@@ -93,7 +93,7 @@ class svgEllipse extends svgShape {
             ['ry', this.ry],
             ['cx', this.cx],
             ['cy', this.cy]]);
-        return [d, super.data()].filter(Boolean).join(' ');
+        return [d, super.data].filter(Boolean).join(' ');
     }
 }
 class svgLine extends svgShape {
@@ -105,7 +105,7 @@ class svgLine extends svgShape {
             ['y1', this.y1],
             ['x2', this.x2],
             ['y2', this.y2]]);
-        return [d, super.data()].filter(Boolean).join(' ');
+        return [d, super.data].filter(Boolean).join(' ');
     }
 }
 class svgPolyline extends svgShape {
@@ -118,7 +118,7 @@ class svgPolyline extends svgShape {
             this.points.forEach(pt => { pts.push(pt.join(',')); });
         }
         let d = ParseData([['points', pts.length > 0 ? pts.join(' ') : null]]);
-        return [d, super.data()].filter(Boolean).join(' ');
+        return [d, super.data].filter(Boolean).join(' ');
     }
 }
 class svgPolygon extends svgShape {
@@ -131,7 +131,7 @@ class svgPolygon extends svgShape {
             this.points.forEach(pt => { pts.push(pt.join(',')); });
         }
         let d = ParseData([['points', pts.length > 0 ? pts.join(' ') : null]]);
-        return [d, super.data()].filter(Boolean).join(' ');
+        return [d, super.data].filter(Boolean).join(' ');
     }
 }
 class svgPath {
@@ -142,7 +142,7 @@ class svgPath {
         let d = ParseData([
             ['d', this.d],
             ['pathLength', this.pathLength]]);
-        return [d, super.data()].filter(Boolean).join(' ');
+        return [d, super.data].filter(Boolean).join(' ');
     }
 }
 
@@ -175,6 +175,7 @@ export class svgBox {
 
     }
 }
+
 export class svgFancyBox {
 
     x;
