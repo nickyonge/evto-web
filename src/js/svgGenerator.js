@@ -68,6 +68,7 @@ export class svgAsset {
         if (SVG_HTML_NEWLINE) { svg += '\n'; }
         // add SVG definitions
         // TODO: svg definitions in own <defs> dropdown
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/46
         // add SVG shapes 
         if (this.svgShapes != null && this.svgShapes.length > 0) {
             this.svgShapes.forEach(shape => {
