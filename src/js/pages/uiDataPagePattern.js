@@ -2,7 +2,7 @@ import * as cmp from "../components";
 import * as ui from '../ui';
 import * as txt from '../text';
 import { SetElementEnabled } from "../lilutils";
-import { CreatePath } from "../svgGenerator";
+import { CreatePath } from "../svg/svgGenerator";
 
 let currentSectionNum = 0;
 
