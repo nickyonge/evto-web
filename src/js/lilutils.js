@@ -5,7 +5,7 @@
  * @param {string} str input string to test 
  * @returns {boolean} true if blank, false if contains content
  */
-export const isBlank = str => !str || !str.trim();
+export const isBlank = str => !str || (typeof str === 'string' && !str.trim());
 
 /** 
  * Gets the CSS stylesheet for the page.
