@@ -134,7 +134,7 @@ class svgPolygon extends svgShape {
         return [d, super.data].filter(Boolean).join(' ');
     }
 }
-class svgPath {
+class svgPath extends svgShape {
     d;
     pathLength;
     constructor() { super(); this.type = 'path'; }
