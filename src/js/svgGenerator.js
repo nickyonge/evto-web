@@ -50,7 +50,22 @@ export class svgAsset {
     }
 
     AddShape(shape = new svgShape()) { this.svgShapes.push(shape); }
+    AddShape(fill) { this.svgShapes.push(new svgShape(fill)); }
+
+    /** add an {@link svgRect} to shapes array @param {svgRect} rect */
     AddRect(rect = new svgRect()) { this.svgShapes.push(rect); }
+    
+    AddCircle(circle = new svgCircle()) { this.svgShapes.push(circle); }
+
+    AddEllipse(ellipse = new svgEllipse()) { this.svgShapes.push(ellipse); }
+
+    AddLine(line = new svgLine()) { this.svgShapes.push(line); }
+
+    AddPolyline(polyline = new svgPolyline()) { this.svgShapes.push(polyline); }
+
+    AddPolygon(polygon = new svgPolygon()) { this.svgShapes.push(polygon); }
+
+    AddPath(path = new svgPath()) { this.svgShapes.push(path); }
 
     get html() { return null; }
     get data() { return null; }
@@ -71,12 +86,12 @@ class svgViewBox {
 class svgShape {
     type = null;
     fill = DEFAULT_FILL;
-    stroke = DEFAULT_STROKE;
+    stroke = DEFAULT_STROKE;// left undefined by default 
     /** Additional attributes to include in the path, 
      * in a 2D string array `[ [attr, value], ... ]`
      * @type {Array<[string, any]>} */
     extraAttributes;
-    constructor(fill = DEFAULT_FILL) { }
+    constructor(fill = DEFAULT_FILL) { this.fill = fill; }
     get html() {
         if (this.type == null) {
             console.error("ERROR: can't get svgShape of null type, specify shape via subclass, returning null");
