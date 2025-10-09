@@ -1,7 +1,7 @@
-import { isBlank } from "../lilutils";
-import { shape, rect, circle, ellipse, line, polyline, polygon, path } from "./index";
 import * as svg from './index';
+import { shape, rect, circle, ellipse, line, polyline, polygon, path } from "./index";
 import { ParseData } from "./svgGenerator";
+import { isBlank } from "../lilutils";
 
 const SVG_HTML_NEWLINE = true;
 const SVG_HTML_INDENT = true;

@@ -17,39 +17,6 @@ export function CreatePath() {
     console.log(a.html);
 }
 
-export function CreateBox(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT) {
-}
-
-export class svgBox {
-    x = svg.default.X;
-    y = svg.default.Y;
-    width = svg.default.WIDTH;
-    height = svg.default.HEIGHT;
-    fill = svg.default.FILL;
-    stroke = svg.default.STROKE;
-
-    /** 
-     * Additional attributes to include in the path, 
-     * in a 2D string array `[ [attr, value], ... ]`
-     * @type {Array<[string, any]>} */
-    extraAttributes = [];
-
-    constructor(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-    }
-
-    get d() {
-        return `M${this.x},${this.y} h${this.width} v${this.height} h${-this.width} Z`;
-    }
-
-    get path() {
-
-    }
-}
-
 export class svgFancyBox {
 
     x;
@@ -72,7 +39,7 @@ export class svgFancyBox {
         }
 
         if (this.splitCount == 0) {
-            return [SVGBasicBoxD(this.x, this.y, this.width, this.height)];
+            return [BoxPath(this.x, this.y, this.width, this.height)];
         }
 
         let ds = [];
@@ -85,7 +52,7 @@ export class svgFancyBox {
         for (let i = 0; i <= this.splitCount; i++) {
             if (FANCYBOX_FIRST_SPLIT_IS_BASE && i == 0) {
                 // first path, generate full basic SVG
-                ds.push(SVGBasicBoxD(this.x, this.y, this.width, this.height));
+                ds.push(BoxPath(this.x, this.y, this.width, this.height));
                 continue;
             }
             let interval = i / this.splitCount + 1;// eg, 1 split should be at 50%, 2 at 33% and 66%, etc
@@ -109,9 +76,9 @@ export class svgFancyBox {
  * @param {number} height {@link svg.default.HEIGHT}
  * @param {boolean} [relativeStart=false] If false, start `d` path with an `M` command; if true, `m`
  * @param {boolean} [closePath=true] End `d` path with a `Z` command?
- * @returns {string}
+ * @returns {string} Path `d` attribute for a rectangle of the given parameters
  */
-export function SVGBasicBoxD(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT,
+export function BoxPath(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT,
     relativeStart = false, closePath = true) {
     return `${relativeStart ? 'm' : 'M'}${x},${y} h${width} v${height} h${-width} ${closePath ? 'Z' : `v${-height}`}`;
 }

@@ -55,6 +55,15 @@ export class svgRect extends svgShape {
         // combine both this data and superclass data to array, filter null values, join w/ space 
         return [d, super.data].filter(Boolean).join(' ');
     }
+    /**
+     * Convert this rect to a `d` {@link svg.path path} attribute  
+     * @param {boolean} [relativeStart=false] If false, start `d` path with an `M` command; if true, `m`
+     * @param {boolean} [closePath=true] End `d` path with a `Z` command?
+     * @returns {string} Path `d` attribute for a rectangle of the given parameters
+     */
+    AsPath(relativeStart = false, closePath = true) {
+        return svg.BoxPath(this.x, this.y, this.width, this.height, relativeStart, closePath);
+    }
 } // rect 
 export class svgCircle extends svgShape {
     r;

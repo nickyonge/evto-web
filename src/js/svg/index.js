@@ -15,3 +15,4 @@ export {
 } from './svgShapes';
 
 export * as default from './svgDefaults';
+export * from './svgGenerator';
