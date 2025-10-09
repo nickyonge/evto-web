@@ -1,3 +1,5 @@
+import { isBlank } from "./lilutils";
+
 const FANCYBOX_MAX_SPLITS = 3;
 const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
 
@@ -6,7 +8,7 @@ const SVG_DEFAULT_Y = 0;
 const SVG_DEFAULT_WIDTH = 200;
 const SVG_DEFAULT_HEIGHT = 100;
 const SVG_DEFAULT_FILL = '#beeeef';
-const SVG_DEFAULT_STROKE = 'none';
+const SVG_DEFAULT_STROKE = null;
 
 export function CreatePath() {
 }
@@ -33,9 +35,9 @@ class svgShape {
     stroke = SVG_DEFAULT_STROKE;
     /** Additional attributes to include in the path, 
      * in a 2D string array `[ [attr, value], ... ]`
-     * @type {Array<string[]>} */
+     * @type {Array<[string, any]>} */
     extraAttributes;
-    constructor() { }
+    constructor(fill = SVG_DEFAULT_FILL) { }
     get html() {
         if (this.type == null) {
             console.error("ERROR: can't get svgShape of null type, specify shape via subclass, returning null");
@@ -44,36 +46,25 @@ class svgShape {
         return `<${this.type} ${this.data} />`;
     }
     // get data() { return `${fill != null ? ` fill="${fill}"` : ''}${stroke != null ? ` stroke="${stroke}"` : ''}` }
-    // get data() { return `${this._pd('fill', this.fill)}${this._pd('stroke', this.stroke)}` }
+    // get data() { return `${_pd('fill', this.fill)}${_pd('stroke', this.stroke)}` }
     get data() {
-        return this._parse([
+        let d = ParseData([
             ['fill', this.fill],
             ['stroke', this.stroke]]);
+        // check for and include extraAttributes
+        if (this.extraAttributes != null && this.extraAttributes.length > 0) {
+            let ea = ParseData(this.extraAttributes);
+            if (!isBlank(ea)) { d = `${d} ${ea}`; }
+        }
+        return d;
     }
-    /**
-     * 
-     * @param {Array<[string, ...any]>} data 2d array of properties, `[name,value]` 
-     * @returns {string|null} */
-    _parse(data) {
-        let d = [];
-        data.forEach(datum => {
-            let out = this._pd(datum[0], datum[1]);
-            if (out != null) { d.push(out); }
-        });
-        return d.join(' ');
-    }
-    /** Parse individual property data for use as an SVG attribute
-     * @param {string} name 
-     * @param {*} value 
-     * @returns {string|null} */
-    _pd(name, value) { return `${value != null ? ` ${name}="${value}"` : ''}`; }
 }
 class svgRect extends svgShape {
     x; y; width; height;
     constructor() { super(); this.type = 'rect'; }
     get data() {
         // cast this shape's unique properties to data string
-        let d = this._parse([
+        let d = ParseData([
             ['x', this.x],
             ['y', this.y],
             ['width', this.width],
@@ -86,7 +77,7 @@ class svgCircle extends svgShape {
     r; cx; cy;
     constructor() { super(); this.type = 'circle'; }
     get data() {
-        let d = this._parse([
+        let d = ParseData([
             ['r', this.r],
             ['cx', this.cx],
             ['cy', this.cy]]);
@@ -97,7 +88,7 @@ class svgEllipse extends svgShape {
     rx; ry; cx; cy;
     constructor() { super(); this.type = 'ellipse'; }
     get data() {
-        let d = this._parse([
+        let d = ParseData([
             ['rx', this.rx],
             ['ry', this.ry],
             ['cx', this.cx],
@@ -109,7 +100,7 @@ class svgLine extends svgShape {
     x1; y1; x2; y2;
     constructor() { super(); this.type = 'line'; }
     get data() {
-        let d = this._parse([
+        let d = ParseData([
             ['x1', this.x1],
             ['y1', this.y1],
             ['x2', this.x2],
@@ -126,7 +117,7 @@ class svgPolyline extends svgShape {
         if (this.points != null) {
             this.points.forEach(pt => { pts.push(pt.join(',')); });
         }
-        let d = this._parse([['points', pts.length > 0 ? pts.join(' ') : null]]);
+        let d = ParseData([['points', pts.length > 0 ? pts.join(' ') : null]]);
         return [d, super.data()].filter(Boolean).join(' ');
     }
 }
@@ -139,7 +130,7 @@ class svgPolygon extends svgShape {
         if (this.points != null) {
             this.points.forEach(pt => { pts.push(pt.join(',')); });
         }
-        let d = this._parse([['points', pts.length > 0 ? pts.join(' ') : null]]);
+        let d = ParseData([['points', pts.length > 0 ? pts.join(' ') : null]]);
         return [d, super.data()].filter(Boolean).join(' ');
     }
 }
@@ -148,7 +139,7 @@ class svgPath {
     pathLength;
     constructor() { super(); this.type = 'path'; }
     get data() {
-        let d = this._parse([
+        let d = ParseData([
             ['d', this.d],
             ['pathLength', this.pathLength]]);
         return [d, super.data()].filter(Boolean).join(' ');
@@ -166,7 +157,7 @@ export class svgBox {
     /** 
      * Additional attributes to include in the path, 
      * in a 2D string array `[ [attr, value], ... ]`
-     * @type {Array<string[]>} */
+     * @type {Array<[string, any]>} */
     extraAttributes = [];
 
     constructor(x = SVG_DEFAULT_X, y = SVG_DEFAULT_Y, width = SVG_DEFAULT_WIDTH, height = SVG_DEFAULT_HEIGHT) {
@@ -238,3 +229,22 @@ export function SVGBasicBoxD(x = SVG_DEFAULT_X, y = SVG_DEFAULT_Y, width = SVG_D
     relativeStart = false, closePath = true) {
     return `${relativeStart ? 'm' : 'M'}${x},${y} h${width} v${height} h${-width} ${closePath ? 'Z' : `v${-height}`}`;
 }
+
+/**
+ * Parse array of data, into HTML-attribute-style `name="value"` format, 
+ * with spaces between attributes as needed.
+ * @param {Array<[string, any]>} data 2d array of properties, `[name,value]` 
+ * @returns {string} data formatted like `first="1" second="2" third="3"`*/
+function ParseData(data) {
+    let d = [];
+    data.forEach(datum => {
+        let out = ParseDatum(datum[0], datum[1]);
+        if (out != null) { d.push(out); }
+    });
+    return d.join(' ');
+}
+/** Parse individual property data for use as an SVG attribute. Returns `''` if invalid.
+ * @param {string} name name of property. Can't be null or blank or whitespace
+ * @param {*} value value of property. Can't be null, but CAN be blank or whitespace
+ * @returns {string} datum formatted like `myName="myValue"`, or `''` if name is empty/null or value is null*/
+function ParseDatum(name, value) { return `${value == null || isBlank(name) ? ` ${name}="${value}"` : ''}`; }
