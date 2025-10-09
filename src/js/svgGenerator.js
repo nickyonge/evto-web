@@ -10,10 +10,27 @@ const DEFAULT_HEIGHT = 100;
 const DEFAULT_FILL = '#beeeef';
 const DEFAULT_STROKE = null;
 
+const DEFAULT_R = DEFAULT_HEIGHT;
+const DEFAULT_CX = DEFAULT_X;
+const DEFAULT_CY = DEFAULT_Y;
+
+const DEFAULT_RX = 100;// note: ellipse, not used for rect rx
+const DEFAULT_RY = DEFAULT_R;// note: ellipse, not used for rect ry
+
+const DEFAULT_X1 = DEFAULT_X;
+const DEFAULT_Y1 = DEFAULT_Y;
+const DEFAULT_X2 = DEFAULT_WIDTH;
+const DEFAULT_Y2 = DEFAULT_HEIGHT;
+
+const DEFAULT_POINTS = [[DEFAULT_X1, DEFAULT_Y1], [DEFAULT_X1, DEFAULT_Y2], [DEFAULT_X2, DEFAULT_Y2], [DEFAULT_X2, DEFAULT_Y1]];
+
+const DEFAULT_D = 'M0,0 L20,0 L20,10 L0,10 Z';
+const DEFAULT_PATHLENGTH = null;
+
 export function CreatePath() {
 
-    let r = new svgRect();
-    console.log(r.html);
+    let a = new svgAsset();
+    console.log(a.html);
 }
 
 export function CreateBox(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT) {
@@ -24,13 +41,32 @@ export class svgAsset {
     id;
     definitions;
     preserveAspectRatio;
-    viewBox = {
-        x: DEFAULT_X, y: DEFAULT_Y, width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT,
-        get html() { return `viewBow="${data}"`; },
-        get data() { return `${x} ${y} ${width} ${height}`; }
+    viewBox;
+    svgShapes;
+
+    constructor(svgShapes = [], viewBox = new svgViewBox()) {
+        this.svgShapes = svgShapes;
+        this.viewBox = viewBox;
     }
-    shapes;
+
+    AddShape(shape = new svgShape()) { this.svgShapes.push(shape); }
+    AddRect(rect = new svgRect()) { this.svgShapes.push(rect); }
+
+    get html() { return null; }
+    get data() { return null; }
+
 }
+
+class svgViewBox {
+    x; y; width; height;
+    constructor(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT) {
+        this.x = x; this.y = y; this.width = width; this.height = height;
+    }
+    get html() { return `viewBow="${data}"`; }
+    get data() { return `${x} ${y} ${width} ${height}`; }
+}
+
+// TODO: move svgShape and subclasses to its own script 
 
 class svgShape {
     type = null;
@@ -63,7 +99,12 @@ class svgShape {
     }
 }
 class svgRect extends svgShape {
-    x; y; width; height;
+    x;
+    y;
+    width;
+    height;
+    rx;// left undefined by default 
+    ry;// left undefined by default 
     constructor(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT, fill = DEFAULT_FILL) {
         super(fill);
         this.type = 'rect';
@@ -75,14 +116,22 @@ class svgRect extends svgShape {
             ['x', this.x],
             ['y', this.y],
             ['width', this.width],
-            ['height', this.height]]);
+            ['height', this.height],
+            ['rx', this.rx],
+            ['ry', this.ry]]);
         // combine both this data and superclass data to array, filter null values, join w/ space 
         return [d, super.data].filter(Boolean).join(' ');
     }
 }
 class svgCircle extends svgShape {
-    r; cx; cy;
-    constructor() { super(); this.type = 'circle'; }
+    r;
+    cx;
+    cy;
+    constructor(r = DEFAULT_R, cx = DEFAULT_CX, cy = DEFAULT_CY, fill = DEFAULT_FILL) {
+        super(fill);
+        this.type = 'circle';
+        this.r = r; this.cx = cx; this.cy = cy;
+    }
     get data() {
         let d = ParseData([
             ['r', this.r],
@@ -92,8 +141,15 @@ class svgCircle extends svgShape {
     }
 }
 class svgEllipse extends svgShape {
-    rx; ry; cx; cy;
-    constructor() { super(); this.type = 'ellipse'; }
+    rx;
+    ry;
+    cx;
+    cy;
+    constructor(rx = DEFAULT_RX, ry = DEFAULT_RY, cx = DEFAULT_CX, cy = DEFAULT_CY, fill = DEFAULT_FILL) {
+        super(fill);
+        this.type = 'ellipse';
+        this.rx = rx; this.ry = ry; this.cx = cx; this.cy = cy;
+    }
     get data() {
         let d = ParseData([
             ['rx', this.rx],
@@ -104,8 +160,15 @@ class svgEllipse extends svgShape {
     }
 }
 class svgLine extends svgShape {
-    x1; y1; x2; y2;
-    constructor() { super(); this.type = 'line'; }
+    x1;
+    y1;
+    x2;
+    y2;
+    constructor(x1 = DEFAULT_X1, y1 = DEFAULT_Y1, x2 = DEFAULT_X2, y2 = DEFAULT_Y2, fill = DEFAULT_FILL) {
+        super(fill);
+        this.type = 'line';
+        this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
+    }
     get data() {
         let d = ParseData([
             ['x1', this.x1],
@@ -118,7 +181,11 @@ class svgLine extends svgShape {
 class svgPolyline extends svgShape {
     /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {[number,number]} */
     points;
-    constructor() { super(); this.type = 'polyline'; }
+    constructor(points = DEFAULT_POINTS, fill = DEFAULT_FILL) {
+        super(fill);
+        this.type = 'polyline';
+        this.points = points;
+    }
     get data() {
         let pts = [];
         if (this.points != null) {
@@ -131,7 +198,11 @@ class svgPolyline extends svgShape {
 class svgPolygon extends svgShape {
     /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {[number,number]} */
     points;
-    constructor() { super(); this.type = 'polygon'; }
+    constructor(points = DEFAULT_POINTS, fill = DEFAULT_FILL) {
+        super(fill);
+        this.type = 'polygon';
+        this.points = points;
+    }
     get data() {
         let pts = [];
         if (this.points != null) {
@@ -143,8 +214,12 @@ class svgPolygon extends svgShape {
 }
 class svgPath extends svgShape {
     d;
-    pathLength;
-    constructor() { super(); this.type = 'path'; }
+    pathLength;// left undefined by default 
+    constructor(d = DEFAULT_D, fill = DEFAULT_FILL) {
+        super(fill);
+        this.type = 'path';
+        this.d = d;
+    }
     get data() {
         let d = ParseData([
             ['d', this.d],
