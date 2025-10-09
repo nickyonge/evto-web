@@ -3,17 +3,17 @@ import { isBlank } from "./lilutils";
 const FANCYBOX_MAX_SPLITS = 3;
 const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
 
-const SVG_DEFAULT_X = 0;
-const SVG_DEFAULT_Y = 0;
-const SVG_DEFAULT_WIDTH = 200;
-const SVG_DEFAULT_HEIGHT = 100;
-const SVG_DEFAULT_FILL = '#beeeef';
-const SVG_DEFAULT_STROKE = null;
+const DEFAULT_X = 0;
+const DEFAULT_Y = 0;
+const DEFAULT_WIDTH = 200;
+const DEFAULT_HEIGHT = 100;
+const DEFAULT_FILL = '#beeeef';
+const DEFAULT_STROKE = null;
 
 export function CreatePath() {
 }
 
-export function CreateBox(x = SVG_DEFAULT_X, y = SVG_DEFAULT_Y, width = SVG_DEFAULT_WIDTH, height = SVG_DEFAULT_HEIGHT) {
+export function CreateBox(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT) {
 }
 
 export class svgAsset {
@@ -22,7 +22,7 @@ export class svgAsset {
     definitions;
     preserveAspectRatio;
     viewBox = {
-        x: SVG_DEFAULT_X, y: SVG_DEFAULT_Y, width: SVG_DEFAULT_WIDTH, height: SVG_DEFAULT_HEIGHT,
+        x: DEFAULT_X, y: DEFAULT_Y, width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT,
         get html() { return `viewBow="${data}"`; },
         get data() { return `${x} ${y} ${width} ${height}`; }
     }
@@ -31,13 +31,13 @@ export class svgAsset {
 
 class svgShape {
     type = null;
-    fill = SVG_DEFAULT_FILL;
-    stroke = SVG_DEFAULT_STROKE;
+    fill = DEFAULT_FILL;
+    stroke = DEFAULT_STROKE;
     /** Additional attributes to include in the path, 
      * in a 2D string array `[ [attr, value], ... ]`
      * @type {Array<[string, any]>} */
     extraAttributes;
-    constructor(fill = SVG_DEFAULT_FILL) { }
+    constructor(fill = DEFAULT_FILL) { }
     get html() {
         if (this.type == null) {
             console.error("ERROR: can't get svgShape of null type, specify shape via subclass, returning null");
@@ -147,12 +147,12 @@ class svgPath {
 }
 
 export class svgBox {
-    x = SVG_DEFAULT_X;
-    y = SVG_DEFAULT_Y;
-    width = SVG_DEFAULT_WIDTH;
-    height = SVG_DEFAULT_HEIGHT;
-    fill = SVG_DEFAULT_FILL;
-    stroke = SVG_DEFAULT_STROKE;
+    x = DEFAULT_X;
+    y = DEFAULT_Y;
+    width = DEFAULT_WIDTH;
+    height = DEFAULT_HEIGHT;
+    fill = DEFAULT_FILL;
+    stroke = DEFAULT_STROKE;
 
     /** 
      * Additional attributes to include in the path, 
@@ -160,7 +160,7 @@ export class svgBox {
      * @type {Array<[string, any]>} */
     extraAttributes = [];
 
-    constructor(x = SVG_DEFAULT_X, y = SVG_DEFAULT_Y, width = SVG_DEFAULT_WIDTH, height = SVG_DEFAULT_HEIGHT) {
+    constructor(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT) {
         this.x = x;
         this.y = y;
         this.width = width;
@@ -225,7 +225,7 @@ export class svgFancyBox {
     }
 }
 
-export function SVGBasicBoxD(x = SVG_DEFAULT_X, y = SVG_DEFAULT_Y, width = SVG_DEFAULT_WIDTH, height = SVG_DEFAULT_HEIGHT,
+export function SVGBasicBoxD(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT,
     relativeStart = false, closePath = true) {
     return `${relativeStart ? 'm' : 'M'}${x},${y} h${width} v${height} h${-width} ${closePath ? 'Z' : `v${-height}`}`;
 }
