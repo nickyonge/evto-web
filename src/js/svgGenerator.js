@@ -240,7 +240,7 @@ function ParseData(data) {
     let d = [];
     data.forEach(datum => {
         let out = ParseDatum(datum[0], datum[1]);
-        if (out != null) { d.push(out); }
+        if (!isBlank(out)) { d.push(out); }
     });
     return d.join(' ');
 }
@@ -248,4 +248,4 @@ function ParseData(data) {
  * @param {string} name name of property. Can't be null or blank or whitespace
  * @param {*} value value of property. Can't be null, but CAN be blank or whitespace
  * @returns {string} datum formatted like `myName="myValue"`, or `''` if name is empty/null or value is null*/
-function ParseDatum(name, value) { return `${value == null || isBlank(name) ? ` ${name}="${value}"` : ''}`; }
+function ParseDatum(name, value) { return `${value == null || isBlank(name) ? '' : `${name}="${value}"`}`; }
