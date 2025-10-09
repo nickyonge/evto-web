@@ -3,6 +3,9 @@ import { isBlank } from "./lilutils";
 const FANCYBOX_MAX_SPLITS = 3;
 const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
 
+const SVG_HTML_NEWLINE = true;
+const SVG_HTML_INDENT = true;
+
 const DEFAULT_SVG_METADATA = [
     ['xmlns', 'http://www.w3.org/2000/svg'],
     ['xmlns:xlink', 'http://www.w3.org/1999/xlink'],
@@ -39,7 +42,7 @@ export function CreatePath() {
     a.AddCircle();
     a.AddRect();
 
-    console.log(a.svgShapes);
+    console.log(a.html);
 }
 
 export function CreateBox(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT) {
@@ -54,20 +57,30 @@ export class svgAsset {
     svgShapes;
     metadata;
 
-    constructor(svgShapes = [], viewBox = new svgViewBox()) {
-        this.svgShapes = svgShapes;
+    constructor(shapes = [], viewBox = new svgViewBox()) {
+        this.svgShapes = shapes;
         this.viewBox = viewBox;
         this.metadata = DEFAULT_SVG_METADATA;
     }
     get html() {
         let d = this.data;
-        let svg = isBlank(d) ? '<svg>' : `<svg ${allData}>`;
+        let svg = isBlank(d) ? '<svg>' : `<svg ${d}>`;
+        if (SVG_HTML_NEWLINE) { svg += '\n'; }
         // add SVG definitions
-        // TODO: svg definitions
+        // TODO: svg definitions in own <defs> dropdown
         // add SVG shapes 
-        // TODO: svg shapes
-        // Issue URL: https://github.com/nickyonge/evto-web/issues/45
-        return svg;
+        if (this.svgShapes != null && this.svgShapes.length > 0) {
+            this.svgShapes.forEach(shape => {
+                if (shape == null) { return; }
+                let h = shape.html;
+                if (!isBlank.h) {
+                    if (SVG_HTML_INDENT) { svg += '\t'; }
+                    svg += h;
+                    if (SVG_HTML_NEWLINE) { svg += '\n'; }
+                }
+            });
+        }
+        return `${svg}</svg>`;
     }
     get data() {
         if (this.viewBox == null) { this.viewBox = new svgViewBox(); }
@@ -77,7 +90,7 @@ export class svgAsset {
             ['id', this.id],
             ['preserveAspectRatio', this.preserveAspectRatio]
         ]);
-        return [d, this.viewBox.html, this.metadata].filter(Boolean).join(' ');
+        return [ParseData(this.metadata), d, this.viewBox.html].filter(Boolean).join(' ');
     }
 
     /** 
@@ -135,8 +148,8 @@ class svgViewBox {
     constructor(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT) {
         this.x = x; this.y = y; this.width = width; this.height = height;
     }
-    get html() { return `viewBox="${data}"`; }
-    get data() { return `${x} ${y} ${width} ${height}`; }
+    get html() { return `viewBox="${this.data}"`; }
+    get data() { return `${this.x} ${this.y} ${this.width} ${this.height}`; }
 }
 
 // TODO: move svgShape and subclasses to its own script 
@@ -156,7 +169,7 @@ class svgShape {
             console.error("ERROR: can't get svgShape of null type, specify shape via subclass, returning null");
             return null;
         }
-        return `<${this.type} ${this.data} />`;
+        return `<${this.type} ${this.data}/>`;
     }
     // get data() { return `${fill != null ? ` fill="${fill}"` : ''}${stroke != null ? ` stroke="${stroke}"` : ''}` }
     // get data() { return `${_pd('fill', this.fill)}${_pd('stroke', this.stroke)}` }
