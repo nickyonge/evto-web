@@ -11,6 +11,9 @@ const DEFAULT_FILL = '#beeeef';
 const DEFAULT_STROKE = null;
 
 export function CreatePath() {
+
+    let r = new svgRect();
+    console.log(r.html);
 }
 
 export function CreateBox(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT) {
@@ -61,7 +64,11 @@ class svgShape {
 }
 class svgRect extends svgShape {
     x; y; width; height;
-    constructor() { super(); this.type = 'rect'; }
+    constructor(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT, fill = DEFAULT_FILL) {
+        super(fill);
+        this.type = 'rect';
+        this.x = x; this.y = y; this.width = width; this.height = height;
+    }
     get data() {
         // cast this shape's unique properties to data string
         let d = ParseData([
