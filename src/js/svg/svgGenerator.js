@@ -83,21 +83,3 @@ export function BoxPath(x = svg.default.X, y = svg.default.Y, width = svg.defaul
     return `${relativeStart ? 'm' : 'M'}${x},${y} h${width} v${height} h${-width} ${closePath ? 'Z' : `v${-height}`}`;
 }
 
-/**
- * Parse array of SVG data, into HTML-attribute-style `name="value"` format, 
- * with spaces between attributes as needed.
- * @param {Array<[string, any]>} data 2d array of properties, `[name,value]` 
- * @returns {string} data formatted like `first="1" second="2" third="3"`*/
-export function ParseData(data) {
-    let d = [];
-    data.forEach(datum => {
-        let out = ParseDatum(datum[0], datum[1]);
-        if (!isBlank(out)) { d.push(out); }
-    });
-    return d.join(' ');
-}
-/** Parse individual property data for use as an SVG attribute. Returns `''` if invalid.
- * @param {string} name name of property. Can't be null or blank or whitespace
- * @param {*} value value of property. Can't be null, but CAN be blank or whitespace
- * @returns {string} datum formatted like `myName="myValue"`, or `''` if name is empty/null or value is null*/
-function ParseDatum(name, value) { return `${value == null || isBlank(name) ? '' : `${name}="${value}"`}`; }

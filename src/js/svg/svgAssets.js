@@ -1,12 +1,34 @@
 import * as svg from './index';
 import { shape, rect, circle, ellipse, line, polyline, polygon, path } from "./index";
-import { ParseData } from "./svgGenerator";
 import { isBlank } from "../lilutils";
 
 const SVG_HTML_NEWLINE = true;
 const SVG_HTML_INDENT = true;
 
-export class svgAsset {
+export class svgElement {
+
+    /**
+ * Parse array of SVG data, into HTML-attribute-style `name="value"` format, 
+ * with spaces between attributes as needed.
+ * @param {Array<[string, any]>} data 2d array of properties, `[name,value]` 
+ * @returns {string} data formatted like `first="1" second="2" third="3"`*/
+    ParseData(data) {
+        let d = [];
+        data.forEach(datum => {
+            let out = this.ParseDatum(datum[0], datum[1]);
+            if (!isBlank(out)) { d.push(out); }
+        });
+        return d.join(' ');
+    }
+    /** Parse individual property data for use as an SVG attribute. Returns `''` if invalid.
+     * @param {string} name name of property. Can't be null or blank or whitespace
+     * @param {*} value value of property. Can't be null, but CAN be blank or whitespace
+     * @returns {string} datum formatted like `myName="myValue"`, or `''` if name is empty/null or value is null*/
+    ParseDatum(name, value) { return `${value == null || isBlank(name) ? '' : `${name}="${value}"`}`; }
+
+}
+
+export class svgAsset extends svgElement {
     class;
     id;
     definitions;
@@ -16,6 +38,7 @@ export class svgAsset {
     metadata;
 
     constructor(shapes = [], viewBox = new svgViewBox()) {
+        super();
         this.svgShapes = shapes;
         this.viewBox = viewBox;
         this.metadata = svg.default.SVG_METADATA;
@@ -44,12 +67,12 @@ export class svgAsset {
     get data() {
         if (this.viewBox == null) { this.viewBox = new svgViewBox(); }
         if (this.metadata == null) { this.metadata = svg.default.SVG_METADATA; }
-        let d = ParseData([
+        let d = this.ParseData([
             ['class', this.class],
             ['id', this.id],
             ['preserveAspectRatio', this.preserveAspectRatio]
         ]);
-        return [ParseData(this.metadata), d, this.viewBox.html].filter(Boolean).join(' ');
+        return [this.ParseData(this.metadata), d, this.viewBox.html].filter(Boolean).join(' ');
     }
 
     /** 

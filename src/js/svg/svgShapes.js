@@ -1,15 +1,15 @@
 import * as svg from './index';
-import { ParseData } from './svgGenerator';
+import { svgElement } from './svgAssets';
 
-export class svgShape {
+export class svgShape extends svgElement {
     type = null;
     fill = svg.default.FILL;
-    stroke = svg.default.STROKE;// left undefined by default 
+    stroke = svg.default.STROKE;
     /** Additional attributes to include in the path, 
      * in a 2D string array `[ [attr, value], ... ]`
      * @type {Array<[string, any]>} */
     extraAttributes;
-    constructor(fill = svg.default.FILL) { this.fill = fill; }
+    constructor(fill = svg.default.FILL) { super(); this.fill = fill; }
     get html() {
         if (this.type == null) {
             console.error("ERROR: can't get svgShape of null type, specify shape via subclass, returning null");
@@ -20,12 +20,12 @@ export class svgShape {
     // get data() { return `${fill != null ? ` fill="${fill}"` : ''}${stroke != null ? ` stroke="${stroke}"` : ''}` }
     // get data() { return `${_pd('fill', this.fill)}${_pd('stroke', this.stroke)}` }
     get data() {
-        let d = ParseData([
+        let d = this.ParseData([
             ['fill', this.fill],
             ['stroke', this.stroke]]);
         // check for and include extraAttributes
         if (this.extraAttributes != null && this.extraAttributes.length > 0) {
-            let ea = ParseData(this.extraAttributes);
+            let ea = this.ParseData(this.extraAttributes);
             if (!isBlank(ea)) { d = `${d} ${ea}`; }
         }
         return d;
@@ -45,7 +45,7 @@ export class svgRect extends svgShape {
     }
     get data() {
         // cast this shape's unique properties to data string
-        let d = ParseData([
+        let d = this.ParseData([
             ['x', this.x],
             ['y', this.y],
             ['width', this.width],
@@ -75,7 +75,7 @@ export class svgCircle extends svgShape {
         this.r = r; this.cx = cx; this.cy = cy;
     }
     get data() {
-        let d = ParseData([
+        let d = this.ParseData([
             ['r', this.r],
             ['cx', this.cx],
             ['cy', this.cy]]);
@@ -93,7 +93,7 @@ export class svgEllipse extends svgShape {
         this.rx = rx; this.ry = ry; this.cx = cx; this.cy = cy;
     }
     get data() {
-        let d = ParseData([
+        let d = this.ParseData([
             ['rx', this.rx],
             ['ry', this.ry],
             ['cx', this.cx],
@@ -112,7 +112,7 @@ export class svgLine extends svgShape {
         this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
     }
     get data() {
-        let d = ParseData([
+        let d = this.ParseData([
             ['x1', this.x1],
             ['y1', this.y1],
             ['x2', this.x2],
@@ -133,7 +133,7 @@ export class svgPolyline extends svgShape {
         if (this.points != null) {
             this.points.forEach(pt => { pts.push(pt.join(',')); });
         }
-        let d = ParseData([['points', pts.length > 0 ? pts.join(' ') : null]]);
+        let d = this.ParseData([['points', pts.length > 0 ? pts.join(' ') : null]]);
         return [d, super.data].filter(Boolean).join(' ');
     }
 } // polyline 
@@ -150,7 +150,7 @@ export class svgPolygon extends svgShape {
         if (this.points != null) {
             this.points.forEach(pt => { pts.push(pt.join(',')); });
         }
-        let d = ParseData([['points', pts.length > 0 ? pts.join(' ') : null]]);
+        let d = this.ParseData([['points', pts.length > 0 ? pts.join(' ') : null]]);
         return [d, super.data].filter(Boolean).join(' ');
     }
 } // polygon 
@@ -163,7 +163,7 @@ export class svgPath extends svgShape {
         this.d = d;
     }
     get data() {
-        let d = ParseData([
+        let d = this.ParseData([
             ['d', this.d],
             ['pathLength', this.pathLength]]);
         return [d, super.data].filter(Boolean).join(' ');
