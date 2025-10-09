@@ -82,6 +82,7 @@ class svgViewBox {
 }
 
 // TODO: move svgShape and subclasses to its own script 
+// Issue URL: https://github.com/nickyonge/evto-web/issues/44
 
 class svgShape {
     type = null;
