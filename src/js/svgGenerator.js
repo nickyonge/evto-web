@@ -52,23 +52,53 @@ export class svgAsset {
     AddShape(shape = new svgShape()) { this.svgShapes.push(shape); }
     AddShape(fill) { this.svgShapes.push(new svgShape(fill)); }
 
+    /** 
+     * add an {@link svgShape} to shapes array (recommend using another shape; 
+     * else, must manually assign `type`) @param {svgShape} shape */
+    AddShape(shape) { this.svgShapes.push(shape); }
+    AddShape(fill = DEFAULT_FILL) { this.svgShapes.push(new svgShape(fill)); }
+
     /** add an {@link svgRect} to shapes array @param {svgRect} rect */
-    AddRect(rect = new svgRect()) { this.svgShapes.push(rect); }
-    
-    AddCircle(circle = new svgCircle()) { this.svgShapes.push(circle); }
+    AddRect(rect) { this.svgShapes.push(rect); }
+    AddRect(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT, fill = DEFAULT_FILL) {
+        this.svgShapes.push(new svgRect(x, y, width, height, fill));
+    }
 
-    AddEllipse(ellipse = new svgEllipse()) { this.svgShapes.push(ellipse); }
+    /** add an {@link svgCircle} to shapes array @param {svgCircle} circle */
+    AddCircle(circle) { this.svgShapes.push(circle); }
+    AddCircle(r = DEFAULT_R, cx = DEFAULT_CX, cy = DEFAULT_CY, fill = DEFAULT_FILL) {
+        this.svgShapes.push(new svgCircle(r, cx, cy, fill));
+    }
 
-    AddLine(line = new svgLine()) { this.svgShapes.push(line); }
+    /** add an {@link svgEllipse} to shapes array @param {svgEllipse} ellipse */
+    AddEllipse(ellipse) { this.svgShapes.push(ellipse); }
+    AddEllipse(rx = DEFAULT_RX, ry = DEFAULT_RY, cx = DEFAULT_CX, cy = DEFAULT_CY, fill = DEFAULT_FILL) {
+        this.svgShapes.push(new svgEllipse(rx, ry, cx, cy, fill));
+    }
 
-    AddPolyline(polyline = new svgPolyline()) { this.svgShapes.push(polyline); }
+    /** add an {@link svgLine} to shapes array @param {svgLine} line */
+    AddLine(line) { this.svgShapes.push(line); }
+    AddLine(x1 = DEFAULT_X1, y1 = DEFAULT_Y1, x2 = DEFAULT_X2, y2 = DEFAULT_Y2, fill = DEFAULT_FILL) {
+        this.svgShapes.push(new svgLine(x1, y1, x2, y2, fill));
+    }
 
-    AddPolygon(polygon = new svgPolygon()) { this.svgShapes.push(polygon); }
+    /** add an {@link svgPolyline} to shapes array @param {svgPolyline} polyline */
+    AddPolyline(polyline) { this.svgShapes.push(polyline); }
+    AddPolyline(points = DEFAULT_POINTS, fill = DEFAULT_FILL) {
+        this.svgShapes.push(new svgPolyline(points, fill));
+    }
 
-    AddPath(path = new svgPath()) { this.svgShapes.push(path); }
+    /** add an {@link svgPolygon} to shapes array @param {svgPolygon} polygon */
+    AddPolygon(polygon) { this.svgShapes.push(polygon); }
+    AddPolygon(points = DEFAULT_POINTS, fill = DEFAULT_FILL) {
+        this.svgShapes.push(new svgPolygon(points, fill));
+    }
 
-    get html() { return null; }
-    get data() { return null; }
+    /** add an {@link svgPath} to shapes array @param {svgPath} path */
+    AddPath(path) { this.svgShapes.push(path); }
+    AddPath(d = DEFAULT_D, fill = DEFAULT_FILL) {
+        this.svgShapes.push(new svgPath(d, fill));
+    }
 
 }
 
