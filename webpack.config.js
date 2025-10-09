@@ -128,12 +128,27 @@ module.exports = {
             //                                          module rules (with some presets)
 
             // Jquery (requires library): npm install jquery --save
-            { 
+            {
                 test: require.resolve("jquery"),
                 loader: "expose-loader",
                 options: {
                     exposes: ["$", "jQuery"],
                 },
+            },
+
+            // Babel loader for JS
+            {
+                test: /\.(?:js|mjs|cjs)$/,
+                exclude: /node_modules/,
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        targets: "defaults",
+                        presets: [
+                            ['@babel/preset-env']
+                        ]
+                    }
+                }
             },
 
             // CSS (requires loader): npm install style-loader css-loader postcss-loader --save
