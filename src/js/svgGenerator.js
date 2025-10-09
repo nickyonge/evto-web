@@ -66,6 +66,7 @@ export class svgAsset {
         // TODO: svg definitions
         // add SVG shapes 
         // TODO: svg shapes
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/45
         return svg;
     }
     get data() {
