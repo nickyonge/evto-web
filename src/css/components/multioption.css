@@ -16,6 +16,7 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
     /* display:none; */
     display: flex;
     flex-direction: row;
+    gap: 1px;
 }
 
 .listselect input[type="radio"] {
@@ -68,17 +69,26 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
     margin-right: -5px;
 }
 
-.value:hover {
+.listselect .value:hover {
+    background-color: var(--ui-component-color-bg-highlight);
+}
+.listselect.horizontal .value:hover {
     background-color: var(--ui-component-color-bg-highlight);
 }
 
 .listselect input[type="radio"]:checked + .value {
     background-color: var(--ui-component-color-bg-highlight);
-    border-radius: calc(var(--ui-component-border-radius) / 2) var(--ui-component-border-radius) var(--ui-component-border-radius) calc(var(--ui-component-border-radius) / 2);
+    border-radius: var(--ui-component-border-radius-middle) var(--ui-component-border-radius) var(--ui-component-border-radius) var(--ui-component-border-radius-middle);
     transition: all 200ms;
 }
-.listselect.horizontal input[type="radio"]:checked + .value {
-    border-radius: var(--ui-component-border-radius) var(--ui-component-border-radius) var(--ui-component-border-radius) var(--ui-component-border-radius);
+.listselect.horizontal input[type="radio"] + .value {
+    border-radius: var(--ui-component-border-radius-middle);
+}
+.listselect.horizontal input[type="radio"]:first-of-type + .value {
+    border-radius: var(--ui-component-border-radius) var(--ui-component-border-radius-middle) var(--ui-component-border-radius-middle) var(--ui-component-border-radius);
+}
+.listselect.horizontal input[type="radio"]:last-of-type + .value {
+    border-radius: var(--ui-component-border-radius-middle) var(--ui-component-border-radius) var(--ui-component-border-radius) var(--ui-component-border-radius-middle);
 }
 .listselect input[type="radio"]:checked + .value svg {
     transition: all 200ms;
@@ -93,7 +103,7 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
     width: 7px;
     height: 60%;
     background-color: var(--ui-component-color-enabled-light);
-    border-radius: var(--ui-component-border-radius) calc(var(--ui-component-border-radius) / 2) calc(var(--ui-component-border-radius) / 2) var(--ui-component-border-radius);
+    border-radius: var(--ui-component-border-radius) var(--ui-component-border-radius-middle) var(--ui-component-border-radius-middle) var(--ui-component-border-radius);
     opacity: 0;
     transition: all 150ms;
     z-index: 1;
@@ -103,7 +113,7 @@ https://uiverse.io/nickyonge/mighty-hound-30 */
     height: 5px;
     width: 69%;
     left: 15.5%;
-    border-radius: calc(var(--ui-component-border-radius) / 2) calc(var(--ui-component-border-radius) / 2) var(--ui-component-border-radius) var(--ui-component-border-radius);
+    border-radius: var(--ui-component-border-radius-middle) var(--ui-component-border-radius-middle) var(--ui-component-border-radius) var(--ui-component-border-radius);
 }
 
 .listselect input[type="radio"]:checked + .value::before {
