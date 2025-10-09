@@ -1,6 +1,8 @@
 import * as svg from './index';
 import { svgElement } from './svgAssets';
 
+// TODO add <use> as an svgShape
+
 export class svgShape extends svgElement {
     type = null;
     fill = svg.default.FILL;
@@ -32,12 +34,12 @@ export class svgShape extends svgElement {
     }
 } // shape 
 export class svgRect extends svgShape {
-    x;
-    y;
-    width;
-    height;
-    rx;// left undefined by default 
-    ry;// left undefined by default 
+    x = svg.default.X;
+    y = svg.default.Y;
+    width = svg.default.WIDTH;
+    height = svg.default.HEIGHT;
+    rx = svg.default.RECT_RX;
+    ry = svg.default.RECT_RY;
     constructor(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT, fill = svg.default.FILL) {
         super(fill);
         this.type = 'rect';
@@ -64,11 +66,13 @@ export class svgRect extends svgShape {
     AsPath(relativeStart = false, closePath = true) {
         return svg.BoxPath(this.x, this.y, this.width, this.height, relativeStart, closePath);
     }
+    /** sets both {@linkcode rx} and {@linkcode ry} corner radii */
+    set r(radius) { this.rx = radius; this.ry = radius; }
 } // rect 
 export class svgCircle extends svgShape {
-    r;
-    cx;
-    cy;
+    r = svg.default.R;
+    cx = svg.default.CX;
+    cy = svg.default.CY;
     constructor(r = svg.default.R, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL) {
         super(fill);
         this.type = 'circle';
@@ -83,10 +87,10 @@ export class svgCircle extends svgShape {
     }
 } // circle 
 export class svgEllipse extends svgShape {
-    rx;
-    ry;
-    cx;
-    cy;
+    rx = svg.default.ELLIPSE_RX;
+    ry = svg.default.ELLIPSE_RY;
+    cx = svg.default.CX;
+    cy = svg.default.CY;
     constructor(rx = svg.default.ELLIPSE_RX, ry = svg.default.ELLIPSE_RY, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL) {
         super(fill);
         this.type = 'ellipse';
@@ -102,10 +106,10 @@ export class svgEllipse extends svgShape {
     }
 } // ellipse 
 export class svgLine extends svgShape {
-    x1;
-    y1;
-    x2;
-    y2;
+    x1 = svg.default.X1;
+    y1 = svg.default.Y1;
+    x2 = svg.default.X2;
+    y2 = svg.default.Y2;
     constructor(x1 = svg.default.X1, y1 = svg.default.Y1, x2 = svg.default.X2, y2 = svg.default.Y2, fill = svg.default.FILL) {
         super(fill);
         this.type = 'line';
@@ -122,7 +126,7 @@ export class svgLine extends svgShape {
 } // line 
 export class svgPolyline extends svgShape {
     /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {[number,number]} */
-    points;
+    points = svg.default.POINTS;
     constructor(points = svg.default.POINTS, fill = svg.default.FILL) {
         super(fill);
         this.type = 'polyline';
@@ -139,7 +143,7 @@ export class svgPolyline extends svgShape {
 } // polyline 
 export class svgPolygon extends svgShape {
     /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {[number,number]} */
-    points;
+    points = svg.default.POINTS;
     constructor(points = svg.default.POINTS, fill = svg.default.FILL) {
         super(fill);
         this.type = 'polygon';
@@ -155,8 +159,8 @@ export class svgPolygon extends svgShape {
     }
 } // polygon 
 export class svgPath extends svgShape {
-    d;
-    pathLength;// left undefined by default 
+    d = svg.default.D;
+    pathLength = svg.default.PATHLENGTH;
     constructor(d = svg.default.D, fill = svg.default.FILL) {
         super(fill);
         this.type = 'path';
