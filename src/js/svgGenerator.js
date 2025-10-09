@@ -3,6 +3,11 @@ import { isBlank } from "./lilutils";
 const FANCYBOX_MAX_SPLITS = 3;
 const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
 
+const DEFAULT_SVG_METADATA = [
+    ['xmlns', 'http://www.w3.org/2000/svg'],
+    ['xmlns:xlink', 'http://www.w3.org/1999/xlink'],
+];
+
 const DEFAULT_X = 0;
 const DEFAULT_Y = 0;
 const DEFAULT_WIDTH = 200;
@@ -25,12 +30,16 @@ const DEFAULT_Y2 = DEFAULT_HEIGHT;
 const DEFAULT_POINTS = [[DEFAULT_X1, DEFAULT_Y1], [DEFAULT_X1, DEFAULT_Y2], [DEFAULT_X2, DEFAULT_Y2], [DEFAULT_X2, DEFAULT_Y1]];
 
 const DEFAULT_D = 'M0,0 L20,0 L20,10 L0,10 Z';
-const DEFAULT_PATHLENGTH = null;
 
 export function CreatePath() {
 
     let a = new svgAsset();
-    console.log(a.html);
+
+    a.AddCircle();
+    a.AddCircle();
+    a.AddRect();
+
+    console.log(a.svgShapes);
 }
 
 export function CreateBox(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT) {
@@ -43,14 +52,32 @@ export class svgAsset {
     preserveAspectRatio;
     viewBox;
     svgShapes;
+    metadata;
 
     constructor(svgShapes = [], viewBox = new svgViewBox()) {
         this.svgShapes = svgShapes;
         this.viewBox = viewBox;
+        this.metadata = DEFAULT_SVG_METADATA;
     }
-
-    AddShape(shape = new svgShape()) { this.svgShapes.push(shape); }
-    AddShape(fill) { this.svgShapes.push(new svgShape(fill)); }
+    get html() {
+        let d = this.data;
+        let svg = isBlank(d) ? '<svg>' : `<svg ${allData}>`;
+        // add SVG definitions
+        // TODO: svg definitions
+        // add SVG shapes 
+        // TODO: svg shapes
+        return svg;
+    }
+    get data() {
+        if (this.viewBox == null) { this.viewBox = new svgViewBox(); }
+        if (this.metadata == null) { this.metadata = DEFAULT_SVG_METADATA; }
+        let d = ParseData([
+            ['class', this.class],
+            ['id', this.id],
+            ['preserveAspectRatio', this.preserveAspectRatio]
+        ]);
+        return [d, this.viewBox.html, this.metadata].filter(Boolean).join(' ');
+    }
 
     /** 
      * add an {@link svgShape} to shapes array (recommend using another shape; 
@@ -107,7 +134,7 @@ class svgViewBox {
     constructor(x = DEFAULT_X, y = DEFAULT_Y, width = DEFAULT_WIDTH, height = DEFAULT_HEIGHT) {
         this.x = x; this.y = y; this.width = width; this.height = height;
     }
-    get html() { return `viewBow="${data}"`; }
+    get html() { return `viewBox="${data}"`; }
     get data() { return `${x} ${y} ${width} ${height}`; }
 }
 
