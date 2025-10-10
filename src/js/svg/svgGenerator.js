@@ -17,7 +17,8 @@ export function CreatePath() {
 
     let g = a.AddGradient();
 
-    g.SetStops('red', 'green', 'blue');
+    g.InsertStop(1, 'red');
+    // g.SetStops('red', 'green', 'blue');
 
     console.log(a.html);
 }

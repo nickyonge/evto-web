@@ -41,42 +41,6 @@ export class svgGradient extends svgElement {
         this.SetStops(color1, color2);
     }
 
-    AddStop(stop) {
-        if (stop != null) { this.stops.push(stop); }
-        return stop;
-    }
-    AddStop(color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) {
-        let stop = new svgGradientStop(color, opacity, offset);
-        this.stops.push(stop);
-        return stop;
-    }
-
-
-    SetStops(...stops) {
-        this.stops = svgGradientStop.GenerateStops(...stops);
-    }
-    SetStop(index, stop) {
-        return this.#setStop(index, stop);
-    }
-    SetStop(index, color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) {
-        let stop = new svgGradientStop(color, opacity, offset);
-        return this.#setStop(index, stop);
-    }
-    #setStop(index, stop) {
-        // local reference to avoid recursion errors =_=
-        if (index == -1) {
-            for (let i = 0; i < this.stops.length; i++) {
-                this.SetStop(i, stop);
-            }
-            return stop;
-        }
-        else if (index < -1) { return stop; }
-        if (this.stops.length < index + 1) { this.stops.length = index + 1; }
-        this.stops[index] = stop;
-        return stop;
-    }
-
-
     get type() { return this.isRadial ? 'radialGradient' : 'linearGradient'; }
 
     get html() {
@@ -121,6 +85,75 @@ export class svgGradient extends svgElement {
             ['href', this.href]
         ]);
     }
+    
+    AddStop(stop) {
+        if (stop != null) { this.stops.push(stop); }
+        return stop;
+    }
+    AddStop(color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) {
+        let stop = new svgGradientStop(color, opacity, offset);
+        this.stops.push(stop);
+        return stop;
+    }
+
+    SetStops(...stops) {
+        this.stops = svgGradientStop.GenerateStops(...stops);
+    }
+    SetStop(index, stop) {
+        return this.#setStop(index, stop);
+    }
+    SetStop(index, color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) {
+        let stop = new svgGradientStop(color, opacity, offset);
+        return this.#setStop(index, stop);
+    }
+    #setStop(index, stop) {
+        // local reference to avoid recursion errors =_=
+        if (index == -1) {
+            for (let i = 0; i < this.stops.length; i++) {
+                this.SetStop(i, stop);
+            }
+            return stop;
+        }
+        else if (index < -1) { return stop; }
+        if (this.stops.length < index + 1) { this.stops.length = index + 1; }
+        this.stops[index] = stop;
+        return stop;
+    }
+
+    InsertStop(index, stop) {
+        return this.#insertStop(index, stop);
+    }
+    InsertStop(index, color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) {
+        let stop = new svgGradientStop(color, opacity, offset);
+        return this.#insertStop(index, stop);
+    }
+    #insertStop(index, stop) {
+        // local reference to avoid recursion errors =_=
+        if (index == -1) {
+            for (let i = 0; i < this.stops.length; i++) {
+                this.SetStop(i, stop);
+            }
+            return stop;
+        }
+        else if (index < -1) { return stop; }
+        if (this.stops.length < index + 1) {
+            this.stops.length = index + 1;
+            this.stops[index] = stop;
+        } else {
+            this.stops.splice(index, 0, stop);
+        }
+        return stop;
+    }
+
+    // alt spellings for convenience 
+    AddColor(color) { return this.AddStop(color); }
+    AddColor(color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) { return this.AddStop(color, opacity, offset); }
+    SetColors(...colors) { this.SetStops(...colors); }
+    SetColor(index, color) { return this.SetStop(index, color); }
+    SetColor(index, color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) { return this.SetStop(index, color, opacity, offset); }
+    InsertColor(index, stop) { return this.InsertColor(index, stop); }
+    InsertColor(index, color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) { return this.InsertColor(index, color, opacity, offset); }
+
 }
 
 class svgGradientStop extends svgElement {
