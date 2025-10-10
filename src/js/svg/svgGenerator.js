@@ -18,7 +18,7 @@ export function CreatePath() {
     console.log(a.html);
 
     let g = new svgGradient();
-    console.log(g.html);
+    console.log(g.IndentHTML(g.html));
 }
 
 export class svgFancyBox {

@@ -33,6 +33,29 @@ export class svgElement {
      * console.log(#ParseDatum(null, 'nullName')); // Output: ''
      * */
     #ParseDatum(name, value) { return `${value == null || isBlank(name) ? '' : `${name}="${value}"`}`; }
+
+    /**
+     * add indentation (`\t`) to the give html string, 
+     * if {@link svg.config.HTML_INDENT HTML_INDENT} is true
+     * @param {string} html input html string 
+     * @param {number} indentCount number of indentations to add 
+     * @returns original string with indentation
+     */
+    IndentHTML(html, indentCount = 1) {
+        if (!svg.config.HTML_INDENT || isBlank(html)) { return html; }
+        let indent = '';
+        for (let i = 0; i < indentCount; i++) { indent += '\t'; }
+        console.log(indentCount);
+        html = indent + html;
+        if (svg.config.HTML_NEWLINE) {
+            // check if ends with newline - if so, don't indent it
+            let newlineEnd = html.endsWith('\n');
+            if (newlineEnd) { html = html.slice(0, -1); }
+            html = html.replaceAll('\n', '\n' + indent);
+            if (newlineEnd) { html += '\n'; }
+        }
+        return html;
+    }
 }
 
 export class svgHTML extends svgElement {
