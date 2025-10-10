@@ -1,3 +1,4 @@
+import { isBlank } from '../lilutils';
 import * as svg from './index';
 import { svgElement } from './svgElement';
 
@@ -31,9 +32,7 @@ export class svgGradient extends svgElement {
 
     gradientUnits = svg.default.GRADIENT_UNITS;
     gradientTransform = svg.default.GRADIENT_TRANSFORM;
-
     spreadMethod = svg.default.GRADIENT_SPREADMETHOD;
-
     href = svg.default.GRADIENT_HREF;
 
     constructor(isRadial = svg.default.GRADIENT_ISRADIAL, color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2) {
@@ -42,22 +41,70 @@ export class svgGradient extends svgElement {
         this.stops = svgGradientStop.GenerateStops(color1, color2);
     }
 
-    get html() { }
-    get data() { }
+    get type() { return this.isRadial ? 'radialGradient' : 'linearGradient'; }
 
+    get html() {
+        let d = this.data;
+        let newGradient = `<${this.type}${isBlank(d) ? '' : ` ${d}`}>`;
+        if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
+        if (this.stops != null && this.stops.length > 0) {
+            this.stops.forEach(stop => {
+                if (stop == null) { return; }
+                let h = stop.html;
+                if (!isBlank.h) {
+                    if (svg.config.HTML_INDENT) { newGradient += '\t'; }
+                    newGradient += h;
+                    if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
+                }
+            });
+        }
+        return `${newGradient}</${this.type}>`;
+    }
+    get data() {
+        return this.isRadial ? this.ParseData([
+            // radial gradient 
+            ['fx', this.fx],
+            ['fy', this.fy],
+            ['cx', this.cx],
+            ['cy', this.cy],
+            ['fr', this.fr],
+            ['r', this.r],
+            ['gradientUnits', this.gradientUnits],
+            ['gradientTransform', this.gradientTransform],
+            ['spreadMethod', this.spreadMethod],
+            ['href', this.href]
+        ]) : this.ParseData([
+            // linear gradient 
+            ['x1', this.x1],
+            ['y1', this.y1],
+            ['x2', this.x2],
+            ['y2', this.y2],
+            ['gradientUnits', this.gradientUnits],
+            ['gradientTransform', this.gradientTransform],
+            ['spreadMethod', this.spreadMethod],
+            ['href', this.href]
+        ]);
+    }
 }
 
-class svgGradientStop {
+class svgGradientStop extends svgElement {
     color = svg.default.GRADIENT_STOP_COLOR;
     opacity = svg.default.GRADIENT_STOP_OPACITY;
     offset = svg.default.GRADIENT_STOP_OFFSET;
     constructor(color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) {
+        super();
         this.color = color;
         this.opacity = opacity;
         this.offset = offset;
     }
-    get html() { }
-    get data() { }
+    get html() { return `<stop ${this.data} />`; }
+    get data() {
+        return this.ParseData([
+            ['stop-color', this.color],
+            ['stop-opacity', this.opacity],
+            ['offset', this.offset]
+        ]);
+    }
 
     /**
      * Converts an array of colours (and optionally opacities and offsets) to an array of 
