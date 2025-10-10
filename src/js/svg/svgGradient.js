@@ -1,5 +1,5 @@
 import * as svg from './index';
-import { svgElement } from './svgAssets';
+import { svgElement } from './svgElement';
 
 /** Class representing an SVG defined linear or radial gradient */
 export class svgGradient extends svgElement {
@@ -125,14 +125,5 @@ class svgGradientStop {
             stops.push(newStop);
         }
         return stops;
-    }
-    /**
-     * 
-     * @param {string} color 
-     * @param {number|string} opacity 
-     * @param {number|string} offset 
-     */
-    static GenerateStop(color, opacity, offset) {
-
     }
 }

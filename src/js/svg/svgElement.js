@@ -35,7 +35,7 @@ export class svgElement {
     #ParseDatum(name, value) { return `${value == null || isBlank(name) ? '' : `${name}="${value}"`}`; }
 }
 
-export class svgAsset extends svgElement {
+export class svgHTML extends svgElement {
     class;
     id;
     definitions;

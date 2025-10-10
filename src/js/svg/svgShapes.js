@@ -1,5 +1,5 @@
 import * as svg from './index';
-import { svgElement } from './svgAssets';
+import { svgElement } from './svgElement';
 
 // TODO add <use> as an svgShape
 // Issue URL: https://github.com/nickyonge/evto-web/issues/47

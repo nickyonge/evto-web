@@ -1,7 +1,7 @@
 export {
-    svgAsset as asset,
+    svgHTML as asset,
     svgViewBox as viewbox
-} from './svgAssets';
+} from './svgElement';
 
 export {
     svgShape as shape,
