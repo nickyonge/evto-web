@@ -65,7 +65,7 @@ export class svgRect extends svgShape {
      * @returns {string} Path `d` attribute for a rectangle of the given parameters
      */
     AsPath(relativeStart = false, closePath = true) {
-        return svg.BoxPath(this.x, this.y, this.width, this.height, relativeStart, closePath);
+        return svg.gen.BoxPath(this.x, this.y, this.width, this.height, relativeStart, closePath);
     }
     /** sets both {@linkcode rx} and {@linkcode ry} corner radii */
     set r(radius) { this.rx = radius; this.ry = radius; }

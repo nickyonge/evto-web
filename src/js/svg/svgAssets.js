@@ -2,10 +2,8 @@ import * as svg from './index';
 import { shape, rect, circle, ellipse, line, polyline, polygon, path } from "./index";
 import { isBlank } from "../lilutils";
 
-const SVG_HTML_NEWLINE = true;
-const SVG_HTML_INDENT = true;
-
 export class svgElement {
+
     /** Parse array of SVG data into HTML-attribute-style `name="value"` format, 
      * with spaces between attributes as needed. 
      * @param {Array<[string, any]>} data 2d array of properties, `[name,value]` 
@@ -54,8 +52,8 @@ export class svgAsset extends svgElement {
     }
     get html() {
         let d = this.data;
-        let svg = isBlank(d) ? '<svg>' : `<svg ${d}>`;
-        if (SVG_HTML_NEWLINE) { svg += '\n'; }
+        let newSVG = isBlank(d) ? '<svg>' : `<svg ${d}>`;
+        if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
         // add SVG definitions
         // TODO: svg definitions in own <defs> dropdown
         // Issue URL: https://github.com/nickyonge/evto-web/issues/46
@@ -65,13 +63,13 @@ export class svgAsset extends svgElement {
                 if (shape == null) { return; }
                 let h = shape.html;
                 if (!isBlank.h) {
-                    if (SVG_HTML_INDENT) { svg += '\t'; }
-                    svg += h;
-                    if (SVG_HTML_NEWLINE) { svg += '\n'; }
+                    if (svg.config.HTML_INDENT) { newSVG += '\t'; }
+                    newSVG += h;
+                    if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
                 }
             });
         }
-        return `${svg}</svg>`;
+        return `${newSVG}</svg>`;
     }
     get data() {
         if (this.viewBox == null) { this.viewBox = new svgViewBox(); }

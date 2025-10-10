@@ -14,6 +14,8 @@ export {
     svgPath as path
 } from './svgShapes';
 
-export * as default from './svgDefaults';
 export { svgGradient as gradient } from './svgGradient';
-export * from './svgGenerator';
+
+export * as config from './svgConfig';
+export * as default from './svgDefaults';
+export * as gen from './svgGenerator';
