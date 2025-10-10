@@ -6,16 +6,20 @@ const SVG_HTML_NEWLINE = true;
 const SVG_HTML_INDENT = true;
 
 export class svgElement {
-
-    /**
- * Parse array of SVG data, into HTML-attribute-style `name="value"` format, 
- * with spaces between attributes as needed.
- * @param {Array<[string, any]>} data 2d array of properties, `[name,value]` 
- * @returns {string} data formatted like `first="1" second="2" third="3"`*/
+    /** Parse array of SVG data into HTML-attribute-style `name="value"` format, 
+     * with spaces between attributes as needed. 
+     * @param {Array<[string, any]>} data 2d array of properties, `[name,value]` 
+     * @returns {string} data formatted like `first="1" second="2" third="3"`
+     * @example 
+     * let myVar = 1;
+     * let myVarName = 'first';
+     * let array = [[myVarName,myVar], ['two',null], ['third',3], ['blank',''], [null,'null']];
+     * let myData = ParseData(array);
+     * console.log(myData); // Outputs string: first="1" third="3" blank="" */
     ParseData(data) {
         let d = [];
         data.forEach(datum => {
-            let out = this.ParseDatum(datum[0], datum[1]);
+            let out = this.#ParseDatum(datum[0], datum[1]);
             if (!isBlank(out)) { d.push(out); }
         });
         return d.join(' ');
@@ -23,9 +27,14 @@ export class svgElement {
     /** Parse individual property data for use as an SVG attribute. Returns `''` if invalid.
      * @param {string} name name of property. Can't be null or blank or whitespace
      * @param {*} value value of property. Can't be null, but CAN be blank or whitespace
-     * @returns {string} datum formatted like `myName="myValue"`, or `''` if name is empty/null or value is null*/
-    ParseDatum(name, value) { return `${value == null || isBlank(name) ? '' : `${name}="${value}"`}`; }
-
+     * @returns {string} datum formatted like `myName="myValue"`, or `''` if name is empty/null or value is null
+     * @example
+     * console.log(#ParseDatum('myNumber', 123));  // Output: 'myNumber="123"'
+     * console.log(#ParseDatum('isBlank', ''));    // Output: 'isBlank=""'
+     * console.log(#ParseDatum('isNull', null));   // Output: 'isNull=""'
+     * console.log(#ParseDatum(null, 'nullName')); // Output: ''
+     * */
+    #ParseDatum(name, value) { return `${value == null || isBlank(name) ? '' : `${name}="${value}"`}`; }
 }
 
 export class svgAsset extends svgElement {
@@ -125,10 +134,10 @@ export class svgAsset extends svgElement {
 
 }
 
-export class svgViewBox {
+export class svgViewBox extends svgElement {
     x; y; width; height;
     constructor(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT) {
-        this.x = x; this.y = y; this.width = width; this.height = height;
+        super(); this.x = x; this.y = y; this.width = width; this.height = height;
     }
     get html() { return `viewBox="${this.data}"`; }
     get data() { return `${this.x} ${this.y} ${this.width} ${this.height}`; }

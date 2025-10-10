@@ -15,4 +15,5 @@ export {
 } from './svgShapes';
 
 export * as default from './svgDefaults';
+export { svgGradient as gradient } from './svgGradient';
 export * from './svgGenerator';

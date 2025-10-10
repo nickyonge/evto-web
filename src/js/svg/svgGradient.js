@@ -1,7 +1,8 @@
 import * as svg from './index';
+import { svgElement } from './svgAssets';
 
 /** Class representing an SVG defined linear or radial gradient */
-export class svgGradient {
+export class svgGradient extends svgElement {
 
     /** if true, html outputs `radialGradient`; if false, `linearGradient` */
     isRadial = svg.default.GRADIENT_ISRADIAL;
@@ -37,6 +38,7 @@ export class svgGradient {
     xlinkhref = svg.default.GRADIENT_XLINKHREF;
 
     constructor(isRadial = svg.default.GRADIENT_ISRADIAL, color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2) {
+        super();
         this.isRadial = isRadial;
         this.stops = svgGradientStop.GenerateStops(color1, color2);
     }

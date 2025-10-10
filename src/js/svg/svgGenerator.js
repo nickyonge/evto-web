@@ -1,6 +1,7 @@
 import { isBlank } from "../lilutils";
 import * as svg from './index';
 import { asset } from "./index";
+import { svgGradient } from "./svgGradient";
 
 const FANCYBOX_MAX_SPLITS = 3;
 const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
@@ -15,6 +16,9 @@ export function CreatePath() {
     a.AddRect();
 
     console.log(a.html);
+
+    let g = new svgGradient();
+    console.log(g.stops);
 }
 
 export class svgFancyBox {
