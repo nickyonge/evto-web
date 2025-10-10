@@ -1,5 +1,5 @@
 import * as svg from './index';
-import { shape, rect, circle, ellipse, line, polyline, polygon, path } from "./index";
+import { shape, rect, circle, ellipse, line, polyline, polygon, path, gradient } from "./index";
 import { isBlank } from "../lilutils";
 
 export class svgElement {
@@ -62,15 +62,16 @@ export class svgHTML extends svgElement {
 
     class;
     id;
-    definitions;
     viewBox;
-    shapes;
+    shapes = [];
+    definitions = [];
     preserveAspectRatio = svg.default.PRESERVEASPECTRATIO;
     metadata = svg.default.METADATA;
 
     constructor(shapes = [], viewBox = new svgViewBox()) {
         super();
         this.shapes = shapes;
+        this.definitions = [];
         this.viewBox = viewBox;
         this.metadata = svg.default.METADATA;
     }
@@ -107,53 +108,57 @@ export class svgHTML extends svgElement {
     }
 
     /** 
-     * add an {@link svg.shape} to shapes array (recommend using another shape; 
+     * add a {@link svg.shape shape} to shapes array (recommend using another shape; 
      * else, must manually assign `type`) @param {shape} shape */
     AddShape(shape) { this.shapes.push(shape); }
-    AddShape(fill = svg.default.FILL) { this.shapes.push(new shape(fill)); }
-
-    /** add an {@link svg.rect} to shapes array @param {svg.rect} rect */
+    AddShape(fill = svg.default.FILL) {
+        this.shapes.push(new shape(fill)); 
+    }
+    /** add a {@link svg.rect rect} to shapes array @param {svg.rect} rect */
     AddRect(rect) { this.shapes.push(rect); }
     AddRect(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT, fill = svg.default.FILL) {
         this.shapes.push(new rect(x, y, width, height, fill));
     }
-
-    /** add an {@link svg.circle} to shapes array @param {circle} circle */
+    /** add an {@link svg.circle circle} to shapes array @param {circle} circle */
     AddCircle(circle) { this.shapes.push(circle); }
     AddCircle(r = svg.default.R, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL) {
         this.shapes.push(new circle(r, cx, cy, fill));
     }
-
-    /** add an {@link svg.ellipse} to shapes array @param {ellipse} ellipse */
+    /** add an {@link svg.ellipse ellipse} to shapes array @param {ellipse} ellipse */
     AddEllipse(ellipse) { this.shapes.push(ellipse); }
     AddEllipse(rx = svg.default.ELLIPSE_RX, ry = svg.default.ELLIPSE_RY, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL) {
         this.shapes.push(new ellipse(rx, ry, cx, cy, fill));
     }
-
-    /** add an {@link svg.line} to shapes array @param {line} line */
+    /** add a {@link svg.line line} to shapes array @param {line} line */
     AddLine(line) { this.shapes.push(line); }
     AddLine(x1 = svg.default.X1, y1 = svg.default.Y1, x2 = svg.default.X2, y2 = svg.default.Y2, fill = svg.default.FILL) {
         this.shapes.push(new line(x1, y1, x2, y2, fill));
     }
-
-    /** add an {@link svg.polyline} to shapes array @param {polyline} polyline */
+    /** add a {@link svg.polyline polyline} to shapes array @param {polyline} polyline */
     AddPolyline(polyline) { this.shapes.push(polyline); }
     AddPolyline(points = svg.default.POINTS, fill = svg.default.FILL) {
         this.shapes.push(new polyline(points, fill));
     }
-
-    /** add an {@link svg.polygon} to shapes array @param {polygon} polygon */
+    /** add a {@link svg.polygon polygon} to shapes array @param {polygon} polygon */
     AddPolygon(polygon) { this.shapes.push(polygon); }
     AddPolygon(points = svg.default.POINTS, fill = svg.default.FILL) {
         this.shapes.push(new polygon(points, fill));
     }
-
-    /** add an {@link svg.path} to shapes array @param {path} path */
+    /** add a {@link svg.path path} to shapes array @param {path} path */
     AddPath(path) { this.shapes.push(path); }
     AddPath(d = svg.default.D, fill = svg.default.FILL) {
         this.shapes.push(new path(d, fill));
     }
 
+    /** add a {@link svg.gradient gradient} to definitions array @param {gradient} gradient */
+    AddGradient(gradient) { 
+        if (this.definitions == null) { this.definitions = []; }
+        this.definitions.push(gradient);
+    }
+    AddGradient(isRadial = svg.default.GRADIENT_ISRADIAL, color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2) {
+        if (this.definitions == null) { this.definitions = []; }
+        this.definitions.push(new gradient(isRadial, color1, color2));
+    }
 }
 
 export class svgViewBox extends svgElement {
