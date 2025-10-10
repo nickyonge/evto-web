@@ -41,13 +41,13 @@ export class svgHTML extends svgElement {
     id;
     definitions;
     viewBox;
-    svgShapes;
+    shapes;
     preserveAspectRatio = svg.default.PRESERVEASPECTRATIO;
     metadata = svg.default.METADATA;
 
     constructor(shapes = [], viewBox = new svgViewBox()) {
         super();
-        this.svgShapes = shapes;
+        this.shapes = shapes;
         this.viewBox = viewBox;
         this.metadata = svg.default.METADATA;
     }
@@ -59,8 +59,8 @@ export class svgHTML extends svgElement {
         // TODO: svg definitions in own <defs> dropdown
         // Issue URL: https://github.com/nickyonge/evto-web/issues/46
         // add SVG shapes 
-        if (this.svgShapes != null && this.svgShapes.length > 0) {
-            this.svgShapes.forEach(shape => {
+        if (this.shapes != null && this.shapes.length > 0) {
+            this.shapes.forEach(shape => {
                 if (shape == null) { return; }
                 let h = shape.html;
                 if (!isBlank.h) {
@@ -86,49 +86,49 @@ export class svgHTML extends svgElement {
     /** 
      * add an {@link svg.shape} to shapes array (recommend using another shape; 
      * else, must manually assign `type`) @param {shape} shape */
-    AddShape(shape) { this.svgShapes.push(shape); }
-    AddShape(fill = svg.default.FILL) { this.svgShapes.push(new shape(fill)); }
+    AddShape(shape) { this.shapes.push(shape); }
+    AddShape(fill = svg.default.FILL) { this.shapes.push(new shape(fill)); }
 
     /** add an {@link svg.rect} to shapes array @param {svg.rect} rect */
-    AddRect(rect) { this.svgShapes.push(rect); }
+    AddRect(rect) { this.shapes.push(rect); }
     AddRect(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT, fill = svg.default.FILL) {
-        this.svgShapes.push(new rect(x, y, width, height, fill));
+        this.shapes.push(new rect(x, y, width, height, fill));
     }
 
     /** add an {@link svg.circle} to shapes array @param {circle} circle */
-    AddCircle(circle) { this.svgShapes.push(circle); }
+    AddCircle(circle) { this.shapes.push(circle); }
     AddCircle(r = svg.default.R, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL) {
-        this.svgShapes.push(new circle(r, cx, cy, fill));
+        this.shapes.push(new circle(r, cx, cy, fill));
     }
 
     /** add an {@link svg.ellipse} to shapes array @param {ellipse} ellipse */
-    AddEllipse(ellipse) { this.svgShapes.push(ellipse); }
+    AddEllipse(ellipse) { this.shapes.push(ellipse); }
     AddEllipse(rx = svg.default.ELLIPSE_RX, ry = svg.default.ELLIPSE_RY, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL) {
-        this.svgShapes.push(new ellipse(rx, ry, cx, cy, fill));
+        this.shapes.push(new ellipse(rx, ry, cx, cy, fill));
     }
 
     /** add an {@link svg.line} to shapes array @param {line} line */
-    AddLine(line) { this.svgShapes.push(line); }
+    AddLine(line) { this.shapes.push(line); }
     AddLine(x1 = svg.default.X1, y1 = svg.default.Y1, x2 = svg.default.X2, y2 = svg.default.Y2, fill = svg.default.FILL) {
-        this.svgShapes.push(new line(x1, y1, x2, y2, fill));
+        this.shapes.push(new line(x1, y1, x2, y2, fill));
     }
 
     /** add an {@link svg.polyline} to shapes array @param {polyline} polyline */
-    AddPolyline(polyline) { this.svgShapes.push(polyline); }
+    AddPolyline(polyline) { this.shapes.push(polyline); }
     AddPolyline(points = svg.default.POINTS, fill = svg.default.FILL) {
-        this.svgShapes.push(new polyline(points, fill));
+        this.shapes.push(new polyline(points, fill));
     }
 
     /** add an {@link svg.polygon} to shapes array @param {polygon} polygon */
-    AddPolygon(polygon) { this.svgShapes.push(polygon); }
+    AddPolygon(polygon) { this.shapes.push(polygon); }
     AddPolygon(points = svg.default.POINTS, fill = svg.default.FILL) {
-        this.svgShapes.push(new polygon(points, fill));
+        this.shapes.push(new polygon(points, fill));
     }
 
     /** add an {@link svg.path} to shapes array @param {path} path */
-    AddPath(path) { this.svgShapes.push(path); }
+    AddPath(path) { this.shapes.push(path); }
     AddPath(d = svg.default.D, fill = svg.default.FILL) {
-        this.svgShapes.push(new path(d, fill));
+        this.shapes.push(new path(d, fill));
     }
 
 }
