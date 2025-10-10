@@ -18,3 +18,8 @@ Element.prototype.appendChild = function (childNode) {
     // original method
     return _appendChild.call(this, childNode);
 };
+
+Number.prototype.toMax = function (maxDecimals = 3) {
+    const str = this.valueOf().toFixed(maxDecimals);
+    return String(Number(str));
+};
