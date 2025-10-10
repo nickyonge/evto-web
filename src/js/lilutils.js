@@ -14,11 +14,11 @@ export const isBlank = str => !str || (typeof str === 'string' && !str.trim());
  * @param {number} [maxDecimals=3] Maximum, not mandatory, decimal places  
  * @returns {string}
  * @example
- * console.log(toFixedWithoutTrailingZeros(33.333333, 3)); // "33.333"
- * console.log(toFixedWithoutTrailingZeros(33.3, 3));      // "33.3"
+ * console.log(toMax(33.333333, 3)); // "33.333"
+ * console.log(toMax(33.3, 3));      // "33.3"
  * console.log(toFixed(33.3, 3));                          // "33.300"
  */
-export function toFixedWithoutTrailingZeros(num, maxDecimals = 3) {
+export function toMax(num, maxDecimals = 3) {
     const str = num.toFixed(maxDecimals);
     return String(Number(str));
 }
