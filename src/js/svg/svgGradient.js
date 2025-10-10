@@ -50,6 +50,7 @@ export class svgGradient extends svgElement {
         if (this.stops != null && this.stops.length > 0) {
             for (let i = 0; i < this.stops.length; i++) {
                 if (this.stops[i] == null) { return; }
+                // check for auto offset calculation, changing 'auto' to a linearly-assigned % based on array size 
                 let autoOffset = typeof this.stops[i].offset == 'string' && this.stops[i].offset.toLowerCase().trim() == 'auto';
                 if (autoOffset) {
                     this.stops[i].offset = `${(i / (this.stops.length - 1)) * 100}%`;
@@ -200,7 +201,6 @@ class svgGradientStop extends svgElement {
         for (let i = 0; i < colors.length; i++) {
             if (colors[i] == null) { continue; }
             let newStop;
-            let calculateOffset = true;
             if (Array.isArray(colors[i])) {
                 // array
                 newStop = new svgGradientStop();
@@ -211,7 +211,6 @@ class svgGradientStop extends svgElement {
                     default:
                     case 3:
                         newStop.offset = colors[i][2];
-                        calculateOffset = false;
                     case 2:
                         newStop.opacity = colors[i][1];
                     case 1:
@@ -229,17 +228,10 @@ class svgGradientStop extends svgElement {
             } else if (colors[i] instanceof svgGradientStop) {
                 // it IS a gradient stop already, just add it to the array
                 newStop = colors[i];
-                // check if stop offset is default value or 'auto' 
-                calculateOffset = colors[i].offset == svg.default.GRADIENT_STOP_OFFSET ||
-                    (typeof colors[i].offset == 'string' && colors[i].offset.toLowerCase().trim() == 'auto');
             } else {
                 // invalid type
                 console.warn(`invalid type ${typeof colors[i]}, must be string/array/svgGradientStop (null is skipped), can't create svgGradientStop`);
                 continue;
-            }
-            // check for offset calculation 
-            if (calculateOffset) {
-                newStop.offset = `${(i / (colors.length - 1)) * 100}%`;
             }
             stops.push(newStop);
         }
