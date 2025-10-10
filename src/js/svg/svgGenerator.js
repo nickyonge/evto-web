@@ -12,10 +12,12 @@ export function CreatePath() {
     let a = new asset();
 
     a.AddCircle();
-    a.AddCircle();
+    a.AddDefaultCircle(true);
     a.AddRect();
 
-    a.AddGradient();
+    let g = a.AddGradient();
+
+    g.SetStops('red', 'green', 'blue');
 
     console.log(a.html);
 }

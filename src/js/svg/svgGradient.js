@@ -38,8 +38,44 @@ export class svgGradient extends svgElement {
     constructor(isRadial = svg.default.GRADIENT_ISRADIAL, color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2) {
         super();
         this.isRadial = isRadial;
-        this.stops = svgGradientStop.GenerateStops(color1, color2);
+        this.SetStops(color1, color2);
     }
+
+    AddStop(stop) {
+        if (stop != null) { this.stops.push(stop); }
+        return stop;
+    }
+    AddStop(color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) {
+        let stop = new svgGradientStop(color, opacity, offset);
+        this.stops.push(stop);
+        return stop;
+    }
+
+
+    SetStops(...stops) {
+        this.stops = svgGradientStop.GenerateStops(...stops);
+    }
+    SetStop(index, stop) {
+        return this.#setStop(index, stop);
+    }
+    SetStop(index, color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) {
+        let stop = new svgGradientStop(color, opacity, offset);
+        return this.#setStop(index, stop);
+    }
+    #setStop(index, stop) {
+        // local reference to avoid recursion errors =_=
+        if (index == -1) {
+            for (let i = 0; i < this.stops.length; i++) {
+                this.SetStop(i, stop);
+            }
+            return stop;
+        }
+        else if (index < -1) { return stop; }
+        if (this.stops.length < index + 1) { this.stops.length = index + 1; }
+        this.stops[index] = stop;
+        return stop;
+    }
+
 
     get type() { return this.isRadial ? 'radialGradient' : 'linearGradient'; }
 
@@ -111,8 +147,8 @@ class svgGradientStop extends svgElement {
      * {@link svgGradientStop svgGradientStops}. If offsets aren't provided, linearly assigns
      * it based on the length of the supplied array.
      * @see {@link GenerateStop}
-     * @param {[string]|[string,number|string]|[string,number|string,number|string]} colors 2D
-     * Array of 1-3 values representing `[color,opacity,offset]`. Arrays and strings can
+     * @param {[string]|[string,number|string]|[string,number|string,number|string]} colors 1D/2D
+     * array of 1-3 values representing `[color,opacity,offset]`. Arrays and strings can
      * be intertwined, eg `[string,[string,number],string]`. Solo strings are colors.
      * Both `opacity` or `offset` are optional, and if omitted or null, are not assigned 
      * as `<stop>` attributes and instead skipped.
@@ -121,7 +157,7 @@ class svgGradientStop extends svgElement {
      */
     static GenerateStops(...colors) {
         if (colors == null) { return []; }
-        colors = colors.flat();// convert to proper array
+        // colors = colors.flat(); // actually don't flatten, ...colors can contain strings alongside 2d arrays // // convert to proper array 
         let stops = [];
         for (let i = 0; i < colors.length; i++) {
             if (colors[i] == null) { continue; }
