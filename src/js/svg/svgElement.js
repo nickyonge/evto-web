@@ -80,8 +80,22 @@ export class svgHTML extends svgElement {
         let newSVG = isBlank(d) ? '<svg>' : `<svg ${d}>`;
         if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
         // add SVG definitions
-        // TODO: svg definitions in own <defs> dropdown
-        // Issue URL: https://github.com/nickyonge/evto-web/issues/46
+        if (this.definitions != null && this.definitions.length > 0) {
+            if (svg.config.HTML_INDENT) { newSVG += '\t'; }
+            newSVG += '<defs>';
+            if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
+            this.definitions.forEach(definition => {
+                if (definition == null) { return; }
+                let h = this.IndentHTML(definition.html, 2);
+                if (!isBlank.h) {
+                    newSVG += h;
+                    if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
+                }
+            });
+            if (svg.config.HTML_INDENT) { newSVG += '\t'; }
+            newSVG += '</defs>';
+            if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
+        }
         // add SVG shapes 
         if (this.shapes != null && this.shapes.length > 0) {
             this.shapes.forEach(shape => {
@@ -112,7 +126,7 @@ export class svgHTML extends svgElement {
      * else, must manually assign `type`) @param {shape} shape */
     AddShape(shape) { this.shapes.push(shape); }
     AddShape(fill = svg.default.FILL) {
-        this.shapes.push(new shape(fill)); 
+        this.shapes.push(new shape(fill));
     }
     /** add a {@link svg.rect rect} to shapes array @param {svg.rect} rect */
     AddRect(rect) { this.shapes.push(rect); }
@@ -151,7 +165,7 @@ export class svgHTML extends svgElement {
     }
 
     /** add a {@link svg.gradient gradient} to definitions array @param {gradient} gradient */
-    AddGradient(gradient) { 
+    AddGradient(gradient) {
         if (this.definitions == null) { this.definitions = []; }
         this.definitions.push(gradient);
     }

@@ -15,10 +15,9 @@ export function CreatePath() {
     a.AddCircle();
     a.AddRect();
 
-    console.log(a.html);
+    a.AddGradient();
 
-    let g = new svgGradient();
-    console.log(g.IndentHTML(g.html));
+    console.log(a.html);
 }
 
 export class svgFancyBox {
