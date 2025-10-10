@@ -46,6 +46,6 @@ export const GRADIENT_HREF = null;
 export const GRADIENT_COLOR1 = 'black';
 export const GRADIENT_COLOR2 = 'white';
 
-export const GRADIENT_STOP_OFFSET = 0;
+export const GRADIENT_STOP_OFFSET = 'auto';
 export const GRADIENT_STOP_COLOR = null;
 export const GRADIENT_STOP_OPACITY = null;

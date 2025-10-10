@@ -48,15 +48,20 @@ export class svgGradient extends svgElement {
         let newGradient = `<${this.type}${isBlank(d) ? '' : ` ${d}`}>`;
         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
         if (this.stops != null && this.stops.length > 0) {
-            this.stops.forEach(stop => {
-                if (stop == null) { return; }
-                let h = stop.html;
+            for (let i = 0; i < this.stops.length; i++) {
+                if (this.stops[i] == null) { return; }
+                let autoOffset = typeof this.stops[i].offset == 'string' && this.stops[i].offset.toLowerCase().trim() == 'auto';
+                if (autoOffset) {
+                    this.stops[i].offset = `${(i / (this.stops.length - 1)) * 100}%`;
+                }
+                let h = this.stops[i].html;
+                if (autoOffset) { this.stops[i].offset = 'auto'; }
                 if (!isBlank.h) {
                     if (svg.config.HTML_INDENT) { newGradient += '\t'; }
                     newGradient += h;
                     if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
                 }
-            });
+            }
         }
         return `${newGradient}</${this.type}>`;
     }
@@ -85,7 +90,7 @@ export class svgGradient extends svgElement {
             ['href', this.href]
         ]);
     }
-    
+
     AddStop(stop) {
         if (stop != null) { this.stops.push(stop); }
         return stop;
@@ -224,8 +229,9 @@ class svgGradientStop extends svgElement {
             } else if (colors[i] instanceof svgGradientStop) {
                 // it IS a gradient stop already, just add it to the array
                 newStop = colors[i];
-                // check if stop offset is default value
-                calculateOffset = colors[i].offset == svg.default.GRADIENT_STOP_OFFSET;
+                // check if stop offset is default value or 'auto' 
+                calculateOffset = colors[i].offset == svg.default.GRADIENT_STOP_OFFSET ||
+                    (typeof colors[i].offset == 'string' && colors[i].offset.toLowerCase().trim() == 'auto');
             } else {
                 // invalid type
                 console.warn(`invalid type ${typeof colors[i]}, must be string/array/svgGradientStop (null is skipped), can't create svgGradientStop`);
