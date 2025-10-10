@@ -81,6 +81,7 @@ export class svgHTML extends svgElement {
         if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
         // add SVG definitions
         // TODO: ensure any added SVG definitions have an ID
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/48
         if (this.definitions != null && this.definitions.length > 0) {
             if (svg.config.HTML_INDENT) { newSVG += '\t'; }
             newSVG += '<defs>';
