@@ -35,15 +35,12 @@ export class svgGradient extends svgElement {
     spreadMethod = svg.default.GRADIENT_SPREADMETHOD;
 
     href = svg.default.GRADIENT_HREF;
-    xlinkhref = svg.default.GRADIENT_XLINKHREF;
 
     constructor(isRadial = svg.default.GRADIENT_ISRADIAL, color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2) {
         super();
         this.isRadial = isRadial;
         this.stops = svgGradientStop.GenerateStops(color1, color2);
     }
-
-
 
     get html() { }
     get data() { }

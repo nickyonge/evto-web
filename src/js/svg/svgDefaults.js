@@ -1,4 +1,5 @@
-export const SVG_METADATA = [
+export const PRESERVEASPECTRATIO = null;
+export const METADATA = [
     ['xmlns', 'http://www.w3.org/2000/svg'],
     ['xmlns:xlink', 'http://www.w3.org/1999/xlink'],
 ];
@@ -41,7 +42,6 @@ export const GRADIENT_UNITS = null;
 export const GRADIENT_TRANSFORM = null;
 export const GRADIENT_SPREADMETHOD = null;
 export const GRADIENT_HREF = null;
-export const GRADIENT_XLINKHREF = null;
 
 export const GRADIENT_COLOR1 = 'black';
 export const GRADIENT_COLOR2 = 'white';

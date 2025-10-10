@@ -36,19 +36,20 @@ export class svgElement {
 }
 
 export class svgHTML extends svgElement {
+
     class;
     id;
     definitions;
-    preserveAspectRatio;
     viewBox;
     svgShapes;
-    metadata;
+    preserveAspectRatio = svg.default.PRESERVEASPECTRATIO;
+    metadata = svg.default.METADATA;
 
     constructor(shapes = [], viewBox = new svgViewBox()) {
         super();
         this.svgShapes = shapes;
         this.viewBox = viewBox;
-        this.metadata = svg.default.SVG_METADATA;
+        this.metadata = svg.default.METADATA;
     }
     get html() {
         let d = this.data;
@@ -73,7 +74,7 @@ export class svgHTML extends svgElement {
     }
     get data() {
         if (this.viewBox == null) { this.viewBox = new svgViewBox(); }
-        if (this.metadata == null) { this.metadata = svg.default.SVG_METADATA; }
+        if (this.metadata == null) { this.metadata = svg.default.METADATA; }
         let d = this.ParseData([
             ['class', this.class],
             ['id', this.id],
