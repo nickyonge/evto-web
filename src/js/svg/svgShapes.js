@@ -2,6 +2,7 @@ import * as svg from './index';
 import { svgElement } from './svgAssets';
 
 // TODO add <use> as an svgShape
+// Issue URL: https://github.com/nickyonge/evto-web/issues/47
 
 export class svgShape extends svgElement {
     type = null;
