@@ -16,11 +16,12 @@ export function CreatePath() {
     a.AddCircle();
     a.AddDefaultCircle(true).id = 'circ';
     a.AddDefaultPolygon(true);
-    a.AddRect();
+    let r = a.AddRect();
 
     let g = a.AddGradient();
-
     g.id = 'testGradient';
+
+    r.fillGradient = g;
 
     g.sharpGradient = true;
 

@@ -1,5 +1,7 @@
+import { isBlank } from '../lilutils';
 import * as svg from './index';
 import { svgElement } from './svgElement';
+import { svgGradient } from './svgGradient';
 
 // TODO add <use> as an svgShape
 // Issue URL: https://github.com/nickyonge/evto-web/issues/47
@@ -32,6 +34,27 @@ export class svgShape extends svgElement {
             if (!isBlank(ea)) { d = `${d} ${ea}`; }
         }
         return d;
+    }
+    /**
+     * sets the {@linkcode fill} property to a URL pointing 
+     * to the given targetID, typically an SVG definition, 
+     * assigning `"url(#targetID)"`
+     * @param {string} targetID ID of the url definition
+     */
+    set fillURL(targetID) {
+        this.fill = `url(#${targetID})`;
+    }
+
+    /**
+     * @param {svgGradient} gradient 
+     */
+    set fillGradient(gradient) {
+        if (!gradient) { return; }
+        if (isBlank(gradient.id)) {
+            console.warn(`WARNING: can't assign a gradient without an ID to an SVG shape`, gradient, this);
+            return;
+        }
+        this.fillURL = gradient.id;
     }
 } // shape 
 export class svgRect extends svgShape {
