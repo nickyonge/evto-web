@@ -8,33 +8,38 @@ const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
 
 export function CreatePath() {
 
-    let a = new asset();
+    let r = BasicGradientRect();
+    console.log(r.html);
 
-    a.id = 'testAsset';
+    // let a = new asset();
 
-    a.NewCircle();
-    a.DefaultCircle(true).id = 'circ';
-    a.DefaultPolygon(true).id = 'polygon';
-    let r = a.NewRect();
+    // a.id = 'testAsset';
+
+    // a.NewCircle();
+    // a.DefaultCircle(true).id = 'circ';
+    // a.DefaultPolygon(true).id = 'polygon';
+    // let r = a.NewRect();
 
     
-    let g = a.NewGradient('testGradient');
+    // let g = a.NewGradient('testGradient');
 
-    r.fillGradient = g;
+    // r.fillGradient = g;
 
-    g.sharpGradient = true;
+    // g.sharpGradient = true;
 
-    g.InsertStop(1, 'red');
+    // g.InsertStop(1, 'red');
     // g.SetStops('red', 'green', 'blue');
 
-    console.log(a.html);
+    // console.log(a.html);
 
 }
 
 export function BasicGradientRect(color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2, width = svg.default.WIDTH, height = svg.default.HEIGHT) {
     let svgAsset = new asset();
-    
-    svgAsset.AddGradient(`basicGradient_${StringAlphanumericOnly(color1)}_${StringAlphanumericOnly(color2)}`,2);
+    let id = `basicGradient_${StringAlphanumericOnly(color1)}_${StringAlphanumericOnly(color2)}`;
+    let g = svgAsset.NewGradient(id);
+    let r = svgAsset.NewRect(svg.default.X, svg.default.Y, width, height, g.idURL);
+    return svgAsset;
 }
 
 export class svgFancyBox {

@@ -60,6 +60,18 @@ export class svgElement {
         }
         return html;
     }
+
+    /**
+     * gets this element's {@linkcode id ID} formatted as an
+     * SVG-attribute URL: `url(#id)`
+     */
+    get idURL() {
+        if (isBlank(this.id)) {
+            console.warn("WARNING: can't get id URL from blank/null ID, returning null", this); 
+            return null;
+        }
+        return `url(#${this.id})`;
+    }
 }
 
 export class svgHTMLAsset extends svgElement {
@@ -67,7 +79,7 @@ export class svgHTMLAsset extends svgElement {
     class;
     viewBox;
     shapes = [];
-    /** @type {svgElement[]} */
+    /** Array of elements contained in this SVG's `<defs>` @type {svgElement[]} */
     definitions = [];
     preserveAspectRatio = svg.default.PRESERVEASPECTRATIO;
     metadata = svg.default.METADATA;
