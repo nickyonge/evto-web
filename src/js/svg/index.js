@@ -1,5 +1,5 @@
 export {
-    svgHTML as asset,
+    svgHTMLAsset as asset,
     svgViewBox as viewbox
 } from './svgElement';
 

@@ -1,4 +1,4 @@
-import { svgElement, svgHTML } from "./svgElement";
+import { svgElement, svgHTMLAsset } from "./svgElement";
 
 /**
  * Should {@link svgElement} HTML code contain 
@@ -13,8 +13,8 @@ export const HTML_NEWLINE = true;
  * */
 export const HTML_INDENT = true && HTML_NEWLINE;
 /** 
- * Should {@link svgHTML} HTML generation warn if it 
- * finds any {@link svgHTML.definitions definitions}
+ * Should {@link svgHTMLAsset} HTML generation warn if it 
+ * finds any {@link svgHTMLAsset.definitions definitions}
  * that do not have an {@link svgElement.id ID}?
  * @type {boolean}
  */

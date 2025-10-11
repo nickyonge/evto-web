@@ -61,7 +61,7 @@ export class svgElement {
     }
 }
 
-export class svgHTML extends svgElement {
+export class svgHTMLAsset extends svgElement {
 
     class;
     viewBox;
