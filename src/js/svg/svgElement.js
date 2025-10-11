@@ -4,6 +4,9 @@ import { isBlank } from "../lilutils";
 
 export class svgElement {
 
+    /** unique identifier for this element @type {string} */
+    id;
+
     /** Parse array of SVG data into HTML-attribute-style `name="value"` format, 
      * with spaces between attributes as needed. 
      * @param {Array<[string, any]>} data 2d array of properties, `[name,value]` 
@@ -15,7 +18,7 @@ export class svgElement {
      * let myData = ParseData(array);
      * console.log(myData); // Outputs string: first="1" third="3" blank="" */
     ParseData(data) {
-        let d = [];
+        let d = isBlank(this.id) ? [] : [this.#ParseDatum('id', this.id)];
         data.forEach(datum => {
             let out = this.#ParseDatum(datum[0], datum[1]);
             if (!isBlank(out)) { d.push(out); }
@@ -61,9 +64,9 @@ export class svgElement {
 export class svgHTML extends svgElement {
 
     class;
-    id;
     viewBox;
     shapes = [];
+    /** @type {svgElement[]} */
     definitions = [];
     preserveAspectRatio = svg.default.PRESERVEASPECTRATIO;
     metadata = svg.default.METADATA;
@@ -88,6 +91,9 @@ export class svgHTML extends svgElement {
             if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
             this.definitions.forEach(definition => {
                 if (definition == null) { return; }
+                if (svg.config.HTML_WARN_DEFS_NO_ID && definition.id == null) {
+                    console.warn(`WARNING: svgHTML[0] definition[1] does not have an ID. Defs need an ID to be used.`, this, definition);
+                }
                 let h = this.IndentHTML(definition.html, 2);
                 if (!isBlank.h) {
                     newSVG += h;
@@ -117,7 +123,6 @@ export class svgHTML extends svgElement {
         if (this.metadata == null) { this.metadata = svg.default.METADATA; }
         let d = this.ParseData([
             ['class', this.class],
-            ['id', this.id],
             ['preserveAspectRatio', this.preserveAspectRatio]
         ]);
         return [this.ParseData(this.metadata), d, this.viewBox.html].filter(Boolean).join(' ');

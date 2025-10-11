@@ -11,12 +11,16 @@ export function CreatePath() {
 
     let a = new asset();
 
+    a.id = 'testAsset';
 
     a.AddCircle();
-    a.AddDefaultCircle(true);
+    a.AddDefaultCircle(true).id = 'circ';
+    a.AddDefaultPolygon(true);
     a.AddRect();
 
     let g = a.AddGradient();
+
+    g.id = 'testGradient';
 
     g.sharpGradient = true;
 
