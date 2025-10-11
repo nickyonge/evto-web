@@ -132,92 +132,86 @@ export class svgHTMLAsset extends svgElement {
      * else, must manually assign `type`) @param {shape} shape 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddShape(shape, asDefinition = false) { this.#PushShape(shape, asDefinition); return shape; }
-    AddShape(fill = svg.default.FILL, asDefinition = false) {
+    NewShape(fill = svg.default.FILL, asDefinition = false) {
         let shape = new svg.shape(fill);
         this.#PushShape(shape, asDefinition); return shape;
     }
-    AddDefaultShape(asDefinition = false) { return this.AddShape(svg.default.FILL, asDefinition); };
+    DefaultShape(asDefinition = false) { return this.NewShape(svg.default.FILL, asDefinition); };
     /** 
      * add a {@link svg.rect rect} to shapes array @param {svg.rect} rect 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddRect(rect, asDefinition = false) { this.#PushShape(rect, asDefinition); return rect; }
-    AddRect(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT, fill = svg.default.FILL, asDefinition = false) {
+    NewRect(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT, fill = svg.default.FILL, asDefinition = false) {
         let rect = new svg.rect(x, y, width, height, fill);
         this.#PushShape(rect, asDefinition); return rect;
     }
-    AddDefaultRect(asDefinition = false) { return this.AddRect(svg.default.X, svg.default.Y, svg.default.WIDTH, svg.default.HEIGHT, svg.default.FILL, asDefinition); };
+    DefaultRect(asDefinition = false) { return this.NewRect(svg.default.X, svg.default.Y, svg.default.WIDTH, svg.default.HEIGHT, svg.default.FILL, asDefinition); };
     /** 
      * add a {@link svg.circle circle} to shapes array @param {circle} circle 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddCircle(circle, asDefinition = false) { this.#PushShape(circle, asDefinition); return circle; }
-    AddCircle(r = svg.default.R, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL, asDefinition = false) {
+    NewCircle(r = svg.default.R, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL, asDefinition = false) {
         let circle = new svg.circle(r, cx, cy, fill);
         this.#PushShape(circle, asDefinition); return circle;
     }
-    AddDefaultCircle(asDefinition = false) { return this.AddCircle(svg.default.R, svg.default.CX, svg.default.CY, svg.default.FILL, asDefinition); };
+    DefaultCircle(asDefinition = false) { return this.NewCircle(svg.default.R, svg.default.CX, svg.default.CY, svg.default.FILL, asDefinition); };
     /** 
      * add an {@link svg.ellipse ellipse} to shapes array @param {ellipse} ellipse 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddEllipse(ellipse, asDefinition = false) { this.#PushShape(ellipse, asDefinition); return ellipse; }
-    AddEllipse(rx = svg.default.ELLIPSE_RX, ry = svg.default.ELLIPSE_RY, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL, asDefinition = false) {
+    NewEllipse(rx = svg.default.ELLIPSE_RX, ry = svg.default.ELLIPSE_RY, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL, asDefinition = false) {
         let ellipse = new svg.ellipse(rx, ry, cx, cy, fill);
         this.#PushShape(ellipse, asDefinition); return ellipse;
     }
-    AddDefaultEllipse(asDefinition = false) { return this.AddEllipse(svg.default.ELLIPSE_RX, svg.default.ELLIPSE_RY, svg.default.CX, svg.default.CY, svg.default.FILL, asDefinition); };
+    DefaultEllipse(asDefinition = false) { return this.NewEllipse(svg.default.ELLIPSE_RX, svg.default.ELLIPSE_RY, svg.default.CX, svg.default.CY, svg.default.FILL, asDefinition); };
     /** 
      * add a {@link svg.line line} to shapes array @param {line} line 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddLine(line, asDefinition = false) { return this.#PushShape(line, asDefinition); return line; }
-    AddLine(x1 = svg.default.X1, y1 = svg.default.Y1, x2 = svg.default.X2, y2 = svg.default.Y2, fill = svg.default.FILL, asDefinition = false) {
+    NewLine(x1 = svg.default.X1, y1 = svg.default.Y1, x2 = svg.default.X2, y2 = svg.default.Y2, fill = svg.default.FILL, asDefinition = false) {
         let line = new svg.line(x1, y1, x2, y2, fill);
         this.#PushShape(line, asDefinition); return line;
     }
-    AddDefaultLine(asDefinition = false) { return this.AddLine(svg.default.X1, svg.default.Y1, svg.default.X2, svg.default.Y2, svg.default.FILL, asDefinition); };
+    DefaultLine(asDefinition = false) { return this.NewLine(svg.default.X1, svg.default.Y1, svg.default.X2, svg.default.Y2, svg.default.FILL, asDefinition); };
     /** 
      * add a {@link svg.polyline polyline} to shapes array @param {polyline} polyline 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddPolyline(polyline, asDefinition = false) { this.#PushShape(polyline, asDefinition); return polyline; }
-    AddPolyline(points = svg.default.POINTS, fill = svg.default.FILL, asDefinition = false) {
+    NewPolyline(points = svg.default.POINTS, fill = svg.default.FILL, asDefinition = false) {
         let polyline = new svg.polyline(points, fill);
         this.#PushShape(polyline, asDefinition); return polyline;
     }
-    AddDefaultPolyline(asDefinition = false) { return this.AddPolyline(svg.default.POINTS, svg.default.FILL, asDefinition); };
+    DefaultPolyline(asDefinition = false) { return this.NewPolyline(svg.default.POINTS, svg.default.FILL, asDefinition); };
     /** 
      * add a {@link svg.polygon polygon} to shapes array @param {polygon} polygon 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddPolygon(polygon, asDefinition = false) { this.#PushShape(polygon, asDefinition); return polygon; }
-    AddPolygon(points = svg.default.POINTS, fill = svg.default.FILL, asDefinition = false) {
+    NewPolygon(points = svg.default.POINTS, fill = svg.default.FILL, asDefinition = false) {
         let polygon = new svg.polygon(points, fill);
         this.#PushShape(polygon, asDefinition); return polygon;
     }
-    AddDefaultPolygon(asDefinition = false) { return this.AddPolygon(svg.default.POINTS, svg.default.FILL, asDefinition); };
+    DefaultPolygon(asDefinition = false) { return this.NewPolygon(svg.default.POINTS, svg.default.FILL, asDefinition); };
     /** 
      * add a {@link svg.path path} to shapes array @param {path} path 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddPath(path, asDefinition = false) { this.#PushShape(path, asDefinition); return path; }
-    AddPath(d = svg.default.D, fill = svg.default.FILL, asDefinition = false) {
+    NewPath(d = svg.default.D, fill = svg.default.FILL, asDefinition = false) {
         let path = new svg.path(d, fill);
         this.#PushShape(path, asDefinition); return path;
     }
-    AddDefaultPath(asDefinition = false) { return this.AddPath(svg.default.D, svg.default.FILL, asDefinition); };
+    DefaultPath(asDefinition = false) { return this.NewPath(svg.default.D, svg.default.FILL, asDefinition); };
 
     /** 
-     * Add a given {@link svg.gradient gradient} (or create and add a new one) 
+     * Create and add a new {@link svg.gradient gradient} 
      * to the {@linkcode definitions} array
      * 
-     * @overload
      * @param {string} id {@link svg.element.id ID} to assign to this gradient
      * @param {boolean} isRadial is this a radial gradient, or linear?
      * @param {string} color1 Default gradient start color
      * @param {string} color2 Default gradient end color
      * @returns {svg.gradient} The newly-created, newly-added gradient
-     * 
-     * @overload
-     * @param {svg.gradient} [gradient] Pre-existing gradient to import
-     * @returns {svg.gradient} The now-added gradient
-     * 
      * */
-    AddGradient(id, isRadial = svg.default.GRADIENT_ISRADIAL, color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2) {
+    NewGradient(id, isRadial = svg.default.GRADIENT_ISRADIAL, color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2) {
         if (this.definitions == null) { this.definitions = []; }
         let gradient = new svg.gradient(id, isRadial, color1, color2);
         gradient.id = id;
@@ -225,9 +219,10 @@ export class svgHTMLAsset extends svgElement {
         return gradient;
     }
     /**
-     * 
-     * @param {svg.gradient} gradient 
-     * @returns {svg.gradient}
+     * Add the given {@link svg.gradient gradient} 
+     * to the {@linkcode definitions} array
+     * @param {svg.gradient} [gradient] Pre-existing gradient to import
+     * @returns {svg.gradient} The now-added gradient
      */
     AddGradient(gradient) {
         if (this.definitions == null) { this.definitions = []; }

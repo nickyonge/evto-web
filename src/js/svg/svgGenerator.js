@@ -12,13 +12,13 @@ export function CreatePath() {
 
     a.id = 'testAsset';
 
-    a.AddCircle();
-    a.AddDefaultCircle(true).id = 'circ';
-    a.AddDefaultPolygon(true).id = 'polygon';
-    let r = a.AddRect();
+    a.NewCircle();
+    a.DefaultCircle(true).id = 'circ';
+    a.DefaultPolygon(true).id = 'polygon';
+    let r = a.NewRect();
 
     
-    let g = a.AddGradient('testGradient');
+    let g = a.NewGradient('testGradient');
 
     r.fillGradient = g;
 
