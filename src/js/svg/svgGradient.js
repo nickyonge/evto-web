@@ -4,10 +4,10 @@ import * as svg from './index';
 /** Class representing an SVG defined linear or radial gradient */
 export class svgGradient extends svg.element {
 
-    /** if true, html outputs `radialGradient`; if false, `linearGradient` */
+    /** if true, html outputs `radialGradient`; if false, `linearGradient` @type {boolean} */
     isRadial = svg.default.GRADIENT_ISRADIAL;
 
-    /** if true, ignores given offsets and outputs a sharp-edged gradient */
+    /** if true, ignores given offsets and outputs a sharp-edged gradient @type {boolean} */
     sharpGradient = svg.default.GRADIENT_SHARPGRADIENT;
 
     x1 = svg.default.GRADIENT_X1;
@@ -18,18 +18,18 @@ export class svgGradient extends svg.element {
     /** array for gradient stops @type {svgGradientStop[]} */
     stops;
 
-    /** radial only, X coord at gradient start circle, convenience, simply gets/sets {@link x1} @type {number} */
+    /** radial only, X coord at gradient start circle, convenience, simply gets/sets {@link x1} @type {number|string} */
     get fx() { return this.x1; } set fx(i) { this.x1 = i; }
-    /** radial only, Y coord at gradient start circle, convenience, simply gets/sets {@link y1} @type {number} */
+    /** radial only, Y coord at gradient start circle, convenience, simply gets/sets {@link y1} @type {number|string} */
     get fy() { return this.y1; } set fy(i) { this.y1 = i; }
-    /** radial only, X coord at gradient end circle, convenience, simply gets/sets {@link x2} @type {number} */
+    /** radial only, X coord at gradient end circle, convenience, simply gets/sets {@link x2} @type {number|string} */
     get cx() { return this.x2; } set cx(i) { this.x2 = i; }
-    /** radial only, Y coord at gradient end circle, convenience, simply gets/sets {@link y2} @type {number} */
+    /** radial only, Y coord at gradient end circle, convenience, simply gets/sets {@link y2} @type {number|string} */
     get cy() { return this.y2; } set cy(i) { this.y2 = i; }
 
-    /** radial-only, radius at end of the gradient @type {number} converted to % */
+    /** radial-only, radius at end of the gradient @type {number|string} */
     fr = svg.default.GRADIENT_FR;
-    /** radial-only, radius at end of the gradient @type {number} converted to % */
+    /** radial-only, radius at end of the gradient @type {number|string} */
     r = svg.default.GRADIENT_R;
 
     gradientUnits = svg.default.GRADIENT_UNITS;

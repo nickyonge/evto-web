@@ -12,7 +12,8 @@ export {
     svgLine as line,
     svgPolyline as polyline,
     svgPolygon as polygon,
-    svgPath as path
+    svgPath as path,
+    IsValidShapeType
 } from './svgShapes';
 
 export { svgGradient as gradient } from './svgGradient';

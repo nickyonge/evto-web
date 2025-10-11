@@ -67,7 +67,7 @@ export class svgElement {
      */
     get idURL() {
         if (isBlank(this.id)) {
-            console.warn("WARNING: can't get id URL from blank/null ID, returning null", this); 
+            console.warn("WARNING: can't get id URL from blank/null ID, returning null", this);
             return null;
         }
         return `url(#${this.id})`;
@@ -78,6 +78,8 @@ export class svgHTMLAsset extends svgElement {
 
     class;
     viewBox;
+    /** Array of {@link svg.shape shapes} contained in this SVG 
+     * (excluding any in {@link definitions `<defs>`}) @type {svg.shape[]} */
     shapes = [];
     /** Array of elements contained in this SVG's `<defs>` @type {svgElement[]} */
     definitions = [];
@@ -139,6 +141,155 @@ export class svgHTMLAsset extends svgElement {
         ]);
         return [this.ParseData(this.metadata), d, this.viewBox.html].filter(Boolean).join(' ');
     }
+
+    /**
+     * Gets the {@link svg.shape shape} found in {@linkcode shapes} 
+     * (or, optionally, in {@linkcode definitions})
+     * at the given index (default `0`, first)
+     * @param {number} [index = 0] index to return 
+     * @param {boolean} [searchDefinitions=false] 
+     * search `definitions` array instead of `shapes`?
+     * If the value found at the given index in `definitions`
+     * is not a shape, returns `null`.
+     * @returns {svg.shape|null}
+     */
+    GetShape(index = 0, searchDefinitions = false) {
+        if (searchDefinitions) {
+            let s = this.GetDefinition(index);
+            if (s == null || !(s instanceof svg.shape)) { return null; }
+            return s;
+        }
+        if (this.shapes == null || this.shapes.length <= index) { return null; }
+        return this.shapes[index];
+    }
+    /**
+     * Gets the first {@link svg.shape shape} of the given `type`
+     * found in {@linkcode shapes} (or, optionally, 
+     * in {@linkcode definitions})
+     * @see {@linkcode svg.IsValidShapeType IsValidShapeType}
+     * @param {number} [index = 0] index to return 
+     * @param {boolean} [searchDefinitions=false] 
+     * search `definitions` array instead of `shapes`?
+     * @returns {svg.shape|null}
+     */
+    GetFirstShapeOfType(type, searchDefinitions = false) {
+        if (!svg.IsValidShapeType(type)) {
+            console.warn(`WARNING: can't get first shape of invalid shape type ${type}`, this);
+            return null;
+        }
+        if (searchDefinitions) {
+            for (let i = 0; i < this.definitions.length; i++) {
+                if (this.definitions[i].type == type) {
+                    return this.definitions[i];
+                }
+            }
+        } else {
+            for (let i = 0; i < this.shapes.length; i++) {
+                if (this.shapes[i].type == type) {
+                    return this.shapes[i];
+                }
+            }
+        }
+        return null;
+    }
+    /**
+     * Gets the first {@link svg.shape shape} with the given
+     * {@linkcode svgElement.id ID} found in {@linkcode shapes}
+     * (or, optionally, in {@linkcode definitions})
+     * @param {string} id ID string to check
+     * @param {boolean} [searchDefinitions=false] 
+     * search `definitions` array instead of `shapes`?
+     * @returns {svg.shape|null}
+     */
+    GetShapeWithID(id, searchDefinitions = false) {
+        if (searchDefinitions) {
+            for (let i = 0; i < this.definitions.length; i++) {
+                if (this.definitions[i].id == id) {
+                    return this.definitions[i];
+                }
+            }
+        } else {
+            for (let i = 0; i < this.shapes.length; i++) {
+                if (this.shapes[i].id == id) {
+                    return this.shapes[i];
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets the Nth {@link svg.gradient gradient} found in 
+     * {@linkcode definitions}, where N (`index`) increments 
+     * through just the gradient elements found. By default,
+     * returns the first gradient found. 
+     * 
+     * Eg, if defs contains `[gradientA, elementA, elementB, 
+     * gradientB, gradientC]`, `index=1` (zero inclusive) 
+     * would return the second gradient found, `gradientB`.
+     * @param {number} [gradientIndex = 0] Nth gradient to return
+     * @returns {svg.gradient|null}
+     */
+    GetGradient(gradientIndex = 0) {
+        if (this.definitions == null || this.definitions.length <= gradientIndex) { return null; }
+        let g = 0;// gradients-only increment 
+        for (let i = 0; i < this.definitions.length; i++) {
+            if (this.definitions[i] instanceof svg.gradient) {
+                if (g == gradientIndex) {
+                    return this.definitions[i];
+                }
+                g++;
+            }
+        }
+        return null;
+    }
+    /**
+     * Gets the first {@link svg.gradient gradient} with the given
+     * {@linkcode svgElement.id ID} found in {@linkcode definitions}
+     * @param {string} id ID string to check
+     * @returns {svg.shape|null}
+     */
+    GetGradientWithID(id) {
+        for (let i = 0; i < this.definitions.length; i++) {
+            if (this.definitions[i] instanceof svg.gradient &&
+                this.definitions[i].id == id) {
+                return this.definitions[i];
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets the {@link svgElement element} found in {@linkcode definitions} 
+     * at the given index (default `0`, first)
+     * @param {number} [index = 0] index to return  
+     * @returns {svgElement|null}
+     */
+    GetDefinition(index = 0) {
+        if (this.definitions == null || this.definitions.length <= index) { return null; }
+        return this.definitions[index];
+    }
+    /**
+     * Gets the first {@link svg.shape element} with the given
+     * {@linkcode svgElement.id ID} found in {@linkcode definitions}
+     * @returns {svgElement|null}
+     */
+    GetDefinitionWithID(id) {
+        for (let i = 0; i < this.definitions.length; i++) {
+            if (this.definitions[i].id == id) {
+                return this.definitions[i];
+            }
+        }
+        return null;
+    }
+
+    /** 
+     * convenience getter for first-found {@link gradient} 
+     * (or `null` if no gradients are defined)
+     * @see {@link GetGradient}
+     * @returns {gradient|null} 
+    */
+    get gradient() { return this.GetGradient(0); }
 
     /** 
      * add a {@link svg.shape shape} to shapes array (recommend using another shape; 
