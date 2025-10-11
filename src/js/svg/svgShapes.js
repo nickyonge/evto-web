@@ -4,6 +4,16 @@ import * as svg from './index';
 // TODO add <use> as an svgShape
 // Issue URL: https://github.com/nickyonge/evto-web/issues/47
 
+const _RECT = 'rect';
+const _CIRCLE = 'circle';
+const _ELLIPSE = 'ellipse';
+const _LINE = 'line';
+const _POLYLINE = 'polyline';
+const _POLYGON = 'polygon';
+const _PATH = 'path';
+const _ALL_SHAPES = [_RECT, _CIRCLE, _ELLIPSE,
+    _LINE, _POLYLINE, _POLYGON, _PATH];
+
 export class svgShape extends svg.element {
     type = null;
     fill = svg.default.FILL;
@@ -64,7 +74,7 @@ export class svgRect extends svgShape {
     ry = svg.default.RECT_RY;
     constructor(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT, fill = svg.default.FILL) {
         super(fill);
-        this.type = 'rect';
+        this.type = _RECT;
         this.x = x; this.y = y; this.width = width; this.height = height;
     }
     get data() {
@@ -97,7 +107,7 @@ export class svgCircle extends svgShape {
     cy = svg.default.CY;
     constructor(r = svg.default.R, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL) {
         super(fill);
-        this.type = 'circle';
+        this.type = _CIRCLE;
         this.r = r; this.cx = cx; this.cy = cy;
     }
     get data() {
@@ -115,7 +125,7 @@ export class svgEllipse extends svgShape {
     cy = svg.default.CY;
     constructor(rx = svg.default.ELLIPSE_RX, ry = svg.default.ELLIPSE_RY, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL) {
         super(fill);
-        this.type = 'ellipse';
+        this.type = _ELLIPSE;
         this.rx = rx; this.ry = ry; this.cx = cx; this.cy = cy;
     }
     get data() {
@@ -134,7 +144,7 @@ export class svgLine extends svgShape {
     y2 = svg.default.Y2;
     constructor(x1 = svg.default.X1, y1 = svg.default.Y1, x2 = svg.default.X2, y2 = svg.default.Y2, fill = svg.default.FILL) {
         super(fill);
-        this.type = 'line';
+        this.type = _LINE;
         this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
     }
     get data() {
@@ -151,7 +161,7 @@ export class svgPolyline extends svgShape {
     points = svg.default.POINTS;
     constructor(points = svg.default.POINTS, fill = svg.default.FILL) {
         super(fill);
-        this.type = 'polyline';
+        this.type = _POLYLINE;
         this.points = points;
     }
     get data() {
@@ -168,7 +178,7 @@ export class svgPolygon extends svgShape {
     points = svg.default.POINTS;
     constructor(points = svg.default.POINTS, fill = svg.default.FILL) {
         super(fill);
-        this.type = 'polygon';
+        this.type = _POLYGON;
         this.points = points;
     }
     get data() {
@@ -185,7 +195,7 @@ export class svgPath extends svgShape {
     pathLength = svg.default.PATHLENGTH;
     constructor(d = svg.default.D, fill = svg.default.FILL) {
         super(fill);
-        this.type = 'path';
+        this.type = _PATH;
         this.d = d;
     }
     get data() {
@@ -194,4 +204,28 @@ export class svgPath extends svgShape {
             ['pathLength', this.pathLength]]);
         return [d, super.data].filter(Boolean).join(' ');
     }
-} // path 
+} // path
+
+/**
+ * Checks if the supplied `type` specifies a valid shape.
+ * 
+ * Valid shape strings are: 
+ * {@linkcode svgRect 'rect'}, 
+ * {@linkcode svgCircle 'circle'}, 
+ * {@linkcode svgEllipse 'ellipse'}, 
+ * {@linkcode svgLine 'line'}, 
+ * {@linkcode svgPolyline 'polyline'}, 
+ * {@linkcode svgPolygon 'polygon'}, and 
+ * {@linkcode svgPath 'path'} 
+ * @param {string} type Shape type to check
+ * @see {@linkcode _ALL_SHAPES}
+ * @returns {boolean}
+ */
+export function IsValidShapeType(type) {
+    if (isBlank(type)) { return false; }
+    for (let i = 0; i < _ALL_SHAPES.length; i++) {
+        if (_ALL_SHAPES[i] == type) { return true; }
+    }
+    return false;
+}
+
