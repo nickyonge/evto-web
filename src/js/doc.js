@@ -1,14 +1,23 @@
+//@ts-check
+
 // script for document-level architecture 
 import { BasicComponent } from "./components/base";
 
-const _appendChild = Element.prototype.appendChild;
+/** @type {<T extends Node>(Node: T) => Node} */
+const _appendChild = Node.prototype.appendChild;
 
-/** appendChild override, accommodating BasicComponent internal div property */
-Element.prototype.appendChild = function (childNode) {
-    if (this.tagName === 'DIV') { // Apply custom logic only for div elements
-        // console.log('Custom appendChild called for a DIV!');
-        // Custom logic for DIVs
-    }
+/**
+ * Calls the function with the specified object as the this 
+ * value and the specified rest arguments as the arguments.
+ * @param {Node} childNode
+ * @override Node.prototype.appendChild This overrides 
+ * {@linkcode Node.prototype.appendChild appendChild} to 
+ * allow directly adding {@linkcode BasicComponent} classes.
+ */
+Node.prototype.appendChild = function (childNode) {
+    // if (this.nodeType === 1 && /** @type {Element} */ (this).tagName === 'DIV') {
+    //     console.log('Custom appendChild called for a DIV!');
+    // }
 
     // if appending a BasicComponent directly, add its div
     if (typeof childNode === 'object' &&
