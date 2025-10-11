@@ -2,7 +2,6 @@ import * as cmp from "../components";
 import * as ui from '../ui';
 import * as txt from '../text';
 import { SetElementEnabled } from "../lilutils";
-import { CreatePath } from "../svg/svgGenerator";
 
 let currentSectionNum = 0;
 
@@ -33,8 +32,6 @@ export function CreatePagePattern(page) {
     // prepare sections
     let svgImage = new cmp.SVGImage();
     sectionPattern.appendChild(svgImage);
-
-    CreatePath();
 
     /* REFERENCE PATTERNS 
     Square (empty canvas): https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z

@@ -5,35 +5,6 @@ import { asset, gradient } from "./index";
 const FANCYBOX_MAX_SPLITS = 3;
 const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
 
-
-export function CreatePath() {
-
-    let r = BasicGradientRect();
-    console.log(r.html);
-
-    // let a = new asset();
-
-    // a.id = 'testAsset';
-
-    // a.NewCircle();
-    // a.DefaultCircle(true).id = 'circ';
-    // a.DefaultPolygon(true).id = 'polygon';
-    // let r = a.NewRect();
-
-    
-    // let g = a.NewGradient('testGradient');
-
-    // r.fillGradient = g;
-
-    // g.sharpGradient = true;
-
-    // g.InsertStop(1, 'red');
-    // g.SetStops('red', 'green', 'blue');
-
-    // console.log(a.html);
-
-}
-
 export function BasicGradientRect(...colors) {
     let svgAsset = new asset();
     let id = `basicGradient_`;
