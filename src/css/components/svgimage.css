@@ -19,13 +19,14 @@
     justify-self: center;
 }
 
-.svgImage .canvasSize {
+.svgImage .image {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    /* background-color: #ff00ff69; */
+}
+.svgImage .canvasSizedImg {
     min-height: calc(attr(min-width, attr(min-size,var(--svgImage-min-size))) * 0.5);
     max-height: calc(attr(max-width, attr(max-size,var(--svgImage-max-size))) * 0.5);
     aspect-ratio: attr(aspect-ratio, 2);
-}
-
-.svgImage .image {
-    flex-grow: 1;
-    background-color: #ff00ff69;
 }
