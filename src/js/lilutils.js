@@ -50,6 +50,13 @@ export function GetCSSVariable(varName) {
 export const StringToNumber = str => (str.match(/\d+/) ? parseInt(str.match(/\d+/)[0], 10) : null);
 
 /**
+ * Strips away all non-alphanumeric characters from a string
+ * @param {string} str 
+ * @returns {string}
+ */
+export const StringAlphanumericOnly = str => (isBlank(str) ? str : str.replace(/[^a-zA-Z0-9]/g, ''));
+
+/**
  * Adds an alpha value to a hex code via 0-1 numeric value
  * @param {string} color Hex code formatted color, eg `#FF00FF` 
  * @param {number} opacity Number from 0 to 1 to represent alpha value 
