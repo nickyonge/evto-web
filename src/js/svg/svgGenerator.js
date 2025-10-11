@@ -1,4 +1,4 @@
-import { isBlank } from "../lilutils";
+import { isBlank, StringAlphanumericOnly } from "../lilutils";
 import * as svg from './index';
 import { asset, gradient } from "./index";
 
@@ -14,11 +14,11 @@ export function CreatePath() {
 
     a.AddCircle();
     a.AddDefaultCircle(true).id = 'circ';
-    a.AddDefaultPolygon(true);
+    a.AddDefaultPolygon(true).id = 'polygon';
     let r = a.AddRect();
 
-    let g = a.AddGradient();
-    g.id = 'testGradient';
+    
+    let g = a.AddGradient('testGradient');
 
     r.fillGradient = g;
 
@@ -28,7 +28,13 @@ export function CreatePath() {
     // g.SetStops('red', 'green', 'blue');
 
     console.log(a.html);
+
+}
+
+export function BasicGradientRect(color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2, width = svg.default.WIDTH, height = svg.default.HEIGHT) {
+    let svgAsset = new asset();
     
+    svgAsset.AddGradient(`basicGradient_${StringAlphanumericOnly(color1)}_${StringAlphanumericOnly(color2)}`,2);
 }
 
 export class svgFancyBox {

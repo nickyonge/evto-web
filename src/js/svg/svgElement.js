@@ -6,6 +6,7 @@ export class svgElement {
 
     /** unique identifier for this element @type {string} */
     id;
+    // TODO: ensure all element IDs are unique 
 
     /** Parse array of SVG data into HTML-attribute-style `name="value"` format, 
      * with spaces between attributes as needed. 
@@ -48,7 +49,6 @@ export class svgElement {
         if (!svg.config.HTML_INDENT || isBlank(html)) { return html; }
         let indent = '';
         for (let i = 0; i < indentCount; i++) { indent += '\t'; }
-        console.log(indentCount);
         html = indent + html;
         if (svg.config.HTML_NEWLINE) {
             // check if ends with newline - if so, don't indent it
@@ -202,16 +202,35 @@ export class svgHTMLAsset extends svgElement {
     AddDefaultPath(asDefinition = false) { return this.AddPath(svg.default.D, svg.default.FILL, asDefinition); };
 
     /** 
-     * add a {@link svg.gradient gradient} to definitions array @param {gradient} gradient 
-     * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
-    AddGradient(gradient, asDefinition = false) {
-        if (this.definitions == null, asDefinition = false) { this.definitions = []; }
+     * Add a given {@link svg.gradient gradient} (or create and add a new one) 
+     * to the {@linkcode definitions} array
+     * 
+     * @overload
+     * @param {string} id {@link svg.element.id ID} to assign to this gradient
+     * @param {boolean} isRadial is this a radial gradient, or linear?
+     * @param {string} color1 Default gradient start color
+     * @param {string} color2 Default gradient end color
+     * @returns {svg.gradient} The newly-created, newly-added gradient
+     * 
+     * @overload
+     * @param {svg.gradient} [gradient] Pre-existing gradient to import
+     * @returns {svg.gradient} The now-added gradient
+     * 
+     * */
+    AddGradient(id, isRadial = svg.default.GRADIENT_ISRADIAL, color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2) {
+        if (this.definitions == null) { this.definitions = []; }
+        let gradient = new svg.gradient(id, isRadial, color1, color2);
+        gradient.id = id;
         this.definitions.push(gradient);
         return gradient;
     }
-    AddGradient(isRadial = svg.default.GRADIENT_ISRADIAL, color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2, asDefinition = false) {
-        if (this.definitions == null, asDefinition = false) { this.definitions = []; }
-        let gradient = new svg.gradient(isRadial, color1, color2);
+    /**
+     * 
+     * @param {svg.gradient} gradient 
+     * @returns {svg.gradient}
+     */
+    AddGradient(gradient) {
+        if (this.definitions == null) { this.definitions = []; }
         this.definitions.push(gradient);
         return gradient;
     }

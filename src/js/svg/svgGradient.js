@@ -37,8 +37,9 @@ export class svgGradient extends svg.element {
     spreadMethod = svg.default.GRADIENT_SPREADMETHOD;
     href = svg.default.GRADIENT_HREF;
 
-    constructor(isRadial = svg.default.GRADIENT_ISRADIAL, color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2) {
+    constructor(id, isRadial = svg.default.GRADIENT_ISRADIAL, color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2) {
         super();
+        this.id = id;
         this.isRadial = isRadial;
         this.SetStops(color1, color2);
     }
