@@ -76,20 +76,31 @@ export class svgElement {
 
 export class svgHTMLAsset extends svgElement {
 
+    /** @type {string} */
     class;
+    /** @type {svgViewBox} */
     viewBox;
     /** Array of {@link svg.shape shapes} contained in this SVG 
      * (excluding any in {@link definitions `<defs>`}) @type {svg.shape[]} */
     shapes = [];
     /** Array of elements contained in this SVG's `<defs>` @type {svgElement[]} */
     definitions = [];
+    /** @type {boolean} */
     preserveAspectRatio = svg.default.PRESERVEASPECTRATIO;
+    /** @type {string[][]} */
     metadata = svg.default.METADATA;
 
-    constructor(shapes = [], viewBox = new svgViewBox()) {
+    /**
+     * Create a new SVG HTML asset, with optionally 
+     * supplied shapes, definitions, and viewbox.
+     * @param {svg.shape[]} shapes Optional array of {@link svg.shape shapes} 
+     * @param {svg.shape[]} definitions Optional array of {@link svgElement elements} for `<defs>` 
+     * @param {svgViewBox} viewBox Optional {@link svgViewBox viewbox}. If omitted, creates a new viewbox with default values.
+     */
+    constructor(shapes = [], definitions = [], viewBox = new svgViewBox()) {
         super();
         this.shapes = shapes;
-        this.definitions = [];
+        this.definitions = definitions;
         this.viewBox = viewBox;
         this.metadata = svg.default.METADATA;
     }
@@ -371,13 +382,12 @@ export class svgHTMLAsset extends svgElement {
      * 
      * @param {string} id {@link svg.element.id ID} to assign to this gradient
      * @param {boolean} isRadial is this a radial gradient, or linear?
-     * @param {string} color1 Default gradient start color
-     * @param {string} color2 Default gradient end color
+     * @param {...string} colors Array/values of colors used to create this array 
      * @returns {svg.gradient} The newly-created, newly-added gradient
      * */
-    NewGradient(id, isRadial = svg.default.GRADIENT_ISRADIAL, color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2) {
+    NewGradient(id, isRadial = svg.default.GRADIENT_ISRADIAL, ...colors) {
         if (this.definitions == null) { this.definitions = []; }
-        let gradient = new svg.gradient(id, isRadial, color1, color2);
+        let gradient = new svg.gradient(id, isRadial, ...colors);
         gradient.id = id;
         this.definitions.push(gradient);
         return gradient;

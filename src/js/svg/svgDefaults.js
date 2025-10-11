@@ -1,3 +1,5 @@
+import * as svg from './index';
+
 export const PRESERVEASPECTRATIO = null;
 export const METADATA = [
     ['xmlns', 'http://www.w3.org/2000/svg'],
@@ -46,7 +48,24 @@ export const GRADIENT_HREF = null;
 
 export const GRADIENT_COLOR1 = 'black';
 export const GRADIENT_COLOR2 = 'white';
+export const GRADIENT_COLORARRAY = [GRADIENT_COLOR1, GRADIENT_COLOR2];
 
 export const GRADIENT_STOP_OFFSET = 'auto';
 export const GRADIENT_STOP_COLOR = null;
 export const GRADIENT_STOP_OPACITY = null;
+
+/**
+ * Ensures that the given values either have content
+ * @param  {...string} colors 
+ * @returns 
+ */
+export function EnsureGradientDefaultColors(...colors) {
+    if (colors == null) { colors = []; }
+    colors = colors.flat();
+    switch (colors.length) {
+        case 0: return GRADIENT_COLORARRAY;
+        case 1: return svg.config.DEFAULT_COLORARRAY_FORCE_TWO_VALUES ?
+            [colors[0], GRADIENT_COLOR2] : colors;
+        default: return colors;
+    }
+}

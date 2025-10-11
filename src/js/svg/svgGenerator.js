@@ -34,11 +34,10 @@ export function CreatePath() {
 
 }
 
-export function BasicGradientRect(color1 = svg.default.GRADIENT_COLOR1, color2 = svg.default.GRADIENT_COLOR2, width = svg.default.WIDTH, height = svg.default.HEIGHT) {
+export function BasicGradientRect(...colors) {
     let svgAsset = new asset();
-    let id = `basicGradient_${StringAlphanumericOnly(color1)}_${StringAlphanumericOnly(color2)}`;
-    let g = svgAsset.NewGradient(id);
-    let r = svgAsset.NewRect(svg.default.X, svg.default.Y, width, height, g.idURL);
+    let id = `basicGradient_`;
+    svgAsset.NewRect(svg.default.X, svg.default.Y, svg.default.WIDTH, svg.default.HEIGHT, svgAsset.NewGradient(id, svg.default.GRADIENT_ISRADIAL, ...colors).idURL);
     return svgAsset;
 }
 
