@@ -1,9 +1,8 @@
 import { isBlank } from '../lilutils';
 import * as svg from './index';
-import { svgElement } from './svgElement';
 
 /** Class representing an SVG defined linear or radial gradient */
-export class svgGradient extends svgElement {
+export class svgGradient extends svg.element {
 
     /** if true, html outputs `radialGradient`; if false, `linearGradient` */
     isRadial = svg.default.GRADIENT_ISRADIAL;
@@ -193,7 +192,7 @@ export class svgGradient extends svgElement {
 
 }
 
-class svgGradientStop extends svgElement {
+class svgGradientStop extends svg.element {
     color = svg.default.GRADIENT_STOP_COLOR;
     opacity = svg.default.GRADIENT_STOP_OPACITY;
     offset = svg.default.GRADIENT_STOP_OFFSET;

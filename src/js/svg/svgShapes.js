@@ -1,12 +1,10 @@
 import { isBlank } from '../lilutils';
 import * as svg from './index';
-import { svgElement } from './svgElement';
-import { svgGradient } from './svgGradient';
 
 // TODO add <use> as an svgShape
 // Issue URL: https://github.com/nickyonge/evto-web/issues/47
 
-export class svgShape extends svgElement {
+export class svgShape extends svg.element {
     type = null;
     fill = svg.default.FILL;
     stroke = svg.default.STROKE;
@@ -46,7 +44,7 @@ export class svgShape extends svgElement {
     }
 
     /**
-     * @param {svgGradient} gradient 
+     * @param {svg.gradient} gradient 
      */
     set fillGradient(gradient) {
         if (!gradient) { return; }
