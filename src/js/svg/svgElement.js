@@ -7,6 +7,7 @@ export class svgElement {
     /** unique identifier for this element @type {string} */
     id;
     // TODO: ensure all element IDs are unique 
+    // Issue URL: https://github.com/nickyonge/evto-web/issues/49
 
     /** Parse array of SVG data into HTML-attribute-style `name="value"` format, 
      * with spaces between attributes as needed. 
