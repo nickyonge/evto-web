@@ -11,16 +11,20 @@ export function CreatePath() {
 
     let a = new asset();
 
+
     a.AddCircle();
     a.AddDefaultCircle(true);
     a.AddRect();
 
     let g = a.AddGradient();
 
+    g.sharpGradient = true;
+
     g.InsertStop(1, 'red');
     // g.SetStops('red', 'green', 'blue');
 
     console.log(a.html);
+    
 }
 
 export class svgFancyBox {

@@ -8,6 +8,9 @@ export class svgGradient extends svgElement {
     /** if true, html outputs `radialGradient`; if false, `linearGradient` */
     isRadial = svg.default.GRADIENT_ISRADIAL;
 
+    /** if true, ignores given offsets and outputs a sharp-edged gradient */
+    sharpGradient = svg.default.GRADIENT_SHARPGRADIENT;
+
     x1 = svg.default.GRADIENT_X1;
     y1 = svg.default.GRADIENT_Y1;
     x2 = svg.default.GRADIENT_X2;
@@ -48,19 +51,47 @@ export class svgGradient extends svgElement {
         let newGradient = `<${this.type}${isBlank(d) ? '' : ` ${d}`}>`;
         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
         if (this.stops != null && this.stops.length > 0) {
+            let initialLength = this.stops.length;
+            let sharpIncrement = 0;
             for (let i = 0; i < this.stops.length; i++) {
-                if (this.stops[i] == null) { return; }
+                if (this.stops[i] == null) { continue; }
                 // check for auto offset calculation, changing 'auto' to a linearly-assigned % based on array size 
-                let autoOffset = typeof this.stops[i].offset == 'string' && this.stops[i].offset.toLowerCase().trim() == 'auto';
-                if (autoOffset) {
-                    this.stops[i].offset = `${(i / (this.stops.length - 1)) * 100}%`;
-                }
-                let h = this.stops[i].html;
-                if (autoOffset) { this.stops[i].offset = 'auto'; }
-                if (!isBlank.h) {
-                    if (svg.config.HTML_INDENT) { newGradient += '\t'; }
-                    newGradient += h;
-                    if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
+                if (this.sharpGradient) {
+                    let initialOffset = this.stops[i].offset;
+                    // sharp gradient - add 1 to entire length, duplicate non-edge gradients, offset the offsets 
+                    let newStop = svgGradientStop.Clone(this.stops[i]);
+                    this.stops[i].offset = `${((sharpIncrement / initialLength) * 100).toMax()}%`;
+                    sharpIncrement++;
+                    newStop.offset = `${((sharpIncrement / initialLength) * 100).toMax()}%`;
+                    let h1 = this.stops[i].html;
+                    let h2 = newStop.html;
+                    if (!isBlank.h1) {
+                        if (svg.config.HTML_INDENT) { newGradient += '\t'; }
+                        newGradient += h1;
+                        if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
+                    }
+                    if (!isBlank.h2) {
+                        if (svg.config.HTML_INDENT) { newGradient += '\t'; }
+                        newGradient += h2;
+                        if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
+                    }
+                    this.stops[i].offset = initialOffset;
+                } else {
+                    // non-sharp gradient
+                    let autoOffset = typeof this.stops[i].offset == 'string' &&
+                        this.stops[i].offset.toLowerCase().trim() == 'auto';
+                    if (autoOffset) {
+                        // smooth gradient 
+                        this.stops[i].offset = `${((i / (this.stops.length - 1)) * 100).toMax()}%`;
+                    }
+                    let h = this.stops[i].html;
+                    // ensure offset value is reset 
+                    if (autoOffset) { this.stops[i].offset = 'auto'; }
+                    if (!isBlank.h) {
+                        if (svg.config.HTML_INDENT) { newGradient += '\t'; }
+                        newGradient += h;
+                        if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
+                    }
                 }
             }
         }
@@ -236,5 +267,14 @@ class svgGradientStop extends svgElement {
             stops.push(newStop);
         }
         return stops;
+    }
+
+    /**
+     * Creates a clone (duplicate) of the given svgGradientStop
+     * @param {svgGradientStop} stop gradient stop to clone  
+     * @returns {svgGradientStop|null} cloned stop, or null if given stop is null
+     */
+    static Clone(stop) {
+        return stop == null ? null : new svgGradientStop(stop.color, stop.opacity, stop.offset);
     }
 }

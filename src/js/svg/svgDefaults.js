@@ -32,6 +32,7 @@ export const D = 'M0,0 L20,0 L20,10 L0,10 Z';
 export const PATHLENGTH = null;
 
 export const GRADIENT_ISRADIAL = false;
+export const GRADIENT_SHARPGRADIENT = false;
 export const GRADIENT_X1 = null;
 export const GRADIENT_Y1 = null;
 export const GRADIENT_X2 = null;
