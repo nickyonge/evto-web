@@ -1,4 +1,4 @@
-import { isBlank, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber } from '../lilutils';
+import { isBlank, Lerp, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber } from '../lilutils';
 import * as svg from './index';
 
 /** Class representing an SVG defined linear or radial gradient */
@@ -7,8 +7,10 @@ export class svgGradient extends svg.element {
     /** if true, html outputs `radialGradient`; if false, `linearGradient` @type {boolean} */
     isRadial = svg.default.GRADIENT_ISRADIAL;
 
-    /** if true, ignores given offsets and outputs a sharp-edged gradient @type {boolean} */
-    sharpGradient = svg.default.GRADIENT_SHARPGRADIENT;
+    /** 
+     * How sharp is the gradient? If 0, fully smooth. If 1, completely sharp. 
+     * Clamped between 0 and 1. @type {number} */
+    sharpness = svg.default.GRADIENT_SHARPNESS;
 
     mirror = svg.default.GRADIENT_MIRROR;
 
@@ -66,7 +68,7 @@ export class svgGradient extends svg.element {
     ScaleValue(value, defaultValue = null) {
         // no need to scale if scale is 1
         if (this.scale == 1) { return value; }
-        else if (this.scale < 0) { 
+        else if (this.scale < 0) {
             // negative values are invalid, error 
             console.error(`ERROR: scale cannot be negative, current value is ${this.scale}, can't scale value ${value}, returning null`, this);
             return null;
@@ -133,18 +135,55 @@ export class svgGradient extends svg.element {
             // apply mirroring, reverse stops array 
             if (this.mirror) { this.stops = this.stops.reverse(); }
             // iterate and apply stops 
+            let sharpness = this.sharpness.clamp(0, 1);
+            let b = 0;
             for (let i = 0; i < this.stops.length; i++) {
                 if (this.stops[i] == null) { continue; }
                 // check for auto offset calculation, changing 'auto' to a linearly-assigned % based on array size 
-                if (this.sharpGradient) {
+                if (sharpness > 0) {
                     let initialOffset = this.stops[i].offset;
                     // sharp gradient - add 1 to entire length, duplicate non-edge gradients, offset the offsets 
                     let newStop = svgGradientStop.Clone(this.stops[i]);
-                    let currentOffset = (sharpIncrement / initialLength) * 100;
+                    let currentOffset = (sharpIncrement / this.stops.length) * 100;
                     sharpIncrement++;
-                    let newOffset = (sharpIncrement / initialLength) * 100;
+                    let newOffset = (sharpIncrement / this.stops.length) * 100;
+                    if (sharpness < 1) {
+                        let smoothOffset = (i / (this.stops.length - 1)) * 100;
+                        currentOffset = Lerp(smoothOffset, currentOffset, sharpness);
+                        newOffset = Lerp(smoothOffset, newOffset, sharpness);
+                        // let halfway = (newOffset - currentOffset) / 2;
+                        // currentOffset = Lerp(currentOffset + halfway, currentOffset, sharpness);
+                        // newOffset = Lerp(newOffset - halfway, newOffset, sharpness); 
+                        /*
+                        if (sharpness <= 0.5) {
+                            let smoothOffset = (i / (this.stops.length - 1)) * 100;
+                            currentOffset = Lerp(smoothOffset, currentOffset, sharpness);
+                            newOffset = Lerp(smoothOffset, newOffset, sharpness);
+                            // console.log(`currentOffset:${currentOffset},newOffset:${newOffset},smoothOffset:${smoothOffset},currentLerp:${Lerp(smoothOffset, currentOffset, sharpness)},newLerp:${Lerp(smoothOffset, newOffset, sharpness)}`);
+                            // currentOffset = smoothOffset;
+                            // newOffset = smoothOffset;
+                            // let difference = (newOffset - currentOffset) * sharpness;
+                            // currentOffset += i == 0 ? 0 : difference;
+                            // newOffset -= i == this.stops.length - 1 ? 0 : difference;
+                            // currentOffset = newOffset;
+                        } else {
+                            
+                            // let difference = (newOffset - currentOffset) * (0.5 - (sharpness - 0.5));
+                            // currentOffset += i == 0 ? 0 : difference;
+                            // newOffset -= i == this.stops.length - 1 ? 0 : difference;
+                            // currentOffset = newOffset;
+
+                            let lerp = Lerp(newOffset, currentOffset, sharpness);
+                            let divergence = lerp - currentOffset;
+                            console.log(`currentOffset:${currentOffset},newOffset:${newOffset},divergence:${divergence},lerp:${lerp}`)
+                            currentOffset += i == 0 ? 0 : lerp - currentOffset;
+                            newOffset -= i == this.stops.length - 1 ? 0 : divergence;
+                        }
+                        /**/
+                    }
                     this.stops[i].offset = `${currentOffset.toMax()}%`;
                     newStop.offset = `${newOffset.toMax()}%`;
+                    console.log("OFF: " + this.stops[i].offset);
                     let h1 = this.stops[i].html;
                     let h2 = newStop.html;
                     if (!isBlank.h1) {
