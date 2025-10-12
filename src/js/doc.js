@@ -57,7 +57,7 @@ Number.prototype.toMax = function (maxDecimals = 3) {
  * @returns {number} */
 Number.prototype.clamp = function (min = 0, max = 1) {
     // ensure min/max values are valid 
-    if (min < max) { let m = min; min = max; max = m; }
+    if (min > max) { let m = min; min = max; max = m; }
     else if (min == max) { return min; }
     return Math.min(Math.max(this.valueOf(), min), max);
 };
