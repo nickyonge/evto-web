@@ -1,4 +1,4 @@
-import { isBlank, Lerp, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber } from '../lilutils';
+import { isBlank, Lerp, RotatePointsAroundSharedCenter, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
 import * as svg from './index';
 
 /** Class representing an SVG defined linear or radial gradient */
@@ -11,10 +11,9 @@ export class svgGradient extends svg.element {
      * How sharp is the gradient? If 0, fully smooth. If 1, completely sharp. 
      * Clamped between 0 and 1. @type {number} */
     sharpness = svg.default.GRADIENT_SHARPNESS;
-
     mirror = svg.default.GRADIENT_MIRROR;
-
     scale = svg.default.GRADIENT_SCALE;
+    angle = svg.default.GRADIENT_ANGLE;
 
     x1 = svg.default.GRADIENT_X1;
     y1 = svg.default.GRADIENT_Y1;
@@ -133,6 +132,22 @@ export class svgGradient extends svg.element {
             let sharpIncrement = 0;
             // apply mirroring, reverse stops array 
             if (this.mirror) { this.stops = this.stops.reverse(); }
+            // apply angle
+            let pOrig = [];
+            let useAngle = this.angle != 0;
+            if (useAngle) {
+                // determine if all x1/2 y1/2 coords are valid 
+                
+            }
+            if (this.angle != 0) {
+                pOrig = [toPoint(this.x1, this.y1), toPoint(this.x2, this.y2)];
+                let p1 = toPoint(this.x1, this.y1);
+                let p2 = toPoint(this.x2, this.y2);
+                let pa = RotatePointsAroundSharedCenter([p1, p2], this.angle);
+                p1 = pa[0]; p2 = pa[1];
+                this.x1 = p1.x; this.y1 = p1.y;
+                this.x2 = p2.x; this.y2 = p2.y;
+            }
             // iterate and apply stops 
             let sharpness = this.sharpness.clamp(0, 1);
             for (let i = 0; i < this.stops.length; i++) {
@@ -183,6 +198,13 @@ export class svgGradient extends svg.element {
                         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
                     }
                 }
+            }
+            // undo angle
+            if (this.angle != 0) {
+                this.x1 = pOrig[0].x;
+                this.y1 = pOrig[0].y;
+                this.x2 = pOrig[1].x;
+                this.y2 = pOrig[1].y;
             }
             // undo mirroring 
             if (this.mirror) { this.stops = this.stops.reverse(); }
