@@ -79,15 +79,25 @@ export const StringRemoveNumeric = str => (isBlank(str) ? str : str.replace(/[0-
  * @example StringRemoveAlpha('abc123!@#'); // returns '123!@#' */
 export const StringRemoveAlpha = str => (isBlank(str) ? str : str.replace(/[a-zA-Z]/g, ''));
 
-/** Checks if string contains any alphanumeric characters 
+/** Checks if string contains ANY alphanumeric characters 
  * @param {string} str string to check @returns {boolean} */
 export const StringContainsAlphanumeric = str => (isStringNotBlank(str) && /[a-zA-Z0-9]/.test(str));
-/** Checks if string contains any numerical characters 
+/** Checks if string contains ANY numerical characters 
  * @param {string} str string to check @returns {boolean} */
 export const StringContainsNumeric = str => (isStringNotBlank(str) && /[0-9]/.test(str));
-/** Checks if string contains any alphabetical characters 
+/** Checks if string contains ANY alphabetical characters 
  * @param {string} str string to check @returns {boolean} */
 export const StringContainsAlpha = str => (isStringNotBlank(str) && /[a-zA-Z]/.test(str));
+
+/** Checks if string contains ONLY alphanumeric characters 
+ * @param {string} str string to check @returns {boolean} */
+export const StringOnlyAlphanumeric = str => (isStringNotBlank(str) && /^[a-zA-Z0-9]+$/.test(str));
+/** Checks if string contains ONLY numerical characters 
+ * @param {string} str string to check @returns {boolean} */
+export const StringOnlyNumeric = str => (isStringNotBlank(str) && /^[0-9]+$/.test(str));
+/** Checks if string contains ONLY alphabetical characters 
+ * @param {string} str string to check @returns {boolean} */
+export const StringOnlyAlpha = str => (isStringNotBlank(str) && /^[a-zA-Z]+$/.test(str));
 
 /** checks if the given string has any numbers in it, and if so, 
  * returns the index of the first number found. Otherwise, returns -1 
