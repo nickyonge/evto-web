@@ -65,6 +65,7 @@ export class svgGradient extends svg.element {
      * @returns {number|string}
      */
     ScaleValue(value, defaultValue = null) {
+        // TODO: replace duplicate code in ScaleValue with DeconstructNumericParam and process there 
         // no need to scale if scale is 1
         if (this.scale == 1) { return value; }
         else if (this.scale < 0) {

@@ -1,6 +1,6 @@
 import * as svg from './index';
 import { shape, rect, circle, ellipse, line, polyline, polygon, path, gradient } from "./index";
-import { isBlank } from "../lilutils";
+import { isBlank, StringNumericDivider, StringNumericOnly, StringToNumber } from "../lilutils";
 
 export class svgElement {
 
@@ -60,6 +60,138 @@ export class svgElement {
         }
         return html;
     }
+
+    /** 
+     * Takes a parameter and:
+     * - If it's at all numerical, returns a sequential and 
+     * alternating array of its numeric and non-numeric values, or
+     * - If it's non-numeric (including `null`), returns itself 
+     * @param {string|number|null} value Value to parse, eg `123`, `"50%"`, `"22.5px"`, `"fit-content"`, `"calc(5px + 10%)"`, etc
+     * @param {string|number|null} [defaultValue = null] Optional backup value if the input value is `null` 
+     * @returns {Array<string|number>|null}
+     * @example 
+     * DeconstructNumericParam(123);               // [123] 
+     * DeconstructNumericParam("123");             // [123] 
+     * DeconstructNumericParam(null, "50%");       // [50, "%"] 
+     * DeconstructNumericParam("22.5px");          // [22.5, "px"] 
+     * DeconstructNumericParam("12.34.56.78");     // [12.34, ".", 56.78] 
+     * DeconstructNumericParam("fit-content");     // ["fit-content"]
+     * DeconstructNumericParam("calc(5px + 10%)"); // ["calc(", 5, "px + ", 10, "%)"] 
+     */
+    DeconstructNumericParam(value, defaultValue = null) {
+        if (value == null) {
+            // value is null, return the defaultValue or just null 
+            if (defaultValue == null) { return null; }
+            return this.DeconstructNumericParam(defaultValue, null);
+        }
+        // flatten single-value array, or parse to string
+        if (Array.isArray(value)) {
+            if (value.length == 1) {
+                if (typeof value[0] == 'number') {
+                    // single-element number array, just return it
+                    return value;
+                }
+                // flatten and attempt to parse
+                value = value[0];
+            }
+            else {
+                // multi-element array, convert to string 
+                value = value.toString();
+                if (value.startsWith('[')) { value = value.slice(1); }
+                if (value.endsWith(']')) { value = value.slice(0, -1); }
+            }
+        }
+        // iterate through value types 
+        switch (typeof value) {
+            case 'number':
+                // number - simply return as-is in an array
+                return [value];
+            case 'string':
+                // string - remove non-numeric chars 
+                if (isBlank(value)) { return [value]; } // return value '' in array 
+                if (StringContainsNumeric(value)) {
+                    // yup, string contains numbers alright 
+                    if (StringOnlyNumeric(value)) {
+                        // ONLY numbers, convert to number, return in array 
+                        return [StringToNumber(value)];
+                    }
+                    // split into alternating array 
+                    return StringNumericDivider(value);
+                }
+                // non-numeric string, return itself in array
+                return [value];
+            case 'boolean':
+                // boolean value, don't convert it to a 0 or 1, return it as string
+                return [value ? 'true' : 'false'];
+            default:
+                // other type - attempt to coerce to number, or return as string
+                const v = Number(value);
+                if (v == null || typeof v != 'number' || !Number.isFinite(v)) {
+                    return [value.toString()]; // invalid number output, return as string 
+                }
+                return [v];
+        }
+    } // split '100px' param into [100, 'px'] array 
+
+    /** 
+     * Reconstructs a parameter deconstructed by {@link DeconstructNumericParam}
+     * @param {Array<string|number>} deconstructedParam Array of a deconstructed parameter  
+     * @returns {string} Parameter, reassembled into an appropriate string 
+     * @example 
+     * ReconstructNumericParam([123]);                           // "123"
+     * ReconstructNumericParam(["fit-content"]);                 // "fit-content"
+     * ReconstructNumericParam([22.5, "px"]);                    // "22.5px"
+     * ReconstructNumericParam(["calc(", 5, "px + ", 10, "%)"]); // "calc(5px + 10%)"
+     */
+    ReconstructNumericParam(deconstructedParam) {
+        if (deconstructedParam == null) { return null; }
+        // check if it's a string 
+        switch (typeof deconstructedParam) {
+            case 'number':
+                return deconstructedParam.toMax();
+            case 'string':
+                // check if it's a string of an array of values 
+                if (deconstructedParam.indexOf(',' == -1)) {
+                    // slice off curly brackets if needed 
+                    if (deconstructedParam.startsWith('[') &&
+                        deconstructedParam.endsWith(']')) {
+                        return deconstructedParam.slice(1, -1);
+                    }
+                    return deconstructedParam;
+                }
+                // convert to array, split along commas, convert num strings to nums
+                let dpArray = deconstructedParam.split(',');
+                for (let i = 0; i < dpArray.length; i++) {
+                    if (StringNumericOnly(dpArray[i])) {
+                        dpArray[i] = StringToNumber(dpArray[i]);
+                    }
+                }
+                return this.ReconstructNumericParam(dpArray);
+        }
+        if (!Array.isArray(deconstructedParam)) {
+            console.warn("WARNING: can't reconstruct param that is neither string nor array, returning null", deconstructedParam, this);
+            return null;
+        }
+        // rebuild parameters (aka why just using 'join' won't cut it)
+        if (deconstructedParam.length == 0) { return ''; }
+        let param = '';
+        for (let i = 0; i < deconstructedParam.length; i++) {
+            if (deconstructedParam[i] == null) { continue; }
+            switch (typeof deconstructedParam[i]) {
+                case 'number':
+                    param += deconstructedParam[i].toMax();
+                    break;
+                case 'string':
+                    param += deconstructedParam[i];
+                    break;
+                default:
+                    console.warn(`WARNING: reconstruction param, index ${i} is ${typeof deconstructedParam[i]}, should be number or string, parsing to string`, deconstructedParam, this);
+                    param += deconstructedParam[i].toString();
+                    break;
+            }
+        }
+        return param;
+    } // rebuild decon param [100, 'px'] back into '100px'
 
     /**
      * gets this element's {@linkcode id ID} formatted as an
@@ -313,7 +445,7 @@ export class svgHTMLAsset extends svgElement {
     }
     DefaultShape(asDefinition = false) { return this.NewShape(svg.default.FILL, asDefinition); };
     /** 
-     * add a {@link svg.rect rect} to shapes array @param {svg.rect} rect 
+     * add a {@link svg.rect rect} to shapes array @param {rect} rect 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddRect(rect, asDefinition = false) { this.#PushShape(rect, asDefinition); return rect; }
     NewRect(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT, fill = svg.default.FILL, asDefinition = false) {
