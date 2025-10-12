@@ -50,8 +50,15 @@ export class svgGradient extends svg.element {
     }
 
     /**
-     * Scales the given numeric/representative value by 
-     * this gradient's {@linkcode scale} property.
+     * Scale the given numeric/representative value by 
+     * this gradient's {@linkcode scale} property. Preserves 
+     * non-numeric text, eg with `scale=2`, `10px` becomes `20px`.
+     * 
+     * For a linear gradient, multiplies the {@linkcode x1}, 
+     * {@linkcode y1}, {@linkcode x2}, and {@linkcode y2} values. 
+     * 
+     * For a radial gradient, multiplies the {@linkcode r}
+     * and {@linkcode fr} values.
      * @param {number|string} value value to scale
      * @param {number|string} [defaultValue = 0] default value if scaling is unsuccessful (will also attempt to scale this value)
      * @returns {number|string}
@@ -59,6 +66,11 @@ export class svgGradient extends svg.element {
     ScaleValue(value, defaultValue = null) {
         // no need to scale if scale is 1
         if (this.scale == 1) { return value; }
+        else if (this.scale < 0) { 
+            // negative values are invalid, error 
+            console.error(`ERROR: scale cannot be negative, current value is ${this.scale}, can't scale value ${value}, returning null`, this);
+            return null;
+        }
         if (value == null) {
             // value is null, return the scaled defaultValue or just null 
             if (defaultValue == null) { return null; }
@@ -180,10 +192,10 @@ export class svgGradient extends svg.element {
             ['href', this.href]
         ]) : this.ParseData([
             // linear gradient 
-            ['x1', this.x1],
-            ['y1', this.y1],
-            ['x2', this.x2],
-            ['y2', this.y2],
+            ['x1', this.ScaleValue(this.x1, svg.default.GRADIENT_X1_SCALEDEFAULT)],
+            ['y1', this.ScaleValue(this.y1, svg.default.GRADIENT_Y1_SCALEDEFAULT)],
+            ['x2', this.ScaleValue(this.x2, svg.default.GRADIENT_X2_SCALEDEFAULT)],
+            ['y2', this.ScaleValue(this.y2, svg.default.GRADIENT_Y2_SCALEDEFAULT)],
             ['gradientUnits', this.gradientUnits],
             ['gradientTransform', this.gradientTransform],
             ['spreadMethod', this.spreadMethod],
