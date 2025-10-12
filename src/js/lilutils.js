@@ -108,7 +108,7 @@ export const StringIndexOfFirstNumber = str => {
  * StringNumericDivider('123');              // [123] 
  * StringNumericDivider(456);                // [456] 
  */
-const StringNumericDivider = str => {
+export const StringNumericDivider = str => {
     if (str == null) { return null; } // null, return
     if (typeof str == 'number') { return [str]; } // number, return in array 
     if (!isString(str)) return null; // neither string nor number 
