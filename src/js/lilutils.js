@@ -53,17 +53,40 @@ export function GetCSSVariable(varName) {
  */
 export const StringToNumber = str => (str.match(/\d+/) ? parseInt(str.match(/\d+/)[0], 10) : null);
 
-/**
- * Strips away all non-alphanumeric characters from a string
- * @param {string} str string to strip
- * @returns {string}
- */
+/** Strips away all non-alphanumeric characters from a string
+ * @param {string} str string to process @returns {string} 
+ * @example StringAlphanumericOnly('abc123!@#'); // returns 'abc123' */
 export const StringAlphanumericOnly = str => (isBlank(str) ? str : str.replace(/[^a-zA-Z0-9]/g, ''));
+/** Strips away all non-numerical characters from a string
+ * @param {string} str string to process @returns {string} 
+ * @example StringNumericOnly('abc123!@#'); // returns '123' */
 export const StringNumericOnly = str => (isBlank(str) ? str : str.replace(/[^0-9]/g, ''));
+/** Strips away all non-alphabetical characters from a string
+ * @param {string} str string to process @returns {string} 
+ * @example StringAlphaOnly('abc123!@#'); // returns 'abc' */
 export const StringAlphaOnly = str => (isBlank(str) ? str : str.replace(/[^a-zA-Z]/g, ''));
 
+/** Strips away all alphanumeric characters from a string
+ * @param {string} str string to process @returns {string} 
+ * @example StringRemoveAlphanumeric('abc123!@#'); // returns '!@#' */
+export const StringRemoveAlphanumeric = str => (isBlank(str) ? str : str.replace(/[a-zA-Z0-9]/g, ''));
+/** Strips away all numerical characters from a string
+ * @param {string} str string to process @returns {string} 
+ * @example StringRemoveNumeric('abc123!@#'); // returns 'abc!@#' */
+export const StringRemoveNumeric = str => (isBlank(str) ? str : str.replace(/[0-9]/g, ''));
+/** Strips away all alphabetical characters from a string
+ * @param {string} str string to process @returns {string} 
+ * @example StringRemoveAlpha('abc123!@#'); // returns '123!@#' */
+export const StringRemoveAlpha = str => (isBlank(str) ? str : str.replace(/[a-zA-Z]/g, ''));
+
+/** Checks if string contains any alphanumeric characters 
+ * @param {string} str string to check @returns {boolean} */ 
 export const StringContainsAlphanumeric = str => (isStringNotBlank(str) && /[a-zA-Z0-9]/.test(str));
+/** Checks if string contains any numerical characters 
+ * @param {string} str string to check @returns {boolean} */
 export const StringContainsNumeric = str => (isStringNotBlank(str) && /[0-9]/.test(str));
+/** Checks if string contains any alphabetical characters 
+ * @param {string} str string to check @returns {boolean} */
 export const StringContainsAlpha = str => (isStringNotBlank(str) && /[a-zA-Z]/.test(str));
 
 /**
