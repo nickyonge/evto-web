@@ -1,4 +1,4 @@
-import { isBlank } from '../lilutils';
+import { isBlank, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber } from '../lilutils';
 import * as svg from './index';
 
 /** Class representing an SVG defined linear or radial gradient */
@@ -9,6 +9,10 @@ export class svgGradient extends svg.element {
 
     /** if true, ignores given offsets and outputs a sharp-edged gradient @type {boolean} */
     sharpGradient = svg.default.GRADIENT_SHARPGRADIENT;
+
+    mirror = svg.default.GRADIENT_MIRROR;
+
+    scale = svg.default.GRADIENT_SCALE;
 
     x1 = svg.default.GRADIENT_X1;
     y1 = svg.default.GRADIENT_Y1;
@@ -45,6 +49,66 @@ export class svgGradient extends svg.element {
         this.SetStops(...colors);
     }
 
+    /**
+     * Scales the given numeric/representative value by 
+     * this gradient's {@linkcode scale} property.
+     * @param {number|string} value value to scale
+     * @param {number|string} [defaultValue = 0] default value if scaling is unsuccessful (will also attempt to scale this value)
+     * @returns {number|string}
+     */
+    ScaleValue(value, defaultValue = null) {
+        // no need to scale if scale is 1
+        if (this.scale == 1) { return value; }
+        if (value == null) {
+            // value is null, return the scaled defaultValue or just null 
+            if (defaultValue == null) { return null; }
+            return this.ScaleValue(defaultValue, null);
+        }
+        switch (typeof value) {
+            case 'number':
+                // number - simply multiply and return 
+                return (value * this.scale).toMax();
+            case 'string':
+                // string - remove non-numeric chars 
+                if (isBlank(value)) { return value; } // return value '' as-is
+                if (StringContainsNumeric(value)) {
+                    // yup, string contains numbers alright 
+                    if (StringOnlyNumeric(value)) {
+                        // ONLY numbers, convert to number, multiply, return
+                        return (StringToNumber(value) * this.scale).toMax();
+                    }
+                    // split into alternating array 
+                    let a = StringNumericDivider(value);
+                    value = '';
+                    for (let i = 0; i < a.length; i++) {
+                        if (a[i] == null) { continue; }
+                        switch (typeof a[i]) {
+                            case 'string':
+                                value += a[i];
+                                break;
+                            case 'number':
+                                let as = a[i] * this.scale;
+                                value += (a[i] * this.scale).toMax();
+                                break;
+                        }
+                    }
+                }
+                // done - either string contained no numbers, or if it did, they've been scaled  
+                break;
+            case 'boolean':
+                // boolean value, don't convert it to a 0 or 1, just return it
+                return value;
+            default:
+                // other type - attempt to coerce to number, and return as string
+                const v = Number(value);
+                if (v == null || typeof v != 'number' || !Number.isFinite(v)) {
+                    return value; // invalid number output 
+                }
+                return (v * this.scale).toMax();
+        }
+        return value;
+    }
+
     get type() { return this.isRadial ? 'radialGradient' : 'linearGradient'; }
 
     get html() {
@@ -61,9 +125,11 @@ export class svgGradient extends svg.element {
                     let initialOffset = this.stops[i].offset;
                     // sharp gradient - add 1 to entire length, duplicate non-edge gradients, offset the offsets 
                     let newStop = svgGradientStop.Clone(this.stops[i]);
-                    this.stops[i].offset = `${((sharpIncrement / initialLength) * 100).toMax()}%`;
+                    let currentOffset = (sharpIncrement / initialLength) * 100;
                     sharpIncrement++;
-                    newStop.offset = `${((sharpIncrement / initialLength) * 100).toMax()}%`;
+                    let newOffset = (sharpIncrement / initialLength) * 100;
+                    this.stops[i].offset = `${currentOffset.toMax()}%`;
+                    newStop.offset = `${newOffset.toMax()}%`;
                     let h1 = this.stops[i].html;
                     let h2 = newStop.html;
                     if (!isBlank.h1) {
@@ -83,7 +149,8 @@ export class svgGradient extends svg.element {
                         this.stops[i].offset.toLowerCase().trim() == 'auto';
                     if (autoOffset) {
                         // smooth gradient 
-                        this.stops[i].offset = `${((i / (this.stops.length - 1)) * 100).toMax()}%`;
+                        let offset = (i / (this.stops.length - 1)) * 100;
+                        this.stops[i].offset = `${offset.toMax()}%`;
                     }
                     let h = this.stops[i].html;
                     // ensure offset value is reset 
@@ -105,8 +172,8 @@ export class svgGradient extends svg.element {
             ['fy', this.fy],
             ['cx', this.cx],
             ['cy', this.cy],
-            ['fr', this.fr],
-            ['r', this.r],
+            ['fr', this.ScaleValue(this.fr, svg.default.GRADIENT_FR_SCALEDEFAULT)],
+            ['r', this.ScaleValue(this.r, svg.default.GRADIENT_R_SCALEDEFAULT)],
             ['gradientUnits', this.gradientUnits],
             ['gradientTransform', this.gradientTransform],
             ['spreadMethod', this.spreadMethod],

@@ -1,3 +1,4 @@
+import { isBlank, isString, StringAlphanumericOnly, StringContainsAlpha, StringContainsAlphanumeric, StringNumericOnly, StringRemoveAlpha, StringRemoveAlphanumeric } from "../lilutils";
 import { BasicGradientRect } from "../svg/svgGenerator";
 import * as ui from "../ui";
 import { BasicComponent, TitledComponent } from "./base";
@@ -20,6 +21,14 @@ export class SVGImage extends TitledComponent {
         let bgr = BasicGradientRect('skyblue', 'white', 'pink');
         // bgr.gradient.sharpGradient = true;
         bgr.gradient.isRadial = true;
+        bgr.gradient.scale = 2;
+
+        console.log("scale test 1 (2) ......... : " + bgr.gradient.ScaleValue(1));
+        console.log("scale test 2 (213) ....... : " + bgr.gradient.ScaleValue(213 / 2));
+        console.log("scale test 3 (720.667) ... : " + bgr.gradient.ScaleValue('360.333333333333'));
+        console.log("scale test 4 (200px) ..... : " + bgr.gradient.ScaleValue('100px'));
+        console.log("scale test 5 (100,200,666) : " + bgr.gradient.ScaleValue('onehun50, twohun100!evilpx: 333px'));
+
         this.#image.innerHTML = bgr.html;
 
     }
