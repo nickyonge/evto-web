@@ -512,7 +512,7 @@ export function SetElementDisabled(element) {
  * 1 returns target, 0.5 returns halfway between the two. 
  * @returns {number}
  */
-export function Lerp(a, b, t) { return (a + (b - a)) * t; }
+export function Lerp(a, b, t) { return a + ((b - a) * t); }
 
 
 /** local array of intervals and timers @type {Array<Array<string,number>>} */
