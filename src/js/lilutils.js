@@ -80,7 +80,7 @@ export const StringRemoveNumeric = str => (isBlank(str) ? str : str.replace(/[0-
 export const StringRemoveAlpha = str => (isBlank(str) ? str : str.replace(/[a-zA-Z]/g, ''));
 
 /** Checks if string contains any alphanumeric characters 
- * @param {string} str string to check @returns {boolean} */ 
+ * @param {string} str string to check @returns {boolean} */
 export const StringContainsAlphanumeric = str => (isStringNotBlank(str) && /[a-zA-Z0-9]/.test(str));
 /** Checks if string contains any numerical characters 
  * @param {string} str string to check @returns {boolean} */
@@ -88,6 +88,37 @@ export const StringContainsNumeric = str => (isStringNotBlank(str) && /[0-9]/.te
 /** Checks if string contains any alphabetical characters 
  * @param {string} str string to check @returns {boolean} */
 export const StringContainsAlpha = str => (isStringNotBlank(str) && /[a-zA-Z]/.test(str));
+
+/** checks if the given string has any numbers in it, and if so, 
+ * returns the index of the first number found. Otherwise, returns -1 
+ * @param {string} str string to check @returns {number} */
+export const StringIndexOfFirstNumber = str => {
+    if (!isStringNotBlank(str)) { return -1 }; return str.search(/[0-9]/);
+};
+
+/** Splits a string into an array of alternating numeric and
+ * non-numeric parts. Numeric parts are converted to numbers.
+ * Pure numbers are returned in a single-value array. 
+ * If `null` or neither a number nor string, returns `null`.
+ * @param {string} str
+ * @returns {(string|number)[]|null} Array of string and number segments
+ * @example 
+ * StringNumericDivider('abc123def!@#456?'); // ['abc',123,'def!@#',456,'?'] 
+ * StringNumericDivider('no numbers');       // ['no numbers'] 
+ * StringNumericDivider('123');              // [123] 
+ * StringNumericDivider(456);                // [456] 
+ */
+const StringNumericDivider = str => {
+    if (str == null) { return null; } // null, return
+    if (typeof str == 'number') { return [str]; } // number, return in array 
+    if (!isString(str)) return null; // neither string nor number 
+    if (isBlank(str)) { return [str]; } // blank/whitespace string, return in array  
+    // find all numeric/non-numeric sequences, and split
+    const strReg = str.match(/\d+|\D+/g);
+    if (!strReg) return []; // if none found, return
+    // map to array and convert numeric-only values to number 
+    return strReg.map(s => /^\d+$/.test(s) ? Number(s) : s);
+};
 
 /**
  * Adds an alpha value to a hex code via 0-1 numeric value
