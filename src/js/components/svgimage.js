@@ -19,7 +19,7 @@ export class SVGImage extends TitledComponent {
         this.div.appendChild(this.#image);
 
         let bgr = BasicGradientRect('skyblue', 'white', 'pink');
-        bgr.gradient.sharpGradient = false;
+        bgr.gradient.sharpGradient = true;
         bgr.gradient.isRadial = false;
         bgr.gradient.scale = 1;
 
@@ -30,9 +30,10 @@ export class SVGImage extends TitledComponent {
         // console.log("scale test 5 (100,200,666) : " + bgr.gradient.ScaleValue('onehun50, twohun100!evilpx: 333px'));
 
         console.log(bgr.gradient.html);
-        bgr.gradient.scale = 2;
+        bgr.gradient.scale = 1;
         console.log(bgr.gradient.html);
-        bgr.gradient.isRadial = true;
+        // bgr.gradient.isRadial = true;
+        // bgr.gradient.mirror = true;
         console.log(bgr.gradient.html);
         this.#image.innerHTML = bgr.html;
 

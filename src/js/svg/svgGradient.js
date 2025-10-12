@@ -130,6 +130,9 @@ export class svgGradient extends svg.element {
         if (this.stops != null && this.stops.length > 0) {
             let initialLength = this.stops.length;
             let sharpIncrement = 0;
+            // apply mirroring, reverse stops array 
+            if (this.mirror) { this.stops = this.stops.reverse(); }
+            // iterate and apply stops 
             for (let i = 0; i < this.stops.length; i++) {
                 if (this.stops[i] == null) { continue; }
                 // check for auto offset calculation, changing 'auto' to a linearly-assigned % based on array size 
@@ -174,6 +177,8 @@ export class svgGradient extends svg.element {
                     }
                 }
             }
+            // undo mirroring 
+            if (this.mirror) { this.stops = this.stops.reverse(); }
         }
         return `${newGradient}</${this.type}>`;
     }
