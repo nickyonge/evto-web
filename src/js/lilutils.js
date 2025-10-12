@@ -124,10 +124,10 @@ export const StringNumericDivider = str => {
     if (!isString(str)) return null; // neither string nor number 
     if (isBlank(str)) { return [str]; } // blank/whitespace string, return in array  
     // find all numeric/non-numeric sequences, and split
-    const strReg = str.match(/\d+|\D+/g);
+    const strReg = str.match(/\d+(?:\.\d+)?|\D+/g);
     if (!strReg) return []; // if none found, return
     // map to array and convert numeric-only values to number 
-    return strReg.map(s => /^\d+$/.test(s) ? Number(s) : s);
+    return strReg.map(s => /^\d+(?:\.\d+)?$/.test(s) ? Number(s) : s);
 };
 
 /**
