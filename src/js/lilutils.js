@@ -1,11 +1,15 @@
 // some little utilities :3 
 
-/**
- * check if a string is null, empty, or whitespace
+/** check if a string is null, empty, or whitespace
  * @param {string} str input string to test 
- * @returns {boolean} true if blank, false if contains content
- */
+ * @returns {boolean} true if blank, false if contains content */
 export const isBlank = str => !str || (typeof str === 'string' && !str.trim());
+/** quick test if the given value is a string @param {string} str string to test @returns {boolean} */
+export const isString = str => typeof str == 'string';
+/** check if a value IS a string AND IS NOT blank/whitespace/null
+ * @param {string} str input string to test 
+ * @returns {boolean} true if non-blank string, false is blank or not string */
+export const isStringNotBlank = str => isString(str) && !isBlank(str);
 
 /** 
  * Gets the CSS stylesheet for the page.
@@ -51,10 +55,16 @@ export const StringToNumber = str => (str.match(/\d+/) ? parseInt(str.match(/\d+
 
 /**
  * Strips away all non-alphanumeric characters from a string
- * @param {string} str 
+ * @param {string} str string to strip
  * @returns {string}
  */
 export const StringAlphanumericOnly = str => (isBlank(str) ? str : str.replace(/[^a-zA-Z0-9]/g, ''));
+export const StringNumericOnly = str => (isBlank(str) ? str : str.replace(/[^0-9]/g, ''));
+export const StringAlphaOnly = str => (isBlank(str) ? str : str.replace(/[^a-zA-Z]/g, ''));
+
+export const StringContainsAlphanumeric = str => (isStringNotBlank(str) && /[a-zA-Z0-9]/.test(str));
+export const StringContainsNumeric = str => (isStringNotBlank(str) && /[0-9]/.test(str));
+export const StringContainsAlpha = str => (isStringNotBlank(str) && /[a-zA-Z]/.test(str));
 
 /**
  * Adds an alpha value to a hex code via 0-1 numeric value
