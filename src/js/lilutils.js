@@ -514,6 +514,90 @@ export function SetElementDisabled(element) {
  */
 export function Lerp(a, b, t) { return a + ((b - a) * t); }
 
+/** 
+ * Convert the given `x` amd `y` coordinates to a `point` object
+ * @param {number} x  @param {number} y 
+ * @returns {{x:number, y:number}} an object with given `.x` and `.y` coordinate properties */
+export function toPoint(x, y) { return { x: x, y: y }; }
+/**
+ * Rotates the given X/Y coordinates around the given X/Y pivot point by the given angle, in degrees (default) or radians 
+ * @param {number} pointX X coordinate to be rotated @param {number} pointY Y coordinate to be rotated 
+ * @param {number} pivotX X coordinate to rotate around @param {number} pivotY Y coordinate to rotate around 
+ * @param {number} angle Angle to rotate by, in degrees (default) or radians 
+ * @param {boolean} [inDegrees=true] If `angle` in degrees? If false, angle is in radians 
+ * @returns {{x:number, y:number}} a {@link toPoint point} with given `.x` and `.y` coordinate properties, rotated as specified */
+export function rotatePointXYAroundPivotXY(pointX, pointY, pivotX, pivotY, angle, inDegrees = true) {
+    return rotatePointAroundPivot(toPoint(pointX, pointY), toPoint(pivotX, pivotY), angle, inDegrees);
+}
+/**
+ * Rotates the given XY point around the given pivot point by the given angle, in degrees (default) or radians 
+ * @param {number} pointX X coordinate to be rotated @param {number} pointY Y coordinate to be rotated 
+ * @param {number} pivot XY {@link toPoint point} coordinates to rotate around 
+ * @param {number} angle Angle to rotate by, in degrees (default) or radians 
+ * @param {boolean} [inDegrees=true] If `angle` in degrees? If false, angle is in radians 
+ * @returns {{x:number, y:number}} a {@link toPoint point} with given `.x` and `.y` coordinate properties, rotated as specified */
+export function rotatePointXYAroundPivot(pointX, pointY, pivot, angle, inDegrees = true) {
+    return rotatePointAroundPivot(toPoint(pointX, pointY), pivot, angle, inDegrees);
+}
+/**
+ * Rotates the given XY point around the given pivot point by the given angle, in degrees (default) or radians 
+ * @param {number} point XY {@link toPoint point} coordinates to be rotated 
+ * @param {number} pivotX X coordinate to rotate around @param {number} pivotY Y coordinate to rotate around 
+ * @param {number} angle Angle to rotate by, in degrees (default) or radians 
+ * @param {boolean} [inDegrees=true] If `angle` in degrees? If false, angle is in radians 
+ * @returns {{x:number, y:number}} a {@link toPoint point} with given `.x` and `.y` coordinate properties, rotated as specified */
+export function rotatePointAroundPivotXY(point, pivotX, pivotY, angle, inDegrees = true) {
+    return rotatePointAroundPivot(point, toPoint(pivotX, pivotY), angle, inDegrees);
+}
+/**
+ * Rotates the given XY point around the given pivot point by the given angle, in degrees (default) or radians 
+ * @param {number} point XY {@link toPoint point} coordinates to be rotated 
+ * @param {number} pivot XY {@link toPoint point} coordinates to rotate around 
+ * @param {number} angle Angle to rotate by, in degrees (default) or radians 
+ * @param {boolean} [inDegrees=true] If `angle` in degrees? If false, angle is in radians 
+ * @returns {{x:number, y:number}} a {@link toPoint point} with given `.x` and `.y` coordinate properties, rotated as specified */
+export function rotatePointAroundPivot(point, pivot, angle, inDegrees = true) {
+    // translate to origin 
+    point.x -= pivot.x;
+    point.y -= pivot.y;
+    // rotate
+    point = rotatePointAroundOrigin(point, angle, inDegrees);
+    // translate back 
+    point.x += pivot.x;
+    point.y += pivot.y;
+    return point;
+}
+/**
+ * Rotates the given point around origin [0,0] by the given angle, in degrees (default) or radians 
+ * @param {number} pointX X coordinate to be rotated @param {number} pointY Y coordinate to be rotated 
+ * @param {number} angle Angle to rotate by, in degrees (default) or radians 
+ * @param {boolean} [inDegrees=true] If `angle` in degrees? If false, angle is in radians 
+ * @returns {{x:number, y:number}} a {@link toPoint point} with given `.x` and `.y` coordinate properties, rotated as specified */
+export function rotatePointXYAroundOrigin(pointX, pointY, angle, inDegrees = true) {
+    return rotatePointAroundOrigin(toPoint(pointX, pointY), angle);
+}
+/**
+ * Rotates the given point around origin [0,0] by the given angle, in degrees (default) or radians 
+ * @param {number} point XY {@link toPoint point} coordinates to be rotated 
+ * @param {number} angle Angle to rotate by, in degrees (default) or radians 
+ * @param {boolean} [inDegrees=true] If `angle` in degrees? If false, angle is in radians 
+ * @returns {{x:number, y:number}} a {@link toPoint point} with given `.x` and `.y` coordinate properties, rotated as specified */
+export function rotatePointAroundOrigin(point, angle, inDegrees = true) {
+    // if needed, convert degrees to radians 
+    if (inDegrees) { angle = angleDegreesToRadians(angle); }
+    // rotate around origin 
+    let rx = (point.x * Math.cos(angle)) - (point.y * Math.sin(angle));
+    let ry = (point.x * Math.sin(angle)) + (point.y * Math.cos(angle));
+    point.x = rx;
+    point.y = ry;
+    return point;
+}
+
+/** Convert radians to degrees @param {number} radians @see {@link angleDegreesToRadians} @returns {number} */
+export function angleRadiansToDegrees(radians) { return radians * (180 / Math.PI); }
+/** Convert degrees to radians @param {number} radians @see {@link angleRadiansToDegrees} @returns {number} */
+export function angleDegreesToRadians(degrees) { return degrees * (Math.PI / 180); }
+
 
 /** local array of intervals and timers @type {Array<Array<string,number>>} */
 let _intervals = [];
