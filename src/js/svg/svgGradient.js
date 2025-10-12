@@ -130,13 +130,11 @@ export class svgGradient extends svg.element {
         let newGradient = `<${this.type}${isBlank(d) ? '' : ` ${d}`}>`;
         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
         if (this.stops != null && this.stops.length > 0) {
-            let initialLength = this.stops.length;
             let sharpIncrement = 0;
             // apply mirroring, reverse stops array 
             if (this.mirror) { this.stops = this.stops.reverse(); }
             // iterate and apply stops 
             let sharpness = this.sharpness.clamp(0, 1);
-            let b = 0;
             for (let i = 0; i < this.stops.length; i++) {
                 if (this.stops[i] == null) { continue; }
                 // check for auto offset calculation, changing 'auto' to a linearly-assigned % based on array size 
@@ -151,39 +149,9 @@ export class svgGradient extends svg.element {
                         let smoothOffset = (i / (this.stops.length - 1)) * 100;
                         currentOffset = Lerp(smoothOffset, currentOffset, sharpness);
                         newOffset = Lerp(smoothOffset, newOffset, sharpness);
-                        // let halfway = (newOffset - currentOffset) / 2;
-                        // currentOffset = Lerp(currentOffset + halfway, currentOffset, sharpness);
-                        // newOffset = Lerp(newOffset - halfway, newOffset, sharpness); 
-                        /*
-                        if (sharpness <= 0.5) {
-                            let smoothOffset = (i / (this.stops.length - 1)) * 100;
-                            currentOffset = Lerp(smoothOffset, currentOffset, sharpness);
-                            newOffset = Lerp(smoothOffset, newOffset, sharpness);
-                            // console.log(`currentOffset:${currentOffset},newOffset:${newOffset},smoothOffset:${smoothOffset},currentLerp:${Lerp(smoothOffset, currentOffset, sharpness)},newLerp:${Lerp(smoothOffset, newOffset, sharpness)}`);
-                            // currentOffset = smoothOffset;
-                            // newOffset = smoothOffset;
-                            // let difference = (newOffset - currentOffset) * sharpness;
-                            // currentOffset += i == 0 ? 0 : difference;
-                            // newOffset -= i == this.stops.length - 1 ? 0 : difference;
-                            // currentOffset = newOffset;
-                        } else {
-                            
-                            // let difference = (newOffset - currentOffset) * (0.5 - (sharpness - 0.5));
-                            // currentOffset += i == 0 ? 0 : difference;
-                            // newOffset -= i == this.stops.length - 1 ? 0 : difference;
-                            // currentOffset = newOffset;
-
-                            let lerp = Lerp(newOffset, currentOffset, sharpness);
-                            let divergence = lerp - currentOffset;
-                            console.log(`currentOffset:${currentOffset},newOffset:${newOffset},divergence:${divergence},lerp:${lerp}`)
-                            currentOffset += i == 0 ? 0 : lerp - currentOffset;
-                            newOffset -= i == this.stops.length - 1 ? 0 : divergence;
-                        }
-                        /**/
                     }
                     this.stops[i].offset = `${currentOffset.toMax()}%`;
                     newStop.offset = `${newOffset.toMax()}%`;
-                    console.log("OFF: " + this.stops[i].offset);
                     let h1 = this.stops[i].html;
                     let h2 = newStop.html;
                     if (!isBlank.h1) {
