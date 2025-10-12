@@ -503,6 +503,17 @@ export function SetElementDisabled(element) {
     SetElementEnabled(element, false);
 }
 
+/**
+ * Lerps (linearly interpolates) between an origin `a` and 
+ * target `b` number by the given time value. 
+ * @param {number} a Origin value, if `t == 0`
+ * @param {number} b Target value, if `t == 1` 
+ * @param {number} t Interpolation amount. 0 returns origin, 
+ * 1 returns target, 0.5 returns halfway between the two. 
+ * @returns {number}
+ */
+export function Lerp(a, b, t) { return (a + (b - a)) * t; }
+
 
 /** local array of intervals and timers @type {Array<Array<string,number>>} */
 let _intervals = [];
