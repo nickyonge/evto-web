@@ -66,6 +66,7 @@ export class svgGradient extends svg.element {
      */
     ScaleValue(value, defaultValue = null) {
         // TODO: replace duplicate code in ScaleValue with DeconstructNumericParam and process there 
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/50
         // no need to scale if scale is 1
         if (this.scale == 1) { return value; }
         else if (this.scale < 0) {
