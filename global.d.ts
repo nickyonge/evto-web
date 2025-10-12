@@ -3,6 +3,7 @@ import type { BasicComponent } from "./src/js/components/base";
 declare global {
 
     interface Node {
+
         /**
          * Calls the function with the specified object as the this 
          * value and the specified rest arguments as the arguments.
@@ -13,14 +14,18 @@ declare global {
          * allow directly adding {@linkcode BasicComponent} classes.
          */
         appendChild<T extends Node>(Node: T): Node;
+        
     }
 
     interface Number {
+
         /** 
          * Converts the given number to string to the given max number of decimals, 
          * while (unlike `toFixed`) also removing any trailing zeros.
-         * @param {number} num Number to convert to string
-         * @param {number} [maxDecimals=3] Maximum, not mandatory, decimal places  
+         * @param {number} [maxDecimals=3] 
+         * Maximum, not mandatory, decimal places.
+         * If -1, simply returns the number as string with no limiting. 
+         * Otherwise must be between 0-20, per `toFixed` docs.  
          * @returns {string}
          * @example
          * console.log(toMax(33.333333, 3)); // "33.333"
@@ -28,8 +33,17 @@ declare global {
          * console.log(toFixed(33.3, 3));    // "33.300"
          */
         toMax(maxDecimals: number): string;
+
+        /** 
+         * Clamps a number between the given minimum and maximum values.
+         * 
+         * By default, clamps between 0 and 1.
+         * @param {number} [min = 0] Minimum possible value
+         * @param {number} [max = 1] Maximum possible value
+         * @returns {number} */
+        clamp(min: number = 0, max: number = 1): number;
     }
-    
+
 }
 
 export { };
