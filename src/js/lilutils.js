@@ -412,7 +412,7 @@ export function GetAllParentsWithClass(childElement, cssClass) {
  * @returns {boolean}
  */
 export function ElementHasClass(element, cssClass) {
-    return element.classList.contains(cssClass);
+    return element != null && element.classList.contains(cssClass);
 }
 
 

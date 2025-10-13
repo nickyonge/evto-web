@@ -41,12 +41,22 @@ window.addEventListener('load', function () {
             formatToggle: true,
         });
         // assign parent page to all components, and call DocumentLoaded on them 
+        let unparentedComponents = [];
         BasicComponent.allComponents.forEach(component => {
+            let parentPage = GetParentWithClass(component.div, 'page');
+            if (parentPage == null) {
+                unparentedComponents.push(component);
+                return;
+            }
+            component.parentPage = parentPage;
             if (component.DocumentLoaded) {
-                component.parentPage = GetParentWithClass(component.div, 'page');
                 component.DocumentLoaded();
             }
         });
+        if (unparentedComponents.length > 0) {
+            let warning = `${unparentedComponents.length} component${unparentedComponents.length > 1 ? 's' : ''}`;
+            console.warn(`WARNING: found ${warning} without parent pages, investigate`, unparentedComponents);
+        }
 
         // display ui
         DisplayUI();
