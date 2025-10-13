@@ -21,7 +21,7 @@ export class SVGImage extends TitledComponent {
         let bgr = BasicGradientRect('skyblue', 'white', 'pink');
         bgr.gradient.sharpness = 0.213;
         bgr.gradient.isRadial = false;
-        bgr.gradient.angle = 90;
+        bgr.gradient.angle = 45;
         bgr.GetShape().fillGradient = bgr.gradient;
         this.#image.innerHTML = bgr.html;
         console.log(this.#image.innerHTML);

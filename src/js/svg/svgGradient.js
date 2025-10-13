@@ -1,4 +1,4 @@
-import { arePoints, FindPointsSharedCenter, isBlank, isPoint, Lerp, RotatePointsAroundSharedCenter, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
+import { arePoints, FindPointsSharedCenter, isBlank, isPoint, Lerp, RotatePointAroundOrigin, RotatePointsAroundOrigin, RotatePointsAroundPivot, RotatePointsAroundPivotXY, RotatePointsAroundSharedCenter, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
 import * as svg from './index';
 
 /** Class representing an SVG defined linear or radial gradient */
@@ -15,6 +15,13 @@ export class svgGradient extends svg.element {
     scale = svg.default.GRADIENT_SCALE;
     /** angle, in degrees, a linear gradient should be rotated by. Does not affect radial gradients. @type {number} */
     angle = svg.default.GRADIENT_ANGLE;
+    /**
+     * Pivot XY {@link isPoint point} around which angle values will be rotated  
+     * @see {@link isPoint} XY point object reference
+     * @see {@linkcode svg.default.GRADIENT_ANGLEPIVOTPOINT GRADIENT_ANGLEPIVOTPOINT}
+     * @type {{x:number, y:number}}
+     */
+    anglePivotPoint = svg.default.GRADIENT_ANGLEPIVOTPOINT;
 
     x1 = svg.default.GRADIENT_X1;
     y1 = svg.default.GRADIENT_Y1;
@@ -133,6 +140,7 @@ export class svgGradient extends svg.element {
     get type() { return this.isRadial ? 'radialGradient' : 'linearGradient'; }
 
     get html() {
+
         let d = this.data;
         let newGradient = `<${this.type}${isBlank(d) ? '' : ` ${d}`}>`;
         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
@@ -141,63 +149,11 @@ export class svgGradient extends svg.element {
             // apply mirroring, reverse stops array 
             if (this.mirror) { this.stops = this.stops.reverse(); }
             // determine if using angle 
-            this.x1 = '100px';
+            // this.x1 = '100px';
             // this.y2 = 'min';
             // this.y1 = 'min';
             // this.x2 = 'min';
-            let IsAngleValid = function () {
-                if (this.isRadial || this.angle == 0) { return false; } // skip, not modifying the angle
-                // determine if all x1/2 y1/2 coords are valid 
-                let deX1 = this.DeconstructNumericParam(this.x1, svg.default.GRADIENT_X1_SCALEDEFAULT);
-                let deY1 = this.DeconstructNumericParam(this.y1, svg.default.GRADIENT_Y1_SCALEDEFAULT);
-                let deX2 = this.DeconstructNumericParam(this.x2, svg.default.GRADIENT_X2_SCALEDEFAULT);
-                let deY2 = this.DeconstructNumericParam(this.y2, svg.default.GRADIENT_Y2_SCALEDEFAULT);
-                // determine if all coordinates are the same type and non-null
-                if (deX1 == null || deY1 == null || deX2 == null || deY2 == null) { return false; } // at least one param is null 
-                if (deX1.length != deY1.length || deX1.length != deX2.length || deX2.length != deY2.length) { return false; }
-                let numberIndices = []; // store indices of all numbers found 
-                for (let i = 0; i < deX1.length; i++) {
-                    if (typeof deX1[i] != typeof deY1[i] || typeof deX1[i] != typeof deX2[i] || typeof deX2[i] != typeof deY2[i]) { return false; } // data type mismatch
-                    // all string values must match 
-                    switch (typeof deX1[i]) {
-                        case 'string':
-                            if (deX1[i] != deY1[i] || deX1[i] != deX2[i] || deX2[i] != deY2[i]) { return false; } // unit type mismatch
-                            break;
-                        case 'number':
-                            numberIndices.push(i);
-                            break;
-                        default:
-                            console.warn(`WARNING: non-number, non-string, type: ${typeof deX1[i]} issue with DeconstructNumericParam? ignoring`, deX1, this);
-                            continue;
-                    }
-                }
-                if (numberIndices.length == 0) { return false; } // no numbers to calculate
-                // NOW do calculations after so we don't calculate a bunch
-                // of numbers before finding out half are % and half are px 
-                let points = new Array(numberIndices.length);
-                for (let i = 0; i < numberIndices.length; i++) {
-                    let n = numberIndices[i];
-                    let xy1 = toPoint(deX1[n], deY1[n]);
-                    let xy2 = toPoint(deX2[n], deY2[n]);
-                    // let center = FindPointsSharedCenter([xy1, xy2]);
-                    let rotated = RotatePointsAroundSharedCenter([xy1, xy2], this.angle);
-                    // reassign points
-                    xy1 = rotated[0];
-                    xy2 = rotated[1];
-                    deX1[n] = xy1.x;
-                    deY1[n] = xy1.y;
-                    deX2[n] = xy2.x;
-                    deY2[n] = xy2.y;
-                    // points[i] = [n, [xy1, xy2]];
-                }
-                return true;
-            }.bind(this);
-            let xyOrig = [this.x1, this.y1, this.x2, this.y2];
-            let useAngle = IsAngleValid();
             // let pOrig = [];
-            console.log(`UseAngle: ${useAngle}, ${this.#xy12Default}`);
-            if (useAngle) {
-            }
             // if (this.angle != 0) {
             //     pOrig = [toPoint(this.x1, this.y1), toPoint(this.x2, this.y2)];
 
@@ -259,7 +215,6 @@ export class svgGradient extends svg.element {
                     }
                 }
             }
-            // undo angle
             // if (useAngle) {
             //     this.x1 = pOrig[0].x;
             //     this.y1 = pOrig[0].y;
@@ -272,7 +227,68 @@ export class svgGradient extends svg.element {
         return `${newGradient}</${this.type}>`;
     }
     get data() {
-        return this.isRadial ? this.ParseData([
+
+        // process angle (must be done before collecting data)
+        let ProcessAngle = function () {
+            if (this.isRadial || this.angle == 0) { return false; } // skip, not modifying the angle
+            // determine if all x1/2 y1/2 coords are valid 
+            let xyOrig = [this.x1, this.y1, this.x2, this.y2];
+            let deX1 = this.DeconstructNumericParam(this.x1, svg.default.GRADIENT_X1_SCALEDEFAULT);
+            let deY1 = this.DeconstructNumericParam(this.y1, svg.default.GRADIENT_Y1_SCALEDEFAULT);
+            let deX2 = this.DeconstructNumericParam(this.x2, svg.default.GRADIENT_X2_SCALEDEFAULT);
+            let deY2 = this.DeconstructNumericParam(this.y2, svg.default.GRADIENT_Y2_SCALEDEFAULT);
+            // determine if all coordinates are the same type and non-null
+            if (deX1 == null || deY1 == null || deX2 == null || deY2 == null) { return false; } // at least one param is null 
+            if (deX1.length != deY1.length || deX1.length != deX2.length || deX2.length != deY2.length) { return false; }
+            let numberIndices = []; // store indices of all numbers found 
+            for (let i = 0; i < deX1.length; i++) {
+                if (typeof deX1[i] != typeof deY1[i] || typeof deX1[i] != typeof deX2[i] || typeof deX2[i] != typeof deY2[i]) { return false; } // data type mismatch
+                // all string values must match 
+                switch (typeof deX1[i]) {
+                    case 'string':
+                        if (deX1[i] != deY1[i] || deX1[i] != deX2[i] || deX2[i] != deY2[i]) { return false; } // unit type mismatch
+                        break;
+                    case 'number':
+                        numberIndices.push(i);
+                        break;
+                    default:
+                        console.warn(`WARNING: non-number, non-string, type: ${typeof deX1[i]} issue with DeconstructNumericParam? ignoring`, deX1, this);
+                        continue;
+                }
+            }
+            if (numberIndices.length == 0) { return false; } // no numbers to calculate
+            // NOW do calculations after so we don't calculate a bunch
+            // of numbers before finding out half are % and half are px 
+            for (let i = 0; i < numberIndices.length; i++) {
+                let n = numberIndices[i];
+                let xy1 = toPoint(deX1[n], deY1[n]);
+                let xy2 = toPoint(deX2[n], deY2[n]);
+                // let center = FindPointsSharedCenter([xy1, xy2]);
+                // let rotated = RotatePointsAroundSharedCenter([xy1, xy2], this.angle);
+                let rotated = RotatePointsAroundPivot([xy1, xy2], this.anglePivotPoint, this.angle);
+                // reassign points
+                xy1 = rotated[0];
+                xy2 = rotated[1];
+                deX1[n] = xy1.x;
+                deY1[n] = xy1.y;
+                deX2[n] = xy2.x;
+                deY2[n] = xy2.y;
+            }
+            let xyArray = [deX1, deY1, deX2, deY2];
+            console.log(xyArray);
+            for (let i = 0; i < xyArray.length; i++) {
+                xyArray[i] = this.ReconstructNumericParam(xyArray[i]);
+            }
+            this.xy12 = xyArray;
+            return true;
+        }.bind(this);
+        let xyOrig = this.xy12;
+        let useAngle = ProcessAngle();
+
+        console.log(`UseAngle: ${useAngle}, ${this.#xy12Default}`);
+
+        // collect data 
+        let d = this.isRadial ? this.ParseData([
             // radial gradient 
             ['fx', this.fx],
             ['fy', this.fy],
@@ -295,6 +311,13 @@ export class svgGradient extends svg.element {
             ['spreadMethod', this.spreadMethod],
             ['href', this.href]
         ]);
+
+        // undo angle 
+        if (useAngle) {
+            this.xy12 = xyOrig;
+        }
+
+        return d;
     }
 
     get xy12() { return [this.x1, this.y1, this.x2, this.y2]; }

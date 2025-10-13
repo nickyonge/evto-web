@@ -50,6 +50,7 @@ export const GRADIENT_R_SCALEDEFAULT = '50%';// default value of an undefined ra
 export const GRADIENT_MIRROR = false;
 export const GRADIENT_SCALE = 1;
 export const GRADIENT_ANGLE = 0;
+export const GRADIENT_ANGLEPIVOTPOINT = { x: 50, y: 50 };
 export const GRADIENT_UNITS = null;
 export const GRADIENT_TRANSFORM = null;
 export const GRADIENT_SPREADMETHOD = null;
