@@ -46,6 +46,27 @@ export function GetCSSVariable(varName) {
 }
 
 /**
+ * Insert a given string `insert` into the `base` string at index `index` 
+ * @param {string} base String to modify 
+ * @param {string} insert String to insert into `base`
+ * @param {number} [index = -1] index to insert `insert` into `base` at. If -1, automatically places at end. 
+ * @returns {string}
+ */
+export function InsertString(base, insert, index = -1) {
+    if (!isString(base)) { return base; } // null/invalid base, return base 
+    if (!isString(insert)) { return base; } // null/invalid insert, return base 
+    if (!Number.isFinite(index)) { return base; } // invalid number, return base 
+    if (index == -1) { index = base.length; } // -1, match to base length
+    if (index < 0 || index > base.length) {
+        console.warn("WARNING: index must be a positive value within the size of base (or -1), can't insert string, returning base", base, insert, index);
+        return base;
+    }
+    // create regex for index param, insert, and return 
+    const regex = new RegExp(`(^.{${index}})`);
+    return base.replace(regex, `$1${insert}`);
+}
+
+/**
  * Removes non-numeric chars from a string and returns the resulting number. 
  * Returns null if no number is found. 
  * @param {string} str Input string to convert 
