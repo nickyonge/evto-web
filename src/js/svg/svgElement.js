@@ -1,6 +1,6 @@
 import * as svg from './index';
 import { shape, rect, circle, ellipse, line, polyline, polygon, path, gradient } from "./index";
-import { isBlank, StringNumericDivider, StringNumericOnly, StringToNumber } from "../lilutils";
+import { isBlank, StringContainsNumeric, StringNumericDivider, StringNumericOnly, StringOnlyNumeric, StringToNumber } from "../lilutils";
 
 export class svgElement {
 

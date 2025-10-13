@@ -23,8 +23,8 @@ export class SVGImage extends TitledComponent {
         bgr.gradient.isRadial = false;
         bgr.gradient.angle = 90;
         bgr.GetShape().fillGradient = bgr.gradient;
-        console.log(bgr.html);
         this.#image.innerHTML = bgr.html;
+        console.log(this.#image.innerHTML);
 
     }
 }

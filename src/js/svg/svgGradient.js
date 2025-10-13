@@ -1,4 +1,4 @@
-import { isBlank, Lerp, RotatePointsAroundSharedCenter, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
+import { FindPointsSharedCenter, isBlank, Lerp, RotatePointsAroundSharedCenter, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
 import * as svg from './index';
 
 /** Class representing an SVG defined linear or radial gradient */
@@ -13,12 +13,18 @@ export class svgGradient extends svg.element {
     sharpness = svg.default.GRADIENT_SHARPNESS;
     mirror = svg.default.GRADIENT_MIRROR;
     scale = svg.default.GRADIENT_SCALE;
+    /** angle, in degrees, a linear gradient should be rotated by. Does not affect radial gradients. @type {number} */
     angle = svg.default.GRADIENT_ANGLE;
 
     x1 = svg.default.GRADIENT_X1;
     y1 = svg.default.GRADIENT_Y1;
     x2 = svg.default.GRADIENT_X2;
     y2 = svg.default.GRADIENT_Y2;
+
+    get #x1Default() { return this.x1 == null ? svg.default.GRADIENT_X1_SCALEDEFAULT : this.x1; }
+    get #y1Default() { return this.y1 == null ? svg.default.GRADIENT_Y1_SCALEDEFAULT : this.y1; }
+    get #x2Default() { return this.x2 == null ? svg.default.GRADIENT_X2_SCALEDEFAULT : this.x2; }
+    get #y2Default() { return this.y2 == null ? svg.default.GRADIENT_Y2_SCALEDEFAULT : this.y2; }
 
     /** array for gradient stops @type {svgGradientStop[]} */
     stops;
@@ -289,6 +295,24 @@ export class svgGradient extends svg.element {
             ['href', this.href]
         ]);
     }
+
+    /** Debug string output for X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient) @returns {string} */
+    get #xy12() {
+        return this.isRadial ?
+            `fx:${this.fx},fy:${this.fy},cx:${this.cx},cy:${this.cy}` :
+            `x1:${this.x1},y1:${this.y1},x2:${this.x2},y2:${this.y2}`;
+    }
+    /** Debug string output for FX/Y and CX/Y values (or X1/2 and Y1/2 on linear gradient) @returns {string} */
+    get #fcxy() { return this.#xy12; }
+
+    /** Debug string output for X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient) @returns {string} */
+    get #xy12Default() {
+        return this.isRadial ?
+            `fx:${this.#x1Default},fy:${this.#y1Default},cx:${this.#x2Default},cy:${this.#y2Default}` :
+            `x1:${this.#x1Default},y1:${this.#y1Default},x2:${this.#x2Default},y2:${this.#y2Default}`;
+    }
+    /** Debug string output for FX/Y and CX/Y values (or X1/2 and Y1/2 on linear gradient) @returns {string} */
+    get #fcxyDefault() { return this.#xy12Default; }
 
     AddStop(stop) {
         if (stop != null) { this.stops.push(stop); }
