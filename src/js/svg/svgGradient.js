@@ -140,31 +140,16 @@ export class svgGradient extends svg.element {
     get type() { return this.isRadial ? 'radialGradient' : 'linearGradient'; }
 
     get html() {
-
+        // collect data, generate base gradient element 
         let d = this.data;
         let newGradient = `<${this.type}${isBlank(d) ? '' : ` ${d}`}>`;
         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
+        // iterate through stops 
         if (this.stops != null && this.stops.length > 0) {
             let sharpIncrement = 0;
             // apply mirroring, reverse stops array 
             if (this.mirror) { this.stops = this.stops.reverse(); }
-            // determine if using angle 
-            // this.x1 = '100px';
-            // this.y2 = 'min';
-            // this.y1 = 'min';
-            // this.x2 = 'min';
-            // let pOrig = [];
-            // if (this.angle != 0) {
-            //     pOrig = [toPoint(this.x1, this.y1), toPoint(this.x2, this.y2)];
-
-            //     let p1 = toPoint(this.x1, this.y1);
-            //     let p2 = toPoint(this.x2, this.y2);
-            //     let pa = RotatePointsAroundSharedCenter([p1, p2], this.angle);
-            //     p1 = pa[0]; p2 = pa[1];
-            //     this.x1 = p1.x; this.y1 = p1.y;
-            //     this.x2 = p2.x; this.y2 = p2.y;
-            // }
-            // iterate and apply stops 
+            // apply iterated stops 
             let sharpness = this.sharpness.clamp(0, 1);
             for (let i = 0; i < this.stops.length; i++) {
                 if (this.stops[i] == null) { continue; }
@@ -215,15 +200,10 @@ export class svgGradient extends svg.element {
                     }
                 }
             }
-            // if (useAngle) {
-            //     this.x1 = pOrig[0].x;
-            //     this.y1 = pOrig[0].y;
-            //     this.x2 = pOrig[1].x;
-            //     this.y2 = pOrig[1].y;
-            // }
             // undo mirroring 
             if (this.mirror) { this.stops = this.stops.reverse(); }
         }
+        // done! return new gradient html 
         return `${newGradient}</${this.type}>`;
     }
     get data() {
@@ -257,14 +237,12 @@ export class svgGradient extends svg.element {
                 }
             }
             if (numberIndices.length == 0) { return false; } // no numbers to calculate
-            // NOW do calculations after so we don't calculate a bunch
-            // of numbers before finding out half are % and half are px 
+            // NOW do calculations, so we don't calculate a bunch of numbers before finding out half are % and half are px 
             for (let i = 0; i < numberIndices.length; i++) {
                 let n = numberIndices[i];
                 let xy1 = toPoint(deX1[n], deY1[n]);
                 let xy2 = toPoint(deX2[n], deY2[n]);
-                // let center = FindPointsSharedCenter([xy1, xy2]);
-                // let rotated = RotatePointsAroundSharedCenter([xy1, xy2], this.angle);
+                // rotate around pivot
                 let rotated = RotatePointsAroundPivot([xy1, xy2], this.anglePivotPoint, this.angle);
                 // reassign points
                 xy1 = rotated[0];
@@ -275,7 +253,6 @@ export class svgGradient extends svg.element {
                 deY2[n] = xy2.y;
             }
             let xyArray = [deX1, deY1, deX2, deY2];
-            console.log(xyArray);
             for (let i = 0; i < xyArray.length; i++) {
                 xyArray[i] = this.ReconstructNumericParam(xyArray[i]);
             }
@@ -284,8 +261,6 @@ export class svgGradient extends svg.element {
         }.bind(this);
         let xyOrig = this.xy12;
         let useAngle = ProcessAngle();
-
-        console.log(`UseAngle: ${useAngle}, ${this.#xy12Default}`);
 
         // collect data 
         let d = this.isRadial ? this.ParseData([
@@ -313,13 +288,21 @@ export class svgGradient extends svg.element {
         ]);
 
         // undo angle 
-        if (useAngle) {
-            this.xy12 = xyOrig;
-        }
+        if (useAngle) { this.xy12 = xyOrig; }
 
+        // done, return data 
         return d;
     }
 
+    /**
+     * get/set X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient).
+     * - Get: returns four-number array, `[x1, y1, x2, y2]`
+     * - Set: set by one of the following (note: `null` values are accepted): 
+     *   - number `[x1, y1, x2, y2]`
+     *   - comma-split string `"x1,x2,y1,y2"`
+     *   - XY {@link toPoint point} objects array `[{x:x1,y:y1},{x:x2,y:y2}]`
+     * @returns {[number,number,number,number]}
+     */
     get xy12() { return [this.x1, this.y1, this.x2, this.y2]; }
     set xy12(values) {
         if (values == null) { this.x1 = null; this.y1 = null; this.x2 = null; this.y2 = null; }
@@ -354,23 +337,34 @@ export class svgGradient extends svg.element {
             return;
         }
     }
+    /**
+     * get/set FX/Y and CX/Y values (or X1/2 and Y1/2 on radial gradient).
+     * - Get: returns four-number array, `[fx, fy, cx, cy]`
+     * - Set: set by one of the following (note: `null` values are accepted): 
+     *   - number `[fx, fy, cx, cy]`
+     *   - comma-split string `"fx,cx,fy,cy"`
+     *   - XY {@link toPoint point} objects array `[{x:fx,y:fy},{x:cx,y:cy}]`
+     * @returns {[number,number,number,number]}
+     */
+    get fcxy() { return this.xy12; } 
+    set fcxy(values) { this.xy12 = values; } 
 
-    /** Debug string output for X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient) @returns {string} */
+    /** string output for X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient) @returns {string} */
     get xy12String() {
         return this.isRadial ?
             `fx:${this.fx},fy:${this.fy},cx:${this.cx},cy:${this.cy}` :
             `x1:${this.x1},y1:${this.y1},x2:${this.x2},y2:${this.y2}`;
     }
-    /** Debug string output for FX/Y and CX/Y values (or X1/2 and Y1/2 on linear gradient) @returns {string} */
+    /** string output for FX/Y and CX/Y values (or X1/2 and Y1/2 on linear gradient) @returns {string} */
     get fcxyString() { return this.xy12String; }
 
-    /** Debug string output for X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient) @returns {string} */
+    /** string output for X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient) with local default backups if `null` @returns {string} */
     get #xy12Default() {
         return this.isRadial ?
             `fx:${this.#x1Default},fy:${this.#y1Default},cx:${this.#x2Default},cy:${this.#y2Default}` :
             `x1:${this.#x1Default},y1:${this.#y1Default},x2:${this.#x2Default},y2:${this.#y2Default}`;
     }
-    /** Debug string output for FX/Y and CX/Y values (or X1/2 and Y1/2 on linear gradient) @returns {string} */
+    /** string output for FX/Y and CX/Y values (or X1/2 and Y1/2 on linear gradient) with local default backups if `null` @returns {string} */
     get #fcxyDefault() { return this.#xy12Default; }
 
     AddStop(stop) {
