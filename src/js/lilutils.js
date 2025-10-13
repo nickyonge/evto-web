@@ -2,8 +2,19 @@
 
 /** check if a string is null, empty, or whitespace
  * @param {string} str input string to test 
+ * @param {boolean} [errorOnNonString=false] 
+ * Throw error on a non-string? If false, just return `true`.
  * @returns {boolean} true if blank, false if contains content */
-export const isBlank = str => !str || (typeof str === 'string' && !str.trim());
+export function isBlank(str, errorOnNonString = true) {
+    if (str == null) { return true; }// null/undefined counts as blank
+    if (typeof str !== 'string') {
+        if (errorOnNonString) {
+            throw new Error(`ERROR: can\'t check non-string if blank, returning true. Fix (or set errorOnNonString to false). Type:${typeof str}, value:${str}`);
+        }
+        return true;
+    }
+    return !str || !str.trim();
+};
 /** quick test if the given value is a string @param {string} str string to test @returns {boolean} */
 export const isString = str => typeof str == 'string';
 /** check if a value IS a string AND IS NOT blank/whitespace/null
