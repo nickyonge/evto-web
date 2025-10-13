@@ -79,20 +79,36 @@ export function InsertString(base, insert, index = -1) {
 
 /**
  * Removes non-numeric chars from a string and returns the resulting number. 
- * Returns null if no number is found. 
+ * Returns `NaN` if no number is found. 
  * @param {string} str Input string to convert 
- * @returns {number|null} The parsed number, or null if no digits are found.
+ * @param {boolean} [parseToInt = false] If true, returns `int`. If false, returns `Number`. Default `false`. 
+ * @returns {number|NaN} The parsed number, or `NaN` if no digits are found.
  */
-export const StringToNumber = str => (str.match(/\d+/) ? parseInt(str.match(/\d+/)[0], 10) : null);
+export function StringToNumber(str, parseToInt = false) {
+    if (!isStringNotBlank) { return typeof str == 'number' ? str : NaN; }
+    if (!StringContainsNumeric(str)) { return NaN; }
+    str = StringNumericOnly(str);// strip away all non-numeric chars 
+    return parseToInt ? parseInt(str) : Number(str);
+}
 
 /** Strips away all non-alphanumeric characters from a string
  * @param {string} str string to process @returns {string} 
  * @example StringAlphanumericOnly('abc123!@#'); // returns 'abc123' */
 export const StringAlphanumericOnly = str => (isBlank(str) ? str : str.replace(/[^a-zA-Z0-9]/g, ''));
 /** Strips away all non-numerical characters from a string
- * @param {string} str string to process @returns {string} 
- * @example StringNumericOnly('abc123!@#'); // returns '123' */
-export const StringNumericOnly = str => (isBlank(str) ? str : str.replace(/[^0-9]/g, ''));
+ * @param {string} str string to process
+ * @param {boolean} [keepNumericSymbols=true] If true, keeps one `-` at the start of the number, and one `.` within the number
+ * @returns {string} 
+ * @example StringNumericOnly('abc-12.34!@#'); // returns '-12.34' */
+export function StringNumericOnly(str, keepNumericSymbols = true) {
+    if (isBlank(str)) { return str; }
+    str = str.replace(/[^0-9.-]/g, ''); // remove non-nums, keep . and - 
+    str = str.replace(/(?!^)-/g, ''); // keep one - at the start, if present
+    let decimal = str.indexOf('.'); // get first index of decimal point 
+    str = str.replaceAll('.', ''); // remove all periods 
+    if (decimal >= 0) { str = InsertString(str, '.', decimal); }
+    return str;
+};
 /** Strips away all non-alphabetical characters from a string
  * @param {string} str string to process @returns {string} 
  * @example StringAlphaOnly('abc123!@#'); // returns 'abc' */
