@@ -587,9 +587,9 @@ export function isPoint(pt, strict = false) {
 export function arePoints(...pts) {
     if (pts == null || !Array.isArray(pts)) { return false; }
     pts = pts.flat();
-    pts.forEach(pt => {
-        if (!isPoint(pt)) { return false; }
-    });
+    for (let i = 0; i < pts.length; i++) {
+        if (!isPoint(pts[i])) { return false; }
+    }
     return true;
 }
 
