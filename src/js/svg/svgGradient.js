@@ -133,22 +133,74 @@ export class svgGradient extends svg.element {
             let sharpIncrement = 0;
             // apply mirroring, reverse stops array 
             if (this.mirror) { this.stops = this.stops.reverse(); }
-            // apply angle
-            let pOrig = [];
-            let useAngle = this.angle != 0;
-            if (useAngle) {
+            // determine if using angle 
+            this.x1 = '100px';
+            // this.y2 = 'min';
+            // this.y1 = 'min';
+            // this.x2 = 'min';
+            let IsAngleValid = function () {
+                if (this.isRadial || this.angle == 0) { return false; } // skip, not modifying the angle
                 // determine if all x1/2 y1/2 coords are valid 
-                
+                let deX1 = this.DeconstructNumericParam(this.x1, svg.default.GRADIENT_X1_SCALEDEFAULT);
+                let deY1 = this.DeconstructNumericParam(this.y1, svg.default.GRADIENT_Y1_SCALEDEFAULT);
+                let deX2 = this.DeconstructNumericParam(this.x2, svg.default.GRADIENT_X2_SCALEDEFAULT);
+                let deY2 = this.DeconstructNumericParam(this.y2, svg.default.GRADIENT_Y2_SCALEDEFAULT);
+                // determine if all coordinates are the same type and non-null
+                if (deX1 == null || deY1 == null || deX2 == null || deY2 == null) { return false; } // at least one param is null 
+                if (deX1.length != deY1.length || deX1.length != deX2.length || deX2.length != deY2.length) { return false; }
+                let numberIndices = []; // store indices of all numbers found 
+                for (let i = 0; i < deX1.length; i++) {
+                    if (typeof deX1[i] != typeof deY1[i] || typeof deX1[i] != typeof deX2[i] || typeof deX2[i] != typeof deY2[i]) { return false; } // data type mismatch
+                    // all string values must match 
+                    switch (typeof deX1[i]) {
+                        case 'string':
+                            if (deX1[i] != deY1[i] || deX1[i] != deX2[i] || deX2[i] != deY2[i]) { return false; } // unit type mismatch
+                            break;
+                        case 'number':
+                            numberIndices.push(i);
+                            break;
+                        default:
+                            console.warn(`WARNING: non-number, non-string, type: ${typeof deX1[i]} issue with DeconstructNumericParam? ignoring`, deX1, this);
+                            continue;
+                    }
+                }
+                if (numberIndices.length == 0) { return false; } // no numbers to calculate
+                // NOW do calculations after so we don't calculate a bunch
+                // of numbers before finding out half are % and half are px 
+                let points = new Array(numberIndices.length);
+                for (let i = 0; i < numberIndices.length; i++) {
+                    let n = numberIndices[i];
+                    let xy1 = toPoint(deX1[n], deY1[n]);
+                    let xy2 = toPoint(deX2[n], deY2[n]);
+                    // let center = FindPointsSharedCenter([xy1, xy2]);
+                    let rotated = RotatePointsAroundSharedCenter([xy1, xy2], this.angle);
+                    // reassign points
+                    xy1 = rotated[0];
+                    xy2 = rotated[1];
+                    deX1[n] = xy1.x;
+                    deY1[n] = xy1.y;
+                    deX2[n] = xy2.x;
+                    deY2[n] = xy2.y;
+                    // points[i] = [n, [xy1, xy2]];
+                }
+                return true;
+            }.bind(this);
+            let xyOrig = [this.x1, this.y1, this.x2, this.y2];
+            let useAngle = IsAngleValid();
+            // let pOrig = [];
+            console.log(`UseAngle: ${useAngle}, ${this.#xy12Default}`);
+            if (useAngle) {
             }
-            if (this.angle != 0) {
-                pOrig = [toPoint(this.x1, this.y1), toPoint(this.x2, this.y2)];
-                let p1 = toPoint(this.x1, this.y1);
-                let p2 = toPoint(this.x2, this.y2);
-                let pa = RotatePointsAroundSharedCenter([p1, p2], this.angle);
-                p1 = pa[0]; p2 = pa[1];
-                this.x1 = p1.x; this.y1 = p1.y;
-                this.x2 = p2.x; this.y2 = p2.y;
-            }
+            // if (this.angle != 0) {
+            //     pOrig = [toPoint(this.x1, this.y1), toPoint(this.x2, this.y2)];
+
+            //     let p1 = toPoint(this.x1, this.y1);
+            //     let p2 = toPoint(this.x2, this.y2);
+            //     let pa = RotatePointsAroundSharedCenter([p1, p2], this.angle);
+            //     p1 = pa[0]; p2 = pa[1];
+            //     this.x1 = p1.x; this.y1 = p1.y;
+            //     this.x2 = p2.x; this.y2 = p2.y;
+            // }
             // iterate and apply stops 
             let sharpness = this.sharpness.clamp(0, 1);
             for (let i = 0; i < this.stops.length; i++) {
@@ -201,12 +253,12 @@ export class svgGradient extends svg.element {
                 }
             }
             // undo angle
-            if (this.angle != 0) {
-                this.x1 = pOrig[0].x;
-                this.y1 = pOrig[0].y;
-                this.x2 = pOrig[1].x;
-                this.y2 = pOrig[1].y;
-            }
+            // if (useAngle) {
+            //     this.x1 = pOrig[0].x;
+            //     this.y1 = pOrig[0].y;
+            //     this.x2 = pOrig[1].x;
+            //     this.y2 = pOrig[1].y;
+            // }
             // undo mirroring 
             if (this.mirror) { this.stops = this.stops.reverse(); }
         }
