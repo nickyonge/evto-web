@@ -1,4 +1,4 @@
-import { FindPointsSharedCenter, isBlank, Lerp, RotatePointsAroundSharedCenter, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
+import { arePoints, FindPointsSharedCenter, isBlank, isPoint, Lerp, RotatePointsAroundSharedCenter, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
 import * as svg from './index';
 
 /** Class representing an SVG defined linear or radial gradient */
@@ -297,14 +297,49 @@ export class svgGradient extends svg.element {
         ]);
     }
 
+    get xy12() { return [this.x1, this.y1, this.x2, this.y2]; }
+    set xy12(values) {
+        if (values == null) { this.x1 = null; this.y1 = null; this.x2 = null; this.y2 = null; }
+        if (Array.isArray(values)) {
+            if (values.length == 0) { this.xy12 = null; }// no values, reset all
+            // check values in order
+            if (values.length >= 2 && arePoints(values[0], values[1])) {
+                this.xy12 = [values[0].x, values[0].y, values[1].x, values[1].y];
+                return;
+            }
+            if (values.length < 4) { values.length = 4; }
+            for (let i = 0; i < values.length; i++) {
+                // direct null assignment, don't wanna screw around with undefined
+                if (values[i] == null) { values[i] = null; }
+                if (isPoint(values[i])) {
+                    values[i + 1] = values[i].y;
+                    values[i] = values[i].x;
+                    i++;
+                    continue;
+                }
+            }
+            this.x1 = values[0];
+            this.y1 = values[1];
+            this.x2 = values[2];
+            this.y2 = values[3];
+        } else if (typeof values == 'string') {
+            if (values.indexOf(',') >= 0) {
+                this.xy12 = values.split(',');
+                return;
+            }
+            console.warn(`WARNING: couldn't set xy12 to values: ${values}`, this);
+            return;
+        }
+    }
+
     /** Debug string output for X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient) @returns {string} */
-    get #xy12() {
+    get xy12String() {
         return this.isRadial ?
             `fx:${this.fx},fy:${this.fy},cx:${this.cx},cy:${this.cy}` :
             `x1:${this.x1},y1:${this.y1},x2:${this.x2},y2:${this.y2}`;
     }
     /** Debug string output for FX/Y and CX/Y values (or X1/2 and Y1/2 on linear gradient) @returns {string} */
-    get #fcxy() { return this.#xy12; }
+    get fcxyString() { return this.xy12String; }
 
     /** Debug string output for X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient) @returns {string} */
     get #xy12Default() {

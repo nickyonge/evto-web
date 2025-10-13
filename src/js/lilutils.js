@@ -580,6 +580,20 @@ export function isPoint(pt, strict = false) {
         'x' in pt && 'y' in pt;
 }
 /**
+ * Checks (non-strict) if all the given values are {@link toPoint point} objects
+ * @param  {...{x:number, y:number}} pts array or values of, hopefully, {@link toPoint point} objects
+ * @returns {boolean}
+ */
+export function arePoints(...pts) {
+    if (pts == null || !Array.isArray(pts)) { return false; }
+    pts = pts.flat();
+    pts.forEach(pt => {
+        if (!isPoint(pt)) { return false; }
+    });
+    return true;
+}
+
+/**
  * Rotates the given X/Y coordinates around the given X/Y pivot point by the given angle, in degrees (default) or radians 
  * @param {number} pointX X coordinate to be rotated @param {number} pointY Y coordinate to be rotated 
  * @param {number} pivotX X coordinate to rotate around @param {number} pivotY Y coordinate to rotate around 
