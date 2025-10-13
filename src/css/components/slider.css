@@ -23,12 +23,35 @@
 
     --slider-bg-z-index: 1;
     --slider-thumb-z-index: 2;
+
+    --min-height-with-title: calc(var(--ui-component-title-height) + max(var(--slider-track-height), var(--slider-thumb-size)));
+    --min-height-without-title: max(var(--slider-track-height), var(--slider-thumb-size));
+}
+
+.slider {
+    position: relative;
+    display: block;
+    height: max-content;
+    /* failsafe default height assignment */
+    min-height: var(--min-height-with-title);
+}
+
+/* set the height based on the presence of a componentTitle child and its display setting */
+.slider:has(> .componentTitle):not(:has(> .componentTitle[style*="display:none"])),
+.slider:has(> .componentTitle):not(:has(> .componentTitle[style*="display: none"])) {
+    /* slider HAS a title, and it IS visible (specifically, it is not invisible) */
+    min-height: var(--min-height-with-title);
+}
+.slider:not(:has(> .componentTitle)),
+.slider:has(> .componentTitle):has(> .componentTitle[style*="display:none"]),
+.slider:has(> .componentTitle):has(> .componentTitle[style*="display: none"]) {
+    /* slider doesn't have a componentTitle child, or it does AND it's invisible */
+    min-height: var(--min-height-without-title);
 }
 
 .slider.container {
     width: 100%;
     height: max-content;
-    min-height: max(var(--slider-track-height), var(--slider-thumb-size));
     position: relative;
     border-radius: var(--slider-track-radius);
     align-content: center;

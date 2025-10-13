@@ -12,5 +12,5 @@
 
 .uiComponent .componentTitle.listTitle {
     display: flex;
-    height: 18px;
+    height: var(--ui-component-title-height);
 }

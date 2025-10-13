@@ -46,6 +46,8 @@
     /* --color-bg-gradient-1: #beeeef;
     --color-bg-gradient-2: #a4d4f3; */
 
+    --ui-component-title-height: 18px;
+
     --ui-component-color-bg: #323133;
     --ui-component-color-bg-border: #3b3a3d;
     --ui-component-color-bg-highlight: #424143;
