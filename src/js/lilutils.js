@@ -520,6 +520,18 @@ export function Lerp(a, b, t) { return a + ((b - a) * t); }
  * @returns {{x:number, y:number}} an object with given `.x` and `.y` coordinate properties */
 export function toPoint(x, y) { return { x: x, y: y }; }
 /**
+ * Checks if the given value `pt` is a {@link toPoint point} object (an object with `.x` and `.y` properties)
+ * @param {{x:number, y:number}} pt Point to check
+ * @param {boolean} [strict = false] If true, performs a stricter check, ensuring `x` and `y` are non-inherited numbers 
+ * @returns {boolean} */
+export function isPoint(pt, strict = false) {
+    if (pt == null || typeof pt != 'object') return false;
+    return strict ?
+        pt.hasOwnProperty('x') && pt.hasOwnProperty('y') &&
+        typeof pt.x == 'number' && typeof pt.y == 'number' :
+        'x' in pt && 'y' in pt;
+}
+/**
  * Rotates the given X/Y coordinates around the given X/Y pivot point by the given angle, in degrees (default) or radians 
  * @param {number} pointX X coordinate to be rotated @param {number} pointY Y coordinate to be rotated 
  * @param {number} pivotX X coordinate to rotate around @param {number} pivotY Y coordinate to rotate around 
