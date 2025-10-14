@@ -585,6 +585,35 @@ export function SetElementDisabled(element) {
 export function Lerp(a, b, t) { return a + ((b - a) * t); }
 
 /** 
+ * Gets the interpolation factor for the given value within the
+ * given range. If value is between `min` and `max`, returns a
+ * value between `0` and `1`. 
+ * 
+ * Values below `min` will be `< 0`, above `max` will be `> 1`.
+ * 
+ * If `min` and `max` are equal, values below `min` will return
+ * `-Infinity`, and above `max` will return `Infinity`.
+ * @param {Number} value Value to determine normalized range of 
+ * @param {Number} min Minimal value, the "start" of the range 
+ * @param {Number} max Maximal value, the "end" of the range 
+ * @returns {Number}
+ */
+export function InverseLerp(value, min, max) {
+    if (!Number.isFinite(value)) { return NaN; }
+    if (!Number.isFinite(min) || !Number.isFinite(max)) {
+        if (min == null || max == null || typeof min != 'number' || typeof max != 'number') { return NaN; }
+        if (Number.isFinite(min)) { return -Infinity; } return Infinity;
+    }
+    if (!Number.isFinite(value) || !Number.isFinite(min) || !Number.isFinite(value)) { return NaN; }
+    if (min === max) {
+        if (min === value) { return 0; }// could be 0 or 1 
+        if (start === 0) { return NaN; }// can't divide by zero
+        if (value < min) { return -Infinity; } return Infinity;
+    }
+    return (value - min) / (max - min);
+}
+
+/** 
  * Convert the given `x` amd `y` coordinates to a `point` object
  * @param {number} x  @param {number} y 
  * @returns {{x:number, y:number}} an object with given `.x` and `.y` coordinate properties */
