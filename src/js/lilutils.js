@@ -78,6 +78,59 @@ export function InsertString(base, insert, index = -1) {
 }
 
 /**
+ * Takes a value, and ensures that it's a number. If `value` isn't a number
+ * and can't be parsed, returns NaN and optionally outputs an error.
+ * @param {number|any} value Input value to convert to a Number 
+ * @param {boolean} [errorOnFailure=true] output an error upon parsing failure? Default `true`
+ * @returns {number}
+ */
+export function EnsureToNumber(value, errorOnFailure = true) {
+    function failure(reason) {
+        if (errorOnFailure) {
+            console.error(`ERROR: failed to parse value: ${value} (type: ${typeof value}) to Number, ${reason}`, value);
+        }
+        return NaN;
+    }
+    if (value == null) { return failure('value is null or undefined'); }
+    switch (typeof value) {
+        case 'number': return value;
+        case 'string': return StringToNumber(str);
+        case 'boolean': return value ? 1 : 0;
+        case 'bigint': return Number(value);
+        default:
+            // other type - attempt to coerce to number
+            const n = Number(value);
+            if (Number.isFinite(n)) { return n; }
+            // failed, before checking if n is Infinity, -Infinity, or NaN, try toString 
+            const s = value.toString();
+            if (isStringNotBlank(s)) {
+                const sn = StringToNumber(s);
+                if (Number.isFinite(sn)) { return sn; }
+                if (IsNumberInfiniteOrNaN(sn)) { return sn; }
+            }
+            // infinity/NaN n check 
+            if (IsNumberInfiniteOrNaN(n)) { return n; }
+            if (n == null || typeof n != 'number') {
+                // conversion fully failed
+                return failure('failed to convert value, likely too complex for conversion');
+            }
+            // unspecified error 
+            return failure('catastrophic error?? like, how???');
+    }
+}
+
+/**
+ * Checks if the given number is explicitly 
+ * `Infinity`, `-Infinity`, or `NaN`
+ * @param {number} num Number to check  
+ * @returns {boolean} */
+export function IsNumberInfiniteOrNaN(num) {
+    if (num == null || typeof num != 'number') { return false; }
+    if (Number.isFinite(num)) { return false; }
+    return num === Infinity || num === -Infinity || num === NaN;
+}
+
+/**
  * Removes {@link StringNumericOnly non-numeric} chars from a string and returns the resulting number. 
  * Returns `NaN` if no number is found. 
  * @param {string} str Input string to convert 
@@ -86,6 +139,10 @@ export function InsertString(base, insert, index = -1) {
  */
 export function StringToNumber(str, parseToInt = false) {
     if (!isStringNotBlank(str)) { return typeof str == 'number' ? str : NaN; }
+    let strLow = str.toLowerCase().trim();
+    if (strLow == 'infinity') { return Infinity; }
+    else if (strLow == '-infinity') { return -Infinity; }
+    else if (strLow == 'nan') { return NaN; }
     if (!StringContainsNumeric(str)) { return NaN; }
     str = StringNumericOnly(str);// strip away all non-numeric chars 
     return parseToInt ? parseInt(str) : Number(str);
