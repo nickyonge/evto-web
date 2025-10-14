@@ -85,7 +85,7 @@ export function InsertString(base, insert, index = -1) {
  * @returns {number|NaN} The parsed number, or `NaN` if no digits are found.
  */
 export function StringToNumber(str, parseToInt = false) {
-    if (!isStringNotBlank) { return typeof str == 'number' ? str : NaN; }
+    if (!isStringNotBlank(str)) { return typeof str == 'number' ? str : NaN; }
     if (!StringContainsNumeric(str)) { return NaN; }
     str = StringNumericOnly(str);// strip away all non-numeric chars 
     return parseToInt ? parseInt(str) : Number(str);
