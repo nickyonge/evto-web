@@ -61,3 +61,15 @@ Number.prototype.clamp = function (min = 0, max = 1) {
     else if (min == max) { return min; }
     return Math.min(Math.max(this.valueOf(), min), max);
 };
+
+/**
+ * Checks if this number is between the given minimum and maximum values.
+ * @param {number} min Minimum bound value 
+ * @param {number} max Maximum bound value 
+ * @param {boolean} [inclusive=true] Does exactly matching a bound count as being between? Default `true` 
+ * @returns {boolean} */
+Number.prototype.isBetween = function (min, max, inclusive = true) {
+    return inclusive ?
+        this.valueOf() >= min && this.valueOf() <= max :
+        this.valueOf() > min && this.valueOf() < max;
+};

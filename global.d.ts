@@ -14,7 +14,7 @@ declare global {
          * allow directly adding {@linkcode BasicComponent} classes.
          */
         appendChild<T extends Node>(Node: T): Node;
-        
+
     }
 
     interface Number {
@@ -42,6 +42,14 @@ declare global {
          * @param {number} [max = 1] Maximum possible value
          * @returns {number} */
         clamp(min: number = 0, max: number = 1): number;
+
+        /**
+         * Checks if this number is between the given minimum and maximum values.
+         * @param {number} min Minimum bound value 
+         * @param {number} max Maximum bound value 
+         * @param {boolean} [inclusive=true] Does exactly matching a bound count as being between? Default `true` 
+         * @returns {boolean} */
+        isBetween(min: number, max: number, inclusive: boolean = true): boolean;
     }
 
 }
