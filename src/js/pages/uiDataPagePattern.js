@@ -33,6 +33,18 @@ export function CreatePagePattern(page) {
     let svgImage = new cmp.SVGImage();
     sectionPattern.appendChild(svgImage);
 
+    let slider1 = new cmp.Slider('scale', null, 0);
+    let slider2 = new cmp.Slider('angle', null, 0);
+    let color1 = new cmp.ColorPicker('color1', null, 'skyblue');
+    let color2 = new cmp.ColorPicker('color2', null, 'white');
+    let color3 = new cmp.ColorPicker('color3', null, 'pink');
+
+    sectionPattern.appendChild(slider1);
+    sectionPattern.appendChild(slider2);
+    sectionPattern.appendChild(color1);
+    sectionPattern.appendChild(color2);
+    sectionPattern.appendChild(color3);
+    
     /* REFERENCE PATTERNS 
     Square (empty canvas): https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z
     Horizontal Split: https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z%0AM0%2C5%20L20%2C5

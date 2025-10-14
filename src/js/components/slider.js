@@ -1,6 +1,14 @@
-import { GetCSSVariable, isBlank, StringNumericOnly, StringToNumber } from "../lilutils";
+import { GetCSSVariable, InverseLerp, isBlank, StringNumericOnly, StringToNumber } from "../lilutils";
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
+
+const INITIAL_VALUE = 0;
+const MIN_VALUE = 0;
+const MAX_VALUE = 100;
+const STEPS = 20;
+const AS_PERCENTAGE = true;
+const PREFIX = '';
+const SUFFIX = '';
 
 /**
  * Slider component with range input
@@ -15,54 +23,93 @@ export class Slider extends TitledComponent {
     #ticksContainer;
     #ticks;
 
-    initialValue = 50;
-    minValue = 0;
-    maxValue = 100;
-    steps = 20;
+    get initialValue() { return this.#_initialValue; }
+    set initialValue(v) { this.#_initialValue = v; }
+    #_initialValue = INITIAL_VALUE;
+    get minValue() { return this.#_minValue; }
+    set minValue(v) { this.#_minValue = v; }
+    #_minValue = MIN_VALUE;
+    get maxValue() { return this.#_maxValue; }
+    set maxValue(v) { this.#_maxValue = v; }
+    #_maxValue = MAX_VALUE;
+    get steps() { return this.#_steps; }
+    set steps(v) { this.#_steps = v; }
+    #_steps = STEPS;
 
-    valuePrefix = '';
-    valueSuffix = '%';
+    get asPercentage() { return this.#_asPercentage; }
+    set asPercentage(v) { this.#_asPercentage = v; }
+    #_asPercentage = AS_PERCENTAGE;
 
-    constructor(componentTitle, onChangeCallback, initialValue = 50, steps = 100) {
-        super(componentTitle);
+    get valuePrefix() { return this.#_valuePrefix; }
+    set valuePrefix(v) { this.#_valuePrefix = v; }
+    #_valuePrefix = PREFIX;
+    get valueSuffix() { return this.#_valueSuffix; }
+    set valueSuffix(v) { this.#_valueSuffix = v; }
+    #_valueSuffix = SUFFIX;
 
-        ui.AddClassesToDOM(this.div, 'slider', 'container');
+    #updateInput() {
+        let increment = this.maxValue / this.steps;
+        ui.AddElementAttributes(this.#input,
+            ['min', 'max', 'step'],
+            [this.minValue, this.maxValue, increment]);
+    }
 
-        this.initialValue = initialValue;
-
-        this.#input = ui.CreateInputWithID('range', this.uniqueComponentName, 'sinput');
-        let increment = 100 / steps;
-        ui.AddElementAttributes(this.#input, ['min', 'max', 'step', 'value'], [0, 100, increment, initialValue]);
-        this.#bg = ui.CreateElementWithClass('span', 'sbg');
-        ui.AddElementAttribute(this.#bg, 'value', initialValue);
-        this.#bg.style.setProperty('--slider-value', `${initialValue.toMax()}%`);
-
-        // generate text indicator
-        this.#textIndicator = ui.CreateDivWithClass('stext');
-        ui.AddElementAttribute(this.#textIndicator, 'slider-value', initialValue);
-        this.#textIndicator.innerHTML = `${initialValue}%`;
-        this._titleElement.appendChild(this.#textIndicator);
-
-        // generate tickmarks
-        this.#ticksContainer = ui.CreateDivWithClass('stickmarks');
-        this.#bg.appendChild(this.#ticksContainer);
-        let min = parseInt(this.#input.min);
-        let max = parseInt(this.#input.max);
-        let step = parseInt(this.#input.step);
+    #generateTickMarks() {
+        if (this.#ticksContainer == null) {
+            this.#ticksContainer = ui.CreateDivWithClass('stickmarks');
+            this.#bg.appendChild(this.#ticksContainer);
+        }
+        let min = StringToNumber(this.minValue);
+        let max = StringToNumber(this.maxValue);
+        let step = StringToNumber(this.steps);
         if (step < 10) { step = 10; }
+        if (this.#ticks != null && this.#ticks.length > 0) {
+            for (let i = 0; i < this.#ticks.length; i++) {
+                this.#ticks[i]?.remove();
+            }
+        }
         this.#ticks = [];
         for (let i = min; i <= max; i += step) {
             let tick = ui.CreateElement('span');
             this.#ticks.push(tick);
             this.#ticksContainer.appendChild(tick);
         }
+    }
+
+    constructor(componentTitle, onChangeCallback, initialValue = INITIAL_VALUE,
+        minValue = MIN_VALUE, maxValue = MAX_VALUE, asPercentage = AS_PERCENTAGE, steps = STEPS) {
+        super(componentTitle);
+
+        ui.AddClassesToDOM(this.div, 'slider', 'container');
+
+        initialValue = initialValue.clamp(minValue, maxValue);
+        this.initialValue = initialValue;
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+        this.steps = steps;
+        this.asPercentage = asPercentage;
+
+        // create slider input 
+        this.#input = ui.CreateInputWithID('range', this.uniqueComponentName, 'sinput');
+        this.value = initialValue; // ensure we set initial value 
+        this.#bg = ui.CreateElementWithClass('span', 'sbg');
+        ui.AddElementAttribute(this.#bg, 'value', initialValue);
+        this.#bg.style.setProperty('--slider-value', this.valueAsString());
+        this.#updateInput();
+
+        // generate text indicator
+        this.#textIndicator = ui.CreateDivWithClass('stext');
+        ui.AddElementAttribute(this.#textIndicator, 'slider-value', initialValue);
+        this.#textIndicator.innerHTML = this.valueAsString();
+        this._titleElement.appendChild(this.#textIndicator);
+
+        // generate tickmarks
+        this.#generateTickMarks();
 
         // add callback event 
         this.#input.addEventListener('input', (e) => {
-            let value = e.target.value;
-            console.log(typeof value);
-            this.#bg.style.setProperty('--slider-value', `${e.target.value}%`);
-            this.#textIndicator.innerHTML = `${e.target.value}%`;
+            this.#bg.style.setProperty('--slider-value', `${this.valueNormalized * 100}%`);
+            this.#textIndicator.innerHTML = this.valueAsString();
             if (onChangeCallback) {
                 onChangeCallback(e.target.value, this);
             }
@@ -71,27 +118,51 @@ export class Slider extends TitledComponent {
         this.div.appendChild(this.#input);
         this.div.appendChild(this.#bg);
 
-        this.value = '69%';
-
         this._addHelpIcon(componentTitle, false, false);
 
         // TODO: slider.css vars move to vars.css
         // Issue URL: https://github.com/nickyonge/evto-web/issues/43
     }
 
-    get valueAsString() {
-        if (!this.#input) { return null; }
-        return this.#input.value;
+    /** gets the current slider value, normalized between 0-1 @returns {Number} */
+    get valueNormalized() {
+        if (this.#input == null) { return NaN; }
+        let value = this.#input.value;
+        let n = StringToNumber(value);
+        if (n == null || !Number.isFinite(n)) {
+            console.warn(`WARNING: couldn't parse slider value ${value} to number, can't create percentage`, this);
+            return NaN;
+        }
+        // normalize to a value between min and max 
+        let min = StringToNumber(this.minValue);
+        let max = StringToNumber(this.maxValue);
+        return InverseLerp(n, min, max);
     }
-    set valueAsString(v) {
-        this.value = v;
+    get valueAsPercent() {
+        return `${Math.round(this.valueNormalized * 100)}%`;
     }
 
-    get value() {
-        let v = this.valueAsString;
-        if (!Number.isFinite(v)) { return null; }
-        return StringToNumber(v);
+    valueAsString(formatted = true) {
+        if (!this.#input) { return null; }
+        if (!formatted) { return this.#input.value; }
+
+        let value = this.#input.value;
+
+        if (this.asPercentage) {
+            value = this.valueAsPercent;
+        }
+
+        return `${this.valuePrefix}${value}${this.valueSuffix}`;
     }
+
+    /**
+     * Gets/sets this slider's value number.
+     * - Getter returns the value as a Number (for string, see {@link valueAsString})
+     * - Setter can take string or number (or any type that can be parsed into a numeric value)
+     *   - Setting to `null` will reset the value to {@linkcode initialValue}
+     * @type {Number|string} can take a number, string, or other type that can be parsed to number
+     * @returns {Number}
+     */
     set value(v) {
         if (!this.#input) { return; }
         if (v == null) { v = this.initialValue; }
@@ -122,6 +193,11 @@ export class Slider extends TitledComponent {
         }
         this.#input.value = v;
         this.#input.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+    get value() {
+        let v = this.valueAsString(false);
+        if (!Number.isFinite(v)) { return null; }
+        return StringToNumber(v);
     }
 }
 
