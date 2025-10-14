@@ -78,7 +78,7 @@ export function InsertString(base, insert, index = -1) {
 }
 
 /**
- * Removes non-numeric chars from a string and returns the resulting number. 
+ * Removes {@link StringNumericOnly non-numeric} chars from a string and returns the resulting number. 
  * Returns `NaN` if no number is found. 
  * @param {string} str Input string to convert 
  * @param {boolean} [parseToInt = false] If true, returns `int`. If false, returns `Number`. Default `false`. 

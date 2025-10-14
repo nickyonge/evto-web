@@ -8,6 +8,8 @@ export class SVGImage extends TitledComponent {
 
     #image;
 
+    rect;
+
     // constructor() {
     //     super();
     constructor(componentTitle) {
@@ -18,13 +20,12 @@ export class SVGImage extends TitledComponent {
         this.#image = ui.CreateDivWithClass('image', 'canvasSizedImg');
         this.div.appendChild(this.#image);
 
-        let bgr = BasicGradientRect('skyblue', 'white', 'pink');
-        bgr.gradient.sharpness = 0.213;
-        bgr.gradient.isRadial = false;
-        bgr.gradient.angle = 45;
-        bgr.GetShape().fillGradient = bgr.gradient;
-        this.#image.innerHTML = bgr.html;
-        console.log(this.#image.innerHTML);
+        this.rect = BasicGradientRect('skyblue', 'white', 'pink');
+        this.rect.GetShape().fillGradient = this.rect.gradient;
+        this.#image.innerHTML = this.rect.html;
+    }
 
+    updateRect() {
+        this.#image.innerHTML = this.rect.html;
     }
 }
