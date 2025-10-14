@@ -91,6 +91,28 @@ export function StringToNumber(str, parseToInt = false) {
     return parseToInt ? parseInt(str) : Number(str);
 }
 
+/**
+ * Ensures a numeric string does not exceed the given number of decimal places.
+ * 
+ * Note: does NOT round the string. If you want it rounded, use {@link StringToNumber} and {@link Number.toMax toMax}.
+ * @param {string} str 
+ * @param {number} [maxDecimals=3] 
+ * @param {boolean} [preProcessStringToNumeric=true] 
+ * @returns {string|null}
+ */
+export function StringNumericToMax(str, maxDecimals = 3, preProcessStringToNumeric = true) {
+    if (!isString(str)) { return null; }
+    else if (isBlank(str)) { return ''; }
+    if (preProcessStringToNumeric) { str = StringNumericOnly(str); }
+    if (maxDecimals < 0) { return str; }
+    let i = str.indexOf('.');
+    if (i < 0) { return str; }
+    if (maxDecimals == 0) { return str.substring(0, i); }
+    if (str.length < i + maxDecimals + 1) { return str; }
+    return str.substring(i + maxDecimals + 1);
+    // if (str.length > )
+}
+
 /** Strips away all non-alphanumeric characters from a string
  * @param {string} str string to process @returns {string} 
  * @example StringAlphanumericOnly('abc123!@#'); // returns 'abc123' */
