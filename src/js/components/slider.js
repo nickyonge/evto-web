@@ -56,6 +56,7 @@ export class Slider extends TitledComponent {
 
     #generateTickMarks() {
         // TODO: ensure tickmarks work with very small values
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/51
         if (this.#ticksContainer == null) {
             this.#ticksContainer = ui.CreateDivWithClass('stickmarks');
             this.#bg.appendChild(this.#ticksContainer);
