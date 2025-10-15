@@ -10,6 +10,9 @@ const AS_PERCENTAGE = true;
 const PREFIX = '';
 const SUFFIX = '';
 
+const MIN_STEPS = 4;
+const MAX_STEPS = 10;
+
 /**
  * Slider component with range input
  * @see https://codepen.io/nickyonge/pen/EaPWMRe
@@ -47,11 +50,12 @@ export class Slider extends TitledComponent {
     set valueSuffix(v) { this.#_valueSuffix = v; }
     #_valueSuffix = SUFFIX;
 
+    get increment() { return (this.maxValue - this.minValue) / this.steps; }
+
     #updateInput() {
-        let increment = this.maxValue / this.steps;
         ui.AddElementAttributes(this.#input,
             ['min', 'max', 'step'],
-            [this.minValue, this.maxValue, increment]);
+            [this.minValue, this.maxValue, this.increment]);
     }
 
     #generateTickMarks() {
@@ -63,15 +67,18 @@ export class Slider extends TitledComponent {
         }
         let min = StringToNumber(this.minValue);
         let max = StringToNumber(this.maxValue);
-        let step = StringToNumber(this.steps);
-        if (step < 10) { step = 10; }
+        let step = StringToNumber(this.steps).clamp(MIN_STEPS, MAX_STEPS);
         if (this.#ticks != null && this.#ticks.length > 0) {
             for (let i = 0; i < this.#ticks.length; i++) {
                 this.#ticks[i]?.remove();
             }
         }
         this.#ticks = [];
-        for (let i = min; i <= max; i += step) {
+        step++;
+        console.log(step.isEven());
+        console.log('min' + min, ' max' + max + ', step' + step);
+        if (step.isEven()) { step++; }
+        for (let i = 0; i < step; i++) {
             let tick = ui.CreateElement('span');
             this.#ticks.push(tick);
             this.#ticksContainer.appendChild(tick);
