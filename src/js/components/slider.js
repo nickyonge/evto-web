@@ -5,13 +5,15 @@ import { TitledComponent } from "./base";
 const INITIAL_VALUE = 0;
 const MIN_VALUE = 0;
 const MAX_VALUE = 100;
+const INCREMENT = 5;
 const STEPS = 20;
 const AS_PERCENTAGE = true;
 const PREFIX = '';
 const SUFFIX = '';
+const INCREMENT_AS_STEPS = false;
 
-const MIN_STEPS = 4;
-const MAX_STEPS = 10;
+const MIN_TICKMARKS = 4;
+const MAX_TICKMARKS = 20;
 
 /**
  * Slider component with range input
@@ -35,9 +37,6 @@ export class Slider extends TitledComponent {
     get maxValue() { return this.#_maxValue; }
     set maxValue(v) { this.#_maxValue = v; }
     #_maxValue = MAX_VALUE;
-    get steps() { return this.#_steps; }
-    set steps(v) { this.#_steps = v; }
-    #_steps = STEPS;
 
     get asPercentage() { return this.#_asPercentage; }
     set asPercentage(v) { this.#_asPercentage = v; }
@@ -50,7 +49,18 @@ export class Slider extends TitledComponent {
     set valueSuffix(v) { this.#_valueSuffix = v; }
     #_valueSuffix = SUFFIX;
 
-    get increment() { return (this.maxValue - this.minValue) / this.steps; }
+    get steps() { return this.#_steps; }
+    set steps(v) {
+        this.#_steps = v;
+    }
+    #_steps = STEPS;
+
+    // get increment() { return (this.maxValue - this.minValue) / this.steps; }
+    get increment() { return this.#_increment; }
+    set increment(v) {
+        this.#_increment = v;
+    }
+    #_increment = INCREMENT;
 
     #updateInput() {
         ui.AddElementAttributes(this.#input,
@@ -61,19 +71,31 @@ export class Slider extends TitledComponent {
     #generateTickMarks() {
         // TODO: ensure tickmarks work with very small values
         // Issue URL: https://github.com/nickyonge/evto-web/issues/51
+        // create ticks container
         if (this.#ticksContainer == null) {
             this.#ticksContainer = ui.CreateDivWithClass('stickmarks');
             this.#bg.appendChild(this.#ticksContainer);
         }
-        let min = StringToNumber(this.minValue);
-        let max = StringToNumber(this.maxValue);
-        let step = StringToNumber(this.steps).clamp(MIN_STEPS, MAX_STEPS);
+        // ensure ticks array is empty
         if (this.#ticks != null && this.#ticks.length > 0) {
             for (let i = 0; i < this.#ticks.length; i++) {
                 this.#ticks[i]?.remove();
             }
         }
         this.#ticks = [];
+        // add tickmarks 
+        let steps = StringToNumber(this.steps).clamp(MIN_TICKMARKS, MAX_TICKMARKS);
+        if (steps.isEven()) { steps++; }
+        for (let i = 0; i < steps; i++) {
+            let tickmark = ui.CreateElement('span');
+            this.#ticks.push(tickmark);
+            this.#ticksContainer.appendChild(tickmark);
+        }
+
+        return;
+        let min = StringToNumber(this.minValue);
+        let max = StringToNumber(this.maxValue);
+        let step = 
         step++;
         console.log(step.isEven());
         console.log('min' + min, ' max' + max + ', step' + step);
@@ -86,8 +108,15 @@ export class Slider extends TitledComponent {
     }
 
     constructor(componentTitle, onChangeCallback, initialValue = INITIAL_VALUE,
-        minValue = MIN_VALUE, maxValue = MAX_VALUE, asPercentage = AS_PERCENTAGE, steps = STEPS) {
+        minValue = MIN_VALUE, maxValue = MAX_VALUE, asPercentage = AS_PERCENTAGE,
+        increment = INCREMENT, incrementParamIsSteps = INCREMENT_AS_STEPS) {
+
         super(componentTitle);
+
+        if (increment == 0 || !isFinite(increment)) {
+            console.warn(`WARNING: increment value ${increment} is invalid, must be nonzero finite number, setting to 1`, this, increment);
+            increment = 1;
+        }
 
         ui.AddClassesToDOM(this.div, 'slider', 'container');
 
@@ -95,8 +124,18 @@ export class Slider extends TitledComponent {
         this.initialValue = initialValue;
         this.minValue = minValue;
         this.maxValue = maxValue;
-        this.steps = steps;
         this.asPercentage = asPercentage;
+
+        // define increment and steps 
+        if (incrementParamIsSteps) {
+            // increment value is steps
+            this.steps = increment;
+            this.increment = (maxValue - minValue) / increment;
+        } else {
+            // increment is increment 
+            this.increment = increment;
+            this.steps = (maxValue - minValue) / increment;
+        }
 
         // create slider input 
         this.#input = ui.CreateInputWithID('range', this.uniqueComponentName, 'sinput');
@@ -108,7 +147,7 @@ export class Slider extends TitledComponent {
 
         // generate text indicator
         this.#textIndicator = ui.CreateDivWithClass('stext');
-        ui.AddElementAttribute(this.#textIndicator, 'slider-value', initialValue);
+        ui.AddElementAttribute(this.#textIndicator, 'slider-value', this.initialValue);
         this.#textIndicator.innerHTML = this.valueAsString();
         this._titleElement.appendChild(this.#textIndicator);
 
@@ -117,7 +156,7 @@ export class Slider extends TitledComponent {
 
         // add callback event 
         this.#input.addEventListener('input', (e) => {
-            this.#bg.style.setProperty('--slider-value', `${this.valueNormalized * 100}%`);
+            this.#bg.style.setProperty('--slider-value', this.valueAsPercent);
             this.#textIndicator.innerHTML = this.valueAsString();
             if (onChangeCallback) {
                 onChangeCallback(e.target.value, this);
