@@ -50,6 +50,17 @@ declare global {
          * @param {boolean} [inclusive=true] Does exactly matching a bound count as being between? Default `true` 
          * @returns {boolean} */
         isBetween(min: number, max: number, inclusive: boolean = true): boolean;
+
+        /**
+         * Checks if this number is even, returning `true`, or odd, returning `false`
+         * @see {@link Number.isOdd isOdd}
+         * @returns {boolean} */
+        isEven(): boolean;
+        /**
+         * Checks if this number is odd, returning `true`, or even, returning `false`
+         * @see {@link Number.isEven isEven}
+         * @returns {boolean} */
+        isOdd(): boolean;
     }
 
 }

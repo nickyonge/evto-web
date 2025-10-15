@@ -73,3 +73,19 @@ Number.prototype.isBetween = function (min, max, inclusive = true) {
         this.valueOf() >= min && this.valueOf() <= max :
         this.valueOf() > min && this.valueOf() < max;
 };
+
+/**
+ * Checks if this number is even, returning `true`, or odd, returning `false`
+ * @see {@link Number.isOdd isOdd}
+ * @returns {boolean} */
+Number.prototype.isEven = function () {
+    if (!Number.isFinite(this.valueOf())) {
+        throw new Error(`ERROR: value ${this.valueOf()} is not finite, cannot determine if even/odd`);
+    }
+    return this.valueOf() % 2 == 0;
+}
+/**
+ * Checks if this number is odd, returning `true`, or even, returning `false`
+ * @see {@link Number.isEven isEven}
+ * @returns {boolean} */
+Number.prototype.isOdd = function () { return !this.valueOf().isEven; }
