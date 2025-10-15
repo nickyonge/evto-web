@@ -94,7 +94,7 @@ export function EnsureToNumber(value, errorOnFailure = true) {
     if (value == null) { return failure('value is null or undefined'); }
     switch (typeof value) {
         case 'number': return value;
-        case 'string': return StringToNumber(str);
+        case 'string': return StringToNumber(value);
         case 'boolean': return value ? 1 : 0;
         case 'bigint': return Number(value);
         default:

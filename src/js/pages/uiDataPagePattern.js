@@ -9,6 +9,8 @@ let sectionContainer;
 let sectionPattern;
 let sectionColors;
 
+let svgImage;
+
 /** Create the Pattern & Colours page
  * @param {HTMLElement} page Element of the page itself */
 export function CreatePagePattern(page) {
@@ -30,17 +32,19 @@ export function CreatePagePattern(page) {
     sectionContainer.appendChild(sectionColors);
 
     // prepare sections
-    let svgImage = new cmp.SVGImage();
+    svgImage = new cmp.SVGImage();
     sectionPattern.appendChild(svgImage);
 
-    let slider1 = new cmp.Slider('scale', null, 0);
-    let slider2 = new cmp.Slider('angle', null, 0);
-    let color1 = new cmp.ColorPicker('color1', null, 'skyblue');
-    let color2 = new cmp.ColorPicker('color2', null, 'white');
-    let color3 = new cmp.ColorPicker('color3', null, 'pink');
+    let slider1 = new cmp.Slider('scale', function (v) { updateParameter(0, v) }, 1, 0.25, 2.5, true, 50);
+    let slider2 = new cmp.Slider('angle', function (v) { updateParameter(1, v); }, 0, 0, 360);
+    let slider3 = new cmp.Slider('sharpness', function (v) { updateParameter(2, v); }, 0, 0, 1);
+    let color1 = new cmp.ColorPicker('color1', function (v) { updateParameter(3, v); }, 'skyblue');
+    let color2 = new cmp.ColorPicker('color2', function (v) { updateParameter(4, v); }, 'white');
+    let color3 = new cmp.ColorPicker('color3', function (v) { updateParameter(5, v) }, 'pink');
 
     sectionPattern.appendChild(slider1);
     sectionPattern.appendChild(slider2);
+    sectionPattern.appendChild(slider3);
     sectionPattern.appendChild(color1);
     sectionPattern.appendChild(color2);
     sectionPattern.appendChild(color3);
@@ -57,6 +61,20 @@ export function CreatePagePattern(page) {
 
     // initialize 
     SelectPatternPage(currentSectionNum);
+}
+
+function updateParameter(paramID, value) {
+    switch (paramID) {
+        case 0: svgImage.rect.gradient.scale = value; break;
+        case 1: svgImage.rect.gradient.angle = value; break;
+        case 2: svgImage.rect.gradient.sharpness = value; break;
+        case 3: svgImage.rect.gradient.SetColor(0, value); break;
+        case 4: svgImage.rect.gradient.SetColor(1, value); break;
+        case 5: svgImage.rect.gradient.SetColor(2, value); break;
+        default:
+            return;
+    }
+    svgImage.updateRect();
 }
 
 function SelectPatternPage(num) {

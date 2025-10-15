@@ -1,4 +1,4 @@
-import { arePoints, FindPointsSharedCenter, isBlank, isPoint, Lerp, RotatePointAroundOrigin, RotatePointsAroundOrigin, RotatePointsAroundPivot, RotatePointsAroundPivotXY, RotatePointsAroundSharedCenter, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
+import { arePoints, EnsureToNumber, FindPointsSharedCenter, isBlank, isPoint, Lerp, RotatePointAroundOrigin, RotatePointsAroundOrigin, RotatePointsAroundPivot, RotatePointsAroundPivotXY, RotatePointsAroundSharedCenter, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
 import * as svg from './index';
 
 /** Class representing an SVG defined linear or radial gradient */
@@ -150,7 +150,8 @@ export class svgGradient extends svg.element {
             // apply mirroring, reverse stops array 
             if (this.mirror) { this.stops = this.stops.reverse(); }
             // apply iterated stops 
-            let sharpness = this.sharpness.clamp(0, 1);
+            console.log(this.sharpness);
+            let sharpness = EnsureToNumber(this.sharpness).clamp(0, 1);
             for (let i = 0; i < this.stops.length; i++) {
                 if (this.stops[i] == null) { continue; }
                 // check for auto offset calculation, changing 'auto' to a linearly-assigned % based on array size 

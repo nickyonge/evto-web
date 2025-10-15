@@ -55,6 +55,7 @@ export class Slider extends TitledComponent {
     }
 
     #generateTickMarks() {
+        // TODO: ensure tickmarks work with very small values
         if (this.#ticksContainer == null) {
             this.#ticksContainer = ui.CreateDivWithClass('stickmarks');
             this.#bg.appendChild(this.#ticksContainer);
@@ -94,7 +95,7 @@ export class Slider extends TitledComponent {
         this.value = initialValue; // ensure we set initial value 
         this.#bg = ui.CreateElementWithClass('span', 'sbg');
         ui.AddElementAttribute(this.#bg, 'value', initialValue);
-        this.#bg.style.setProperty('--slider-value', this.valueAsString());
+        this.#bg.style.setProperty('--slider-value', this.valueAsPercent);
         this.#updateInput();
 
         // generate text indicator
