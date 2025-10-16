@@ -139,15 +139,15 @@ export class Slider extends TitledComponent {
 
         // create slider input 
         this.#input = ui.CreateInputWithID('range', this.uniqueComponentName, 'sinput');
-        this.value = initialValue; // ensure we set initial value 
-        this.#bg = ui.CreateElementWithClass('span', 'sbg');
-        ui.AddElementAttribute(this.#bg, 'value', initialValue);
-        this.#bg.style.setProperty('--slider-value', this.valueAsPercent);
         this.#updateInput();
+        this.value = this.initialValue; // ensure we set initial value 
+        this.#bg = ui.CreateElementWithClass('span', 'sbg');
+        ui.AddElementAttribute(this.#bg, 'value', this.initialValue);
+        this.#bg.style.setProperty('--slider-value', this.valueAsPercent);
 
         // generate text indicator
         this.#textIndicator = ui.CreateDivWithClass('stext');
-        ui.AddElementAttribute(this.#textIndicator, 'slider-value', this.initialValue);
+        ui.AddElementAttribute(this.#textIndicator, 'slider-value', 75);
         this.#textIndicator.innerHTML = this.valueAsString();
         this._titleElement.appendChild(this.#textIndicator);
 
@@ -181,6 +181,7 @@ export class Slider extends TitledComponent {
             console.warn(`WARNING: couldn't parse slider value ${value} to number, can't create percentage`, this);
             return NaN;
         }
+        console.log("getting component value normalized, min" + this.minValue + ", max:" + this.maxValue + ", n" + n);
         // normalize to a value between min and max 
         let min = StringToNumber(this.minValue);
         let max = StringToNumber(this.maxValue);

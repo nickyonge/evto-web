@@ -150,7 +150,6 @@ export class svgGradient extends svg.element {
             // apply mirroring, reverse stops array 
             if (this.mirror) { this.stops = this.stops.reverse(); }
             // apply iterated stops 
-            console.log(this.sharpness);
             let sharpness = EnsureToNumber(this.sharpness).clamp(0, 1);
             for (let i = 0; i < this.stops.length; i++) {
                 if (this.stops[i] == null) { continue; }
