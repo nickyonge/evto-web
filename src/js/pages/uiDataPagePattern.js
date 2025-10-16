@@ -35,7 +35,7 @@ export function CreatePagePattern(page) {
     svgImage = new cmp.SVGImage();
     sectionPattern.appendChild(svgImage);
 
-    let slider1 = new cmp.Slider('scale', function (v) { updateParameter(0, v) }, 1, 0.25, 2.5, false, 0.125);
+    let slider1 = new cmp.Slider('scale', function (v) { updateParameter(0, v) }, 1, 0.25, 2.5, false, 0.05);
     let slider2 = new cmp.Slider('angle', function (v) { updateParameter(1, v); }, 0, 0, 360);
     let slider3 = new cmp.Slider('sharpness', function (v) { updateParameter(2, v); }, 0, 0, 1, true, 0.05);
     let color1 = new cmp.ColorPicker('color1', function (v) { updateParameter(3, v); }, 'skyblue');

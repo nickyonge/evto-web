@@ -147,7 +147,6 @@ export class Slider extends TitledComponent {
 
         // generate text indicator
         this.#textIndicator = ui.CreateDivWithClass('stext');
-        ui.AddElementAttribute(this.#textIndicator, 'slider-value', 75);
         this.#textIndicator.innerHTML = this.valueAsString();
         this._titleElement.appendChild(this.#textIndicator);
 
