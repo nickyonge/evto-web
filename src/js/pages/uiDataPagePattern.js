@@ -2,14 +2,13 @@ import * as cmp from "../components";
 import * as ui from '../ui';
 import * as txt from '../text';
 import { SetElementEnabled } from "../lilutils";
+import { DemoGradient } from "./uiDataPageBase";
 
 let currentSectionNum = 0;
 
 let sectionContainer;
 let sectionPattern;
 let sectionColors;
-
-let svgImage;
 
 /** Create the Pattern & Colours page
  * @param {HTMLElement} page Element of the page itself */
@@ -31,28 +30,9 @@ export function CreatePagePattern(page) {
     sectionContainer.appendChild(sectionPattern);
     sectionContainer.appendChild(sectionColors);
 
-    // prepare sections
-    svgImage = new cmp.SVGImage();
-    sectionPattern.appendChild(svgImage);
+    DemoGradient(sectionPattern);
 
-    let slider1 = new cmp.Slider('scale', function (v) { updateParameter(1, v); }, 1, 0.1, 2.5, false, 0.05);
-    let slider2 = new cmp.Slider('angle', function (v) { updateParameter(2, v); }, 0, 0, 360);
-    let slider3 = new cmp.Slider('sharpness', function (v) { updateParameter(3, v); }, 0, 0, 1, true, 0.05);
-    let color1 = new cmp.ColorPicker('color1', function (v) { updateParameter(4, v); }, 'skyblue');
-    let color2 = new cmp.ColorPicker('color2', function (v) { updateParameter(5, v); }, 'white');
-    let color3 = new cmp.ColorPicker('color3', function (v) { updateParameter(6, v); }, 'pink');
-    let toggle1 = new cmp.Toggle('radial', function (v) {
-        updateParameter(0, v);
-        slider2.disabled = v;
-    }, null, false);
-    sectionPattern.appendChild(toggle1);
-    sectionPattern.appendChild(slider1);
-    sectionPattern.appendChild(slider2);
-    sectionPattern.appendChild(slider3);
-    sectionPattern.appendChild(color1);
-    sectionPattern.appendChild(color2);
-    sectionPattern.appendChild(color3);
-    
+
     /* REFERENCE PATTERNS 
     Square (empty canvas): https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z
     Horizontal Split: https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z%0AM0%2C5%20L20%2C5
@@ -65,21 +45,6 @@ export function CreatePagePattern(page) {
 
     // initialize 
     SelectPatternPage(currentSectionNum);
-}
-
-function updateParameter(paramID, value) {
-    switch (paramID) {
-        case 0: svgImage.rect.gradient.isRadial = value; break;
-        case 1: svgImage.rect.gradient.scale = value; break;
-        case 2: svgImage.rect.gradient.angle = value; break;
-        case 3: svgImage.rect.gradient.sharpness = value; break;
-        case 4: svgImage.rect.gradient.SetColor(0, value); break;
-        case 5: svgImage.rect.gradient.SetColor(1, value); break;
-        case 6: svgImage.rect.gradient.SetColor(2, value); break;
-        default:
-            return;
-    }
-    svgImage.updateRect();
 }
 
 function SelectPatternPage(num) {

@@ -51,6 +51,7 @@ export class Slider extends TitledComponent {
         } else {
             ui.AllowContentSelectionWithDefaultCursor(this.div);
         }
+        this.#updateText(v);// require override if disabled 
     }
 
     get initialValue() { return this.#_initialValue; }
@@ -64,15 +65,79 @@ export class Slider extends TitledComponent {
     #_maxValue = MAX_VALUE;
 
     get asPercentage() { return this.#_asPercentage; }
-    set asPercentage(v) { this.#_asPercentage = v; }
+    set asPercentage(v) { this.#_asPercentage = v; this.#updateText(); }
     #_asPercentage = AS_PERCENTAGE;
 
     get valuePrefix() { return this.#_valuePrefix; }
-    set valuePrefix(v) { this.#_valuePrefix = v; }
+    set valuePrefix(v) { this.#_valuePrefix = v; this.#updateText(); }
     #_valuePrefix = PREFIX;
     get valueSuffix() { return this.#_valueSuffix; }
-    set valueSuffix(v) { this.#_valueSuffix = v; }
+    set valueSuffix(v) { this.#_valueSuffix = v; this.#updateText(); }
     #_valueSuffix = SUFFIX;
+
+    #_uniqueValueOverrides = [];
+    /** 
+     * Array of [number,string] pairs. 
+     * If slider's current {@link value} is found as the first element in 
+     * this array, use the second element as the display text.
+     * 
+     * Read-only - to add, use {@linkcode AddUniqueValueOverride}.
+     * 
+     * Use value `NaN` for disabled override.
+     * @type {Array<Array<number,string>>}
+     */
+    get uniqueValueOverrides() { if (this.#_uniqueValueOverrides == null) { this.#_uniqueValueOverrides = []; } return this.#_uniqueValueOverrides; }
+    AddUniqueValueOverride(value, override, autoUpdateText = true) {
+        let i = this.GetUniqueValueOverrideIndex(value);
+        if (i >= 0) {
+            this.uniqueValueOverrides[i] = override;
+            return;
+        }
+        this.uniqueValueOverrides.push([value, override]);
+        if (autoUpdateText) {this.#updateText();}
+    }
+    AddUniqueValueOverrides(valueOverrides) {
+        if (valueOverrides == null) { return; }
+        for (let i = 0; i < valueOverrides.length; i++) {
+            if (valueOverrides[i] == null || !Array.isArray(valueOverrides[i]) || valueOverrides[i].length < 2) { continue; }
+            this.AddUniqueValueOverride(valueOverrides[i][0], valueOverrides[i][1], false);
+        }
+        this.#updateText();
+    }
+    RemoveUniqueValueOverride(value) {
+        let i = this.GetUniqueValueOverrideIndex(value);
+        if (i >= 0) {
+            this.#_uniqueValueOverrides = this.#_uniqueValueOverrides.splice(i, 1);
+        }
+    }
+    ClearUniqueValueOverrides() { this.#_uniqueValueOverrides = []; }
+    GetCurrentUniqueValueOverride() {
+        if (this.#input == null) { return null; }
+        return this.GetUniqueValueOverride(this.disabled ? NaN : this.#input.value);
+    }
+    GetCurrentUniqueValueOverrideIndex() {
+        if (this.#input == null) { return null; }
+        return this.GetUniqueValueOverrideIndex(this.disabled ? NaN : this.#input.value);
+    }
+    GetUniqueValueOverrideIndex(value) {
+        let checkNaN = Number.isNaN(value);
+        for (let i = 0; i < this.uniqueValueOverrides.length; i++) {
+            if (this.uniqueValueOverrides[i] == null || !Array.isArray(this.uniqueValueOverrides[i]) || this.uniqueValueOverrides[i].length == 0) { continue; }
+            if (this.uniqueValueOverrides[i][0] == value) {
+                return i;
+            }
+            if (checkNaN) {
+                if (Number.isNaN(this.uniqueValueOverrides[i][0])) {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+    GetUniqueValueOverride(value) {
+        let i = this.GetUniqueValueOverrideIndex(value);
+        return i >= 0 ? this.uniqueValueOverrides[i][1] : null;
+    }
 
     get steps() { return this.#_steps; }
     set steps(v) {
@@ -97,19 +162,21 @@ export class Slider extends TitledComponent {
     #recalculateIncrementAndSteps(regenerateTickmarks = true) {
         this.#recalculateIncrement(false);
         this.#recalculateSteps(false);
-        if (regenerateTickmarks && this.hasBeenLoaded) { this.#generateTickMarks(); }
+        if (regenerateTickmarks) { this.#generateTickMarks(); }
     }
     #recalculateIncrement(regenerateTickmarks = true) {
         this.#_increment = (this.maxValue - this.minValue) / this.steps;
-        if (regenerateTickmarks && this.hasBeenLoaded) { this.#generateTickMarks(); }
+        if (regenerateTickmarks) { this.#generateTickMarks(); }
     }
     #recalculateSteps(regenerateTickmarks = true) {
         this.#_steps = (this.maxValue - this.minValue) / this.increment;
-        if (regenerateTickmarks && this.hasBeenLoaded) { this.#generateTickMarks(); }
-
+        if (regenerateTickmarks) { this.#generateTickMarks(); }
     }
 
-    #generateTickMarks() {
+    #generateTickMarks(initialGeneration = false) {
+        if (!initialGeneration && !this.hasBeenLoaded) {
+            return;
+        }
         // create tickmarks container
         if (this.#tickmarksContainer == null) {
             this.#tickmarksContainer = ui.CreateDivWithClass('stickmarks');
@@ -129,6 +196,10 @@ export class Slider extends TitledComponent {
             let tickmark = ui.CreateElement('span');
             this.#tickmarks.push(tickmark);
             this.#tickmarksContainer.appendChild(tickmark);
+        }
+        // regen text if tickmarks are regenerated
+        if (!initialGeneration) {
+            this.#updateText();
         }
     }
 
@@ -172,16 +243,16 @@ export class Slider extends TitledComponent {
 
         // generate text indicator
         this.#textIndicator = ui.CreateDivWithClass('stext');
-        this.#textIndicator.innerHTML = this.valueAsString();
+        this.#updateText();
         this._titleElement.appendChild(this.#textIndicator);
 
         // generate tickmarks
-        this.#generateTickMarks();
+        this.#generateTickMarks(true);
 
         // add callback event 
         this.#input.addEventListener('input', (e) => {
             this.#bg.style.setProperty('--slider-value', this.valueAsPercent);
-            this.#textIndicator.innerHTML = this.valueAsString();
+            this.#updateText();
             if (onChangeCallback) {
                 onChangeCallback(e.target.value, this);
             }
@@ -216,25 +287,35 @@ export class Slider extends TitledComponent {
 
     valueAsString(formatted = true) {
         if (!this.#input) { return null; }
+        let override = this.GetCurrentUniqueValueOverride();
+        if (override != null) { return override; }
         if (!formatted) {
-            return this.disabled ?
-                this.disabledReturnsZero ?
-                    '0' : this.initialValue :
-                this.#input.value;
+            if (this.disabled) {
+                return this.disabledReturnsZero ? '0' : this.#input.value;
+            } else {
+                return this.#input.value;
+            }
         }
-
         let value;
-        
         if (this.disabled) {
-            value = disabledReturnsZero ? '0' : this.initialValue;
+            value = this.disabledReturnsZero ? '0' : this.initialValue;
         } else {
             value = this.#input.value;
             if (this.asPercentage) {
                 value = this.valueAsPercent;
             }
         }
-
         return `${this.valuePrefix}${value}${this.valueSuffix}`;
+    }
+
+    #updateText(onlyIfUniqueOverrideFound = false) {
+        if (this.#textIndicator == null) { return; }
+        if (onlyIfUniqueOverrideFound && this.#input != null) {
+            if (this.GetCurrentUniqueValueOverrideIndex() == -1) {
+                return;
+            }
+        }
+        this.#textIndicator.innerHTML = this.valueAsString();
     }
 
     /**
