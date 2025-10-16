@@ -25,8 +25,8 @@ export class Slider extends TitledComponent {
     #input;
     #bg;
     #textIndicator;
-    #ticksContainer;
-    #ticks;
+    #tickmarksContainer;
+    #tickmarks;
 
     get initialValue() { return this.#_initialValue; }
     set initialValue(v) { this.#_initialValue = v; }
@@ -85,25 +85,25 @@ export class Slider extends TitledComponent {
     }
 
     #generateTickMarks() {
-        // create ticks container
-        if (this.#ticksContainer == null) {
-            this.#ticksContainer = ui.CreateDivWithClass('stickmarks');
-            this.#bg.appendChild(this.#ticksContainer);
+        // create tickmarks container
+        if (this.#tickmarksContainer == null) {
+            this.#tickmarksContainer = ui.CreateDivWithClass('stickmarks');
+            this.#bg.appendChild(this.#tickmarksContainer);
         }
-        // ensure ticks array is empty
-        if (this.#ticks != null && this.#ticks.length > 0) {
-            for (let i = 0; i < this.#ticks.length; i++) {
-                this.#ticks[i]?.remove();
+        // ensure tickmarks array is empty
+        if (this.#tickmarks != null && this.#tickmarks.length > 0) {
+            for (let i = 0; i < this.#tickmarks.length; i++) {
+                this.#tickmarks[i]?.remove();
             }
         }
-        this.#ticks = [];
+        this.#tickmarks = [];
         // add tickmarks 
         let steps = StringToNumber(this.steps).clamp(MIN_TICKMARKS, MAX_TICKMARKS);
         if (steps.isEven()) { steps++; }
         for (let i = 0; i < steps; i++) {
             let tickmark = ui.CreateElement('span');
-            this.#ticks.push(tickmark);
-            this.#ticksContainer.appendChild(tickmark);
+            this.#tickmarks.push(tickmark);
+            this.#tickmarksContainer.appendChild(tickmark);
         }
     }
 
