@@ -583,7 +583,10 @@ export function IsActiveElement(element) {
  * @param {boolean} [set=true] state to assign, `true` to Enable (default), or `false` to Disable 
  */
 export function SetElementEnabled(element, set = true) {
-    if (!set) { DeselectElement(element, true); }
+    if (!set) {
+        DeselectElement(element, true); 
+        element.draggable = set ? 'auto' : 'false';
+    }
     element.style.pointerEvents = set ? 'auto' : 'none';
     if (set) {
         // enable 

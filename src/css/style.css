@@ -133,16 +133,30 @@ input[type="text"]:focus-visible {
 
 .allowSelectDefaultCursor {
     user-select: text;
+    -o-user-select: text;
     -ms-user-select: text;
     -moz-user-select: text;
+    -khtml-user-select: text;
     -webkit-user-select: text;
+    -o-user-drag: auto;
+    -ms-user-drag: auto;
+    -moz-user-drag: auto;
+    -khtml-user-drag: auto;
+    -webkit-user-drag: auto;
     cursor: default;
 }
 .preventSelect {
     user-select: none;
+    -o-user-select: none;
     -ms-user-select: none;
     -moz-user-select: none;
+    -khtml-user-select: none;
     -webkit-user-select: none;
+    -o-user-drag: none;
+    -ms-user-drag: none;
+    -moz-user-drag: none;
+    -khtml-user-drag: none;
+    -webkit-user-drag: none;
 }
 
 
