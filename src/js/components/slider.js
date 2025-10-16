@@ -69,8 +69,6 @@ export class Slider extends TitledComponent {
     }
 
     #generateTickMarks() {
-        // TODO: ensure tickmarks work with very small values
-        // Issue URL: https://github.com/nickyonge/evto-web/issues/51
         // create ticks container
         if (this.#ticksContainer == null) {
             this.#ticksContainer = ui.CreateDivWithClass('stickmarks');
@@ -90,20 +88,6 @@ export class Slider extends TitledComponent {
             let tickmark = ui.CreateElement('span');
             this.#ticks.push(tickmark);
             this.#ticksContainer.appendChild(tickmark);
-        }
-
-        return;
-        let min = StringToNumber(this.minValue);
-        let max = StringToNumber(this.maxValue);
-        let step = 
-        step++;
-        console.log(step.isEven());
-        console.log('min' + min, ' max' + max + ', step' + step);
-        if (step.isEven()) { step++; }
-        for (let i = 0; i < step; i++) {
-            let tick = ui.CreateElement('span');
-            this.#ticks.push(tick);
-            this.#ticksContainer.appendChild(tick);
         }
     }
 
@@ -139,8 +123,8 @@ export class Slider extends TitledComponent {
 
         // create slider input 
         this.#input = ui.CreateInputWithID('range', this.uniqueComponentName, 'sinput');
-        this.#updateInput();
-        this.value = this.initialValue; // ensure we set initial value 
+        this.#updateInput(); // update (set) input attributes before initial value 
+        this.value = this.initialValue; // ensure we set initial value before bg or slider-value 
         this.#bg = ui.CreateElementWithClass('span', 'sbg');
         ui.AddElementAttribute(this.#bg, 'value', this.initialValue);
         this.#bg.style.setProperty('--slider-value', this.valueAsPercent);
@@ -248,6 +232,18 @@ export class Slider extends TitledComponent {
         if (!Number.isFinite(v)) { return null; }
         return StringToNumber(v);
     }
+}
+
+const halfMaxTickmarks = 100;// 1/2 max tickmarks to add for detecting middle tickmark 
+export function GenerateCSS() {
+    const style = document.createElement('style');
+    let content = '';
+    for (let i = 1; i <= 100; i++) {
+        content += `.slider .stickmarks span:nth-child(${i}):nth-last-child(${i})${i == 100 ? ' {' : ','}\n`;
+    }
+    content += '    opacity: var(--slider-tickmark-opacity-middle);\n}\n';
+    style.textContent = content;
+    document.head.appendChild(style);
 }
 
 /* Example HTML

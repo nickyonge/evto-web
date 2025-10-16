@@ -7,12 +7,15 @@ import Coloris from "@melloware/coloris";
 import { BasicComponent } from './components/base';
 import { GetParentWithClass } from './lilutils';
 
+import { GenerateCSS as ComponentsCSS } from './components';
+
 import './doc'; // should be called after all other imports 
 
 let _onLoadCompleteCallbacks = [];
 
 window.addEventListener('load', function () {
     // initial window load
+    GenerateCSS();
     StartObservation();
     BuildUI();
     SetupDataWindow();
@@ -64,6 +67,16 @@ window.addEventListener('load', function () {
     }, 0);
 });
 
+/** Generate dynamic CSS across all scripts that call for it */
+function GenerateCSS() {
+    ComponentsCSS();
+}
+
+/**
+ * Specify a function to be called once the page is loaded and one tick has passed 
+ * @param {function} callback Function/method to call when page load is complete 
+ * @returns 
+ */
 export function CallOnLoadComplete(callback) {
     if (!callback) { return; }
     _onLoadCompleteCallbacks.push(callback);

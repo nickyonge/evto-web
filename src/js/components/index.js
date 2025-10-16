@@ -7,3 +7,9 @@ export { Slider } from "./slider.js";
 export { SVGImage } from './svgimage.js';
 export { TextField } from "./textfield.js";
 export { Toggle } from "./toggle.js";
+
+import { GenerateCSS as SliderCSS } from "./slider.js";
+
+export function GenerateCSS() {
+    SliderCSS();
+}
