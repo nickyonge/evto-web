@@ -1,4 +1,4 @@
-import { GetCSSVariable, InverseLerp, isBlank, StringNumericOnly, StringToNumber } from "../lilutils";
+import { GetCSSVariable, InverseLerp, isBlank, SetElementEnabled, StringNumericOnly, StringToNumber } from "../lilutils";
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
 
@@ -15,6 +15,9 @@ const INCREMENT_AS_STEPS = false;
 const MIN_TICKMARKS = 4;
 const MAX_TICKMARKS = 20;
 
+const DISABLED_ALPHA = 0.69;
+const DISABLED_GRAYSCALE = 0.69;
+
 /**
  * Slider component with range input
  * @see https://codepen.io/nickyonge/pen/EaPWMRe
@@ -27,6 +30,27 @@ export class Slider extends TitledComponent {
     #textIndicator;
     #tickmarksContainer;
     #tickmarks;
+
+    /** 
+     * If {@link disabled}, return `0` (`true`) or {@linkcode initialValue} (`false`)? Default `true`
+     * @type {boolean} */
+    disabledReturnsZero = true;
+
+    get enabled() { return !this.disabled; }
+    set enabled(v) { this.disabled = !v; }
+    get disabled() { return this.#input.disabled; }
+    set disabled(v) {
+        // TODO: make enable/disable a core part of BasicComponent
+        this.#input.disabled = v;
+        this.div.style.opacity = v ? DISABLED_ALPHA : 1;
+        this.div.style.filter = v ? `grayscale(${DISABLED_GRAYSCALE})` : '';
+        SetElementEnabled(this.div, !v);
+        if (v) {
+            ui.DisableContentSelection(this.div);
+        } else {
+            ui.AllowContentSelectionWithDefaultCursor(this.div);
+        }
+    }
 
     get initialValue() { return this.#_initialValue; }
     set initialValue(v) { this.#_initialValue = v; }
@@ -180,7 +204,6 @@ export class Slider extends TitledComponent {
             console.warn(`WARNING: couldn't parse slider value ${value} to number, can't create percentage`, this);
             return NaN;
         }
-        console.log("getting component value normalized, min" + this.minValue + ", max:" + this.maxValue + ", n" + n);
         // normalize to a value between min and max 
         let min = StringToNumber(this.minValue);
         let max = StringToNumber(this.maxValue);
@@ -192,12 +215,22 @@ export class Slider extends TitledComponent {
 
     valueAsString(formatted = true) {
         if (!this.#input) { return null; }
-        if (!formatted) { return this.#input.value; }
+        if (!formatted) {
+            return this.disabled ?
+                this.disabledReturnsZero ?
+                    '0' : this.initialValue :
+                this.#input.value;
+        }
 
-        let value = this.#input.value;
-
-        if (this.asPercentage) {
-            value = this.valueAsPercent;
+        let value;
+        
+        if (this.disabled) {
+            value = disabledReturnsZero ? '0' : this.initialValue;
+        } else {
+            value = this.#input.value;
+            if (this.asPercentage) {
+                value = this.valueAsPercent;
+            }
         }
 
         return `${this.valuePrefix}${value}${this.valueSuffix}`;
