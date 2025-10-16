@@ -46,8 +46,10 @@ window.addEventListener('load', function () {
         // assign parent page to all components, and call DocumentLoaded on them 
         let unparentedComponents = [];
         BasicComponent.allComponents.forEach(component => {
+            component.hasBeenLoaded = true;
             let parentPage = GetParentWithClass(component.div, 'page');
             if (parentPage == null) {
+                component.hasBeenAddedToPage = true;
                 unparentedComponents.push(component);
                 return;
             }

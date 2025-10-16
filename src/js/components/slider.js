@@ -32,10 +32,10 @@ export class Slider extends TitledComponent {
     set initialValue(v) { this.#_initialValue = v; }
     #_initialValue = INITIAL_VALUE;
     get minValue() { return this.#_minValue; }
-    set minValue(v) { this.#_minValue = v; }
+    set minValue(v) { this.#_minValue = v; this.#recalculateIncrementAndSteps(); }
     #_minValue = MIN_VALUE;
     get maxValue() { return this.#_maxValue; }
-    set maxValue(v) { this.#_maxValue = v; }
+    set maxValue(v) { this.#_maxValue = v; this.#recalculateIncrementAndSteps(); }
     #_maxValue = MAX_VALUE;
 
     get asPercentage() { return this.#_asPercentage; }
@@ -52,13 +52,14 @@ export class Slider extends TitledComponent {
     get steps() { return this.#_steps; }
     set steps(v) {
         this.#_steps = v;
+        this.#recalculateIncrement();
     }
     #_steps = STEPS;
 
-    // get increment() { return (this.maxValue - this.minValue) / this.steps; }
     get increment() { return this.#_increment; }
     set increment(v) {
         this.#_increment = v;
+        this.#recalculateSteps();
     }
     #_increment = INCREMENT;
 
@@ -66,6 +67,21 @@ export class Slider extends TitledComponent {
         ui.AddElementAttributes(this.#input,
             ['min', 'max', 'step'],
             [this.minValue, this.maxValue, this.increment]);
+    }
+
+    #recalculateIncrementAndSteps(regenerateTickmarks = true) {
+        this.#recalculateIncrement(false);
+        this.#recalculateSteps(false);
+        if (regenerateTickmarks && this.hasBeenLoaded) { this.#generateTickMarks(); }
+    }
+    #recalculateIncrement(regenerateTickmarks = true) {
+        this.#_increment = (this.maxValue - this.minValue) / this.steps;
+        if (regenerateTickmarks && this.hasBeenLoaded) { this.#generateTickMarks(); }
+    }
+    #recalculateSteps(regenerateTickmarks = true) {
+        this.#_steps = (this.maxValue - this.minValue) / this.increment;
+        if (regenerateTickmarks && this.hasBeenLoaded) { this.#generateTickMarks(); }
+
     }
 
     #generateTickMarks() {

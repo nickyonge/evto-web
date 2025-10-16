@@ -7,9 +7,14 @@ export const basicComponentClass = '__UICOMP';
 export class BasicComponent {
     div;
     onScroll;
+    hasBeenLoaded = false;
+    hasBeenAddedToPage = false;
     #parentPage;
+    /** @type {Number} */
     static componentCount = 0;
+    /** @type {BasicComponent[]} */
     static allComponents = [];
+    /** @type {HTMLDivElement[]} */
     static allComponentDivs = [];
     constructor() {
         BasicComponent.componentCount++;
