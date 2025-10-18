@@ -60,6 +60,7 @@ export class svgShape extends svg.element {
     set extraAttributes(v) { this.#_extraAttributes = v; this.#changed('extraAttributes', v); }
     #_extraAttributes = [];
     // TODO: svg shapes onChange callback for if extraAttributes array is modified, not just directly set 
+    // Issue URL: https://github.com/nickyonge/evto-web/issues/54
     constructor(fill = svg.default.FILL) { super(); this.fill = fill; }
     get html() {
         if (this.type == null) {
