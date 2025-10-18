@@ -6,8 +6,23 @@ export class svgElement {
 
     /** unique identifier for this element @type {string} */
     id;
-    // TODO: ensure all element IDs are unique 
+    // TODO: ensure all element IDs are unique
     // Issue URL: https://github.com/nickyonge/evto-web/issues/49
+
+    /**
+     * Callback for when a value in an {@link svgElement} has changed
+     * @callback svgChangeCallback
+     * @param {string} valueChanged The name of the value that was changed 
+     * @param {any} newValue The newly assigned value 
+     * @param {svgElement} changedElement The {@link svgElement} that was changed  
+     * @returns {void}
+     */
+
+    /**
+     * @type {svgChangeCallback}
+     */
+    onChange;
+
 
     /** Parse array of SVG data into HTML-attribute-style `name="value"` format, 
      * with spaces between attributes as needed. 
@@ -210,7 +225,7 @@ export class svgHTMLAsset extends svgElement {
 
     /** @type {string} */
     get class() { return this.#_class; }
-    set class(v) { this.#_class = v; }
+    set class(v) { this.#_class = v; this.onChange?.('class', v); }
     #_class;
     /** @type {svgViewBox} */
     get viewBox() { return this.#_viewBox; }

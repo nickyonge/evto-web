@@ -15,13 +15,29 @@ const _ALL_SHAPES = [_RECT, _CIRCLE, _ELLIPSE,
     _LINE, _POLYLINE, _POLYGON, _PATH];
 
 export class svgShape extends svg.element {
-    type = null;
-    fill = svg.default.FILL;
-    stroke = svg.default.STROKE;
+    /** 
+     * SVG shape type, assigned in {@link svgShape} constructor.
+     * @see {@linkcode _ALL_SHAPES}
+     * @returns {string} */
+    get type() { return this.#_type; }
+    set type(v) { // can only set shape type once 
+        if (this.type != null) { console.warn(`cannot reassign set shape type ${this.type} to ${v}`, this); return; }
+        if (!IsValidShapeType(v)) { return; }
+        this.#_type = v;
+    }
+    #_type = null;
+    get fill() { return this.#_fill; }
+    set fill(v) { this.#_fill = v; console.log(v); this.onChange?.('fill', v); }
+    #_fill = svg.default.FILL;
+    get stroke() { return this.#_stroke; }
+    set stroke(v) { this.#_stroke = v; }
+    #_stroke = svg.default.STROKE;
     /** Additional attributes to include in the path, 
      * in a 2D string array `[ [attr, value], ... ]`
      * @type {Array<[string, any]>} */
-    extraAttributes;
+    get extraAttributes() { return this.#_extraAttributes; }
+    set extraAttributes(v) { this.#_extraAttributes = v; }
+    #_extraAttributes = [];
     constructor(fill = svg.default.FILL) { super(); this.fill = fill; }
     get html() {
         if (this.type == null) {
