@@ -89,6 +89,22 @@ export class svgGradient extends svg.element {
     set href(v) { this.#_href = v; }
     #_href = svg.default.GRADIENT_HREF;
 
+    /** 
+     * SVG parent {@link svg.asset asset}, assigned by the parent 
+     * @returns {svg.asset} */
+    get parent() { return this.#_parent; }
+    set parent(v) {
+        if (this.parent == v) { return; }
+        this.#_parent = v;
+        if (!this.#_firstParentAssigned) {
+            this.#changed('parent', v);
+            this.#_firstParentAssigned = true;
+        }
+    }
+    /** @type {svg.asset} */
+    #_parent = null;
+    #_firstParentAssigned = false;
+    
     constructor(id, isRadial = svg.default.GRADIENT_ISRADIAL, ...colors) {
         super();
         this.id = id;
@@ -380,8 +396,8 @@ export class svgGradient extends svg.element {
      *   - XY {@link toPoint point} objects array `[{x:fx,y:fy},{x:cx,y:cy}]`
      * @returns {[number,number,number,number]}
      */
-    get fcxy() { return this.xy12; } 
-    set fcxy(values) { this.xy12 = values; } 
+    get fcxy() { return this.xy12; }
+    set fcxy(values) { this.xy12 = values; }
 
     /** string output for X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient) @returns {string} */
     get xy12String() {
@@ -468,6 +484,16 @@ export class svgGradient extends svg.element {
     SetColor(index, color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) { return this.SetStop(index, color, opacity, offset); }
     InsertColor(index, stop) { return this.InsertColor(index, stop); }
     InsertColor(index, color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) { return this.InsertColor(index, color, opacity, offset); }
+    
+    // Local change and bubble-on-change settings 
+    /** Should changes to this asset bubble up to its {@link parent} asset? @type {boolean} */
+    get bubbleOnChange() { return this.#_bubbleOnChange; }
+    set bubbleOnChange(v) { this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v); }
+    #_bubbleOnChange = svg.default.BUBBLEONCHANGE;
+    #changed(valueChanged, newValue) {
+        this.onChange?.(valueChanged, newValue, this);
+        if (this.bubbleOnChange) { this.parent?.onChange?.(valueChanged, newValue, this); }
+    }
 
 }
 
@@ -481,6 +507,23 @@ class svgGradientStop extends svg.element {
     get offset() { return this.#_offset; }
     set offset(v) { this.#_offset = v; }
     #_offset = svg.default.GRADIENT_STOP_OFFSET;
+
+    /** 
+     * SVG parent {@link svgGradient gradient}, assigned by the gradient 
+     * @returns {svgGradient} */
+    get parent() { return this.#_parent; }
+    set parent(v) {
+        if (this.parent == v) { return; }
+        this.#_parent = v;
+        if (!this.#_firstParentAssigned) {
+            this.#changed('parent', v);
+            this.#_firstParentAssigned = true;
+        }
+    }
+    /** @type {svg.gradient} */
+    #_parent = null;
+    #_firstParentAssigned = false;
+
     constructor(color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) {
         super();
         this.color = color;
@@ -561,4 +604,15 @@ class svgGradientStop extends svg.element {
     static Clone(stop) {
         return stop == null ? null : new svgGradientStop(stop.color, stop.opacity, stop.offset);
     }
+
+    // Local change and bubble-on-change settings 
+    /** Should changes to this asset bubble up to its {@link parent} asset? @type {boolean} */
+    get bubbleOnChange() { return this.#_bubbleOnChange; }
+    set bubbleOnChange(v) { this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v); }
+    #_bubbleOnChange = svg.default.BUBBLEONCHANGE;
+    #changed(valueChanged, newValue) {
+        this.onChange?.(valueChanged, newValue, this);
+        if (this.bubbleOnChange) { this.parent?.onChange?.(valueChanged, newValue, this); }
+    }
+
 }

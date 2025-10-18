@@ -1,3 +1,5 @@
+import { svgElement } from './svgElement';
+
 export {
     svgElement as element,
     svgHTMLAsset as asset,
@@ -21,3 +23,12 @@ export { svgGradient as gradient } from './svgGradient';
 export * as config from './svgConfig';
 export * as default from './svgDefaults';
 export * as gen from './svgGenerator';
+
+/**
+ * Callback for when a value in an {@link svgElement} has changed
+ * @callback onChange
+ * @param {string} valueChanged The name of the value that was changed 
+ * @param {any} newValue The newly assigned value 
+ * @param {svgElement} changedElement The {@link svgElement} that was changed  
+ * @returns {void}
+ */
