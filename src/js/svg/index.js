@@ -29,6 +29,7 @@ export * as gen from './svgGenerator';
  * @callback onChange
  * @param {string} valueChanged The name of the value that was changed 
  * @param {any} newValue The newly assigned value 
- * @param {svgElement} changedElement The {@link svgElement} that was changed  
+ * @param {any} previousValue The old value, for reference  
+ * @param {svgElement} changedElement The {@link svgElement} that was changed 
  * @returns {void}
  */

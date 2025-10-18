@@ -21,8 +21,8 @@ export class SVGImage extends TitledComponent {
         this.div.appendChild(this.#image);
         
         this.rect = BasicGradientRect('skyblue', 'white', 'pink');
-        this.rect.onChange = function (valueChanged, newValue, changedElement) {
-            console.log(`SVGAsset value ${valueChanged} changed to ${newValue} on ${changedElement}`);
+        this.rect.onChange = function (valueChanged, newValue, previousValue, changedElement) {
+            console.log(`SVGAsset value ${valueChanged} changed to ${newValue} from ${previousValue} on ${changedElement.constructor.name}`);
         }
 
         this.rect.GetShape().fillGradient = this.rect.gradient;

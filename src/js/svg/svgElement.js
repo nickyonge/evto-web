@@ -5,16 +5,41 @@ import { isBlank, StringContainsNumeric, StringNumericDivider, StringNumericOnly
 export class svgElement {
 
     /** unique identifier for this element @type {string} */
-    id;
+    get id() { return this.#_id; };
+    set id(v) {
+        if (this.#_id == v) { return; }
+        let prev = this.#_id;
+        this.#_id = v;
+        if (!this.#_firstIDAssigned) {
+            if (!this.__suppressOnChange) {
+                this.onChange?.('id', v, prev, this);
+                if (this.hasOwnProperty('parent')) {
+                    this.parent?.onChange?.('id', v, prev, this);
+                }
+            }
+            this.#_firstIDAssigned = true;
+        }
+    }
+    /** @type {string} */
+    #_id;
+    #_firstIDAssigned = false;
+
     // TODO: ensure all element IDs are unique
     // Issue URL: https://github.com/nickyonge/evto-web/issues/49
-
-
 
     /**
      * @type {svg.onChange}
      */
     onChange;
+
+    /**
+     * DO NOT USE.  
+     * 
+     * Used internally to prevent multiple {@linkcode onChange} calls 
+     * when modifying one property that itself modifies multiple.
+     * @type {boolean}
+     */
+    __suppressOnChange = false;
 
 
     /** Parse array of SVG data into HTML-attribute-style `name="value"` format, 
@@ -218,15 +243,16 @@ export class svgHTMLAsset extends svgElement {
 
     /** @type {string} */
     get class() { return this.#_class; }
-    set class(v) { this.#_class = v; this.#changed('class', v); }
+    set class(v) { let prev = this.#_class; this.#_class = v; this.#changed('class', v, prev); }
     #_class;
     /** @type {svgViewBox} */
     get viewBox() { return this.#_viewBox; }
     set viewBox(v) {
         if (this.viewBox == v) { return; }
+        let prev = this.#_viewBox;
         this.#_viewBox = v; if (v != null) { v.parent = this; }
         if (!this.#_firstViewboxAssigned) {
-            this.#changed('viewbox', v);
+            this.#changed('viewbox', v, prev);
             this.#_firstViewboxAssigned = true;
         }
     }
@@ -239,31 +265,33 @@ export class svgHTMLAsset extends svgElement {
     get shapes() { return this.#_shapes; }
     set shapes(v) {
         if (v == null) { return; }
+        let prev = this.#_shapes;
         v.forEach(shape => { shape.parent = this; });
         this.#_shapes = v;
-        this.#changed('shapes', v);
+        this.#changed('shapes', v, prev);
     }
     #_shapes = [];
     /** Array of elements contained in this SVG's `<defs>` @type {svgElement[]} */
     get definitions() { return this.#_definitions; }
     set definitions(v) {
         if (v == null) { return; }
+        let prev = this.#_definitions;
         v.forEach(def => {
             if (def.hasOwnProperty('parent')) {
                 def.parent = this;
             }
         });
         this.#_definitions = v;
-        this.#changed('definitions', v);
+        this.#changed('definitions', v, prev);
     }
     #_definitions = [];
     /** @type {boolean} */
     get preserveAspectRatio() { return this.#_preserveAspectRatio; }
-    set preserveAspectRatio(v) { this.#_preserveAspectRatio = v; this.#changed('preserveAspectRatio', v); }
+    set preserveAspectRatio(v) { let prev = this.#_preserveAspectRatio; this.#_preserveAspectRatio = v; this.#changed('preserveAspectRatio', v, prev); }
     #_preserveAspectRatio = svg.default.PRESERVEASPECTRATIO;;
     /** @type {string[][]} */
     get metadata() { return this.#_metadata; }
-    set metadata(v) { this.#_metadata = v; this.#changed('metadata', v); }
+    set metadata(v) { let prev = this.#_metadata; this.#_metadata = v; this.#changed('metadata', v, prev); }
     #_metadata = svg.default.METADATA;
 
     /**
@@ -565,9 +593,10 @@ export class svgHTMLAsset extends svgElement {
         if (this.definitions == null) { this.definitions = []; }
         let gradient = new svg.gradient(id, isRadial, ...colors);
         gradient.id = id;
+        let prev = this.#_definitions;
         this.definitions.push(gradient);
         this.gradient.parent = this;
-        this.#changed('definitions', this.definitions);
+        this.#changed('definitions', this.definitions, prev);
         return gradient;
     }
     /**
@@ -578,9 +607,10 @@ export class svgHTMLAsset extends svgElement {
      */
     AddGradient(gradient) {
         if (this.definitions == null) { this.definitions = []; }
+        let prev = this.#_definitions;
         this.definitions.push(gradient);
         gradient.parent = this;
-        this.#changed('definitions', this.definitions);
+        this.#changed('definitions', this.definitions, prev);
         return gradient;
     }
 
@@ -590,34 +620,37 @@ export class svgHTMLAsset extends svgElement {
      * @param {boolean} [asDefinition=false] Push this shape as a definition? Default `false`
      */
     #PushShape(element, asDefinition = false) {
+        let prev;
         if (asDefinition) {
+            prev = this.#_definitions;
             this.definitions.push(element);
             if (element.hasOwnProperty('parent')) { element.parent = this; }
-            this.#changed('definitions', this.definitions);
+            this.#changed('definitions', this.definitions, prev);
         }
         else {
+            prev = this.#_shapes;
             this.shapes.push(element);
             if (element.hasOwnProperty('parent')) { element.parent = this; }
-            this.#changed('shapes', this.shapes);
+            this.#changed('shapes', this.shapes, prev);
         }
     }
 
     /** @type {svg.onChange} Local changed callback that calls {@link onChange} on this element (separated for easy modification) */
-    #changed(valueChanged, newValue) { this.onChange?.(valueChanged, newValue, this); }
+    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); }
 }
 
 export class svgViewBox extends svgElement {
     get x() { return this.#_x; }
-    set x(v) { this.#_x = v; this.#changed('x', v); }
+    set x(v) { let prev = this.#_x; this.#_x = v; this.#changed('x', v, prev); }
     #_x = svg.default.X;
     get y() { return this.#_y; }
-    set y(v) { this.#_y = v; this.#changed('y', v); }
+    set y(v) { let prev = this.#_y; this.#_y = v; this.#changed('y', v, prev); }
     #_y = svg.default.Y;
     get width() { return this.#_width; }
-    set width(v) { this.#_width = v; this.#changed('width', v); }
+    set width(v) { let prev = this.#_width; this.#_width = v; this.#changed('width', v, prev); }
     #_width = svg.default.WIDTH;
     get height() { return this.#_height; }
-    set height(v) { this.#_height = v; this.#changed('height', v); }
+    set height(v) { let prev = this.#_height; this.#_height = v; this.#changed('height', v, prev); }
     #_height = svg.default.HEIGHT;
     constructor(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT) {
         super(); this.x = x; this.y = y; this.width = width; this.height = height;
@@ -630,9 +663,10 @@ export class svgViewBox extends svgElement {
     get parent() { return this.#_parent; }
     set parent(v) {
         if (this.parent == v) { return; }
+        let prev = this.#_parent;
         this.#_parent = v;
         if (!this.#_firstParentAssigned) {
-            this.#changed('parent', v);
+            this.#changed('parent', v, prev);
             this.#_firstParentAssigned = true;
         }
     }
@@ -641,8 +675,8 @@ export class svgViewBox extends svgElement {
     #_firstParentAssigned = false;
     /** Should changes to this asset bubble up to its {@link parent} asset? @type {boolean} */
     get bubbleOnChange() { return this.#_bubbleOnChange; }
-    set bubbleOnChange(v) { this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v); }
+    set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
     #_bubbleOnChange = svg.default.BUBBLEONCHANGE;
     /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
-    #changed(valueChanged, newValue) { this.onChange?.(valueChanged, newValue, this); if (this.bubbleOnChange) { this.parent?.onChange?.(valueChanged, newValue, this); } }
+    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.onChange?.(valueChanged, newValue, this); } }
 }
