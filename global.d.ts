@@ -17,6 +17,19 @@ declare global {
 
     }
 
+    interface Array {
+
+        /**
+         * Appends new elements to the end of an array, and returns the new length of the array.
+         * @param {...T} items New elements to add to the array.
+         * @returns {Number} The new length of the array 
+         * @type {<T>(...items: T[]): number}
+         * @template T 
+         */
+        push<T>(...items: T[]): number;
+
+    }
+
     interface Number {
 
         /** 
