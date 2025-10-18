@@ -30,7 +30,7 @@ export function CreatePagePattern(page) {
     sectionContainer.appendChild(sectionPattern);
     sectionContainer.appendChild(sectionColors);
 
-    // DemoGradient(sectionPattern);
+    DemoGradient(sectionPattern);
 
 
     /* REFERENCE PATTERNS 

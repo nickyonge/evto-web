@@ -13,7 +13,7 @@ export function BasicGradientRect(...colors) {
 }
 
 export class svgFancyBox {
-
+    // TODO: convert svgFancyBox to SVG pattern generation, not its own weird pseudo-shape type 
     x;
     y;
     width;

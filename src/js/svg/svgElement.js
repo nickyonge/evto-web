@@ -209,18 +209,30 @@ export class svgElement {
 export class svgHTMLAsset extends svgElement {
 
     /** @type {string} */
-    class;
+    get class() { return this.#_class; }
+    set class(v) { this.#_class = v; }
+    #_class;
     /** @type {svgViewBox} */
-    viewBox;
+    get viewBox() { return this.#_viewBox; }
+    set viewBox(v) { this.#_viewBox = v; }
+    #_viewBox;
     /** Array of {@link svg.shape shapes} contained in this SVG 
      * (excluding any in {@link definitions `<defs>`}) @type {svg.shape[]} */
-    shapes = [];
+    get shapes() { return this.#_shapes; }
+    set shapes(v) { this.#_shapes = v; }
+    #_shapes = [];
     /** Array of elements contained in this SVG's `<defs>` @type {svgElement[]} */
-    definitions = [];
+    get definitions() { return this.#_definitions; }
+    set definitions(v) { this.#_definitions = v; }
+    #_definitions = [];
     /** @type {boolean} */
-    preserveAspectRatio = svg.default.PRESERVEASPECTRATIO;
+    get preserveAspectRatio() { return this.#_preserveAspectRatio; }
+    set preserveAspectRatio(v) { this.#_preserveAspectRatio = v; }
+    #_preserveAspectRatio = svg.default.PRESERVEASPECTRATIO;;
     /** @type {string[][]} */
-    metadata = svg.default.METADATA;
+    get metadata() { return this.#_metadata; }
+    set metadata(v) { this.#_metadata = v; }
+    #_metadata = svg.default.METADATA;
 
     /**
      * Create a new SVG HTML asset, with optionally 
@@ -543,7 +555,18 @@ export class svgHTMLAsset extends svgElement {
 }
 
 export class svgViewBox extends svgElement {
-    x; y; width; height;
+    get x() { return this.#_x; }
+    set x(v) { this.#_x = v; }
+    #_x = svg.default.X;
+    get y() { return this.#_y; }
+    set y(v) { this.#_y = v; }
+    #_y = svg.default.Y;
+    get width() { return this.#_width; }
+    set width(v) { this.#_width = v; }
+    #_width = svg.default.WIDTH;
+    get height() { return this.#_height; }
+    set height(v) { this.#_height = v; }
+    #_height = svg.default.HEIGHT;
     constructor(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT) {
         super(); this.x = x; this.y = y; this.width = width; this.height = height;
     }

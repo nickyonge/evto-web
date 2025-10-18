@@ -66,12 +66,24 @@ export class svgShape extends svg.element {
     }
 } // shape 
 export class svgRect extends svgShape {
-    x = svg.default.X;
-    y = svg.default.Y;
-    width = svg.default.WIDTH;
-    height = svg.default.HEIGHT;
-    rx = svg.default.RECT_RX;
-    ry = svg.default.RECT_RY;
+    get x() { return this.#_x; }
+    set x(v) { this.#_x = v; }
+    #_x = svg.default.X;
+    get y() { return this.#_y; }
+    set y(v) { this.#_y = v; }
+    #_y = svg.default.Y;
+    get width() { return this.#_width; }
+    set width(v) { this.#_width = v; }
+    #_width = svg.default.WIDTH;
+    get height() { return this.#_height; }
+    set height(v) { this.#_height = v; }
+    #_height = svg.default.HEIGHT;
+    get rx() { return this.#_rx; }
+    set rx(v) { this.#_rx = v; }
+    #_rx = svg.default.RECT_RX;
+    get ry() { return this.#_ry; }
+    set ry(v) { this.#_ry = v; }
+    #_ry = svg.default.RECT_RY;
     constructor(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT, fill = svg.default.FILL) {
         super(fill);
         this.type = _RECT;
@@ -102,9 +114,15 @@ export class svgRect extends svgShape {
     set r(radius) { this.rx = radius; this.ry = radius; }
 } // rect 
 export class svgCircle extends svgShape {
-    r = svg.default.R;
-    cx = svg.default.CX;
-    cy = svg.default.CY;
+    get r() { return this.#_r; }
+    set r(v) { this.#_r = v; }
+    #_r = svg.default.R;
+    get cx() { return this.#_cx; }
+    set cx(v) { this.#_cx = v; }
+    #_cx = svg.default.CX;
+    get cy() { return this.#_cy; }
+    set cy(v) { this.#_cy = v; }
+    #_cy = svg.default.CY;
     constructor(r = svg.default.R, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL) {
         super(fill);
         this.type = _CIRCLE;
@@ -119,10 +137,18 @@ export class svgCircle extends svgShape {
     }
 } // circle 
 export class svgEllipse extends svgShape {
-    rx = svg.default.ELLIPSE_RX;
-    ry = svg.default.ELLIPSE_RY;
-    cx = svg.default.CX;
-    cy = svg.default.CY;
+    get rx() { return this.#_rx; }
+    set rx(v) { this.#_rx = v; }
+    #_rx = svg.default.ELLIPSE_RX;
+    get ry() { return this.#_ry; }
+    set ry(v) { this.#_ry = v; }
+    #_ry = svg.default.ELLIPSE_RY;
+    get cx() { return this.#_cx; }
+    set cx(v) { this.#_cx = v; }
+    #_cx = svg.default.CX;
+    get cy() { return this.#_cy; }
+    set cy(v) { this.#_cy = v; }
+    #_cy = svg.default.CY;
     constructor(rx = svg.default.ELLIPSE_RX, ry = svg.default.ELLIPSE_RY, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL) {
         super(fill);
         this.type = _ELLIPSE;
@@ -138,10 +164,18 @@ export class svgEllipse extends svgShape {
     }
 } // ellipse 
 export class svgLine extends svgShape {
-    x1 = svg.default.X1;
-    y1 = svg.default.Y1;
-    x2 = svg.default.X2;
-    y2 = svg.default.Y2;
+    get x1() { return this.#_x1; }
+    set x1(v) { this.#_x1 = v; }
+    #_x1 = svg.default.X1;
+    get y1() { return this.#_y1; }
+    set y1(v) { this.#_y1 = v; }
+    #_y1 = svg.default.Y1;
+    get x2() { return this.#_x2; }
+    set x2(v) { this.#_x2 = v; }
+    #_x2 = svg.default.X2;
+    get y2() { return this.#_y2; }
+    set y2(v) { this.#_y2 = v; }
+    #_y2 = svg.default.Y2;
     constructor(x1 = svg.default.X1, y1 = svg.default.Y1, x2 = svg.default.X2, y2 = svg.default.Y2, fill = svg.default.FILL) {
         super(fill);
         this.type = _LINE;
@@ -158,7 +192,9 @@ export class svgLine extends svgShape {
 } // line 
 export class svgPolyline extends svgShape {
     /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {[number,number]} */
-    points = svg.default.POINTS;
+    get points() { return this.#_points; }
+    set points(v) { this.#_points = v; }
+    #_points = svg.default.POINTS;
     constructor(points = svg.default.POINTS, fill = svg.default.FILL) {
         super(fill);
         this.type = _POLYLINE;
@@ -175,7 +211,9 @@ export class svgPolyline extends svgShape {
 } // polyline 
 export class svgPolygon extends svgShape {
     /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {[number,number]} */
-    points = svg.default.POINTS;
+    get points() { return this.#_points; }
+    set points(v) { this.#_points = v; }
+    #_points = svg.default.POINTS;
     constructor(points = svg.default.POINTS, fill = svg.default.FILL) {
         super(fill);
         this.type = _POLYGON;
@@ -191,8 +229,12 @@ export class svgPolygon extends svgShape {
     }
 } // polygon 
 export class svgPath extends svgShape {
-    d = svg.default.D;
-    pathLength = svg.default.PATHLENGTH;
+    get d() { return this.#_d; }
+    set d(v) { this.#_d = v; }
+    #_d = svg.default.D;
+    get pathLength() { return this.#_pathLength; }
+    set pathLength(v) { this.#_pathLength = v; }
+    #_pathLength = svg.default.PATHLENGTH;
     constructor(d = svg.default.D, fill = svg.default.FILL) {
         super(fill);
         this.type = _PATH;

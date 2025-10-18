@@ -5,28 +5,48 @@ import * as svg from './index';
 export class svgGradient extends svg.element {
 
     /** if true, html outputs `radialGradient`; if false, `linearGradient` @type {boolean} */
-    isRadial = svg.default.GRADIENT_ISRADIAL;
+    get isRadial() { return this.#_isRadial; }
+    set isRadial(v) { this.#_isRadial = v; }
+    #_isRadial = svg.default.GRADIENT_ISRADIAL;
 
     /** 
      * How sharp is the gradient? If 0, fully smooth. If 1, completely sharp. 
      * Clamped between 0 and 1. @type {number} */
-    sharpness = svg.default.GRADIENT_SHARPNESS;
-    mirror = svg.default.GRADIENT_MIRROR;
-    scale = svg.default.GRADIENT_SCALE;
+    get sharpness() { return this.#_sharpness; }
+    set sharpness(v) { this.#_sharpness = v; }
+    #_sharpness = svg.default.GRADIENT_SHARPNESS;
+    get mirror() { return this.#_mirror; }
+    set mirror(v) { this.#_mirror = v; }
+    #_mirror = svg.default.GRADIENT_MIRROR;
+    get scale() { return this.#_scale; }
+    set scale(v) { this.#_scale = v; }
+    #_scale = svg.default.GRADIENT_SCALE;
     /** angle, in degrees, a linear gradient should be rotated by. Does not affect radial gradients. @type {number} */
-    angle = svg.default.GRADIENT_ANGLE;
+    get angle() { return this.#_angle; }
+    set angle(v) { this.#_angle = v; }
+    #_angle = svg.default.GRADIENT_ANGLE;
     /**
      * Pivot XY {@link isPoint point} around which angle values will be rotated  
      * @see {@link isPoint} XY point object reference
      * @see {@linkcode svg.default.GRADIENT_ANGLEPIVOTPOINT GRADIENT_ANGLEPIVOTPOINT}
      * @type {{x:number, y:number}}
      */
-    anglePivotPoint = svg.default.GRADIENT_ANGLEPIVOTPOINT;
+    get anglePivotPoint() { return this.#_anglePivotPoint; }
+    set anglePivotPoint(v) { this.#_anglePivotPoint = v; }
+    #_anglePivotPoint = svg.default.GRADIENT_ANGLEPIVOTPOINT;
 
-    x1 = svg.default.GRADIENT_X1;
-    y1 = svg.default.GRADIENT_Y1;
-    x2 = svg.default.GRADIENT_X2;
-    y2 = svg.default.GRADIENT_Y2;
+    get x1() { return this.#_x1; }
+    set x1(v) { this.#_x1 = v; }
+    #_x1 = svg.default.GRADIENT_X1;
+    get y1() { return this.#_y1; }
+    set y1(v) { this.#_y1 = v; }
+    #_y1 = svg.default.GRADIENT_Y1;
+    get x2() { return this.#_x2; }
+    set x2(v) { this.#_x2 = v; }
+    #_x2 = svg.default.GRADIENT_X2;
+    get y2() { return this.#_y2; }
+    set y2(v) { this.#_y2 = v; }
+    #_y2 = svg.default.GRADIENT_Y2;
 
     get #x1Default() { return this.x1 == null ? svg.default.GRADIENT_X1_SCALEDEFAULT : this.x1; }
     get #y1Default() { return this.y1 == null ? svg.default.GRADIENT_Y1_SCALEDEFAULT : this.y1; }
@@ -34,7 +54,9 @@ export class svgGradient extends svg.element {
     get #y2Default() { return this.y2 == null ? svg.default.GRADIENT_Y2_SCALEDEFAULT : this.y2; }
 
     /** array for gradient stops @type {svgGradientStop[]} */
-    stops;
+    get stops() { return this.#_stops; }
+    set stops(v) { this.#_stops = v; }
+    #_stops;
 
     /** radial only, X coord at gradient start circle, convenience, simply gets/sets {@link x1} @type {number|string} */
     get fx() { return this.x1; } set fx(i) { this.x1 = i; }
@@ -46,14 +68,26 @@ export class svgGradient extends svg.element {
     get cy() { return this.y2; } set cy(i) { this.y2 = i; }
 
     /** radial-only, radius at end of the gradient @type {number|string} */
-    fr = svg.default.GRADIENT_FR;
+    get fr() { return this.#_fr; }
+    set fr(v) { this.#_fr = v; }
+    #_fr = svg.default.GRADIENT_FR;
     /** radial-only, radius at end of the gradient @type {number|string} */
-    r = svg.default.GRADIENT_R;
+    get r() { return this.#_r; }
+    set r(v) { this.#_r = v; }
+    #_r = svg.default.GRADIENT_R;
 
-    gradientUnits = svg.default.GRADIENT_UNITS;
-    gradientTransform = svg.default.GRADIENT_TRANSFORM;
-    spreadMethod = svg.default.GRADIENT_SPREADMETHOD;
-    href = svg.default.GRADIENT_HREF;
+    get gradientUnits() { return this.#_gradientUnits; }
+    set gradientUnits(v) { this.#_gradientUnits = v; }
+    #_gradientUnits = svg.default.GRADIENT_UNITS;
+    get gradientTransform() { return this.#_gradientTransform; }
+    set gradientTransform(v) { this.#_gradientTransform = v; }
+    #_gradientTransform = svg.default.GRADIENT_TRANSFORM;
+    get spreadMethod() { return this.#_spreadMethod; }
+    set spreadMethod(v) { this.#_spreadMethod = v; }
+    #_spreadMethod = svg.default.GRADIENT_SPREADMETHOD;
+    get href() { return this.#_href; }
+    set href(v) { this.#_href = v; }
+    #_href = svg.default.GRADIENT_HREF;
 
     constructor(id, isRadial = svg.default.GRADIENT_ISRADIAL, ...colors) {
         super();
@@ -438,9 +472,15 @@ export class svgGradient extends svg.element {
 }
 
 class svgGradientStop extends svg.element {
-    color = svg.default.GRADIENT_STOP_COLOR;
-    opacity = svg.default.GRADIENT_STOP_OPACITY;
-    offset = svg.default.GRADIENT_STOP_OFFSET;
+    get color() { return this.#_color; }
+    set color(v) { this.#_color = v; }
+    #_color = svg.default.GRADIENT_STOP_COLOR;
+    get opacity() { return this.#_opacity; }
+    set opacity(v) { this.#_opacity = v; }
+    #_opacity = svg.default.GRADIENT_STOP_OPACITY;
+    get offset() { return this.#_offset; }
+    set offset(v) { this.#_offset = v; }
+    #_offset = svg.default.GRADIENT_STOP_OFFSET;
     constructor(color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) {
         super();
         this.color = color;
