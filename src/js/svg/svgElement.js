@@ -566,6 +566,8 @@ export class svgHTMLAsset extends svgElement {
         let gradient = new svg.gradient(id, isRadial, ...colors);
         gradient.id = id;
         this.definitions.push(gradient);
+        this.gradient.parent = this;
+        this.#changed('definitions', this.definitions);
         return gradient;
     }
     /**
@@ -577,12 +579,27 @@ export class svgHTMLAsset extends svgElement {
     AddGradient(gradient) {
         if (this.definitions == null) { this.definitions = []; }
         this.definitions.push(gradient);
+        gradient.parent = this;
+        this.#changed('definitions', this.definitions);
         return gradient;
     }
 
-    #PushShape(element, asDefinition) {
-        if (asDefinition) { this.definitions.push(element); }
-        else { this.shapes.push(element); }
+    /**
+     * Local ref to push a shape/element to {@link shapes} or {@link definitions}
+     * @param {svg.shape|svg.element} element SVGShape or SVGElement to push
+     * @param {boolean} [asDefinition=false] Push this shape as a definition? Default `false`
+     */
+    #PushShape(element, asDefinition = false) {
+        if (asDefinition) {
+            this.definitions.push(element);
+            if (element.hasOwnProperty('parent')) { element.parent = this; }
+            this.#changed('definitions', this.definitions);
+        }
+        else {
+            this.shapes.push(element);
+            if (element.hasOwnProperty('parent')) { element.parent = this; }
+            this.#changed('shapes', this.shapes);
+        }
     }
 
     /** @type {svg.onChange} Local changed callback that calls {@link onChange} on this element (separated for easy modification) */
