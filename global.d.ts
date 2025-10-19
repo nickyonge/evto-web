@@ -25,6 +25,31 @@ declare global {
         name?: string;
 
         /**
+         * Checks if the given value is contained anywhere in this array
+         * @param {T} value Value to check for 
+         * @returns {boolean}
+         * @type {<T>(value:T): boolean}
+         * @template T 
+         */
+        contains: (value: T) => boolean;
+        /**
+         * Checks if ANY of the given values are contained in this array
+         * @param {...T} value Values to check for 
+         * @returns {boolean}
+         * @type {<T>(...value:T[]): boolean}
+         * @template T 
+         */
+        containsAny: (...value:T[]) => boolean;
+        /**
+         * Checks if ALL of the given values are contained in this array
+         * @param {...T} value Values to check for 
+         * @returns {boolean}
+         * @type {<T>(...value:T[]): boolean}
+         * @template T 
+         */
+        containsAll: (...value:T[]) => boolean;
+
+        /**
          * Callback invoked whenever a {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#copying_methods_and_mutating_methods mutating} 
          * method is called on an array - that is, a method that directly modifies
          * the given array, and doesn't simply reference it (eg, `find()`) or that
@@ -55,7 +80,7 @@ declare global {
          * @type {(type:string, source:T[], returnValue:T, ...parameters:T[]): T}
          * @template T 
          */
-        onChange?: (type:string, source:T[], returnValue:T, ...parameters:T[]) => T;
+        onChange?: (type: string, source: T[], returnValue: T, ...parameters: T[]) => T;
 
         /**
          * Returns this array after copying a section of the array identified by start and end

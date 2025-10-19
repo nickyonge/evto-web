@@ -43,8 +43,7 @@ Object.defineProperty(Array.prototype, 'name', {
     /** 
      * Optionally-assigned name for this array
      * @returns {string} */
-    get: function () { 
-        return this[_arrayName] || undefined; },
+    get: function () { return this[_arrayName] || undefined; },
     /**
      * Optionally-assigned name for this array
      * @param {string|undefined} [name=undefined] Name to assign to this array. Default `undefined`
@@ -362,6 +361,46 @@ Array.prototype.unshift = function (...items) {
     }
     return _unshift.call(this, ...items);
 };
+
+/**
+ * Checks if the given value is contained anywhere in this array
+ * @param {T} value Value to check for 
+ * @returns {boolean}
+ * @type {<T>(value:T) => boolean}
+ * @template T 
+ */
+Array.prototype.contains = function (value) {
+    return (this.indexOf(value) >= 0);
+}
+/**
+ * Checks if ANY of the given values are contained in this array
+ * @param {...T} value Values to check for 
+ * @returns {boolean}
+ * @type {<T>(...value:T[]) => boolean}
+ * @template T 
+ */
+Array.prototype.containsAny = function (...value) {
+    if (FLATTEN_CONTAINS) { value = /** @type {T[]} */ (value.flat()); }
+    for (let i = 0; i < value.length; i++) {
+        if (this.contains(value[i])) { return true; }
+    }
+    return false;
+}
+/**
+ * Checks if ANY of the given values are contained in this array
+ * @param {...T} value Values to check for 
+ * @returns {boolean}
+ * @type {<T>(...value:T[]) => boolean}
+ * @template T 
+ */
+Array.prototype.containsAll = function (...value) {
+    if (FLATTEN_CONTAINS) { value = /** @type {T[]} */ (value.flat()); }
+    for (let i = 0; i < value.length; i++) {
+        if (!this.contains(value[i])) { return false; }
+    }
+    return true;
+}
+const FLATTEN_CONTAINS = true;
 
 // #endregion Array 
 
