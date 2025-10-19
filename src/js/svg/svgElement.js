@@ -43,6 +43,7 @@ export class svgElement {
         }
 
         //TODO: move object property/getter listing to utils 
+        //Issue URL: https://github.com/nickyonge/evto-web/issues/55
         /**
          * Returns a list of all entries (properties, property descriptions) on this object AND its class parent prototype
          * @param {Object} obj Object to get properties of
