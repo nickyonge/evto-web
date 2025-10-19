@@ -1,8 +1,15 @@
 import * as svg from './index';
 import { shape, rect, circle, ellipse, line, polyline, polygon, path, gradient } from "./index";
-import { isBlank, StringContainsNumeric, StringNumericDivider, StringNumericOnly, StringOnlyNumeric, StringToNumber } from "../lilutils";
+import { isBlank, isStringNotBlank, StringContainsNumeric, StringNumericDivider, StringNumericOnly, StringOnlyNumeric, StringToNumber } from "../lilutils";
 
 export class svgElement {
+    /** Array containing all {@linkcode svgElement} instances @type {svgElement[]} */
+    static allSVGElements = [];
+    /** Filters and returns length of {@linkcode allSVGElements} @returns {Number} */
+    static get allSVGElementsCount() { svgElement.#__filterElementsArray(); return svgElement.allSVGElements.length; }
+    /** Remove all `null` values from the {@linkcode allSVGElements} array @returns {void} */
+    static #__filterElementsArray() { svgElement.allSVGElements = svgElement.allSVGElements.filter(e => e != null); }
+
 
     /** unique identifier for this element @type {string} */
     get id() { return this.#_id; };
@@ -19,6 +26,87 @@ export class svgElement {
             }
             this.#_firstIDAssigned = true;
         }
+        // update ID change on all SVG Elements 
+        for (let i = 0; i < svgElement.allSVGElementsCount; i++) {
+            let e = svgElement.allSVGElements[i];
+            if (e == null) { continue; }
+            // iterate through all keys in an object, check for URLs to update
+
+
+            let values = getSortedValues(e).flat();
+            for (let i = 0; i < values.length; i++) {
+                if (values[i] == null) { continue; }
+                if (this.isURL(values[i][1])) {
+
+                }
+            }
+        }
+
+        //TODO: move object property/getter listing to utils 
+        /**
+         * Returns a list of all entries (properties, property descriptions) on this object AND its class parent prototype
+         * @param {Object} obj Object to get properties of
+         * @param {boolean} [skipObjectEntries=true] skip the entries from base `Object` prototype? Default `true`
+         * @returns {[string, TypedPropertyDescriptor<any> & PropertyDescriptor]}
+         */
+        function listAll(obj, skipObjectEntries = false) {
+            let prototype = Object.getPrototypeOf(obj);
+            if (prototype == null) { return []; }// reached the end! 
+            if (skipObjectEntries && prototype.constructor.name === 'Object') { return []; } // don't include Object entries 
+            // get all property descriptors 
+            let entries = Object.entries(Object.getOwnPropertyDescriptors(prototype));
+            if (!obj.__SKIP_INSTANCE_PROPERTIES) {
+                // should only run on the first object passed into listAll, which is an iterative function 
+                entries = entries.concat(Object.entries(Object.getOwnPropertyDescriptors(obj)));
+            }
+            let subEntries = [];
+            for (let i = 0; i < entries.length; i++) {
+                if (entries[i][0] === 'constructor') {
+                    let p = entries[i][1].value.prototype;
+                    let prev = null;
+                    let hasProperty = p.hasOwnProperty('__SKIP_INSTANCE_PROPERTIES');
+                    if (hasProperty) {
+                        // in the EXTREMELY unlikely chance that an object prototype already has a
+                        // property called __SKIP_INSTANCE_PROPERTIES, preserve and restore the value
+                        prev = p.__SKIP_INSTANCE_PROPERTIES;
+                    }
+                    p.__SKIP_INSTANCE_PROPERTIES = true;// skip instance properties on parent constructors 
+                    subEntries.push(listAll(p, skipObjectEntries));
+                    if (hasProperty) {
+                        p.__SKIP_INSTANCE_PROPERTIES = prev;
+                    } else {
+                        delete (p.__SKIP_INSTANCE_PROPERTIES);
+                    }
+                }
+            }
+            for (let i = 0; i < subEntries.length; i++) {
+                entries = entries.concat(subEntries[i]);
+            }
+            return entries;
+        }
+        function getSortedValues(obj) {
+            // [ getters[getter,value], properties[property,value] ]
+            let all = listAll(obj);
+            let properties = [];
+            let getters = [];
+            function skipProperty(name) {
+                const skipPropertyNames = ['id', 'idURL'];
+                return skipPropertyNames.contains(name);
+            }
+            for (let i = 0; i < all.length; i++) {
+                if (all[i] == null) { continue; }
+                if (skipProperty(all[i][0])) { continue; }
+                if (typeof all[i][1].get === 'function') {
+                    let getter = [all[i][0], obj[all[i][0]]];
+                    getters.push(getter);
+                }
+                else if (all[i][1].enumerable && all[i][1].writable) {
+                    let property = [all[i][0], obj[all[i][0]]];
+                    properties.push(property);
+                }
+            }
+            return [getters, properties];
+        }
     }
     /** @type {string} */
     #_id;
@@ -26,6 +114,11 @@ export class svgElement {
 
     // TODO: ensure all element IDs are unique
     // Issue URL: https://github.com/nickyonge/evto-web/issues/49
+
+    constructor() {
+        svgElement.#__filterElementsArray();
+        svgElement.allSVGElements.push(this);
+    }
 
     /**
      * Callback for when a value in this {@link svgElement} has changed
@@ -233,6 +326,61 @@ export class svgElement {
     } // rebuild decon param [100, 'px'] back into '100px'
 
     /**
+     * Converts a string to a local URL reference, eg `"url(#myString)"`. 
+     * Attempts to convert non-string values to string and format those. 
+     * If string is null or empty, returns unmodified input value, eg `""`.
+     * @param {string} str String to convert
+     * @see {@link stringFromURL} — Extracts a string FROM a URL reference, eg `"myString"` from `"url(#myString)"` 
+     * @returns {string}
+     */
+    stringToURL(str) {
+        if (str == null) { return null; }
+        if (typeof str != 'string') { return this.stringToURL(str.toString()); }
+        if (isBlank(str)) { return str; }
+        if (this.isURL(str)) { return str; } // already a URL 
+        if (str.startsWith('#')) { str = str.slice(1); } // remove to easily reassign below 
+        if (!str.startsWith('url(')) { str = `url(#${str}`; } // url(#myString
+        if (!str.endsWith(')')) { str = `${str})`; } // url(#myString)
+        return str;
+    }
+    /**
+     * Extract inner string from URL-formatted string, eg `"myString"` from `"url(#myString)"` 
+     * @param {string} str String to process. If string is not URL formatted (or value is not a string), returns `str` unmodified 
+     * @see {@link stringToURL} — Converts a string INTO a URL
+     * @see {@link isURL} — Checks if input string is URL formatted or not 
+     * @returns {string} 
+     */
+    stringFromURL(str) {
+        if (!this.isURL(str, false, false)) { return str; }
+        str = str.trim(); // "url(#myString)" 
+        if (str.toLowerCase().startsWith('url')) {
+            str = str.slice(3); // "(#myString)" 
+            if (str.startsWith('(')) {
+                str = str.slice(1); // "#myString)" 
+                if (str.startsWith('#')) {
+                    str = str.slice(1); // "myString)" 
+                }
+                if (str.endsWith(')')) {
+                    str = str.slice(0, -1); // "myString" 
+                }
+            }
+        }
+        return str;
+    }
+    /** Checks if a given string is formatted as a local URL reference, eg `"url(#myString)"`
+     * @param {string} str String to check 
+     * @param {boolean} [checkEnd=true] Check end of string for `)`? Default `true
+     * @param {boolean} [requireHash=true] Require `#` in `url(#`? Default `true` 
+     * @returns {boolean}
+     */
+    isURL(str, checkEnd = true, requireHash = true) {
+        if (!isStringNotBlank(str)) { return false; }
+        str = str.toLowerCase();
+        if (checkEnd) { if (!str.endsWith(')')) { return false; } }
+        return requireHash ? str.startsWith('url(#') : str.startsWith('url(');
+    }
+
+    /**
      * gets this element's {@linkcode id ID} formatted as an
      * SVG-attribute URL: `url(#id)`
      */
@@ -241,11 +389,19 @@ export class svgElement {
             console.warn("WARNING: can't get id URL from blank/null ID, returning null", this);
             return null;
         }
-        return `url(#${this.id})`;
+        return this.stringToURL(this.id);
     }
 }
 
 export class svgHTMLAsset extends svgElement {
+
+    /** Array containing all {@linkcode svgHTMLAsset svgHTMLAsset} instances @type {svgHTMLAsset[]} */
+    static allSVGHTMLAssets = [];
+    /** Filters and returns length of {@linkcode allSVGHTMLAssets} @returns {Number} */
+    static get allSVGHTMLAssetsCount() { svgHTMLAsset.#__filterAssetsArray(); return svgHTMLAsset.allSVGHTMLAssets.length; }
+    /** Remove all `null` values from the {@linkcode allSVGHTMLAssets} array @returns {void} */
+    static #__filterAssetsArray() { svgHTMLAsset.allSVGHTMLAssets = svgHTMLAsset.allSVGHTMLAssets.filter(e => e != null); }
+
 
     /** @type {string} */
     get class() { return this.#_class; }
@@ -319,6 +475,8 @@ export class svgHTMLAsset extends svgElement {
         this.definitions = definitions;
         this.viewBox = viewBox;
         this.metadata = svg.default.METADATA;
+        svgHTMLAsset.#__filterAssetsArray();
+        svgHTMLAsset.allSVGHTMLAssets.push(this);
     }
     get html() {
         let d = this.data;

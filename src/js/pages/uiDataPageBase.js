@@ -87,28 +87,6 @@ export function DemoPageContent(page) {
 
 export function DemoGradient(page) {
 
-    let a = [1, 2, 3];
-    a.onChange = function (type, src, r, p) { console.log(`array change: ${type}, src: ${src}, rv: ${r}, params: ${p}`) };
-    console.log(a.name);
-    a.name = 'array name';
-    console.log(a.name);
-    a.name = '2nd name';
-    a.name = '2nd name';
-    a.name = '2nd name';
-    console.log(a.name);
-    console.log(a.length);
-    a.length = 5;
-    console.log(a.length);
-    a.length = 4;
-    console.log(a.length);
-    a.length = 6;
-    console.log(a.length);
-
-    console.log("test");
-    a.name = 'heck';
-    a[2] = 3;
-    console.log("test");
-
     
     // prepare sections
     let svgImage = new cmp.SVGImage();
@@ -147,4 +125,8 @@ export function DemoGradient(page) {
     page.appendChild(color1);
     page.appendChild(color2);
     page.appendChild(color3);
+
+    svgImage.updateDemoRect();
+    svgImage.demoRect.id = 'testID';
+    svgImage.demoRect.id = 'testID2';
 }
