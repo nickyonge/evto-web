@@ -20,6 +20,31 @@ declare global {
     interface Array {
 
         /**
+         * Callback invoked whenever a {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#copying_methods_and_mutating_methods mutating} 
+         * method is called on an array - that is, a method that directly modifies
+         * the given array, and doesn't simply reference it (eg, `find()`) or that
+         * itself returns an entirely new array or type (eg, `slice()` or `join()`).
+         * @param {string} type The name of the method used on the array, as a string. Eg, `"push"` for {@linkcode Array.prototype.push Array.push()}. See below for a comprehensive list. 
+         * @param {T[]} source The array object itself that was modified 
+         * @param {T} returnValue The value returned by the modified method. Eg, for `type = "pop"`, returns the array's now-removed last element, as per {@linkcode Array.prototype.pop Array.pop()}.
+         * @param {...T} [parameters=undefined] All parameter values supplied to the array in the invoked method. See below for a comprehensive list. 
+         * @returns {void}
+         * @see {@link Array.prototype} — All mutating methods, and thus possible values for `type`, include (with parameters): 
+         * - {@linkcode Array.prototype.copyWithin copyWithin}, 3 params: `[ target:number, start:number, end?:number=undefined ]` 
+         * - {@linkcode Array.prototype.fill fill}, 3 params: `[ value:T, start?:number, end?:number ]` 
+         * - {@linkcode Array.prototype.pop pop}, 0 params: `[]` 
+         * - {@linkcode Array.prototype.push push}, 0 + [... spread] params: `[...items:any[] ]` 
+         * - {@linkcode Array.prototype.reverse reverse}, 0 params: `[]` 
+         * - {@linkcode Array.prototype.shift shift}, 0 params: `[]` 
+         * - {@linkcode Array.prototype.sort sort}, 1 param: `[ compareFn?:(a:any, b:any):number ]` 
+         * - {@linkcode Array.prototype.splice splice}, 2 + [... spread] params: `[ start:number, deleteCount?:number=0, ...items:any[] ]` 
+         * - {@linkcode Array.prototype.unshift unshift}, 0 + [... spread] params: `[...items:any[] ]` 
+         * @type {(type:string, source:T[], returnValue:T, ...parameters:T[]): T}
+         * @template T 
+         */
+        onChange?: (type:string, source:T[], returnValue:T, ...parameters:T[]) => T;
+
+        /**
          * Returns this array after copying a section of the array identified by start and end
          * to the same array starting at position target
          * @param {Number} target If target is negative, it is treated as length+target where length is the
@@ -28,8 +53,8 @@ declare global {
          * is treated as length+end.
          * @param {Number} [end=this.length] If not specified, length of the this object is used as its default value.
          * @returns {T[]} This array, after modification
-         * @override This overrides {@linkcode Array.prototype.copyWithin copyWithin}
-         * to allow for invoking an `onChange` callback on array objects.
+         * @override This overrides {@linkcode Array.prototype.copyWithin copyWithin} to allow for 
+         * invoking an {@linkcode Array.prototype.onChange onChange} callback on array objects. 
          * @type {(target: number, start: number, end?: number): T[]} 
          * @template T 
          */
@@ -43,8 +68,8 @@ declare global {
          * @param {Number} [end=this.length] index to stop filling the array at. If end is negative, it is treated as
          * length+end. If undefined, array.length is used.
          * @returns {T[]} The modified array
-         * @override This overrides {@linkcode Array.prototype.fill fill}
-         * to allow for invoking an `onChange` callback on array objects.
+         * @override This overrides {@linkcode Array.prototype.fill fill} to allow for 
+         * invoking an {@linkcode Array.prototype.onChange onChange} callback on array objects. 
          * @type {<T>(value: T, start?: number, end?: number): T[]}
          * @template T 
          */
@@ -54,8 +79,8 @@ declare global {
          * Removes the last element from an array and returns it.
          * If the array is empty, undefined is returned and the array is not modified.
          * @returns {T | undefined} The now-removed last element of the array (or `undefined`)
-         * @override This overrides {@linkcode Array.prototype.pop pop}
-         * to allow for invoking an `onChange` callback on array objects.
+         * @override This overrides {@linkcode Array.prototype.pop pop} to allow for 
+         * invoking an {@linkcode Array.prototype.onChange onChange} callback on array objects. 
          * @type {<T>(): T | undefined}
          * @template T 
          */
@@ -65,8 +90,8 @@ declare global {
          * Appends new elements to the end of an array, and returns the new length of the array.
          * @param {...T} items New elements to add to the array.
          * @returns {Number} The new length of the array 
-         * @override This overrides {@linkcode Array.prototype.push push}
-         * to allow for invoking an `onChange` callback on array objects.
+         * @override This overrides {@linkcode Array.prototype.push push} to allow for 
+         * invoking an {@linkcode Array.prototype.onChange onChange} callback on array objects. 
          * @type {<T>(...items: T[]): number}
          * @template T 
          */
@@ -76,8 +101,8 @@ declare global {
          * Reverses the elements in an array in place.
          * This method mutates the array and returns a reference to the same array.
          * @returns {T[]} Returns a reference to this same, now reversed, array 
-         * @override This overrides {@linkcode Array.prototype.reverse reverse}
-         * to allow for invoking an `onChange` callback on array objects.
+         * @override This overrides {@linkcode Array.prototype.reverse reverse} to allow for 
+         * invoking an {@linkcode Array.prototype.onChange onChange} callback on array objects. 
          * @type {<T>(): T[]}
          * @template T 
          */
@@ -87,8 +112,8 @@ declare global {
          * Removes the first element from an array and returns it.
          * If the array is empty, undefined is returned and the array is not modified.
          * @returns {T[] | undefined} The now-removed first element of the array (or `undefined`)
-         * @override This overrides {@linkcode Array.prototype.shift shift}
-         * to allow for invoking an `onChange` callback on array objects.
+         * @override This overrides {@linkcode Array.prototype.shift shift} to allow for 
+         * invoking an {@linkcode Array.prototype.onChange onChange} callback on array objects. 
          * @type {<T>(): T[] | undefined}
          * @template T 
          */
@@ -104,8 +129,8 @@ declare global {
          * [11,2,22,1].sort((a, b) => a - b)
          * ```
          * @returns {Array<T>} Reference to this array object 
-         * @override This overrides {@linkcode Array.prototype.sort sort}
-         * to allow for invoking an `onChange` callback on array objects.
+         * @override This overrides {@linkcode Array.prototype.sort sort} to allow for 
+         * invoking an {@linkcode Array.prototype.onChange onChange} callback on array objects. 
          * @type {<T>(compareFn?: (a: T, b: T): number): T[]}
          * @template T 
          */
@@ -119,8 +144,8 @@ declare global {
          * that cannot be converted to an integer, the function will evaluate the argument as zero and not remove any elements.
          * @param {...T} [items=undefined] Optional elements to add to the array. If omitted, will only remove elements from the array.
          * @returns {T[]} An array containing the elements that were deleted, including `[]` if nothing was deleted.
-         * @override This overrides {@linkcode Array.prototype.splice splice}
-         * to allow for invoking an `onChange` callback on array objects.
+         * @override This overrides {@linkcode Array.prototype.splice splice} to allow for 
+         * invoking an {@linkcode Array.prototype.onChange onChange} callback on array objects. 
          * @type {<T>(start: number, deleteCount?: number, ...items: T[]): T[]}
          * @template T 
          */
@@ -130,8 +155,8 @@ declare global {
          * Inserts new elements at the start of an array, and returns the new length of the array.
          * @param {...T} items Elements to insert at the start of the array.
          * @returns {Number} The new length of the array.
-         * @override This overrides {@linkcode Array.prototype.unshift unshift}
-         * to allow for invoking an `onChange` callback on array objects.
+         * @override This overrides {@linkcode Array.prototype.unshift unshift} to allow for 
+         * invoking an {@linkcode Array.prototype.onChange onChange} callback on array objects. 
          * @type {<T>(...items: T[]): number}
          * @template T 
          */
