@@ -16,6 +16,11 @@ export function CreatePagePattern(page) {
     // ----------------------------- CREATE COLOUR & PATTERN PAGE -----
     // DemoPageContent(page);
 
+    let a = [];
+    a.onChange = function (a, b, ...c) { console.log("hell yeah, " + a + ", " + b + ", " + c.length); console.log(c); }
+    a.push(1,2,3);
+
+
     // create div selection bar
     let sectionSelection = new cmp.MutliOptionList('', SelectPatternPage, txt.PG_PATTERN_SECTIONS, null, null, currentSectionNum, true);
 

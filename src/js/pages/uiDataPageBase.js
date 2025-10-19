@@ -86,23 +86,46 @@ export function DemoPageContent(page) {
 }
 
 export function DemoGradient(page) {
+
+    let a = [1, 2, 3];
+    a.onChange = function (type, src, r, p) { console.log(`array change: ${type}, src: ${src}, rv: ${r}, params: ${p}`) };
+    console.log(a.name);
+    a.name = 'array name';
+    console.log(a.name);
+    a.name = '2nd name';
+    a.name = '2nd name';
+    a.name = '2nd name';
+    console.log(a.name);
+    console.log(a.length);
+    a.length = 5;
+    console.log(a.length);
+    a.length = 4;
+    console.log(a.length);
+    a.length = 6;
+    console.log(a.length);
+
+    console.log("test");
+    a.name = 'heck';
+    a[2] = 3;
+    console.log("test");
+
     
     // prepare sections
     let svgImage = new cmp.SVGImage();
     page.appendChild(svgImage);
     function updateParameter(paramID, value) {
         switch (paramID) {
-            case 0: svgImage.rect.gradient.isRadial = value; break;
-            case 1: svgImage.rect.gradient.scale = value; break;
-            case 2: svgImage.rect.gradient.angle = value; break;
-            case 3: svgImage.rect.gradient.sharpness = value; break;
-            case 4: svgImage.rect.gradient.SetColor(0, value); break;
-            case 5: svgImage.rect.gradient.SetColor(1, value); break;
-            case 6: svgImage.rect.gradient.SetColor(2, value); break;
+            case 0: svgImage.demoRect.gradient.isRadial = value; break;
+            case 1: svgImage.demoRect.gradient.scale = value; break;
+            case 2: svgImage.demoRect.gradient.angle = value; break;
+            case 3: svgImage.demoRect.gradient.sharpness = value; break;
+            case 4: svgImage.demoRect.gradient.SetColor(0, value); break;
+            case 5: svgImage.demoRect.gradient.SetColor(1, value); break;
+            case 6: svgImage.demoRect.gradient.SetColor(2, value); break;
             default:
                 return;
         }
-        svgImage.updateRect();
+        svgImage.updateDemoRect();
     }
     let slider1 = new cmp.Slider('scale', function (v) { updateParameter(1, v); }, 1, 0.1, 2.5, false, 0.05);
     let slider2 = new cmp.Slider('angle', function (v) { updateParameter(2, v); }, 0, 0, 360, false);
