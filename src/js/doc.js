@@ -37,6 +37,38 @@ Node.prototype.appendChild = function (childNode) {
 
 // #region Array
 
+/** unique symbol for arrayName internal property */
+const _arrayName = Symbol('arrayName');
+Object.defineProperty(Array.prototype, 'name', {
+    /** 
+     * Optionally-assigned name for this array
+     * @returns {string} */
+    get: function () { 
+        return this[_arrayName] || undefined; },
+    /**
+     * Optionally-assigned name for this array
+     * @param {string|undefined} [name=undefined] Name to assign to this array. Default `undefined`
+     * @returns {void} */
+    set: function (name) {
+        if (name === null || name === undefined) {
+            // null and undefined are acceptable 
+        } else {
+            if (typeof name !== 'string') {
+                throw new TypeError('Array name must be string, null, or undefined')
+            }
+        }
+        if (this[_arrayName] === name) { return; } // don't change if new name is identical 
+        if (this.hasOwnProperty('onChange')) {
+            let prev = this[_arrayName];
+            const a = /** @type {Array} */ (this);
+            a.onChange('name', a, name, prev);
+        }
+        this[_arrayName] = name;
+    },
+    configurable: true,
+    enumerable: true,
+});
+
 // all mutating functions for an array: 
 // copyWithin, fill, pop, push, reverse, shift, sort, splice, unshift
 
@@ -171,6 +203,7 @@ Array.prototype.copyWithin = function (target, start, end = this.length) {
     }
     return _copyWithin.call(this, target, start, end);
 };
+
 
 /**
  * Changes all array elements from `start` to `end` index to a static `value` and returns the modified array

@@ -20,13 +20,19 @@ declare global {
     interface Array {
 
         /**
+         * Optionally-assigned name for this array 
+         * @type {string} */
+        name?: string;
+
+        /**
          * Callback invoked whenever a {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#copying_methods_and_mutating_methods mutating} 
          * method is called on an array - that is, a method that directly modifies
          * the given array, and doesn't simply reference it (eg, `find()`) or that
-         * itself returns an entirely new array or type (eg, `slice()` or `join()`).
-         * @param {string} type The name of the method used on the array, as a string. Eg, `"push"` for {@linkcode Array.prototype.push Array.push()}. See below for a comprehensive list. 
+         * itself returns an entirely new array or type (eg, `slice()` or `join()`). 
+         * Also called when {@linkcode Array.prototype.name name} is changed.
+         * @param {string} type The name of the method used on the array, as a string. Eg, `"push"` for {@linkcode Array.prototype.push array.push()}. See below for a comprehensive list. 
          * @param {T[]} source The array object itself that was modified 
-         * @param {T} returnValue The value returned by the modified method. Eg, for `type = "pop"`, returns the array's now-removed last element, as per {@linkcode Array.prototype.pop Array.pop()}.
+         * @param {T} returnValue The value returned by the modified method. Eg, for `type = "pop"`, returns the array's now-removed last element, as per {@linkcode Array.prototype.pop array.pop()}.
          * @param {...T} [parameters=undefined] All parameter values supplied to the array in the invoked method. See below for a comprehensive list. 
          * @returns {void}
          * @see {@link Array.prototype} — All mutating methods, and thus possible values for `type`, include (with parameters): 
@@ -39,6 +45,11 @@ declare global {
          * - {@linkcode Array.prototype.sort sort}, 1 param: `[ compareFn?:(a:any, b:any):number ]` 
          * - {@linkcode Array.prototype.splice splice}, 2 + [... spread] params: `[ start:number, deleteCount?:number=0, ...items:any[] ]` 
          * - {@linkcode Array.prototype.unshift unshift}, 0 + [... spread] params: `[...items:any[] ]` 
+         * 
+         * Callback is also invoked for changes of the following properties: 
+         * - {@linkcode Array.prototype.name}, 1 param: `[ previousName:string ]`, and a `returnValue` of the newly-assigned `name` value
+         * 
+         * **Note:** the `onChange` callback is NOT invoked if {@linkcode Array.prototype.length array.length} is changed.
          * @type {(type:string, source:T[], returnValue:T, ...parameters:T[]): T}
          * @template T 
          */
