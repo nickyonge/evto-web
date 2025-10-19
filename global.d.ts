@@ -49,7 +49,9 @@ declare global {
          * Callback is also invoked for changes of the following properties: 
          * - {@linkcode Array.prototype.name}, 1 param: `[ previousName:string ]`, and a `returnValue` of the newly-assigned `name` value
          * 
-         * **Note:** the `onChange` callback is NOT invoked if {@linkcode Array.prototype.length array.length} is changed.
+         * **Note:** the `onChange` callback is NOT invoked when: 
+         *  - {@linkcode Array.prototype.length array.length} value is changed 
+         *  - A value in the array, eg `myArray[0] = x`, is directly changed 
          * @type {(type:string, source:T[], returnValue:T, ...parameters:T[]): T}
          * @template T 
          */

@@ -6,7 +6,8 @@ export const METADATA = [
     ['xmlns:xlink', 'http://www.w3.org/1999/xlink'],
 ];
 
-export const BUBBLEONCHANGE = true;
+export const BUBBLE_ONCHANGE = true;
+export const UPDATE_DEFINITIONS_ON_ID_CHANGE = true;
 
 export const X = 0;
 export const Y = 0;

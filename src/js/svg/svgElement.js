@@ -28,7 +28,13 @@ export class svgElement {
     // Issue URL: https://github.com/nickyonge/evto-web/issues/49
 
     /**
-     * @type {svg.onChange}
+     * Callback for when a value in this {@link svgElement} has changed
+     * @type {svg.onChange} see {@link svg.onChange onChange}
+     * @param {string} valueChanged The name of the value that was changed 
+     * @param {any} newValue The newly assigned value 
+     * @param {any} previousValue The old value, for reference  
+     * @param {svgElement} changedElement The {@link svgElement} that was changed 
+     * @returns {void}
      */
     onChange;
 
@@ -268,6 +274,9 @@ export class svgHTMLAsset extends svgElement {
         let prev = this.#_shapes;
         v.forEach(shape => { shape.parent = this; });
         this.#_shapes = v;
+        this.#_shapes.name = 'shapes';
+        this.#_shapes.htmlAsset = this;
+        this.#_shapes.onChange = this.#arrayChanged;
         this.#changed('shapes', v, prev);
     }
     #_shapes = [];
@@ -282,6 +291,9 @@ export class svgHTMLAsset extends svgElement {
             }
         });
         this.#_definitions = v;
+        this.#_definitions.name = 'definitions';
+        this.#_definitions.htmlAsset = this;
+        this.#_definitions.onChange = this.#arrayChanged;
         this.#changed('definitions', v, prev);
     }
     #_definitions = [];
@@ -596,7 +608,9 @@ export class svgHTMLAsset extends svgElement {
         let prev = this.#_definitions;
         this.definitions.push(gradient);
         this.gradient.parent = this;
-        this.#changed('definitions', this.definitions, prev);
+        if (!this.definitions.hasOwnProperty('onChange')) {
+            this.#changed('definitions#push', this.definitions, prev);
+        }
         return gradient;
     }
     /**
@@ -610,7 +624,9 @@ export class svgHTMLAsset extends svgElement {
         let prev = this.#_definitions;
         this.definitions.push(gradient);
         gradient.parent = this;
-        this.#changed('definitions', this.definitions, prev);
+        if (!this.definitions.hasOwnProperty('onChange')) {
+            this.#changed('definitions#push', this.definitions, prev);
+        }
         return gradient;
     }
 
@@ -625,18 +641,23 @@ export class svgHTMLAsset extends svgElement {
             prev = this.#_definitions;
             this.definitions.push(element);
             if (element.hasOwnProperty('parent')) { element.parent = this; }
-            this.#changed('definitions', this.definitions, prev);
+            if (!this.definitions.hasOwnProperty('onChange')) {
+                this.#changed('definitions#push', this.definitions, prev);
+            }
         }
         else {
             prev = this.#_shapes;
             this.shapes.push(element);
             if (element.hasOwnProperty('parent')) { element.parent = this; }
-            this.#changed('shapes', this.shapes, prev);
+            if (!this.shapes.hasOwnProperty('onChange')) {
+                this.#changed('shapes#push', this.shapes, prev);
+            }
         }
     }
-
-    /** @type {svg.onChange} Local changed callback that calls {@link onChange} on this element (separated for easy modification) */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); }
+    /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {Array.prototype} source array object @param {any} returnValue returned value from method */
+    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('htmlAsset')) { source.htmlAsset.#changed(`${source.name}#${type}`, source, returnValue); } };
+    /** Local changed callback that calls {@link onChange} on this element (separated for easy modification) @type {svg.onChange} */
+    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); };
 }
 
 export class svgViewBox extends svgElement {
@@ -673,10 +694,10 @@ export class svgViewBox extends svgElement {
     /** @type {svg.asset} */
     #_parent = null;
     #_firstParentAssigned = false;
-    /** Should changes to this asset bubble up to its {@link parent} asset? @type {boolean} */
+    /** Should changes to this asset bubble up to its {@link svgViewBox.parent parent} asset? @type {boolean} */
     get bubbleOnChange() { return this.#_bubbleOnChange; }
     set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
-    #_bubbleOnChange = svg.default.BUBBLEONCHANGE;
-    /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.onChange?.(valueChanged, newValue, this); } }
+    #_bubbleOnChange = svg.default.BUBBLE_ONCHANGE;
+    /** Local changed callback that calls {@link onChange} on both this element and its {@link svgViewBox.parent parent}. @type {svg.onChange} */
+    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.onChange?.(valueChanged, newValue, this); } };
 }

@@ -58,7 +58,10 @@ export class svgGradient extends svg.element {
     set stops(v) {
         if (v == null) { return; }
         let prev = this.#_stops;
-        this.#_stops = v; this.#changed('stops', v);
+        this.#_stops = v;
+        this.#_stops.name = 'definitions';
+        this.#_stops.gradient = this;
+        this.#_stops.onChange = this.#arrayChanged;
         v.forEach(stop => { stop.parent = this; });
         this.#changed('stops', v, prev);
     }
@@ -438,14 +441,20 @@ export class svgGradient extends svg.element {
         if (stop == null) { return stop; }
         let prev = this.stops;
         this.stops.push(stop);
-        stop.parent = this; this.#changed('stops', this.stops, prev);
+        stop.parent = this;
+        if (!this.stops.hasOwnProperty('onChange')) {
+            this.#changed('stops#push', this.stops, prev);
+        }
         return stop;
     }
     AddStop(color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) {
         let prev = this.stops;
         let stop = new svgGradientStop(color, opacity, offset);
         this.stops.push(stop);
-        stop.parent = this; this.#changed('stops', this.stops, prev);
+        stop.parent = this;
+        if (!this.stops.hasOwnProperty('onChange')) {
+            this.#changed('stops#push', this.stops, prev);
+        }
         return stop;
     }
 
@@ -471,7 +480,8 @@ export class svgGradient extends svg.element {
         let prev = this.stops;
         if (this.stops.length < index + 1) { this.stops.length = index + 1; }
         this.stops[index] = stop;
-        stop.parent = this; this.#changed('stops', this.stops, prev);
+        stop.parent = this;
+        this.#changed('stops#index', this.stops, prev);
         return stop;
     }
 
@@ -495,10 +505,15 @@ export class svgGradient extends svg.element {
         if (this.stops.length < index + 1) {
             this.stops.length = index + 1;
             this.stops[index] = stop;
+            stop.parent = this;
+            this.#changed('stops#index', this.stops, prev);
         } else {
             this.stops.splice(index, 0, stop);
+            stop.parent = this;
+            if (!this.stops.hasOwnProperty('onChange')) {
+                this.#changed('stops#splice', this.stops, prev);
+            }
         }
-        stop.parent = this; this.#changed('stops', this.stops, prev);
         return stop;
     }
 
@@ -512,12 +527,14 @@ export class svgGradient extends svg.element {
     InsertColor(index, color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) { return this.InsertStop(index, color, opacity, offset); }
 
     // Local change and bubble-on-change settings 
-    /** Should changes to this asset bubble up to its {@link parent} asset? @type {boolean} */
+    /** Should changes to this asset bubble up to its {@link svgGradient.parent parent} asset? @type {boolean} */
     get bubbleOnChange() { return this.#_bubbleOnChange; }
     set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
-    #_bubbleOnChange = svg.default.BUBBLEONCHANGE;
+    #_bubbleOnChange = svg.default.BUBBLE_ONCHANGE;
 
-    /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
+    /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {Array.prototype} source array object @param {any} returnValue returned value from method */
+    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('gradient')) { source.gradient.#changed(`${source.name}#${type}`, source, returnValue); } };
+    /** Local changed callback that calls {@link onChange} on both this element and its {@link svgGradient.parent parent}. @type {svg.onChange} */
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.onChange?.(valueChanged, newValue, previousValue, this); } }
 }
 
@@ -635,11 +652,11 @@ class svgGradientStop extends svg.element {
     }
 
     // Local change and bubble-on-change settings 
-    /** Should changes to this asset bubble up to its {@link parent} asset? @type {boolean} */
+    /** Should changes to this asset bubble up to its {@link svgGradientStop.parent parent} asset? @type {boolean} */
     get bubbleOnChange() { return this.#_bubbleOnChange; }
     set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
-    #_bubbleOnChange = svg.default.BUBBLEONCHANGE;
+    #_bubbleOnChange = svg.default.BUBBLE_ONCHANGE;
 
-    /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
+    /** Local changed callback that calls {@link onChange} on both this element and its {@link svgGradientStop.parent parent}. @type {svg.onChange} */
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.onChange?.(valueChanged, newValue, previousValue, this); } }
 }

@@ -46,7 +46,7 @@ export class svgShape extends svg.element {
     /** Should changes to this asset bubble up to its {@link parent} asset? @type {boolean} */
     get bubbleOnChange() { return this.#_bubbleOnChange; }
     set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
-    #_bubbleOnChange = svg.default.BUBBLEONCHANGE;
+    #_bubbleOnChange = svg.default.BUBBLE_ONCHANGE;
 
     get fill() { return this.#_fill; }
     set fill(v) { let prev = this.#_fill; this.#_fill = v; this.#changed('fill', v, prev); }
