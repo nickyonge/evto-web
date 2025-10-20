@@ -1,8 +1,20 @@
-import { arePoints, EnsureToNumber, FindPointsSharedCenter, isBlank, isPoint, Lerp, RotatePointAroundOrigin, RotatePointsAroundOrigin, RotatePointsAroundPivot, RotatePointsAroundPivotXY, RotatePointsAroundSharedCenter, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
+import { arePoints, EnsureToNumber, isBlank, isPoint, Lerp, RotatePointsAroundPivot, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
 import * as svg from './index';
 
 /** Class representing an SVG defined linear or radial gradient */
 export class svgGradient extends svg.element {
+
+    /**
+     * Templates for gradient arrays 
+     * @readonly
+     * @enum {string[]}
+     */
+    static templates = {
+        bw: ['black', 'white'],
+        rainbow: ['red', 'orange', 'yellow', 'green', 'blue', 'purple'],
+        lightrainbow: ['lightcoral', 'sandybrown', 'moccasin', 'lightgreen', 'paleturquoise', 'plum'],
+        softrainbow: ['indianred', 'coral', 'khaki', 'mediumseagreen', 'cornflowerblue', 'mediumpurple'],
+    };
 
     /** if true, html outputs `radialGradient`; if false, `linearGradient` @type {boolean} */
     get isRadial() { return this.#_isRadial; }

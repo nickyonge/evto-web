@@ -1,7 +1,7 @@
-import { isBlank, isString, Lerp, StringAlphanumericOnly, StringContainsAlpha, StringContainsAlphanumeric, StringNumericOnly, StringRemoveAlpha, StringRemoveAlphanumeric } from "../lilutils";
 import { BasicGradientRect } from "../svg/svgGenerator";
 import * as ui from "../ui";
 import { BasicComponent, TitledComponent } from "./base";
+import { svgGradient } from "../svg/svgGradient";
 
 // export class SVGImage extends BasicComponent {
 export class SVGImage extends TitledComponent {
@@ -19,7 +19,7 @@ export class SVGImage extends TitledComponent {
         this.#image = ui.CreateDivWithClass('image', 'canvasSizedImg');
         this.div.appendChild(this.#image);
 
-        let rainbow = BasicGradientRect('red', 'orange', 'yellow', 'green', 'blue', 'purple');
+        let rainbow = BasicGradientRect(svgGradient.templates.softrainbow);
         this.#image.innerHTML = rainbow.html;
     }
 
@@ -28,7 +28,7 @@ export class SVGImage extends TitledComponent {
             this.#_demoRect = BasicGradientRect('skyblue', 'white', 'pink');
             this.#_demoRect.id = '_DemoRect ' + Date.now().toString();
             this.#_demoRect.onChange = function (valueChanged, newValue, previousValue, changedElement) {
-                console.log(`SVGAsset value ${valueChanged} changed to ${newValue} from ${previousValue} on ${changedElement.constructor.name}`);
+                // console.log(`SVGAsset value ${valueChanged} changed to ${newValue} from ${previousValue} on ${changedElement.constructor.name}`);
             }
             this.#_demoRect.GetShape().fillGradient = this.#_demoRect.gradient;
             this.updateDemoRect();
