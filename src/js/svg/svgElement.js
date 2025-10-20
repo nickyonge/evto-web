@@ -51,6 +51,7 @@ export class svgElement {
             // do NOT perform ID update 
         } else {
             // update ID change on all SVG Elements 
+            let newURL = this.stringToURL(v);
             for (let i = 0; i < svgElement.allSVGElementsCount; i++) {
                 let e = svgElement.allSVGElements[i];
                 if (e == null) { continue; }
@@ -59,7 +60,12 @@ export class svgElement {
                 for (let i = 0; i < values.length; i++) {
                     if (values[i] == null) { continue; }
                     if (this.isURL(values[i][1])) {
-
+                        // extract id from URL 
+                        let s = this.stringFromURL(values[i][1]);
+                        if (s == prev) {
+                            // yup, found a match! replace ID 
+                            e[values[i][0]] = newURL;
+                        }
                     }
                 }
             }
