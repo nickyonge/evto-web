@@ -662,7 +662,7 @@ class svgGradientStop extends svg.element {
         if (stop == null) { return null; }
         let newStop = new svgGradientStop(stop.color, stop.opacity, stop.offset);
         if (cloneParentage) { newStop.parent = stop.parent; }
-        return stop;
+        return newStop;
     }
 
     // Local change and bubble-on-change settings 
