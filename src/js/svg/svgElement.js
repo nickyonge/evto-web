@@ -148,7 +148,12 @@ export class svgElement {
         // record this element's unique instance number
         Object.defineProperty(this, __svgElementInstance, { value: svgElement.#svgElementsCount, configurable: false, enumerable: true, writable: false });
         // set id 
-        if (isBlank(id)) { id = this.#defaultID; }
+        let skipAutoID = svg.config.IGNORE_AUTO_ID_CLASSES.contains(this.className);
+        if (isBlank(id)) {
+            if (!skipAutoID) {
+                id = this.#defaultID;
+            }
+        }
         let skip = this.hasOwnProperty('__SKIP_ID_UPDATE');
         let prev = skip ? this.__SKIP_ID_UPDATE : undefined;
         this.__SKIP_ID_UPDATE = true;
@@ -431,6 +436,9 @@ export class svgElement {
         }
         return this.stringToURL(this.id);
     }
+
+    /** Gets the name of this specific class constructor, eg `svgGradient` @returns {string} */
+    get className() { return this.constructor?.name; }
 }
 const __svgElementInstance = Symbol('__svgElementInstance');
 
