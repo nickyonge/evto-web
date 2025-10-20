@@ -165,6 +165,9 @@ export class svgElement {
         svgElement.#svgElementsCount++;
     }
 
+    /** Unique instance of this SVGElement @returns {number} */
+    get svgInstance() { return this[__svgElementInstance]; }
+
     /**
      * Callback for when a value in this {@link svgElement} has changed
      * @type {svg.onChange} see {@link svg.onChange onChange}
@@ -657,7 +660,7 @@ export class svgHTMLAsset extends svgElement {
     }
 
     /**
-     * Gets the Nth {@link svg.gradient gradient} found in 
+     * Gets the Nth {@link svg.gradient svgGradient} found in 
      * {@linkcode definitions}, where N (`index`) increments 
      * through just the gradient elements found. By default,
      * returns the first gradient found. 
@@ -680,6 +683,20 @@ export class svgHTMLAsset extends svgElement {
             }
         }
         return null;
+    }
+    /**
+     * Gets the index of the first {@link svg.gradient svgGradient}
+     * found in {@linkcode definitions}, or `-1` if none are found.
+     * @returns {number}
+     */
+    GetFirstGradientDefinitionIndex() {
+        if (this.definitions == null) { return -1; }
+        for (let i = 0; i < this.definitions.length; i++) {
+            if (this.definitions[i] instanceof svg.gradient) {
+                return i;
+            }
+        }
+        return -1;
     }
     /**
      * Gets the first {@link svg.gradient gradient} with the given
@@ -736,6 +753,36 @@ export class svgHTMLAsset extends svgElement {
                 // as a URL, and replace them with null
                 return;
             } else { return; }
+        }
+        // check if actual gradient, or string, or array
+        if (v instanceof svg.gradient) {
+            // it's an actual gradient 
+            // TODO: direct reassignment of svgGradient via set svgHTMLAsset.gradient 
+        } else if (Array.isArray(v)) {
+            // it's an array, check if it's empty, if so, treat as null 
+            if (v.length == 0) { v = null; this.gradient = v; return; }
+            // check if it's all strings, if not, error 
+            for (let i = 0; i < v.length; i++) {
+                if (typeof v[i] !== 'string') {
+                    console.warn("WARNING: if assigning an array to gradient, it MUST be all string values", v, this);
+                    return;
+                }
+            }
+            // assign 
+            if (this.GetFirstGradientDefinitionIndex() >= 0) {
+                this.GetGradient().SetColors(v);
+            } else {
+                this.NewGradient(null, false, v);
+            }
+        } else if (typeof v === 'string') {
+            // it's a string 
+            if (this.GetFirstGradientDefinitionIndex() >= 0) {
+                this.GetGradient().SetColors(v);
+            } else {
+                this.NewGradient(null, false, v);
+            }
+        } else {
+            console.warn("WARNING: can't set gradient, can't parse type, should be svgGradient, string[] of colors, or single color string", v, this);
         }
     }
 
@@ -817,12 +864,12 @@ export class svgHTMLAsset extends svgElement {
      * Create and add a new {@link svg.gradient gradient} 
      * to the {@linkcode definitions} array
      * 
-     * @param {string} id {@link svg.element.id ID} to assign to this gradient
-     * @param {boolean} isRadial is this a radial gradient, or linear?
+     * @param {string} [id=null] {@link svg.element.id ID} to assign to this gradient, default `undefined` (auto-set)
+     * @param {boolean} isRadial is this a radial gradient, or linear? Default `GRADIENT_ISRADIAL`
      * @param {...string} colors Array/values of colors used to create this array 
      * @returns {svg.gradient} The newly-created, newly-added gradient
      * */
-    NewGradient(id = null, isRadial = svg.default.GRADIENT_ISRADIAL, ...colors) {
+    NewGradient(id = undefined, isRadial = svg.default.GRADIENT_ISRADIAL, ...colors) {
         if (this.definitions == null) { this.definitions = []; }
         let gradient = new svg.gradient(id, isRadial, ...colors);
         let prev = this.#_definitions;
