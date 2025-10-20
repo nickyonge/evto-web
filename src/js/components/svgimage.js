@@ -16,15 +16,10 @@ export class SVGImage extends TitledComponent {
 
         ui.AddClassesToDOM(this.div, 'svgImage', 'container');
 
-        this.#image = ui.CreateDivWithClass('image', 'canvasSizedImg');
-        this.div.appendChild(this.#image);
+        // this.#image = ui.CreateDivWithClass('image', 'canvasSizedImg');
+        // this.div.appendChild(this.#image);
 
-        // this.rect = BasicGradientRect('skyblue', 'white', 'pink');
-
-        // this.rect.GetShape().fillGradient = this.rect.gradient;
-        // this.#image.innerHTML = this.rect.html;
-
-        let d = this.demoRect;
+        this.demoRect;
 
     }
 
@@ -34,8 +29,6 @@ export class SVGImage extends TitledComponent {
             this.#_demoRect.id = '_DemoRect ' + Date.now().toString();
             this.#_demoRect.onChange = function (valueChanged, newValue, previousValue, changedElement) {
                 console.log(`SVGAsset value ${valueChanged} changed to ${newValue} from ${previousValue} on ${changedElement.constructor.name}`);
-                
-                changedElement.parent?.NewRect?.();
             }
             this.#_demoRect.GetShape().fillGradient = this.#_demoRect.gradient;
             this.updateDemoRect();

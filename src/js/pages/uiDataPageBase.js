@@ -86,9 +86,6 @@ export function DemoPageContent(page) {
 }
 
 export function DemoGradient(page) {
-
-    
-    // prepare sections
     let svgImage = new cmp.SVGImage();
     page.appendChild(svgImage);
     function updateParameter(paramID, value) {
@@ -125,8 +122,4 @@ export function DemoGradient(page) {
     page.appendChild(color1);
     page.appendChild(color2);
     page.appendChild(color3);
-
-    svgImage.updateDemoRect();
-    svgImage.demoRect.id = 'testID';
-    svgImage.demoRect.id = 'testID2';
 }
