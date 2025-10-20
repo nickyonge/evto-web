@@ -759,6 +759,7 @@ export class svgHTMLAsset extends svgElement {
         if (v instanceof svg.gradient) {
             // it's an actual gradient 
             // TODO: direct reassignment of svgGradient via set svgHTMLAsset.gradient 
+            // Issue URL: https://github.com/nickyonge/evto-web/issues/58
         } else if (Array.isArray(v)) {
             // it's an array, check if it's empty, if so, treat as null 
             if (v.length == 0) { v = null; this.gradient = v; return; }
