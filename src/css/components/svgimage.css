@@ -21,24 +21,16 @@
 
 .svgImage.container .image {
     display: flex;
-
-    /* width: 100%; */
     flex-direction: column;
     flex-grow: 1;
-    /* background-color: #ff00ff69; */
-
     position: absolute;
     inset: 0;
-    margin: 2px 2px 2px 2px;
-
-    opacity: 50%;
+    margin: 1.69px;
 }
 .svgImage.container > .image:first-child,
 .svgImage.container > :has(+ .image):not(.image) + .image {
-    /* styles for first .image */
-    margin: 0;
-    opacity: 1;
     position: relative;
+    margin: 0;
 }
 .svgImage .canvasSizedImg {
     min-height: calc(attr(min-width, attr(min-size, var(--svgImage-min-size))) * 0.5);

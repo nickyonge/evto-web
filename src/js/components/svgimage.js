@@ -20,11 +20,7 @@ export class SVGImage extends TitledComponent {
         this.div.appendChild(this.#image);
 
         let rainbow = BasicGradientRect('red', 'orange', 'yellow', 'green', 'blue', 'purple');
-        rainbow.gradient.mirror = true;
         this.#image.innerHTML = rainbow.html;
-
-        // this.demoRect;
-
     }
 
     get demoRect() {
