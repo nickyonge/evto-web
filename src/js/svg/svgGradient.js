@@ -624,6 +624,13 @@ class svgGradientStop extends svg.element {
         let stops = [];
         // TODO: re-use existing stops instead of generating new ones where possible 
         // Issue URL: https://github.com/nickyonge/evto-web/issues/56
+        // detect and flatten nested array 
+        let failsafe = 999;
+        while (colors.length == 1 && Array.isArray(colors[0])) {
+            colors = colors.flat();
+            failsafe--;
+            if (failsafe <= 0) { console.error("ERROR: should NOT have been able to hit this, investigate", colors, this); break; }
+        }
         for (let i = 0; i < colors.length; i++) {
             if (colors[i] == null) { continue; }
             let newStop;

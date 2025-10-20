@@ -1,5 +1,6 @@
 import { EnsureGradientDefaultColors } from "./svgDefaults";
 import { svgElement, svgHTMLAsset } from "./svgElement";
+import { svgShape } from "./svgShapes";
 
 /**
  * Are unique IDs on {@link svgElement svgElements} REQUIRED? 
@@ -28,6 +29,14 @@ export const HTML_INDENT = true && HTML_NEWLINE;
  * @returns {boolean}
  */
 export const HTML_WARN_DEFS_NO_ID = true;
+
+/**
+ * Does setting {@linkcode svgHTMLAsset.gradient} to `null`
+ * also set {@linkcode svgShape.fill} to `null` for any
+ * {@link svgHTMLAsset.shapes shapes} on that
+ * {@link svgHTMLAsset asset} using the existing gradient?
+ */
+export const SET_GRADIENT_NULL_SETS_FILL_NULL = true;
 
 /**
  * Should {@linkcode EnsureGradientDefaultColors}
