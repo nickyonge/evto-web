@@ -7,8 +7,7 @@ const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
 
 export function BasicGradientRect(...colors) {
     let svgAsset = new asset();
-    let id = `basicGradient_`;
-    svgAsset.NewRect(svg.default.X, svg.default.Y, svg.default.WIDTH, svg.default.HEIGHT, svgAsset.NewGradient(id, svg.default.GRADIENT_ISRADIAL, ...colors).idURL);
+    svgAsset.NewRect(svg.default.X, svg.default.Y, svg.default.WIDTH, svg.default.HEIGHT, svgAsset.NewGradient(null, svg.default.GRADIENT_ISRADIAL, ...colors).idURL);
     return svgAsset;
 }
 

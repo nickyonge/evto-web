@@ -120,8 +120,7 @@ export class svgGradient extends svg.element {
     #_firstParentAssigned = false;
 
     constructor(id, isRadial = svg.default.GRADIENT_ISRADIAL, ...colors) {
-        super();
-        this.id = id;
+        super(id);
         this.isRadial = isRadial;
         colors = svg.default.EnsureGradientDefaultColors(...colors);
         this.SetStops(...colors);

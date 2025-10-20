@@ -2,6 +2,14 @@ import { EnsureGradientDefaultColors } from "./svgDefaults";
 import { svgElement, svgHTMLAsset } from "./svgElement";
 
 /**
+ * Are unique IDs on {@link svgElement svgElements} REQUIRED? 
+ * If `true`, already-used IDs will not be permitted. If `false`,
+ * they will still produce a warning. IDs that are `null` are ignored.
+ * @returns {boolean}
+ */
+export const REQUIRE_UNIQUE_SVG_ELEMENT_IDS = true;
+
+/**
  * Should {@link svgElement} HTML code contain 
  * `\n` newlines for each element?
  * @returns {boolean} 

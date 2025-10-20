@@ -2,6 +2,8 @@ import * as svg from './index';
 import { shape, rect, circle, ellipse, line, polyline, polygon, path, gradient } from "./index";
 import { isBlank, isStringNotBlank, StringContainsNumeric, StringNumericDivider, StringNumericOnly, StringOnlyNumeric, StringToNumber } from "../lilutils";
 
+// #region SVG Element
+
 export class svgElement {
     /** Array containing all {@linkcode svgElement} instances @type {svgElement[]} */
     static allSVGElements = [];
@@ -9,12 +11,31 @@ export class svgElement {
     static get allSVGElementsCount() { svgElement.#__filterElementsArray(); return svgElement.allSVGElements.length; }
     /** Remove all `null` values from the {@linkcode allSVGElements} array @returns {void} */
     static #__filterElementsArray() { svgElement.allSVGElements = svgElement.allSVGElements.filter(e => e != null); }
-
+    /** Counter for all {@linkcode SVGElement SVGElements} ever instanced, ensuring unique IDs for each one. */
+    static #svgElementsCount = 0;
 
     /** unique identifier for this element @type {string} */
     get id() { return this.#_id; };
     set id(v) {
         if (this.#_id == v) { return; }
+        // ensure ID is unique 
+        if (v != null) {
+            svgElement.#__filterElementsArray();
+            for (let i = 0; i < svgElement.allSVGElements.length; i++) {
+                if (svgElement.allSVGElements[i] == this) { continue; }
+                if (isStringNotBlank(svgElement.allSVGElements[i].id)) {
+                    if (svgElement.allSVGElements[i].id == v) {
+                        // yup, IDs match 
+                        if (svg.config.REQUIRE_UNIQUE_SVG_ELEMENT_IDS) {
+                            console.error(`ERROR: SVGElement ID ${v} is already in use. Cannot assign to this SVGElement. IDs should be unique.`, this, svgElement.allSVGElements[i]);
+                            return;
+                        } else {
+                            console.warn(`WARNING: SVGElement ID ${v} is already in use. This may cause issues. IDs should be unique.`, this, svgElement.allSVGElements[i]);
+                        }
+                    }
+                }
+            }
+        }
         let prev = this.#_id;
         this.#_id = v;
         if (!this.#_firstIDAssigned) {
@@ -26,18 +47,20 @@ export class svgElement {
             }
             this.#_firstIDAssigned = true;
         }
-        // update ID change on all SVG Elements 
-        for (let i = 0; i < svgElement.allSVGElementsCount; i++) {
-            let e = svgElement.allSVGElements[i];
-            if (e == null) { continue; }
-            // iterate through all keys in an object, check for URLs to update
+        if (this.__SKIP_ID_UPDATE == true) {
+            // do NOT perform ID update 
+        } else {
+            // update ID change on all SVG Elements 
+            for (let i = 0; i < svgElement.allSVGElementsCount; i++) {
+                let e = svgElement.allSVGElements[i];
+                if (e == null) { continue; }
+                // iterate through all keys in an object, check for URLs to update 
+                let values = getSortedValues(e).flat();
+                for (let i = 0; i < values.length; i++) {
+                    if (values[i] == null) { continue; }
+                    if (this.isURL(values[i][1])) {
 
-
-            let values = getSortedValues(e).flat();
-            for (let i = 0; i < values.length; i++) {
-                if (values[i] == null) { continue; }
-                if (this.isURL(values[i][1])) {
-
+                    }
                 }
             }
         }
@@ -113,12 +136,22 @@ export class svgElement {
     #_id;
     #_firstIDAssigned = false;
 
-    // TODO: ensure all element IDs are unique
-    // Issue URL: https://github.com/nickyonge/evto-web/issues/49
+    get #defaultID() { return `__svgE[${this[__svgElementInstance]}]:${this.constructor.name}`; }
 
-    constructor() {
+    constructor(id = null) {
+        // record this element's unique instance number
+        Object.defineProperty(this, __svgElementInstance, { value: svgElement.#svgElementsCount, configurable: false, enumerable: true, writable: false });
+        // set id 
+        if (isBlank(id)) { id = this.#defaultID; }
+        let skip = this.hasOwnProperty('__SKIP_ID_UPDATE');
+        let prev = skip ? this.__SKIP_ID_UPDATE : undefined;
+        this.__SKIP_ID_UPDATE = true;
+        this.id = id;
+        if (skip) { this.__SKIP_ID_UPDATE = prev; } else { delete (this.__SKIP_ID_UPDATE); }
+        // update SVG Element arrays 
         svgElement.#__filterElementsArray();
         svgElement.allSVGElements.push(this);
+        svgElement.#svgElementsCount++;
     }
 
     /**
@@ -393,6 +426,11 @@ export class svgElement {
         return this.stringToURL(this.id);
     }
 }
+const __svgElementInstance = Symbol('__svgElementInstance');
+
+// #endregion
+
+// #region SVG HTML Asset
 
 export class svgHTMLAsset extends svgElement {
 
@@ -760,10 +798,9 @@ export class svgHTMLAsset extends svgElement {
      * @param {...string} colors Array/values of colors used to create this array 
      * @returns {svg.gradient} The newly-created, newly-added gradient
      * */
-    NewGradient(id, isRadial = svg.default.GRADIENT_ISRADIAL, ...colors) {
+    NewGradient(id = null, isRadial = svg.default.GRADIENT_ISRADIAL, ...colors) {
         if (this.definitions == null) { this.definitions = []; }
         let gradient = new svg.gradient(id, isRadial, ...colors);
-        gradient.id = id;
         let prev = this.#_definitions;
         this.definitions.push(gradient);
         this.gradient.parent = this;
@@ -818,6 +855,10 @@ export class svgHTMLAsset extends svgElement {
     /** Local changed callback that calls {@link onChange} on this element (separated for easy modification) @type {svg.onChange} */
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); };
 }
+// #endregion SVG HTML Asset
+
+// #region SVG Viewbox
+//  ^ region specified here just so it shows up in the VSCode scrollbar :) 
 
 export class svgViewBox extends svgElement {
     get x() { return this.#_x; }
