@@ -16,10 +16,14 @@ export class SVGImage extends TitledComponent {
 
         ui.AddClassesToDOM(this.div, 'svgImage', 'container');
 
-        // this.#image = ui.CreateDivWithClass('image', 'canvasSizedImg');
-        // this.div.appendChild(this.#image);
+        this.#image = ui.CreateDivWithClass('image', 'canvasSizedImg');
+        this.div.appendChild(this.#image);
 
-        this.demoRect;
+        let rainbow = BasicGradientRect('red', 'orange', 'yellow', 'green', 'blue', 'purple');
+        rainbow.gradient.mirror = true;
+        this.#image.innerHTML = rainbow.html;
+
+        // this.demoRect;
 
     }
 

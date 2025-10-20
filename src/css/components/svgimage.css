@@ -10,23 +10,38 @@
     position: relative;
     width: attr(width, 100%);
     height: attr(height, auto);
-    min-width: attr(min-width, attr(min-size,var(--svgImage-min-size)));
-    min-height: attr(min-height, attr(min-size,var(--svgImage-min-size)));
-    max-width: attr(max-width, attr(max-size,var(--svgImage-max-size)));
-    max-height: attr(max-height, attr(max-size,var(--svgImage-max-size)));
+    min-width: attr(min-width, attr(min-size, var(--svgImage-min-size)));
+    min-height: attr(min-height, attr(min-size, var(--svgImage-min-size)));
+    max-width: attr(max-width, attr(max-size, var(--svgImage-max-size)));
+    max-height: attr(max-height, attr(max-size, var(--svgImage-max-size)));
     aspect-ratio: attr(aspect-ratio, initial);
 
     justify-self: center;
 }
 
-.svgImage .image {
+.svgImage.container .image {
     display: flex;
+
+    /* width: 100%; */
     flex-direction: column;
     flex-grow: 1;
     /* background-color: #ff00ff69; */
+
+    position: absolute;
+    inset: 0;
+    margin: 2px 2px 2px 2px;
+
+    opacity: 50%;
+}
+.svgImage.container > .image:first-child,
+.svgImage.container > :has(+ .image):not(.image) + .image {
+    /* styles for first .image */
+    margin: 0;
+    opacity: 1;
+    position: relative;
 }
 .svgImage .canvasSizedImg {
-    min-height: calc(attr(min-width, attr(min-size,var(--svgImage-min-size))) * 0.5);
-    max-height: calc(attr(max-width, attr(max-size,var(--svgImage-max-size))) * 0.5);
+    min-height: calc(attr(min-width, attr(min-size, var(--svgImage-min-size))) * 0.5);
+    max-height: calc(attr(max-width, attr(max-size, var(--svgImage-max-size))) * 0.5);
     aspect-ratio: attr(aspect-ratio, 2);
 }
