@@ -37,3 +37,12 @@
     max-height: calc(attr(max-width, attr(max-size, var(--svgImage-max-size))) * 0.5);
     aspect-ratio: attr(aspect-ratio, 2);
 }
+.svgImage img.image.canvasSizedImg {
+    max-width: 100%;
+}
+.svgImage .onBottom {
+    z-index: -1;
+}
+.svgImage .onTop {
+    z-index: 1;
+}
