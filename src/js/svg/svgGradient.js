@@ -464,8 +464,15 @@ export class svgGradient extends svg.element {
         return this.#setStop(index, stop);
     }
     SetStop(index, color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) {
-        let stop = new svgGradientStop(color, opacity, offset);
-        return this.#setStop(index, stop);
+        let stop = this.GetStop(index);
+        if (stop == null) {
+            stop = new svgGradientStop(color, opacity, offset);
+            return this.#setStop(index, stop);
+        }
+        stop.color = color;
+        stop.opacity = opacity;
+        stop.offset = offset;
+        return stop;
     }
     #setStop(index, stop) {
         // local reference to avoid recursion errors =_=
@@ -482,6 +489,11 @@ export class svgGradient extends svg.element {
         stop.parent = this;
         this.#changed('stops#index', this.stops, prev);
         return stop;
+    }
+
+    GetStop(index) {
+        if (index < 0 || index >= this.stops.length) { return null; }
+        return this.stops[index];
     }
 
     InsertStop(index, stop) {
@@ -522,6 +534,7 @@ export class svgGradient extends svg.element {
     SetColors(...colors) { this.SetStops(...colors); }
     SetColor(index, color) { return this.SetStop(index, color); }
     SetColor(index, color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) { return this.SetStop(index, color, opacity, offset); }
+    GetColor(index) { return this.GetStop(index); }
     InsertColor(index, stop) { return this.InsertStop(index, stop); }
     InsertColor(index, color = svg.default.GRADIENT_STOP_COLOR, opacity = svg.default.GRADIENT_STOP_OPACITY, offset = svg.default.GRADIENT_STOP_OFFSET) { return this.InsertStop(index, color, opacity, offset); }
 
@@ -597,6 +610,7 @@ class svgGradientStop extends svg.element {
         if (colors == null) { return []; }
         // colors = colors.flat(); // actually don't flatten, ...colors can contain strings alongside 2d arrays // // convert to proper array 
         let stops = [];
+        // TODO: re-use existing stops instead of generating new ones where possible 
         for (let i = 0; i < colors.length; i++) {
             if (colors[i] == null) { continue; }
             let newStop;

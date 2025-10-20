@@ -40,4 +40,6 @@ export const DEFAULT_COLORARRAY_FORCE_TWO_VALUES = false;
  * Class constructor names to NOT auto-add an ID to in {@link svgElement}
  * @returns {string[]}
  */
-export const IGNORE_AUTO_ID_CLASSES = ['svgGradientStop'];
+export const IGNORE_AUTO_ID_CLASSES = [
+    // 'svgGradientStop'
+];
