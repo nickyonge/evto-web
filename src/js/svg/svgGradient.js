@@ -611,6 +611,7 @@ class svgGradientStop extends svg.element {
         // colors = colors.flat(); // actually don't flatten, ...colors can contain strings alongside 2d arrays // // convert to proper array 
         let stops = [];
         // TODO: re-use existing stops instead of generating new ones where possible 
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/56
         for (let i = 0; i < colors.length; i++) {
             if (colors[i] == null) { continue; }
             let newStop;
