@@ -311,15 +311,28 @@ export function HasAttributes(element, attTypes, all = true) {
 /**
  * Creates a new `<img>` element, and assigns the given src attribute (and optional alt text value)
  * @param {string} imgSrc Value to add to the "src" attribute to the new img
- * @param {string} alt Alt text to provide to the new img (optional)
+ * @param {string} [alt=undefined] Alt text to provide to the new img (optional)
  * @returns 
  */
-export function CreateImage(imgSrc, alt) {
+export function CreateImage(imgSrc, alt = undefined) {
     let img = CreateElement('img');
     img.setAttribute('src', imgSrc);
     if (!isBlank(alt)) {
         img.setAttribute('alt', alt);
     }
+    return img;
+}
+/**
+ * Creates a new `<img>` element, and assigns the given src attribute (and optional alt text value),
+ * and then assigns the given CSS class(es) to it.
+ * @param {string} imgSrc Value to add to the "src" attribute to the new img
+ * @param {string} [alt=undefined] Alt text to provide to the new img (optional)
+ * @param  {...string} cssClasses optional CSS class(es) to apply to the new img
+ * @returns {HTMLElement} newly-made <img> HTMLElement
+ */
+export function CreateImageWithClasses(imgSrc, alt = undefined, ...cssClasses) {
+    let img = CreateImage(imgSrc, alt);
+    AddClassesToDOM(img, ...cssClasses);
     return img;
 }
 
