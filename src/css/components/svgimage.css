@@ -25,12 +25,12 @@
     flex-grow: 1;
     position: absolute;
     inset: 0;
-    margin: 1.69px;
+    padding: 2px;
 }
 .svgImage.container > .image:first-child,
 .svgImage.container > :has(+ .image):not(.image) + .image {
     position: relative;
-    margin: 0;
+    padding: 0px;
 }
 .svgImage .canvasSizedImg {
     min-height: calc(attr(min-width, attr(min-size, var(--svgImage-min-size))) * 0.5);
