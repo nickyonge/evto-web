@@ -728,6 +728,16 @@ export class svgHTMLAsset extends svgElement {
      * @returns {gradient|null} 
     */
     get gradient() { return this.GetGradient(0); }
+    set gradient(v) {
+        if (v == null) {
+            if (svg.config.SET_GRADIENT_NULL_SETS_FILL_NULL) {
+                // TODO: implement GetAllSVGElementsWithProperty to find all svgs using a gradient
+                // use GetAllSVGElementsWithProperty to find all svgs that reference the gradient 
+                // as a URL, and replace them with null
+                return;
+            } else { return; }
+        }
+    }
 
     /** 
      * add a {@link svg.shape shape} to shapes array (recommend using another shape; 
