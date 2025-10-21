@@ -5,6 +5,9 @@ import { asset, gradient } from "./index";
 const FANCYBOX_MAX_SPLITS = 3;
 const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
 
+/** Generate a basic rectangle with a gradient of the given colors, with all default values.
+ * @param  {...any} colors Array of colors to generate the gradient with
+ * @returns {svg.asset} new instance of {@linkcode svg.asset svgHTMLAsset} */
 export function BasicGradientRect(...colors) {
     let svgAsset = new asset();
     svgAsset.NewRect(svg.default.X, svg.default.Y, svg.default.WIDTH, svg.default.HEIGHT, svgAsset.NewGradient(null, svg.default.GRADIENT_ISRADIAL, ...colors).idURL);

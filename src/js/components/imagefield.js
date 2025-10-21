@@ -24,20 +24,7 @@ export class ImageField extends TitledComponent {
 
     constructor(componentTitle) {
         super(componentTitle);
-
         ui.AddClassesToDOM(this.div, 'imageField', 'container');
-
-        // this.#image = ui.CreateDivWithClass('image', 'canvasSizedImg');
-        this.#image = ui.CreateImageWithClasses(demoImage, 'Demo image', 'image', 'canvasSizedImg', 'onTop');
-        // this.div.appendChild(this.#image);
-
-        let gradientRect = BasicGradientRect(svgGradient.templates.bw);
-        this.addSVG(gradientRect);
-        gradientRect.gradient = svgGradient.templates.softrainbow;
-
-
-        // let rainbow = BasicGradientRect(svgGradient.templates.softrainbow);
-        // this.#image.innerHTML = rainbow.html;
     }
 
     addImage(imgSrc, alt = null, canvasSized = true, zSort = 0, ...extraClasses) {

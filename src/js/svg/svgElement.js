@@ -931,6 +931,14 @@ export class svgHTMLAsset extends svgElement {
             }
         }
     }
+
+    /** Generate a basic rectangle with a gradient of the given colors, with all default values.
+     * @param  {...any} colors Array of colors to generate the gradient with
+     * @returns {svg.asset} new instance of {@linkcode svg.asset svgHTMLAsset} */
+    static BasicGradientRect(...colors) {
+        return svg.generator.BasicGradientRect(...colors);
+    }
+
     /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {Array.prototype} source array object @param {any} returnValue returned value from method */
     #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('htmlAsset')) { source.htmlAsset.#changed(`${source.name}#${type}`, source, returnValue); } };
     /** Local changed callback that calls {@link onChange} on this element (separated for easy modification) @type {svg.onChange} */

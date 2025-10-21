@@ -3,6 +3,8 @@ import * as ui from '../ui';
 import * as txt from '../text';
 import { SetElementEnabled } from "../lilutils";
 import { DemoGradient } from "./uiDataPageBase";
+import { svgHTMLAsset } from "../svg/svgElement";
+import { svgGradient } from "../svg/svgGradient";
 
 let currentSectionNum = 0;
 
@@ -31,8 +33,10 @@ export function CreatePagePattern(page) {
     sectionContainer.appendChild(sectionPattern);
     sectionContainer.appendChild(sectionColors);
 
-    DemoGradient(sectionPattern);
+    // DemoGradient(sectionPattern);
 
+    CreatePatternSection(sectionPattern);
+    CreateColorsSection(sectionColors);
 
     /* REFERENCE PATTERNS 
     Square (empty canvas): https://svg-path-visualizer.netlify.app/#M0%2C0%20L20%2C0%20L20%2C10%20L0%2C10%20Z
@@ -47,6 +51,18 @@ export function CreatePagePattern(page) {
     // initialize 
     SelectPatternPage(currentSectionNum);
 }
+
+function CreatePatternSection(section) {
+    let patternImage = new cmp.ImageField();
+    section.appendChild(patternImage);
+    // let patternSVG = 
+    let patternSVG = svgHTMLAsset.BasicGradientRect(svgGradient.templates.softrainbow);
+    patternImage.addSVG(patternSVG);
+}
+function CreateColorsSection(section) {
+
+}
+
 
 function SelectPatternPage(num) {
     currentSectionNum = num;
