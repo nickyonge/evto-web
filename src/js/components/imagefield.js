@@ -63,6 +63,7 @@ export class ImageField extends TitledComponent {
 
     CreateDemoImage() {
         // TODO: finish create demo image / demo SVG in imageField 
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/59
         // this.#image = ui.CreateDivWithClass('image', 'canvasSizedImg');
         // this.#image = ui.CreateImageWithClasses(demoImage, 'Demo image', 'image', 'canvasSizedImg', 'onTop');
         // // this.div.appendChild(this.#image);
