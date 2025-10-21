@@ -752,14 +752,22 @@ export class svgHTMLAsset extends svgElement {
                 // Issue URL: https://github.com/nickyonge/evto-web/issues/57
                 // use GetAllSVGElementsWithProperty to find all svgs that reference the gradient 
                 // as a URL, and replace them with null
-                return;
+                throw new Error(`Not Yet Implemented: svgHTMLAsset.gradient.set null value when SET_GRADIENT_NULL_SETS_FILL_NULL should reassign all #url(thisGradient) values to null`);
             } else { return; }
         }
         // check if actual gradient, or string, or array
         if (v instanceof svg.gradient) {
-            // it's an actual gradient 
-            // TODO: direct reassignment of svgGradient via set svgHTMLAsset.gradient 
-            // Issue URL: https://github.com/nickyonge/evto-web/issues/58
+            // it's an actual gradient, assign values directly  
+            let gdIndex = this.GetFirstGradientDefinitionIndex();
+            if (gdIndex >= 0) {
+                let g = this.GetGradient();
+                if (g == v) { return; } // reassigning the same gradient, do nothing 
+                let prev = this.definitions.structuredClone();
+                this.definitions[gdIndex] = v;
+                this.#changed('definitions#setGradient', this.definitions, prev);
+            } else {
+                this.NewGradient(null, false, v);
+            }
         } else if (Array.isArray(v)) {
             // it's an array, check if it's empty, if so, treat as null 
             if (v.length == 0) { v = null; this.gradient = v; return; }
