@@ -512,11 +512,11 @@ export class svgHTMLAsset extends svgElement {
     /** @type {boolean} */
     get preserveAspectRatio() { return this.#_preserveAspectRatio; }
     set preserveAspectRatio(v) { let prev = this.#_preserveAspectRatio; this.#_preserveAspectRatio = v; this.#changed('preserveAspectRatio', v, prev); }
-    #_preserveAspectRatio = svg.default.PRESERVEASPECTRATIO;;
+    #_preserveAspectRatio = svg.defaults.PRESERVEASPECTRATIO;;
     /** @type {string[][]} */
     get metadata() { return this.#_metadata; }
     set metadata(v) { let prev = this.#_metadata; this.#_metadata = v; this.#changed('metadata', v, prev); }
-    #_metadata = svg.default.METADATA;
+    #_metadata = svg.defaults.METADATA;
 
     /**
      * Create a new SVG HTML asset, with optionally 
@@ -530,7 +530,7 @@ export class svgHTMLAsset extends svgElement {
         this.shapes = shapes;
         this.definitions = definitions;
         this.viewBox = viewBox;
-        this.metadata = svg.default.METADATA;
+        this.metadata = svg.defaults.METADATA;
         svgHTMLAsset.#__filterAssetsArray();
         svgHTMLAsset.allSVGHTMLAssets.push(this);
     }
@@ -575,7 +575,7 @@ export class svgHTMLAsset extends svgElement {
     }
     get data() {
         if (this.viewBox == null) { this.viewBox = new svgViewBox(); }
-        if (this.metadata == null) { this.metadata = svg.default.METADATA; }
+        if (this.metadata == null) { this.metadata = svg.defaults.METADATA; }
         let d = this.ParseData([
             ['class', this.class],
             ['preserveAspectRatio', this.preserveAspectRatio]
@@ -801,74 +801,74 @@ export class svgHTMLAsset extends svgElement {
      * else, must manually assign `type`) @param {shape} shape 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddShape(shape, asDefinition = false) { this.#PushShape(shape, asDefinition); return shape; }
-    NewShape(fill = svg.default.FILL, asDefinition = false) {
+    NewShape(fill = svg.defaults.FILL, asDefinition = false) {
         let shape = new svg.shape(fill);
         this.#PushShape(shape, asDefinition); return shape;
     }
-    DefaultShape(asDefinition = false) { return this.NewShape(svg.default.FILL, asDefinition); };
+    DefaultShape(asDefinition = false) { return this.NewShape(svg.defaults.FILL, asDefinition); };
     /** 
      * add a {@link svg.rect rect} to shapes array @param {rect} rect 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddRect(rect, asDefinition = false) { this.#PushShape(rect, asDefinition); return rect; }
-    NewRect(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT, fill = svg.default.FILL, asDefinition = false) {
+    NewRect(x = svg.defaults.X, y = svg.defaults.Y, width = svg.defaults.WIDTH, height = svg.defaults.HEIGHT, fill = svg.defaults.FILL, asDefinition = false) {
         let rect = new svg.rect(x, y, width, height, fill);
         this.#PushShape(rect, asDefinition); return rect;
     }
-    DefaultRect(asDefinition = false) { return this.NewRect(svg.default.X, svg.default.Y, svg.default.WIDTH, svg.default.HEIGHT, svg.default.FILL, asDefinition); };
+    DefaultRect(asDefinition = false) { return this.NewRect(svg.defaults.X, svg.defaults.Y, svg.defaults.WIDTH, svg.defaults.HEIGHT, svg.defaults.FILL, asDefinition); };
     /** 
      * add a {@link svg.circle circle} to shapes array @param {circle} circle 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddCircle(circle, asDefinition = false) { this.#PushShape(circle, asDefinition); return circle; }
-    NewCircle(r = svg.default.R, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL, asDefinition = false) {
+    NewCircle(r = svg.defaults.R, cx = svg.defaults.CX, cy = svg.defaults.CY, fill = svg.defaults.FILL, asDefinition = false) {
         let circle = new svg.circle(r, cx, cy, fill);
         this.#PushShape(circle, asDefinition); return circle;
     }
-    DefaultCircle(asDefinition = false) { return this.NewCircle(svg.default.R, svg.default.CX, svg.default.CY, svg.default.FILL, asDefinition); };
+    DefaultCircle(asDefinition = false) { return this.NewCircle(svg.defaults.R, svg.defaults.CX, svg.defaults.CY, svg.defaults.FILL, asDefinition); };
     /** 
      * add an {@link svg.ellipse ellipse} to shapes array @param {ellipse} ellipse 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddEllipse(ellipse, asDefinition = false) { this.#PushShape(ellipse, asDefinition); return ellipse; }
-    NewEllipse(rx = svg.default.ELLIPSE_RX, ry = svg.default.ELLIPSE_RY, cx = svg.default.CX, cy = svg.default.CY, fill = svg.default.FILL, asDefinition = false) {
+    NewEllipse(rx = svg.defaults.ELLIPSE_RX, ry = svg.defaults.ELLIPSE_RY, cx = svg.defaults.CX, cy = svg.defaults.CY, fill = svg.defaults.FILL, asDefinition = false) {
         let ellipse = new svg.ellipse(rx, ry, cx, cy, fill);
         this.#PushShape(ellipse, asDefinition); return ellipse;
     }
-    DefaultEllipse(asDefinition = false) { return this.NewEllipse(svg.default.ELLIPSE_RX, svg.default.ELLIPSE_RY, svg.default.CX, svg.default.CY, svg.default.FILL, asDefinition); };
+    DefaultEllipse(asDefinition = false) { return this.NewEllipse(svg.defaults.ELLIPSE_RX, svg.defaults.ELLIPSE_RY, svg.defaults.CX, svg.defaults.CY, svg.defaults.FILL, asDefinition); };
     /** 
      * add a {@link svg.line line} to shapes array @param {line} line 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddLine(line, asDefinition = false) { return this.#PushShape(line, asDefinition); return line; }
-    NewLine(x1 = svg.default.X1, y1 = svg.default.Y1, x2 = svg.default.X2, y2 = svg.default.Y2, fill = svg.default.FILL, asDefinition = false) {
+    NewLine(x1 = svg.defaults.X1, y1 = svg.defaults.Y1, x2 = svg.defaults.X2, y2 = svg.defaults.Y2, fill = svg.defaults.FILL, asDefinition = false) {
         let line = new svg.line(x1, y1, x2, y2, fill);
         this.#PushShape(line, asDefinition); return line;
     }
-    DefaultLine(asDefinition = false) { return this.NewLine(svg.default.X1, svg.default.Y1, svg.default.X2, svg.default.Y2, svg.default.FILL, asDefinition); };
+    DefaultLine(asDefinition = false) { return this.NewLine(svg.defaults.X1, svg.defaults.Y1, svg.defaults.X2, svg.defaults.Y2, svg.defaults.FILL, asDefinition); };
     /** 
      * add a {@link svg.polyline polyline} to shapes array @param {polyline} polyline 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddPolyline(polyline, asDefinition = false) { this.#PushShape(polyline, asDefinition); return polyline; }
-    NewPolyline(points = svg.default.POINTS, fill = svg.default.FILL, asDefinition = false) {
+    NewPolyline(points = svg.defaults.POINTS, fill = svg.defaults.FILL, asDefinition = false) {
         let polyline = new svg.polyline(points, fill);
         this.#PushShape(polyline, asDefinition); return polyline;
     }
-    DefaultPolyline(asDefinition = false) { return this.NewPolyline(svg.default.POINTS, svg.default.FILL, asDefinition); };
+    DefaultPolyline(asDefinition = false) { return this.NewPolyline(svg.defaults.POINTS, svg.defaults.FILL, asDefinition); };
     /** 
      * add a {@link svg.polygon polygon} to shapes array @param {polygon} polygon 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddPolygon(polygon, asDefinition = false) { this.#PushShape(polygon, asDefinition); return polygon; }
-    NewPolygon(points = svg.default.POINTS, fill = svg.default.FILL, asDefinition = false) {
+    NewPolygon(points = svg.defaults.POINTS, fill = svg.defaults.FILL, asDefinition = false) {
         let polygon = new svg.polygon(points, fill);
         this.#PushShape(polygon, asDefinition); return polygon;
     }
-    DefaultPolygon(asDefinition = false) { return this.NewPolygon(svg.default.POINTS, svg.default.FILL, asDefinition); };
+    DefaultPolygon(asDefinition = false) { return this.NewPolygon(svg.defaults.POINTS, svg.defaults.FILL, asDefinition); };
     /** 
      * add a {@link svg.path path} to shapes array @param {path} path 
      * @param {boolean} [asDefinition=false] add the shape to SVG `<defs>`? */
     AddPath(path, asDefinition = false) { this.#PushShape(path, asDefinition); return path; }
-    NewPath(d = svg.default.D, fill = svg.default.FILL, asDefinition = false) {
+    NewPath(d = svg.defaults.D, fill = svg.defaults.FILL, asDefinition = false) {
         let path = new svg.path(d, fill);
         this.#PushShape(path, asDefinition); return path;
     }
-    DefaultPath(asDefinition = false) { return this.NewPath(svg.default.D, svg.default.FILL, asDefinition); };
+    DefaultPath(asDefinition = false) { return this.NewPath(svg.defaults.D, svg.defaults.FILL, asDefinition); };
 
     /** 
      * Create and add a new {@link svg.gradient gradient} 
@@ -879,7 +879,7 @@ export class svgHTMLAsset extends svgElement {
      * @param {...string} colors Array/values of colors used to create this array 
      * @returns {svg.gradient} The newly-created, newly-added gradient
      * */
-    NewGradient(id = undefined, isRadial = svg.default.GRADIENT_ISRADIAL, ...colors) {
+    NewGradient(id = undefined, isRadial = svg.defaults.GRADIENT_ISRADIAL, ...colors) {
         if (this.definitions == null) { this.definitions = []; }
         let gradient = new svg.gradient(id, isRadial, ...colors);
         let prev = this.#_definitions;
@@ -953,17 +953,17 @@ export class svgHTMLAsset extends svgElement {
 export class svgViewBox extends svgElement {
     get x() { return this.#_x; }
     set x(v) { let prev = this.#_x; this.#_x = v; this.#changed('x', v, prev); }
-    #_x = svg.default.X;
+    #_x = svg.defaults.X;
     get y() { return this.#_y; }
     set y(v) { let prev = this.#_y; this.#_y = v; this.#changed('y', v, prev); }
-    #_y = svg.default.Y;
+    #_y = svg.defaults.Y;
     get width() { return this.#_width; }
     set width(v) { let prev = this.#_width; this.#_width = v; this.#changed('width', v, prev); }
-    #_width = svg.default.WIDTH;
+    #_width = svg.defaults.WIDTH;
     get height() { return this.#_height; }
     set height(v) { let prev = this.#_height; this.#_height = v; this.#changed('height', v, prev); }
-    #_height = svg.default.HEIGHT;
-    constructor(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT) {
+    #_height = svg.defaults.HEIGHT;
+    constructor(x = svg.defaults.X, y = svg.defaults.Y, width = svg.defaults.WIDTH, height = svg.defaults.HEIGHT) {
         super(); this.x = x; this.y = y; this.width = width; this.height = height;
     }
     get html() { return `viewBox="${this.data}"`; }
@@ -987,7 +987,7 @@ export class svgViewBox extends svgElement {
     /** Should changes to this asset bubble up to its {@link svgViewBox.parent parent} asset? @type {boolean} */
     get bubbleOnChange() { return this.#_bubbleOnChange; }
     set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
-    #_bubbleOnChange = svg.default.BUBBLE_ONCHANGE;
+    #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
     /** Local changed callback that calls {@link onChange} on both this element and its {@link svgViewBox.parent parent}. @type {svg.onChange} */
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.onChange?.(valueChanged, newValue, this); } };
 }

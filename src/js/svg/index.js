@@ -21,7 +21,7 @@ export {
 export { svgGradient as gradient } from './svgGradient';
 
 export * as config from './svgConfig';
-export * as default from './svgDefaults';
+export * as defaults from './svgDefaults';
 export * as generator from './svgGenerator';
 
 /**

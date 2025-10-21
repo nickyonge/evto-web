@@ -10,7 +10,7 @@ const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
  * @returns {svg.asset} new instance of {@linkcode svg.asset svgHTMLAsset} */
 export function BasicGradientRect(...colors) {
     let svgAsset = new asset();
-    svgAsset.NewRect(svg.default.X, svg.default.Y, svg.default.WIDTH, svg.default.HEIGHT, svgAsset.NewGradient(null, svg.default.GRADIENT_ISRADIAL, ...colors).idURL);
+    svgAsset.NewRect(svg.defaults.X, svg.defaults.Y, svg.defaults.WIDTH, svg.defaults.HEIGHT, svgAsset.NewGradient(null, svg.defaults.GRADIENT_ISRADIAL, ...colors).idURL);
     return svgAsset;
 }
 
@@ -68,15 +68,15 @@ export class svgFancyBox {
 /**
  * Create a `d` attribute {@link svg.path path} making up a rectangle 
  * @see {@link svg.rect}
- * @param {number} x {@link svg.default.X}
- * @param {number} y {@link svg.default.Y}
- * @param {number} width {@link svg.default.WIDTH}
- * @param {number} height {@link svg.default.HEIGHT}
+ * @param {number} x {@link svg.defaults.X}
+ * @param {number} y {@link svg.defaults.Y}
+ * @param {number} width {@link svg.defaults.WIDTH}
+ * @param {number} height {@link svg.defaults.HEIGHT}
  * @param {boolean} [relativeStart=false] If false, start `d` path with an `M` command; if true, `m`
  * @param {boolean} [closePath=true] End `d` path with a `Z` command?
  * @returns {string} Path `d` attribute for a rectangle of the given parameters
  */
-export function BoxPath(x = svg.default.X, y = svg.default.Y, width = svg.default.WIDTH, height = svg.default.HEIGHT,
+export function BoxPath(x = svg.defaults.X, y = svg.defaults.Y, width = svg.defaults.WIDTH, height = svg.defaults.HEIGHT,
     relativeStart = false, closePath = true) {
     return `${relativeStart ? 'm' : 'M'}${x},${y} h${width} v${height} h${-width} ${closePath ? 'Z' : `v${-height}`}`;
 }
