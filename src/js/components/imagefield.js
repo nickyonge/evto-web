@@ -7,8 +7,7 @@ import { svgGradient } from "../svg/svgGradient";
 import { svgHTMLAsset } from "../svg/svgElement";
 import { EnsureToNumber } from "../lilutils";
 
-// export class SVGImage extends BasicComponent {
-export class SVGImage extends TitledComponent {
+export class ImageField extends TitledComponent {
 
 
     #image;
@@ -26,7 +25,7 @@ export class SVGImage extends TitledComponent {
     constructor(componentTitle) {
         super(componentTitle);
 
-        ui.AddClassesToDOM(this.div, 'svgImage', 'container');
+        ui.AddClassesToDOM(this.div, 'imageField', 'container');
 
         // this.#image = ui.CreateDivWithClass('image', 'canvasSizedImg');
         this.#image = ui.CreateImageWithClasses(demoImage, 'Demo image', 'image', 'canvasSizedImg', 'onTop');

@@ -17,7 +17,7 @@ import(/* webpackPreload: true */ './../css/components/multioption.css');
 import(/* webpackPreload: true */ './../css/components/socialbtn.css');
 import(/* webpackPreload: true */ './../css/components/slidebtn.css');
 import(/* webpackPreload: true */ './../css/components/slider.css');
-import(/* webpackPreload: true */ './../css/components/svgimage.css');
+import(/* webpackPreload: true */ './../css/components/imagefield.css');
 import(/* webpackPreload: true */ './../css/components/tabs.css');
 import(/* webpackPreload: true */ './../css/components/textfield.css');
 import(/* webpackPreload: true */ './../css/components/toggle.css');

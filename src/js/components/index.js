@@ -4,7 +4,7 @@ export { DropdownList } from "./dropdown.js";
 export { HelpIcon } from "./helpicon.js";
 export { MutliOptionList } from "./multioption.js";
 export { Slider } from "./slider.js";
-export { SVGImage } from './svgimage.js';
+export { ImageField } from './imagefield.js';
 export { TextField } from "./textfield.js";
 export { Toggle } from "./toggle.js";
 

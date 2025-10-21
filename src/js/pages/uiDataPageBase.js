@@ -86,21 +86,21 @@ export function DemoPageContent(page) {
 }
 
 export function DemoGradient(page) {
-    let svgImage = new cmp.SVGImage();
-    page.appendChild(svgImage);
+    let imageField = new cmp.ImageField();
+    page.appendChild(imageField);
     function updateParameter(paramID, value) {
         switch (paramID) {
-            case 0: svgImage.demoRect.gradient.isRadial = value; break;
-            case 1: svgImage.demoRect.gradient.scale = value; break;
-            case 2: svgImage.demoRect.gradient.angle = value; break;
-            case 3: svgImage.demoRect.gradient.sharpness = value; break;
-            case 4: svgImage.demoRect.gradient.SetColor(0, value); break;
-            case 5: svgImage.demoRect.gradient.SetColor(1, value); break;
-            case 6: svgImage.demoRect.gradient.SetColor(2, value); break;
+            case 0: imageField.demoRect.gradient.isRadial = value; break;
+            case 1: imageField.demoRect.gradient.scale = value; break;
+            case 2: imageField.demoRect.gradient.angle = value; break;
+            case 3: imageField.demoRect.gradient.sharpness = value; break;
+            case 4: imageField.demoRect.gradient.SetColor(0, value); break;
+            case 5: imageField.demoRect.gradient.SetColor(1, value); break;
+            case 6: imageField.demoRect.gradient.SetColor(2, value); break;
             default:
                 return;
         }
-        svgImage.updateDemoRect();
+        imageField.updateDemoRect();
     }
     let slider1 = new cmp.Slider('scale', function (v) { updateParameter(1, v); }, 1, 0.1, 2.5, false, 0.05);
     let slider2 = new cmp.Slider('angle', function (v) { updateParameter(2, v); }, 0, 0, 360, false);
