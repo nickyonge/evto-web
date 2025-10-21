@@ -2,15 +2,13 @@ import { BasicGradientRect } from "../svg/svgGenerator";
 import * as ui from "../ui";
 import { BasicComponent, TitledComponent } from "./base";
 
-import demoImage from '../../assets/png/demo-paintings/demopainting1.png';
+import demoImageSrc from '../../assets/png/demo-paintings/demopainting1.png';
 import { svgGradient } from "../svg/svgGradient";
 import { svgHTMLAsset } from "../svg/svgElement";
 import { EnsureToNumber } from "../lilutils";
 
 export class ImageField extends TitledComponent {
 
-
-    #image;
     #addedImgs = [];
     #addedSVGs = [];
     get #addedAssets() {
@@ -19,8 +17,9 @@ export class ImageField extends TitledComponent {
         return this.#addedImgs.concat(this.#addedSVGs);
     }
 
-    #_demoRect;
-    #_demoImg;
+    #_demoImage;
+    #_demoSvgRect;
+    #_demoSvgDiv;
 
     constructor(componentTitle) {
         super(componentTitle);
@@ -62,22 +61,39 @@ export class ImageField extends TitledComponent {
         if (extraClasses != null) { ui.AddClassesToDOM(e, ...extraClasses); } // extra classes 
     }
 
-    get demoRect() {
-        if (this.#_demoRect == null) {
-            this.#_demoRect = BasicGradientRect('skyblue', 'white', 'pink');
-            this.#_demoRect.onChange = function (valueChanged, newValue, previousValue, changedElement) {
+    CreateDemoImage() {
+        // TODO: finish create demo image / demo SVG in imageField 
+        // this.#image = ui.CreateDivWithClass('image', 'canvasSizedImg');
+        // this.#image = ui.CreateImageWithClasses(demoImage, 'Demo image', 'image', 'canvasSizedImg', 'onTop');
+        // // this.div.appendChild(this.#image);
+
+        // let gradientRect = BasicGradientRect(svgGradient.templates.bw);
+        // this.addSVG(gradientRect);
+        // gradientRect.gradient = svgGradient.templates.softrainbow;
+
+
+        // let rainbow = BasicGradientRect(svgGradient.templates.softrainbow);
+        // this.#image.innerHTML = rainbow.html;
+
+    }
+    CreateDemoSVG() {
+    }
+
+    get demoImage() {
+        if (this.#_demoImage == null) {
+            this.#_demoImage = ui.CreateImageWithClasses(this.demoImage, )
+        }
+        return this.#_demoImage;
+    }
+
+    get demoSVG() {
+        if (this.#_demoSvgRect == null) {
+            this.#_demoSvgRect = BasicGradientRect('skyblue', 'white', 'pink');
+            this.#_demoSvgRect.onChange = function (valueChanged, newValue, previousValue, changedElement) {
                 // console.log(`SVGAsset value ${valueChanged} changed to ${newValue} from ${previousValue} on ${changedElement.constructor.name}`);
             }
-            this.#_demoRect.GetShape().fillGradient = this.#_demoRect.gradient;
-            this.updateDemoRect();
+            this.#_demoSvgRect.GetShape().fillGradient = this.#_demoSvgRect.gradient;
         }
-        return this.#_demoRect;
-    }
-    updateDemoRect() {
-        if (this.#_demoImg == null) {
-            this.#_demoImg = ui.CreateDivWithClass('image', 'canvasSizedImg');
-            this.div.appendChild(this.#_demoImg);
-        }
-        this.#_demoImg.innerHTML = this.demoRect.html;
+        return this.#_demoSvgRect;
     }
 }

@@ -23,7 +23,7 @@ export function CreatePage(page) {
         throw new Error("ERROR: can't CreatePageContent, page is null");
     } else if (!page.id) { throw new Error(`ERROR: can't CreatePageContent, page.id is null, page: ${page}`); }
 
-    let pageNumber = GetPageNumberByID(page.id);
+    // let pageNumber = GetPageNumberByID(page.id);
 
     // universal page header
     let header = ui.CreateElement('h2');
@@ -90,17 +90,16 @@ export function DemoGradient(page) {
     page.appendChild(imageField);
     function updateParameter(paramID, value) {
         switch (paramID) {
-            case 0: imageField.demoRect.gradient.isRadial = value; break;
-            case 1: imageField.demoRect.gradient.scale = value; break;
-            case 2: imageField.demoRect.gradient.angle = value; break;
-            case 3: imageField.demoRect.gradient.sharpness = value; break;
-            case 4: imageField.demoRect.gradient.SetColor(0, value); break;
-            case 5: imageField.demoRect.gradient.SetColor(1, value); break;
-            case 6: imageField.demoRect.gradient.SetColor(2, value); break;
+            case 0: imageField.demoSVG.gradient.isRadial = value; break;
+            case 1: imageField.demoSVG.gradient.scale = value; break;
+            case 2: imageField.demoSVG.gradient.angle = value; break;
+            case 3: imageField.demoSVG.gradient.sharpness = value; break;
+            case 4: imageField.demoSVG.gradient.SetColor(0, value); break;
+            case 5: imageField.demoSVG.gradient.SetColor(1, value); break;
+            case 6: imageField.demoSVG.gradient.SetColor(2, value); break;
             default:
                 return;
         }
-        imageField.updateDemoRect();
     }
     let slider1 = new cmp.Slider('scale', function (v) { updateParameter(1, v); }, 1, 0.1, 2.5, false, 0.05);
     let slider2 = new cmp.Slider('angle', function (v) { updateParameter(2, v); }, 0, 0, 360, false);
