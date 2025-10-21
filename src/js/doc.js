@@ -400,7 +400,41 @@ Array.prototype.containsAll = function (...value) {
     }
     return true;
 }
+/** Call `flat()` on arrays processed in {@linkcode Array.prototype.containsAny containsAny} and {@linkcode Array.prototype.containsAll containsAll}? @returns {boolean} */
 const FLATTEN_CONTAINS = true;
+
+
+/**
+ * Returns a clone of this array, either using `Array.from()` or `structuredClone`.
+ * @param {boolean} [deepClone=false] Use `structuredClone` copy? If false, uses `Array.from()`. Deep cloning creates new value instances for property editing. Default `false`
+ * @returns {T[]} The newly cloned version of the given array 
+ * @type {<T>(deepClone:boolean) => T[]}
+ * @template T 
+ */
+Array.prototype.clone = function (deepClone = false) {
+    return deepClone ? this.structuredClone() : Array.from(this);
+}
+/**
+ * Returns a `structuredClone` copy of this array, for deep cloning. Deep cloning creates new value instances for property editing.
+ * @returns {T[]} The newly cloned version of the given array 
+ * @type {<T>() => T[]}
+ * @template T 
+ */
+Array.prototype.structuredClone = function () {
+    return structuredClone(this);
+}
+/**
+ * Returns a `structuredClone` copy of this array, for deep cloning. Deep cloning creates new value instances for property editing.
+ * 
+ * Convenience, alternate name of {@linkcode Array.prototype.structuredClone}.
+ * @returns {T[]} The newly cloned version of the given array 
+ * @type {<T>() => T[]}
+ * @template T 
+ * @borrows structuredClone as deepClone
+ */
+Array.prototype.deepClone = function() {
+    return this.structuredClone();
+}
 
 // #endregion Array 
 

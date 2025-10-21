@@ -39,7 +39,7 @@ declare global {
          * @type {<T>(...value:T[]): boolean}
          * @template T 
          */
-        containsAny: (...value:T[]) => boolean;
+        containsAny: (...value: T[]) => boolean;
         /**
          * Checks if ALL of the given values are contained in this array
          * @param {...T} value Values to check for 
@@ -47,7 +47,7 @@ declare global {
          * @type {<T>(...value:T[]): boolean}
          * @template T 
          */
-        containsAll: (...value:T[]) => boolean;
+        containsAll: (...value: T[]) => boolean;
 
         /**
          * Callback invoked whenever a {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#copying_methods_and_mutating_methods mutating} 
@@ -199,6 +199,33 @@ declare global {
          * @template T 
          */
         unshift<T>(...items: T[]): number;
+
+        /**
+         * Returns a clone of this array, either using `Array.from()` or `structuredClone`.
+         * @param {boolean} [deepClone=false] Use `structuredClone` copy? If false, uses `Array.from()`. Default `false`
+         * @returns {T[]} The newly cloned version of the given array 
+         * @type {<T>(deepClone:boolean): T[]}
+         * @template T 
+         */
+        clone<T>(deepClone: boolean): T[];
+        
+        /**
+         * Returns a `structuredClone` copy of this array, for deep cloning. Deep cloning creates new value instances for property editing.
+         * @returns {T[]} The newly cloned version of the given array 
+         * @type {<T>(): T[]}
+         * @template T 
+         */
+        structuredClone<T>(): T[];
+        /**
+         * Returns a `structuredClone` copy of this array, for deep cloning. Deep cloning creates new value instances for property editing.
+         * 
+         * Convenience, alternate name of {@linkcode Array.structuredClone}.
+         * @returns {T[]} The newly cloned version of the given array 
+         * @type {<T>(): T[]}
+         * @template T 
+         * @borrows structuredClone as deepClone
+         */
+        deepClone<T>(): T[];
 
     }
 
