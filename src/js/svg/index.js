@@ -22,7 +22,7 @@ export { svgGradient as gradient } from './svgGradient';
 
 export * as config from './svgConfig';
 export * as default from './svgDefaults';
-export * as gen from './svgGenerator';
+export * as generator from './svgGenerator';
 
 /**
  * Callback for when a value in an {@link svgElement} has changed

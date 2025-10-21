@@ -934,7 +934,8 @@ export class svgHTMLAsset extends svgElement {
 
     /** Generate a basic rectangle with a gradient of the given colors, with all default values.
      * @param  {...any} colors Array of colors to generate the gradient with
-     * @returns {svg.asset} new instance of {@linkcode svg.asset svgHTMLAsset} */
+     * @returns {svg.asset} new instance of {@linkcode svg.asset svgHTMLAsset}
+     * @see {@linkcode svg.generator.BasicGradientRect svgGenerator.BasicGradientRect}, which this static method calls */
     static BasicGradientRect(...colors) {
         return svg.generator.BasicGradientRect(...colors);
     }
