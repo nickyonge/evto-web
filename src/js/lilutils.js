@@ -23,6 +23,22 @@ export const isString = str => typeof str == 'string';
 export const isStringNotBlank = str => isString(str) && !isBlank(str);
 
 /** 
+ * Checks {@linkcode isStringNotBlank} on the given string. 
+ * If it IS a string AND it's not blank, returns that string. If it's blank, or
+ * whitespace, or `null`, or not a string, returns `''`.
+ * @param {string} str String to check 
+ * @param {string} [prefix=undefined] Optional prefix to add, IF the string isn't blank
+ * @param {string} [suffix=undefined] Optional suffix to add, IF the string isn't blank
+ * @returns {string}
+ */
+export function ReturnStringNotBlank(str, prefix = undefined, suffix = undefined) {
+    if (isStringNotBlank(str)) {
+        return `${isStringNotBlank(prefix) ? prefix : ''}${str}${isStringNotBlank(suffix) ? suffix : ''}`
+    }
+    return '';
+}
+
+/** 
  * Gets the CSS stylesheet for the page.
  * 
  * Remember!!! Use `.value` when accessing `style` (eg, `style.value.getPropertyValue`)
@@ -584,7 +600,7 @@ export function IsActiveElement(element) {
  */
 export function SetElementEnabled(element, set = true) {
     if (!set) {
-        DeselectElement(element, true); 
+        DeselectElement(element, true);
         element.draggable = set ? 'auto' : 'false';
     }
     element.style.pointerEvents = set ? 'auto' : 'none';
