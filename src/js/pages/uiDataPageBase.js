@@ -87,6 +87,7 @@ export function DemoPageContent(page) {
 
 export function DemoGradient(page) {
     let imageField = new cmp.ImageField();
+    imageField.CreateDemoSVG();
     page.appendChild(imageField);
     function updateParameter(paramID, value) {
         switch (paramID) {

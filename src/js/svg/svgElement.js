@@ -40,9 +40,9 @@ export class svgElement {
         this.#_id = v;
         if (!this.#_firstIDAssigned) {
             if (!this.__suppressOnChange) {
-                this.onChange?.('id', v, prev, this);
+                this.__invokeChange('id', v, prev, this);
                 if (this.hasOwnProperty('parent')) {
-                    this.parent?.onChange?.('id', v, prev, this);
+                    this.parent?.__invokeChange('id', v, prev, this);
                 }
             }
             this.#_firstIDAssigned = true;
@@ -171,13 +171,44 @@ export class svgElement {
     /**
      * Callback for when a value in this {@link svgElement} has changed
      * @type {svg.onChange} see {@link svg.onChange onChange}
+     * @param {svg.onChange} onChangeMethod 
      * @param {string} valueChanged The name of the value that was changed 
      * @param {any} newValue The newly assigned value 
      * @param {any} previousValue The old value, for reference  
      * @param {svgElement} changedElement The {@link svgElement} that was changed 
-     * @returns {void}
      */
-    onChange;
+    set onChange(onChangeMethod) {
+        // if setting null, reset methods 
+        if (onChangeMethod == null) { this.#onChangeMethods = []; return; }
+        if (this.#onChangeMethods == null) { this.#onChangeMethods = []; }
+        if (this.#onChangeMethods.contains(onChangeMethod)) { console.log("CHANGE 2"); return; }
+        this.#onChangeMethods.push(onChangeMethod);
+        console.log("ADDED ON CHANGE METHOD, CHANGE CONT: " + this.#onChangeMethods.length);
+    };
+    // get #onChange() {
+    //     if (this.#onChangeMethods == null) { this.#onChangeMethods = []; }
+    //     switch (this.#onChangeMethods.length) {
+    //         case 0:
+    //             return undefined;
+    //         case 1:
+    //             return this.#onChangeMethods[0];
+    //         default:
+    //             console.log("NOTE: multiple onChange methods exist on this SVGElement, returning first, consider reading allOnChangeMethods", this, this.#onChangeMethods);
+    //             return this.#onChangeMethods;
+    //     }
+    // }
+    __invokeChange(valueChanged, newValue, previousValue, changedElement) {
+        console.log("invoke change, array cont: " + this.#onChangeMethods.length);
+        if (this.#onChangeMethods == null) { this.#onChangeMethods = []; console.log("RETURNING EMPTY ARRAY"); return; }
+        for (let i = 0; i < this.#onChangeMethods.length; i++) {
+            this.#onChangeMethods[i]?.(valueChanged, newValue, previousValue, changedElement == null ? this : changedElement);
+        }
+    }
+    // get allOnChangeMethods() {
+    //     return this.#onChangeMethods;
+    // }
+    /** Local reference to onChange methods array @type {@link svg.onChange[]} */
+    #onChangeMethods = [];
 
     /**
      * DO NOT USE.  
@@ -943,7 +974,7 @@ export class svgHTMLAsset extends svgElement {
     /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {Array.prototype} source array object @param {any} returnValue returned value from method */
     #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('htmlAsset')) { source.htmlAsset.#changed(`${source.name}#${type}`, source, returnValue); } };
     /** Local changed callback that calls {@link onChange} on this element (separated for easy modification) @type {svg.onChange} */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); };
+    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); };
 }
 // #endregion SVG HTML Asset
 
@@ -989,5 +1020,5 @@ export class svgViewBox extends svgElement {
     set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
     #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
     /** Local changed callback that calls {@link onChange} on both this element and its {@link svgViewBox.parent parent}. @type {svg.onChange} */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.onChange?.(valueChanged, newValue, this); } };
+    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, this); } };
 }

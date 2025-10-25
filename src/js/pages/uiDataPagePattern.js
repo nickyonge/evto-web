@@ -33,7 +33,7 @@ export function CreatePagePattern(page) {
     sectionContainer.appendChild(sectionPattern);
     sectionContainer.appendChild(sectionColors);
 
-    // DemoGradient(sectionPattern);
+    DemoGradient(sectionPattern);
 
     CreatePatternSection(sectionPattern);
     CreateColorsSection(sectionColors);
@@ -56,8 +56,8 @@ function CreatePatternSection(section) {
     let patternImage = new cmp.ImageField();
     section.appendChild(patternImage);
     // let patternSVG = 
-    let patternSVG = svgHTMLAsset.BasicGradientRect(svgGradient.templates.softrainbow);
-    patternImage.addSVG(patternSVG);
+    // let patternSVG = svgHTMLAsset.BasicGradientRect(svgGradient.templates.softrainbow);
+    // patternImage.addSVG(patternSVG);
 }
 function CreateColorsSection(section) {
 

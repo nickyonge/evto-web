@@ -4,8 +4,8 @@ import { BasicComponent, TitledComponent } from "./base";
 
 import demoImageSrc from '../../assets/png/demo-paintings/demopainting1.png';
 import { svgGradient } from "../svg/svgGradient";
-import { svgHTMLAsset } from "../svg/svgElement";
-import { EnsureToNumber } from "../lilutils";
+import { svgElement, svgHTMLAsset } from "../svg/svgElement";
+import { EnsureToNumber, isBlank, isStringAndBlank } from "../lilutils";
 
 export class ImageField extends TitledComponent {
 
@@ -19,30 +19,56 @@ export class ImageField extends TitledComponent {
 
     #_demoImage;
     #_demoSvgRect;
-    #_demoSvgDiv;
+
+    IsSVGAdded(svgAsset) {
+        return this.#addedSVGs.includes(svgAsset);
+    }
 
     constructor(componentTitle) {
         super(componentTitle);
         ui.AddClassesToDOM(this.div, 'imageField', 'container');
     }
 
+    /**
+     * Adds an image div to this image container. 
+     * Returns whether or not the image was successfully added.
+     * Will return `false` if imgSrc is null/whitespace
+     * @param {svgHTMLAsset} svgAsset SVG asset to add
+     * @returns {boolean}
+     * @see {@link ui.CreateImage}
+     */
     addImage(imgSrc, alt = null, canvasSized = true, zSort = 0, ...extraClasses) {
+        if (!isStringAndBlank(imgSrc)) { return false; }
         let newImg = ui.CreateImage(imgSrc, alt);
         this.#prepareHTMLElementImage(newImg, canvasSized, zSort, ...extraClasses);
         this.div.appendChild(newImg);
         this.#addedImgs.push(newImg);
+        return true;
     }
     /**
-     * Adds an {@link svgHTMLAsset} to this image container
+     * Adds an {@link svgHTMLAsset} to this image container. 
+     * Returns whether or not the SVG was successfully added.
+     * Will return `false` if svgAsset is null, or if it's already added (and `allowDuplicates` if `false`).
      * @param {svgHTMLAsset} svgAsset SVG asset to add
+     * @param {svgElement.onChangeCallback} [onChangeCallback=null] Additional custom callback for when this SVG is modified (if not already assigned) 
+     * @param {boolean} [canvasSized=true] Assign the `canvasSizedImg` CSS class, forcing 2:1 aspect ratio? Default `true` 
+     * @param {number} [zSort=0] Assignment for z-index CSS class. 0: leave default, >=1: assign class `onTop`, <=0: assign class `onBottom`. Default 0
+     * @param {boolean} [allowDuplicates=false] Allow duplicates, if already added? Default `false`
+     * @param {...string} extraClasses Optional extra classes to add to string 
+     * @returns {boolean}
      */
-    addSVG(svgAsset, canvasSized = true, zSort = 0, ...extraClasses) {
-        if (svgAsset == null) { return; }
+    addSVG(svgAsset, onChangeCallback = null, canvasSized = true, zSort = 0, allowDuplicates = false, ...extraClasses) {
+        if (svgAsset == null) { return false; }
+        if (!allowDuplicates && this.IsSVGAdded(svgAsset)) { return false; }
         let newSVG = ui.CreateDiv();
         this.#prepareHTMLElementImage(newSVG, canvasSized, zSort, ...extraClasses);
         this.div.appendChild(newSVG);
-        svgAsset.onChange = function () { newSVG.innerHTML = svgAsset.html; }
+        if (svgAsset.onChange == null) {
+            console.log("HELLO");
+            svgAsset.onChange = function () { console.log("TEST"); newSVG.innerHTML = svgAsset.html; }
+        }
         newSVG.innerHTML = svgAsset.html;
+        return true;
     }
     /** Prep an HTMLElement to be added 
      * @param {HTMLElement} e HTMLElement to prepare 
@@ -78,6 +104,11 @@ export class ImageField extends TitledComponent {
 
     }
     CreateDemoSVG() {
+        if (this.#_demoSvgRect == null) {
+            this.#_demoSvgRect = BasicGradientRect('skyblue', 'white', 'pink');
+            this.addSVG(this.#_demoSvgRect);
+        }
+        return this.#_demoSvgRect;
     }
 
     get demoImage() {
@@ -88,13 +119,6 @@ export class ImageField extends TitledComponent {
     }
 
     get demoSVG() {
-        if (this.#_demoSvgRect == null) {
-            this.#_demoSvgRect = BasicGradientRect('skyblue', 'white', 'pink');
-            this.#_demoSvgRect.onChange = function (valueChanged, newValue, previousValue, changedElement) {
-                // console.log(`SVGAsset value ${valueChanged} changed to ${newValue} from ${previousValue} on ${changedElement.constructor.name}`);
-            }
-            this.#_demoSvgRect.GetShape().fillGradient = this.#_demoSvgRect.gradient;
-        }
-        return this.#_demoSvgRect;
+        return this.CreateDemoSVG();
     }
 }

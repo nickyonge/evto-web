@@ -559,7 +559,7 @@ export class svgGradient extends svg.element {
     /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {Array.prototype} source array object @param {any} returnValue returned value from method */
     #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('gradient')) { source.gradient.#changed(`${source.name}#${type}`, source, returnValue); } };
     /** Local changed callback that calls {@link onChange} on both this element and its {@link svgGradient.parent parent}. @type {svg.onChange} */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.onChange?.(valueChanged, newValue, previousValue, this); } }
+    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 }
 
 class svgGradientStop extends svg.element {
@@ -691,5 +691,5 @@ class svgGradientStop extends svg.element {
     #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
 
     /** Local changed callback that calls {@link onChange} on both this element and its {@link svgGradientStop.parent parent}. @type {svg.onChange} */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.onChange?.(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.onChange?.(valueChanged, newValue, previousValue, this); } }
+    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 }
