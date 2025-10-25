@@ -11,7 +11,7 @@ export class svgElement {
     static get allSVGElementsCount() { svgElement.#__filterElementsArray(); return svgElement.allSVGElements.length; }
     /** Remove all `null` values from the {@linkcode allSVGElements} array @returns {void} */
     static #__filterElementsArray() { svgElement.allSVGElements = svgElement.allSVGElements.filter(e => e != null); }
-    /** Counter for all {@linkcode SVGElement SVGElements} ever instanced, ensuring unique IDs for each one. */
+    /** Counter for all {@linkcode svgElement svgElements} ever instanced, ensuring unique IDs for each one. */
     static #svgElementsCount = 0;
 
     /** unique identifier for this element @type {string} */
@@ -27,10 +27,10 @@ export class svgElement {
                     if (svgElement.allSVGElements[i].id == v) {
                         // yup, IDs match 
                         if (svg.config.REQUIRE_UNIQUE_SVG_ELEMENT_IDS) {
-                            console.error(`ERROR: SVGElement ID ${v} is already in use. Cannot assign to this SVGElement. IDs should be unique.`, this, svgElement.allSVGElements[i]);
+                            console.error(`ERROR: svgElement ID ${v} is already in use. Cannot assign to this svgElement. IDs should be unique.`, this, svgElement.allSVGElements[i]);
                             return;
                         } else {
-                            console.warn(`WARNING: SVGElement ID ${v} is already in use. This may cause issues. IDs should be unique.`, this, svgElement.allSVGElements[i]);
+                            console.warn(`WARNING: svgElement ID ${v} is already in use. This may cause issues. IDs should be unique.`, this, svgElement.allSVGElements[i]);
                         }
                     }
                 }
@@ -165,13 +165,16 @@ export class svgElement {
         svgElement.#svgElementsCount++;
     }
 
-    /** Unique instance of this SVGElement @returns {number} */
+    /** Unique instance of this svgElement @returns {number} */
     get svgInstance() { return this[__svgElementInstance]; }
 
     /**
-     * Callback for when a value in this {@link svgElement} has changed
+     * Set a callback for when a value in this {@link svgElement} has changed.
+     * 
+     * NOTE: convenience setter! See {@linkcode onChangeCallbacks} for all
+     * callbacks, or {@linkcode hasOnChange} to check if any callback is added.
      * @type {svg.onChange} see {@link svg.onChange onChange}
-     * @param {svg.onChange} onChangeMethod 
+     * @param {svg.onChange} onChangeMethod {@link svg.onChange onChange} method to call
      * @param {string} valueChanged The name of the value that was changed 
      * @param {any} newValue The newly assigned value 
      * @param {any} previousValue The old value, for reference  
@@ -179,42 +182,76 @@ export class svgElement {
      */
     set onChange(onChangeMethod) {
         // if setting null, reset methods 
-        if (onChangeMethod == null) { this.#onChangeMethods = []; return; }
-        if (this.#onChangeMethods == null) { this.#onChangeMethods = []; }
-        if (this.#onChangeMethods.contains(onChangeMethod)) { console.log("CHANGE 2"); return; }
-        this.#onChangeMethods.push(onChangeMethod);
-        console.log("ADDED ON CHANGE METHOD, CHANGE CONT: " + this.#onChangeMethods.length);
+        if (onChangeMethod == null) { this.onChangeCallbacks = []; return; }
+        // ensure onChangeCallbacks array exsts 
+        if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; }
+        // check if adding array or individual methods 
+        if (Array.isArray(onChangeMethod)) {
+            for (let i = 0; i < onChangeMethod.length; i++) {
+                if (onChangeMethod[i] == null) { continue; }
+                if (Array.isArray(onChangeMethod[i])) {
+                    // handle nested arrays 
+                    this.onChange = onChangeMethod[i];
+                    continue;
+                }
+                // check if function - if so, add 
+                if (typeof onChangeMethod[i] === 'function') {
+                    if (!this.onChangeCallbacks.contains(onChangeMethod)) {
+                        this.onChangeCallbacks.push(onChangeMethod);
+                    }
+                } else {
+                    console.warn(`WARNING: can't add value ${onChangeMethod[i]} of invalid type ${typeof onChangeMethod[i]} to onChange callback array (via array)`, onChangeMethod, this);
+                }
+            }
+        } else if (typeof onChangeMethod === 'function') {
+            if (this.onChangeCallbacks.contains(onChangeMethod)) { return; }
+            this.onChangeCallbacks.push(onChangeMethod);
+        } else {
+            console.warn(`WARNING: can't add value ${onChangeMethod} of invalid type ${typeof onChangeMethod} to onChange callback array`, this);
+        }
     };
-    // get #onChange() {
-    //     if (this.#onChangeMethods == null) { this.#onChangeMethods = []; }
-    //     switch (this.#onChangeMethods.length) {
-    //         case 0:
-    //             return undefined;
-    //         case 1:
-    //             return this.#onChangeMethods[0];
-    //         default:
-    //             console.log("NOTE: multiple onChange methods exist on this SVGElement, returning first, consider reading allOnChangeMethods", this, this.#onChangeMethods);
-    //             return this.#onChangeMethods;
-    //     }
-    // }
-    __invokeChange(valueChanged, newValue, previousValue, changedElement) {
-        console.log("invoke change, array cont: " + this.#onChangeMethods.length);
-        if (this.#onChangeMethods == null) { this.#onChangeMethods = []; console.log("RETURNING EMPTY ARRAY"); return; }
-        for (let i = 0; i < this.#onChangeMethods.length; i++) {
-            this.#onChangeMethods[i]?.(valueChanged, newValue, previousValue, changedElement == null ? this : changedElement);
+
+    get hasOnChange() { return this.onChangeCallbacks != null && this.onChangeCallbacks.length > 0; }
+
+    /** 
+     * Array of all {@link svg.onChange onChange} methods to call on ths {@link svgElement}, whenever a local change occurs.
+     * 
+     * Note that changing this array or its values itself does NOT invoke a change.
+     * @type {@link svg.onChange[]} 
+     * */
+    onChangeCallbacks = [];
+
+    /**
+     * DO NOT USE.  
+     * 
+     * Used internally to invoke a change in this {@link svgElement},
+     * including changes bubbled up from subclasses.
+     * @param {string} valueChanged The name of the value that was changed 
+     * @param {any} newValue The newly assigned value 
+     * @param {any} previousValue The old value, for reference  
+     * @param {svgElement} [changedElement = undefined] The {@link svgElement} that was changed. If `undefined` (the default value), sends `this` (the {@link svgElement} itself)
+     * @returns 
+     */
+    __invokeChange(valueChanged, newValue, previousValue, changedElement = undefined) {
+        console.log("invoke change, array cont: " + this.onChangeCallbacks.length);
+        if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; console.log("RETURNING EMPTY ARRAY"); return; }
+        for (let i = 0; i < this.onChangeCallbacks.length; i++) {
+            this.onChangeCallbacks[i]?.(valueChanged, newValue, previousValue, changedElement == null ? this : changedElement);
         }
     }
-    // get allOnChangeMethods() {
-    //     return this.#onChangeMethods;
-    // }
-    /** Local reference to onChange methods array @type {@link svg.onChange[]} */
-    #onChangeMethods = [];
 
     /**
      * DO NOT USE.  
      * 
      * Used internally to prevent multiple {@linkcode onChange} calls 
      * when modifying one property that itself modifies multiple.
+     * 
+     * Eg, modifying {@link svg.gradient.angle svgGradient.angle} also 
+     * modifies that gradient's {@link svg.gradient.x1 x1}, 
+     * {@link svg.gradient.y1 y1}, {@link svg.gradient.x2 x2}, and 
+     * {@link svg.gradient.y2 y2} properties. However, {@link onChange}
+     * should only be invoked once, as only {@link svg.gradient.angle angle}
+     * was modified.
      * @type {boolean}
      */
     __suppressOnChange = false;
@@ -940,7 +977,7 @@ export class svgHTMLAsset extends svgElement {
 
     /**
      * Local ref to push a shape/element to {@link shapes} or {@link definitions}
-     * @param {svg.shape|svg.element} element SVGShape or SVGElement to push
+     * @param {svg.shape|svg.element} element {@link svg.shape svgShape} or {@link svgElement} to push
      * @param {boolean} [asDefinition=false] Push this shape as a definition? Default `false`
      */
     #PushShape(element, asDefinition = false) {
