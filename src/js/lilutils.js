@@ -21,6 +21,11 @@ export const isString = str => typeof str == 'string';
  * @param {string} str input string to test 
  * @returns {boolean} true if non-blank string, false is blank or not string */
 export const isStringNotBlank = str => isString(str) && !isBlank(str);
+/** Returns true only if value IS a string, AND that string IS blank (or whitespace).
+ * @param {string} str 
+ * @returns {boolean}
+ * @see {@link isBlank} */
+export const isStringAndBlank = str => isString(str) && isBlank(str);
 
 /** 
  * Checks {@linkcode isStringNotBlank} on the given string. 
