@@ -14,6 +14,7 @@ export class svgGradient extends svg.element {
         rainbow: ['red', 'orange', 'yellow', 'green', 'blue', 'purple'],
         lightrainbow: ['lightcoral', 'sandybrown', 'moccasin', 'lightgreen', 'paleturquoise', 'plum'],
         softrainbow: ['indianred', 'coral', 'khaki', 'mediumseagreen', 'cornflowerblue', 'mediumpurple'],
+        trans: ['skyblue', 'white', 'pink', 'white', 'skyblue'],
     };
 
     /** if true, html outputs `radialGradient`; if false, `linearGradient` @type {boolean} */
