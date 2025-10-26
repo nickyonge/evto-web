@@ -1,18 +1,44 @@
 import { isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
 
+const defaultPath = '../../assets/png/map/';
+const defaultExtension = '.png';
+
+// const gcs = RecursiveProxyObject(AssetPath('gcs'), defaultExtension);
+
 export function testExport() {
     console.log("testing export");
-    console.log(gcs.equator.dotted);
 
     console.log("creating object");
-    let obj = recursiveProxyObject("test", "end", '#');
-    console.log("testing:");
-    console.log("PROCESSING: " + obj.cookie.chocolatechip.mint);
+    // let obj = RecursiveProxyObject("test", "end", '#');
+    let gcs = RecursiveProxyObject(ReferenceAssetPath('gcs'), defaultExtension, '_', true);
+    // let gcs = RecursiveProxyObject('pre', 'post', '.', true);
+    // console.clear();
+    console.log("testing: gcs.complete.equator");
+    // console.log("test: " + obj.cookie.chocolatechip.mint);
+    console.log(gcs.complete.equator); // object
+    console.log(gcs["complete"]["equator"].toString());
+    console.log(testValues(gcs, 'complete', 'equator'));
 }
 
-const defaultAssetExtension = '.png';
+export function GetAssetPath(...assetPath) {
+    assetPath
+}
 
-function Asset(assetFolderReference, assetName, assetExtension = defaultAssetExtension) {
+function testValues(object, ...values) {
+    values = values.flat();
+    return `${values.reduce((acc, key) => acc[key], object)}`;
+}
+
+
+
+
+function ReferenceAssetPath(reference) {
+    switch (reference) {
+        case 'gcs': return `${defaultPath}gcs/gcs-`;
+    }
+}
+
+function Asset(assetFolderReference, assetName, assetExtension = defaultExtension) {
     let assetPath = '';
     switch (assetFolderReference) {
         case 'gcs':
@@ -22,12 +48,12 @@ function Asset(assetFolderReference, assetName, assetExtension = defaultAssetExt
     return `${assetPath}${assetName}${assetExtension}`
 }
 
-const gcs = {
-    complete: Asset('gcs', 'complete'),
-    equator: {
-        dotted: Asset('gcs', 'equator_dotted')
-    }
-}
+// const gcs = {
+//     complete: Asset('gcs', 'complete'),
+//     equator: {
+//         dotted: Asset('gcs', 'equator_dotted')
+//     }
+// }
 
 /**
  * Take symbol values and recursively convert it to a string, or nested object
@@ -40,15 +66,15 @@ const gcs = {
  * let myObject = recursiveProxyObject()
  * console.log()
  */
-function recursiveProxyObject(prefix = '', suffix = '', separator = '.', returnAsString = true, __path = []) {
+function RecursiveProxyObject(prefix = '', suffix = '', separator = '.', returnAsString = true, __path = []) {
     return new Proxy({}, {
         get(_, property) {
-            // porperty type conversion, check to return final output 
+            // porperty type conversion, in case of direct string casting+primitive, check to return final output 
             if (property === Symbol.toPrimitive || property === 'toString' || property === 'valueOf') {
-                const result = `${ReturnStringNotBlank(prefix,null,separator)}${__path.join(separator)}${ReturnStringNotBlank(suffix,separator)}`;
-                return () => (returnAsString ? String(result) : result);
+                const result = `${ReturnStringNotBlank(prefix)}${__path.join(separator)}${ReturnStringNotBlank(suffix)}`;
+                return () => (result);
             }
-            return recursiveProxyObject(prefix, suffix, separator, returnAsString, [...__path, property]);
+            return RecursiveProxyObject(prefix, suffix, separator, returnAsString, [...__path, property]);
         }
     });
 }

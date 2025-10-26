@@ -6,6 +6,7 @@ import { DisconnectObserver, StartObservation } from './mutationObserver';
 import Coloris from "@melloware/coloris";
 import { BasicComponent } from './components/base';
 import { GetParentWithClass } from './lilutils';
+import { testExport } from './assetExporter';
 
 import { GenerateCSS as ComponentsCSS } from './components';
 
@@ -20,6 +21,8 @@ window.addEventListener('load', function () {
     BuildUI();
     SetupDataWindow();
     SetupArtWindow();
+
+    testExport();
 
     // load complete 
 
