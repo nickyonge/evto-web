@@ -174,47 +174,78 @@ export class svgElement {
      * Can handle single {@link svg.onChange onChange} method assignments, or
      * {@link svg.onChange onChange[]} arrays (including nested arrays).
      * 
-     * **NOTE:** convenience setter! See {@linkcode onChangeCallbacks} for all
-     * callbacks, or {@linkcode hasOnChange} to check if any callback is added.
-     * This setter has no equivalent getter. 
-     * @param {svg.onChange | svg.onChange[]} onChangeMethod {@link svg.onChange onChange} method to call
-     * @param {string} valueChanged The name of the value that was changed 
-     * @param {any} newValue The newly assigned value 
-     * @param {any} previousValue The old value, for reference  
-     * @param {svgElement} changedElement The {@link svgElement} that was changed 
+     * **NOTE:** convenience setter! Passes value to {@linkcode AddOnChangeCallback}. 
+     * See {@linkcode onChangeCallbacks} for all callbacks, or {@linkcode hasOnChange} 
+     * to check if any callback is added. This setter has no getter. 
+     * @param {svg.onChange | svg.onChange[]} onChangeCallback {@link svg.onChange onChange} method to call
+     * @param {string} valueChanged Callback param: The name of the value that was changed 
+     * @param {any} newValue Callback param: The newly assigned value 
+     * @param {any} previousValue Callback param: The old value, for reference  
+     * @param {svgElement} changedElement Callback param: The {@link svgElement} that was changed 
      */
-    set onChange(onChangeMethod) {
+    set onChange(onChangeCallback) {
+        this.AddOnChangeCallback(onChangeCallback);
+    };
+
+    /**
+     * Set a callback for when a value in this {@link svgElement} has changed. 
+     * 
+     * Returns the full {@linkcode onChangeCallbacks} array. Passing a `null` value
+     * will reset {@linkcode onChangeCallbacks} to `[]`, clearing all callbacks. 
+     * (Specifically passing `undefined` will output a console warning.)
+     * 
+     * Can handle single {@link svg.onChange onChange} method assignments, or
+     * {@link svg.onChange onChange[]} arrays (including nested arrays).
+     * @param {svg.onChange | svg.onChange[]} onChangeCallback {@link svg.onChange onChange} method to call
+     * @param {string} valueChanged Callback param: The name of the value that was changed 
+     * @param {any} newValue Callback param: The newly assigned value 
+     * @param {any} previousValue Callback param: The old value, for reference  
+     * @param {svgElement} changedElement Callback param: The {@link svgElement} that was changed 
+     */
+    AddOnChangeCallback(onChangeCallback) {
         // if setting null, reset methods 
-        if (onChangeMethod == null) { this.onChangeCallbacks = []; return; }
+        if (onChangeCallback == null) {
+            if (onChangeCallback === undefined) {
+                console.warn("Assigning undefined onChangeCallback. " +
+                    "Will reset all onChangeCallbacks on this element, " +
+                    "but set null - not undefined - to avoid this warning, " +
+                    "in case of unintentional callback clearing.", this);
+            }
+            this.onChangeCallbacks = []; return;
+        }
         // ensure onChangeCallbacks array exsts 
         if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; }
         // check if adding array or individual methods 
-        if (Array.isArray(onChangeMethod)) {
-            for (let i = 0; i < onChangeMethod.length; i++) {
-                if (onChangeMethod[i] == null) { continue; }
-                if (Array.isArray(onChangeMethod[i])) {
+        if (Array.isArray(onChangeCallback)) {
+            for (let i = 0; i < onChangeCallback.length; i++) {
+                if (onChangeCallback[i] == null) { continue; }
+                if (Array.isArray(onChangeCallback[i])) {
                     // handle nested arrays 
-                    this.onChange = onChangeMethod[i];
+                    this.onChange = onChangeCallback[i];
                     continue;
                 }
                 // check if function - if so, add 
-                if (typeof onChangeMethod[i] === 'function') {
-                    if (!this.onChangeCallbacks.contains(onChangeMethod)) {
-                        this.onChangeCallbacks.push(onChangeMethod);
+                if (typeof onChangeCallback[i] === 'function') {
+                    if (!this.onChangeCallbacks.contains(onChangeCallback)) {
+                        this.onChangeCallbacks.push(onChangeCallback);
                     }
                 } else {
-                    console.warn(`WARNING: can't add value ${onChangeMethod[i]} of invalid type ${typeof onChangeMethod[i]} to onChange callback array (via array)`, onChangeMethod, this);
+                    console.warn(`WARNING: can't add value ${onChangeCallback[i]} of invalid type ${typeof onChangeCallback[i]} to onChange callback array (via array), must be function`, onChangeCallback, this);
                 }
             }
-        } else if (typeof onChangeMethod === 'function') {
-            if (!this.onChangeCallbacks.contains(onChangeMethod)) {
-                this.onChangeCallbacks.push(onChangeMethod);
+        } else if (typeof onChangeCallback === 'function') {
+            if (!this.onChangeCallbacks.contains(onChangeCallback)) {
+                this.onChangeCallbacks.push(onChangeCallback);
             }
         } else {
-            console.warn(`WARNING: can't add value ${onChangeMethod} of invalid type ${typeof onChangeMethod} to onChange callback array`, this);
+            console.warn(`WARNING: can't add value ${onChangeCallback} of invalid type ${typeof onChangeCallback} to onChange callback array, must be function`, this);
         }
-    };
+    }
 
+    /**
+     * Does this {@link svgElement} have any {@link svg.onChange onChange} callbacks in the {@linkcode onChangeCallbacks} array?
+     * @returns {boolean}
+     */
     get hasOnChange() { return this.onChangeCallbacks != null && this.onChangeCallbacks.length > 0; }
 
     /** 

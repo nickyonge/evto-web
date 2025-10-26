@@ -63,9 +63,7 @@ export class ImageField extends TitledComponent {
         let newSVG = ui.CreateDiv();
         this.#prepareHTMLElementImage(newSVG, canvasSized, zSort, ...extraClasses);
         this.div.appendChild(newSVG);
-        if (svgAsset.onChange == null) {
-            svgAsset.onChange = function () { newSVG.innerHTML = svgAsset.html; }
-        }
+        svgAsset.onChange = function () { newSVG.innerHTML = svgAsset.html; };
         newSVG.innerHTML = svgAsset.html;
         return true;
     }
@@ -105,6 +103,7 @@ export class ImageField extends TitledComponent {
     CreateDemoSVG() {
         if (this.#_demoSvgRect == null) {
             this.#_demoSvgRect = BasicGradientRect('skyblue', 'white', 'pink');
+            this.#_demoSvgRect.onChange = function () { console.log("CHANGED"); }
             this.addSVG(this.#_demoSvgRect);
         }
         return this.#_demoSvgRect;
