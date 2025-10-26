@@ -66,7 +66,7 @@ export function SelectSize(selectedSize) {
  * @param {HTMLElement} page element of the given page that was just opened 
  * @param {boolean} [wasSnapped] was the page snap displayed (t) or regular transition (f)
  * 
- * NOTE: iterative call on all pages. It may come BEFORE OR AFTER `PageClosed`
+ * **NOTE:** iterative call on all pages. It may come BEFORE OR AFTER `PageClosed`
  */
 export function PageOpened(page, wasSnapped) {
     switch (page.id) {
@@ -88,7 +88,7 @@ export function PageOpened(page, wasSnapped) {
  * 
  * @param {HTMLElement} page element of the given page that was just closed 
  * 
- * NOTE: iterative call on all pages. It may come BEFORE OR AFTER `PageOpened`
+ * **NOTE:** iterative call on all pages. It may come BEFORE OR AFTER `PageOpened`
  */
 export function PageClosed(page) {
     switch (page.id) {

@@ -172,7 +172,7 @@ export function StringToNumber(str, parseToInt = false) {
 /**
  * Ensures a numeric string does not exceed the given number of decimal places.
  * 
- * Note: does NOT round the string. If you want it rounded, use {@link StringToNumber} and {@link Number.toMax toMax}.
+ * **NOTE:** does NOT round the string. If you want it rounded, use {@link StringToNumber} and {@link Number.toMax toMax}.
  * @param {string} str 
  * @param {number} [maxDecimals=3] 
  * @param {boolean} [preProcessStringToNumeric=true] 

@@ -171,10 +171,13 @@ export class svgElement {
     /**
      * Set a callback for when a value in this {@link svgElement} has changed.
      * 
-     * NOTE: convenience setter! See {@linkcode onChangeCallbacks} for all
+     * Can handle single {@link svg.onChange onChange} method assignments, or
+     * {@link svg.onChange onChange[]} arrays (including nested arrays).
+     * 
+     * **NOTE:** convenience setter! See {@linkcode onChangeCallbacks} for all
      * callbacks, or {@linkcode hasOnChange} to check if any callback is added.
-     * @type {svg.onChange} see {@link svg.onChange onChange}
-     * @param {svg.onChange} onChangeMethod {@link svg.onChange onChange} method to call
+     * This setter has no equivalent getter. 
+     * @param {svg.onChange | svg.onChange[]} onChangeMethod {@link svg.onChange onChange} method to call
      * @param {string} valueChanged The name of the value that was changed 
      * @param {any} newValue The newly assigned value 
      * @param {any} previousValue The old value, for reference  
@@ -204,8 +207,9 @@ export class svgElement {
                 }
             }
         } else if (typeof onChangeMethod === 'function') {
-            if (this.onChangeCallbacks.contains(onChangeMethod)) { return; }
-            this.onChangeCallbacks.push(onChangeMethod);
+            if (!this.onChangeCallbacks.contains(onChangeMethod)) {
+                this.onChangeCallbacks.push(onChangeMethod);
+            }
         } else {
             console.warn(`WARNING: can't add value ${onChangeMethod} of invalid type ${typeof onChangeMethod} to onChange callback array`, this);
         }
@@ -216,13 +220,13 @@ export class svgElement {
     /** 
      * Array of all {@link svg.onChange onChange} methods to call on ths {@link svgElement}, whenever a local change occurs.
      * 
-     * Note that changing this array or its values itself does NOT invoke a change.
+     * **NOTE:** Changing this array or its values itself does NOT invoke a change.
      * @type {@link svg.onChange[]} 
      * */
     onChangeCallbacks = [];
 
     /**
-     * DO NOT USE.  
+     * ***Do not use.*** 
      * 
      * Used internally to invoke a change in this {@link svgElement},
      * including changes bubbled up from subclasses.
@@ -233,15 +237,15 @@ export class svgElement {
      * @returns 
      */
     __invokeChange(valueChanged, newValue, previousValue, changedElement = undefined) {
-        console.log("invoke change, array cont: " + this.onChangeCallbacks.length);
-        if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; console.log("RETURNING EMPTY ARRAY"); return; }
+        if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; return; }
         for (let i = 0; i < this.onChangeCallbacks.length; i++) {
+            if (typeof this.onChangeCallbacks[i] !== 'function') { continue; }
             this.onChangeCallbacks[i]?.(valueChanged, newValue, previousValue, changedElement == null ? this : changedElement);
         }
     }
 
     /**
-     * DO NOT USE.  
+     * ***Do not use.*** 
      * 
      * Used internally to prevent multiple {@linkcode onChange} calls 
      * when modifying one property that itself modifies multiple.

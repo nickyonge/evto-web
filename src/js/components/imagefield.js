@@ -64,8 +64,7 @@ export class ImageField extends TitledComponent {
         this.#prepareHTMLElementImage(newSVG, canvasSized, zSort, ...extraClasses);
         this.div.appendChild(newSVG);
         if (svgAsset.onChange == null) {
-            console.log("HELLO");
-            svgAsset.onChange = function () { console.log("TEST"); newSVG.innerHTML = svgAsset.html; }
+            svgAsset.onChange = function () { newSVG.innerHTML = svgAsset.html; }
         }
         newSVG.innerHTML = svgAsset.html;
         return true;

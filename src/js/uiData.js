@@ -97,7 +97,7 @@ function CreateTabs() {
 /**
  * Creates the individual pages for the data window.
  * 
- * NOTE: See `uiDataPageBase.js` for creation of the actual content 
+ * **NOTE:** See `uiDataPageBase.js` for creation of the actual content 
  * in the pages themselves (text, buttons, sliders, graphics, etc)
  */
 function CreatePages() {

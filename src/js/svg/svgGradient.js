@@ -33,7 +33,10 @@ export class svgGradient extends svg.element {
     get scale() { return this.#_scale; }
     set scale(v) { let prev = this.#_scale; this.#_scale = v; this.#changed('scale', v, prev); }
     #_scale = svg.defaults.GRADIENT_SCALE;
-    /** angle, in degrees, a linear gradient should be rotated by. Does not affect radial gradients. @type {number} */
+    /** angle, in degrees, a linear gradient should be rotated by. Does not affect radial gradients. 
+     * 
+     * **NOTE:** also affects xy12 properties, but only invokes {@link svg.element.onChange} once, for property `angle`. 
+     * @type {number} */
     get angle() { return this.#_angle; }
     set angle(v) { let prev = this.#_angle; this.#_angle = v; this.#changed('angle', v, prev); }
     #_angle = svg.defaults.GRADIENT_ANGLE;
@@ -378,10 +381,12 @@ export class svgGradient extends svg.element {
     /**
      * get/set X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient).
      * - Get: returns four-number array, `[x1, y1, x2, y2]`
-     * - Set: set by one of the following (note: `null` values are accepted): 
+     * - Set: set by one of the following: 
      *   - number `[x1, y1, x2, y2]`
      *   - comma-split string `"x1,x2,y1,y2"`
      *   - XY {@link toPoint point} objects array `[{x:x1,y:y1},{x:x2,y:y2}]`
+     * 
+     * **NOTE:** `null` setter values are accepted 
      * @returns {[number,number,number,number]}
      */
     get xy12() { return [this.x1, this.y1, this.x2, this.y2]; }
@@ -421,10 +426,12 @@ export class svgGradient extends svg.element {
     /**
      * get/set FX/Y and CX/Y values (or X1/2 and Y1/2 on radial gradient).
      * - Get: returns four-number array, `[fx, fy, cx, cy]`
-     * - Set: set by one of the following (note: `null` values are accepted): 
+     * - Set: set by one of the following: 
      *   - number `[fx, fy, cx, cy]`
      *   - comma-split string `"fx,cx,fy,cy"`
      *   - XY {@link toPoint point} objects array `[{x:fx,y:fy},{x:cx,y:cy}]`
+     * 
+     * **NOTE:** `null` setter values are accepted 
      * @returns {[number,number,number,number]}
      */
     get fcxy() { return this.xy12; }
