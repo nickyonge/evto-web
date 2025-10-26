@@ -50,6 +50,13 @@ export class svgGradient extends svg.element {
     set anglePivotPoint(v) { let prev = this.#_anglePivotPoint; this.#_anglePivotPoint = v; this.#changed('anglePivotPoint', v, prev); }
     #_anglePivotPoint = svg.defaults.GRADIENT_ANGLEPIVOTPOINT;
 
+    /** Overall opacity for this gradient. 
+     * Multiplied to the opacity of each {@link svgGradientStop} in {@link stops}.
+     * Should typically be between values 0-1, `null` is considered 1. */
+    get opacity() { return this.#_opacity; }
+    set opacity(v) { let prev = this.#_opacity; this.#_opacity = v; this.#changed('opacity', v, prev); }
+    #_opacity = svg.defaults.GRADIENT_OPACITY;
+
     get x1() { return this.#_x1; }
     set x1(v) { let prev = this.#_x1; this.#_x1 = v; this.#changed('x1', v, prev); }
     #_x1 = svg.defaults.GRADIENT_X1;
@@ -573,6 +580,10 @@ class svgGradientStop extends svg.element {
     get color() { return this.#_color; }
     set color(v) { let prev = this.#_color; this.#_color = v; this.#changed('color', v, prev); }
     #_color = svg.defaults.GRADIENT_STOP_COLOR;
+    /** 
+     * Get/set opacity of this gradient. Should be between 0-1. Null = 1.
+     * Multiplied with the {@link parent} gradent {@link svgGradient.opacity opacity}, if its value is assigned. 
+     * @see {@linkcode opacityInherited this.opacityInherited} for opacity value that also accounts for parent opacity.*/
     get opacity() { return this.#_opacity; }
     set opacity(v) { let prev = this.#_opacity; this.#_opacity = v; this.#changed('opacity', v, prev); }
     #_opacity = svg.defaults.GRADIENT_STOP_OPACITY;
@@ -607,9 +618,32 @@ class svgGradientStop extends svg.element {
     get data() {
         return this.ParseData([
             ['stop-color', this.color],
-            ['stop-opacity', this.opacity],
+            ['stop-opacity', this.opacityInherited],
             ['offset', this.offset]
         ]);
+    }
+
+    /**
+     * Gets this stop's opacity, and also multiplies it by the 
+     * {@link parent} gradent {@link svgGradient.opacity opacity},
+     * as needed. 
+     * 
+     * Returns `null` if the opacity value is exactly 1, because
+     * 1 is the implied default value. This will return `null` even if 
+     * opacity value is assigned to 1, and even as a result of the parent
+     * opacity calculation. (Eg, if stop opacity is 0.5 and parent 
+     * opacity is 2, the result will be 1, and this will return `null`.)
+     * @returns {Number|null}
+     */
+    get opacityInherited() {
+        function calculateInheritedOpacity(opacity, parentOpacity) {
+            if (parentOpacity == null || parentOpacity == 1 ||
+                (typeof parentOpacity)?.toLowerCase() !== 'number') { return opacity; }
+            if (opacity == null && (typeof parentOpacity)?.toLowerCase() === 'number') { return parentOpacity; }
+            return opacity * parentOpacity;
+        }
+        let opacity = calculateInheritedOpacity(this.opacity, this.parent?.opacity);
+        return opacity === 1 ? null : opacity;
     }
 
     /**

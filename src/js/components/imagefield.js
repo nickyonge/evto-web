@@ -5,7 +5,7 @@ import { BasicComponent, TitledComponent } from "./base";
 import demoImageSrc from '../../assets/png/demo-paintings/demopainting1.png';
 import { svgGradient } from "../svg/svgGradient";
 import { svgElement, svgHTMLAsset } from "../svg/svgElement";
-import { EnsureToNumber, isBlank, isStringAndBlank } from "../lilutils";
+import { EnsureToNumber, isBlank, isStringAndBlank, isStringNotBlank } from "../lilutils";
 
 export class ImageField extends TitledComponent {
 
@@ -31,19 +31,26 @@ export class ImageField extends TitledComponent {
 
     /**
      * Adds an image div to this image container. 
-     * Returns whether or not the image was successfully added.
-     * Will return `false` if imgSrc is null/whitespace
-     * @param {svgHTMLAsset} svgAsset SVG asset to add
-     * @returns {boolean}
+     * Returns the newly-created `HTMLElement` div for the image.
+     * Will return `null` if imgSrc is null/whitespace
+     * @param {string} imgSrc Value to add to the "src" attribute to the new img
+     * @param {string} [alt=null] Alt text to provide to the new img (optional) 
+     * @param {boolean} [canvasSized=true] Assign the `canvasSizedImg` CSS class, forcing 2:1 aspect ratio? Default `true` 
+     * @param {number} [zSort=0] Assignment for z-index CSS class. 0: leave default, >=1: assign class `onTop`, <=0: assign class `onBottom`. Default 0
+     * @param {...string} extraClasses Optional extra classes to add to image  
+     * @returns {HTMLElement|null}
      * @see {@link ui.CreateImage}
      */
     addImage(imgSrc, alt = null, canvasSized = true, zSort = 0, ...extraClasses) {
-        if (!isStringAndBlank(imgSrc)) { return false; }
+        console.log(1);
+        if (!isStringNotBlank(imgSrc)) { return null; }
+        console.log(2);
         let newImg = ui.CreateImage(imgSrc, alt);
         this.#prepareHTMLElementImage(newImg, canvasSized, zSort, ...extraClasses);
         this.div.appendChild(newImg);
         this.#addedImgs.push(newImg);
-        return true;
+        console.log(3);
+        return newImg;
     }
     /**
      * Adds an {@link svgHTMLAsset} to this image container. 
@@ -54,7 +61,7 @@ export class ImageField extends TitledComponent {
      * @param {boolean} [canvasSized=true] Assign the `canvasSizedImg` CSS class, forcing 2:1 aspect ratio? Default `true` 
      * @param {number} [zSort=0] Assignment for z-index CSS class. 0: leave default, >=1: assign class `onTop`, <=0: assign class `onBottom`. Default 0
      * @param {boolean} [allowDuplicates=false] Allow duplicates, if already added? Default `false`
-     * @param {...string} extraClasses Optional extra classes to add to string 
+     * @param {...string} extraClasses Optional extra classes to add to SVG 
      * @returns {boolean}
      */
     addSVG(svgAsset, onChangeCallback = null, canvasSized = true, zSort = 0, allowDuplicates = false, ...extraClasses) {
@@ -64,6 +71,9 @@ export class ImageField extends TitledComponent {
         this.#prepareHTMLElementImage(newSVG, canvasSized, zSort, ...extraClasses);
         this.div.appendChild(newSVG);
         svgAsset.onChange = function () { newSVG.innerHTML = svgAsset.html; };
+        if (onChangeCallback != null && typeof onChangeCallback === 'function') {
+            svgAsset.onChange = onChangeCallback;
+        }
         newSVG.innerHTML = svgAsset.html;
         return true;
     }
@@ -85,35 +95,28 @@ export class ImageField extends TitledComponent {
     }
 
     CreateDemoImage() {
+        console.log("creating demo image");
         // TODO: finish create demo image / demo SVG in imageField 
         // Issue URL: https://github.com/nickyonge/evto-web/issues/59
-        // this.#image = ui.CreateDivWithClass('image', 'canvasSizedImg');
-        // this.#image = ui.CreateImageWithClasses(demoImage, 'Demo image', 'image', 'canvasSizedImg', 'onTop');
-        // // this.div.appendChild(this.#image);
-
-        // let gradientRect = BasicGradientRect(svgGradient.templates.bw);
-        // this.addSVG(gradientRect);
-        // gradientRect.gradient = svgGradient.templates.softrainbow;
-
-
-        // let rainbow = BasicGradientRect(svgGradient.templates.softrainbow);
-        // this.#image.innerHTML = rainbow.html;
-
+        if (this.#_demoImage == null) {
+            this.#_demoImage = this.addImage(demoImageSrc, 'Demo Image');
+        }
+        return this.#_demoImage;
     }
     CreateDemoSVG() {
         if (this.#_demoSvgRect == null) {
             this.#_demoSvgRect = BasicGradientRect('skyblue', 'white', 'pink');
-            this.#_demoSvgRect.onChange = function () { console.log("CHANGED"); }
             this.addSVG(this.#_demoSvgRect);
         }
         return this.#_demoSvgRect;
     }
 
     get demoImage() {
-        if (this.#_demoImage == null) {
-            this.#_demoImage = ui.CreateImageWithClasses(this.demoImage, )
-        }
-        return this.#_demoImage;
+        // if (this.#_demoImage == null) {
+        //     this.#_demoImage = ui.CreateImageWithClasses(this.demoImage, )
+        // }
+        // return this.#_demoImage;
+        return this.CreateDemoImage();
     }
 
     get demoSVG() {
