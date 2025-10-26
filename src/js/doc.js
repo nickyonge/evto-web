@@ -403,6 +403,19 @@ Array.prototype.containsAll = function (...value) {
 /** Call `flat()` on arrays processed in {@linkcode Array.prototype.containsAny containsAny} and {@linkcode Array.prototype.containsAll containsAll}? @returns {boolean} */
 const FLATTEN_CONTAINS = true;
 
+/**
+ * Removes all `null` and `undefined` values from this array.
+ * @returns {number}
+ * @type {() => number}
+ * */
+Array.prototype.removeNullValues = function () {
+    let removedCount = 0;
+    for (let i = this.length - 1; i >= 0; i--) {
+        if (this[i] == null) { this.splice(i, 1); removedCount++; }
+    }
+    return removedCount;
+}
+
 
 /**
  * Returns a clone of this array, either using `Array.from()` or `structuredClone`.
@@ -432,7 +445,7 @@ Array.prototype.structuredClone = function () {
  * @template T 
  * @borrows structuredClone as deepClone
  */
-Array.prototype.deepClone = function() {
+Array.prototype.deepClone = function () {
     return this.structuredClone();
 }
 

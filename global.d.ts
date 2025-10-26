@@ -50,6 +50,14 @@ declare global {
         containsAll: (...value: T[]) => boolean;
 
         /**
+         * Removes all `null` and `undefined` values from this array. 
+         * Returns the number of values removed.
+         * @returns {number}
+         * @type {(): number}
+         */
+        removeNullValues: () => number;
+
+        /**
          * Callback invoked whenever a {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array#copying_methods_and_mutating_methods mutating} 
          * method is called on an array - that is, a method that directly modifies
          * the given array, and doesn't simply reference it (eg, `find()`) or that
