@@ -43,14 +43,11 @@ export class ImageField extends TitledComponent {
      * @see {@link ui.CreateImage}
      */
     addImage(imgSrc, alt = null, canvasSized = true, zSort = 0, ...extraClasses) {
-        console.log(1);
         if (!isStringNotBlank(imgSrc)) { return null; }
-        console.log(2);
         let newImg = ui.CreateImage(imgSrc, alt);
         this.#prepareHTMLElementImage(newImg, canvasSized, zSort, ...extraClasses);
         this.div.appendChild(newImg);
         this.#addedImgs.push(newImg);
-        console.log(3);
         return newImg;
     }
     /**
