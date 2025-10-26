@@ -55,13 +55,7 @@ export function CreatePagePattern(page) {
 function CreatePatternSection(section) {
     let patternImage = new cmp.ImageField();
     section.appendChild(patternImage);
-    patternImage.CreateDemoImage();
-    let patternSVG = svgHTMLAsset.BasicGradientRect(svgGradient.templates.softrainbow);
-    patternSVG.gradient.stops.forEach(stop => {
-        stop.opacity = Math.random();
-    });
-    patternSVG.gradient.opacity = 2;
-    patternImage.addSVG(patternSVG);
+    patternImage.CreateDemoImageAndSVG();
 }
 function CreateColorsSection(section) {
 

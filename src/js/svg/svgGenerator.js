@@ -6,9 +6,12 @@ const FANCYBOX_MAX_SPLITS = 3;
 const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
 
 /** Generate a basic rectangle with a gradient of the given colors, with all default values.
- * @param  {...any} colors Array of colors to generate the gradient with
+ * @param  {...string} colors Optional array of colors to generate the gradient with
  * @returns {svg.asset} new instance of {@linkcode svg.asset svgHTMLAsset} */
 export function BasicGradientRect(...colors) {
+    if (colors == null || !Array.isArray(colors)) { colors = []; }
+    colors.removeNullValues();
+    if (colors.length == 0) { colors = svg.gradient.templates.softrainbow; }
     let svgAsset = new asset();
     svgAsset.NewRect(svg.defaults.X, svg.defaults.Y, svg.defaults.WIDTH, svg.defaults.HEIGHT, svgAsset.NewGradient(null, svg.defaults.GRADIENT_ISRADIAL, ...colors).idURL);
     return svgAsset;

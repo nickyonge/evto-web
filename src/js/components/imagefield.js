@@ -18,6 +18,7 @@ export class ImageField extends TitledComponent {
     }
 
     #_demoImage;
+    /** @type {svgHTMLAsset} */
     #_demoSvgRect;
 
     IsSVGAdded(svgAsset) {
@@ -94,32 +95,27 @@ export class ImageField extends TitledComponent {
         if (extraClasses != null) { ui.AddClassesToDOM(e, ...extraClasses); } // extra classes 
     }
 
+    CreateDemoImageAndSVG() {
+        this.CreateDemoImage();
+        let svg = this.CreateDemoSVG(svgGradient.templates.trans);
+        svg.gradient.opacity = 0.69;
+        svg.gradient.sharpness = 0.69;
+    }
+
     CreateDemoImage() {
-        console.log("creating demo image");
-        // TODO: finish create demo image / demo SVG in imageField 
-        // Issue URL: https://github.com/nickyonge/evto-web/issues/59
         if (this.#_demoImage == null) {
             this.#_demoImage = this.addImage(demoImageSrc, 'Demo Image');
         }
         return this.#_demoImage;
     }
-    CreateDemoSVG() {
+    CreateDemoSVG(...colors) {
         if (this.#_demoSvgRect == null) {
-            this.#_demoSvgRect = BasicGradientRect('skyblue', 'white', 'pink');
+            this.#_demoSvgRect = BasicGradientRect(...colors);
             this.addSVG(this.#_demoSvgRect);
         }
         return this.#_demoSvgRect;
     }
 
-    get demoImage() {
-        // if (this.#_demoImage == null) {
-        //     this.#_demoImage = ui.CreateImageWithClasses(this.demoImage, )
-        // }
-        // return this.#_demoImage;
-        return this.CreateDemoImage();
-    }
-
-    get demoSVG() {
-        return this.CreateDemoSVG();
-    }
+    get demoImage() { return this.CreateDemoImage(); }
+    get demoSVG() { return this.CreateDemoSVG(); }
 }
