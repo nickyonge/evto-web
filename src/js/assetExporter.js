@@ -3,6 +3,73 @@ import { isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
 const defaultPath = '../../assets/png/map/';
 const defaultExtension = '.png';
 
+/*
+Enum images tree (to replace arbitrary recursive proxy obj stuff)
+
+╔═══════╗   
+║  map  ║     
+╚═══╤═══╝   
+    │       
+    ├─gcs 
+    │   ├─complete » .............................. gcs-complete.png
+    │   ├─equator » ............................... gcs-equator_solid.png
+    │   │   ├─dotted » ............................ gcs-equator_dotted.png
+    │   │   ├─solid » ............................. gcs-equator_solid.png
+    │   │   └─tropics_polarcircles » .............. gcs-equator_tropics_polar_circles.png
+    │   ├─latitude » .............................. gcs-latitude.png
+    │   │   ├─equator_dotted » .................... gcs-latitude_with_dotted_equator.png
+    │   │   └─tropics_polarcircles » .............. gcs-latitude_with_tropics_and_polar_circles.png
+    │   ├─latlong » ............................... gcs-latlong.png
+    │   │   ├─dotted_15deg » ...................... gcs-latlong_15deg_dotted.png
+    │   │   ├─dotted_30deg » ...................... gcs-latlong_30deg_dotted.png
+    │   │   └─dotted_equator_meridians » .......... gcs-latlong_with_dotted_equator_meridians.png
+    │   ├─longitude » ............................. gcs-longitude.png
+    │   │   └─dotted_meridians » .................. gcs-longitude_with_dotted_meridians.png
+    │   ├─tropics » ............................... gcs-tropics.png
+    │   │   └─polarcircles » ...................... gcs-tropics_and_polar_circles.png
+    │   │       └─equator » ....................... gcs-equator_tropics_polar_circles.png
+    │   └─polarcircles » .......................... gcs-polar_circles.png
+    │       └─tropics » ........................... gcs-tropics_and_polar_circles.png
+    │           └─equator » ....................... gcs-equator_tropics_polar_circles.png
+    │   
+    ├─labels
+    │   │   ├─ 
+    │   │   └─
+    │   │     └─
+    │   ├─
+    │   ├─
+    │   └─
+    │   
+    ├─land
+    │   │  ├─ 
+    │   │  └─
+    │   │     └─
+    │   ├─
+    │   ├─
+    │   └─
+    │   
+    ├─landlines
+    │   │  ├─ 
+    │   │  └─
+    │   │     └─
+    │   ├─
+    │   ├─
+    │   └─
+    │   
+    └─titlebox
+        ├─border
+        │   ├─combined
+        │   ├─fill
+        │   └─stroke
+        │       ├─black
+        │       └─white
+        └─text  
+            ├─black
+            └─white
+
+*/
+
+
 // const gcs = RecursiveProxyObject(AssetPath('gcs'), defaultExtension);
 
 export function testExport() {
