@@ -10,62 +10,103 @@ Enum images tree (to replace arbitrary recursive proxy obj stuff)
 ║  map  ║     
 ╚═══╤═══╝   
     │       
-    ├─gcs 
-    │   ├─complete » .............................. gcs-complete.png
-    │   ├─equator » ............................... gcs-equator_solid.png
-    │   │   ├─dotted » ............................ gcs-equator_dotted.png
-    │   │   ├─solid » ............................. gcs-equator_solid.png
-    │   │   └─tropics_polarcircles » .............. gcs-equator_tropics_polar_circles.png
-    │   ├─latitude » .............................. gcs-latitude.png
-    │   │   ├─equator_dotted » .................... gcs-latitude_with_dotted_equator.png
-    │   │   └─tropics_polarcircles » .............. gcs-latitude_with_tropics_and_polar_circles.png
-    │   ├─latlong » ............................... gcs-latlong.png
-    │   │   ├─dotted_15deg » ...................... gcs-latlong_15deg_dotted.png
-    │   │   ├─dotted_30deg » ...................... gcs-latlong_30deg_dotted.png
-    │   │   └─dotted_equator_meridians » .......... gcs-latlong_with_dotted_equator_meridians.png
-    │   ├─longitude » ............................. gcs-longitude.png
-    │   │   └─dotted_meridians » .................. gcs-longitude_with_dotted_meridians.png
-    │   ├─tropics » ............................... gcs-tropics.png
-    │   │   └─polarcircles » ...................... gcs-tropics_and_polar_circles.png
-    │   │       └─equator » ....................... gcs-equator_tropics_polar_circles.png
-    │   └─polarcircles » .......................... gcs-polar_circles.png
-    │       └─tropics » ........................... gcs-tropics_and_polar_circles.png
-    │           └─equator » ....................... gcs-equator_tropics_polar_circles.png
+    ├─ gcs 
+    │   ├─ complete » .............................. gcs-complete.png
+    │   ├─ equator » ............................... gcs-equator_dotted.png
+    │   │   ├─ dotted » ............................ gcs-equator_dotted.png
+    │   │   ├─ solid » ............................. gcs-equator_solid.png
+    │   │   └─ tropicsAndPolarCircles » ............ gcs-equator_tropics_polar_circles.png
+    │   ├─ latitude » .............................. gcs-latitude.png
+    │   │   ├─ equator » ........................... gcs-latitude_with_dotted_equator.png
+    │   │   └─ tropicsAndPolarCircles » ............ gcs-latitude_with_tropics_and_polar_circles.png
+    │   ├─ latLong » ............................... gcs-latlong.png
+    │   │   ├─ deg15 » ............................. gcs-latlong_15deg_dotted.png
+    │   │   ├─ deg30 » ............................. gcs-latlong_30deg_dotted.png
+    │   │   └─ equatorAndMeridians » ............... gcs-latlong_with_dotted_equator_meridians.png
+    │   ├─ longitude » ............................. gcs-longitude.png
+    │   │   └─ meridians » ......................... gcs-longitude_with_dotted_meridians.png
+    │   ├─ tropics » ............................... gcs-tropics.png
+    │   │   └─ polarCircles » ...................... gcs-tropics_and_polar_circles.png
+    │   │       └─ equator » ....................... gcs-equator_tropics_polar_circles.png
+    │   └─ polarCircles » .......................... gcs-polar_circles.png
+    │       └─ tropics » ........................... gcs-tropics_and_polar_circles.png
+    │           └─ equator » ....................... gcs-equator_tropics_polar_circles.png
     │   
-    ├─labels
+    ├─ labels
+    │   ├─ gcs
+    │   │   ├─ latitude
+    │   │   │   ├─ deg15  » ........................ 
+    │   │   │   └─ deg30
+    │   │   ├─ latLong
+    │   │   │   ├─ deg15
+    │   │   │   └─ deg30
+    │   │   ├─ longitude
+    │   │   │   ├─ deg15
+    │   │   │   └─ deg30
+    │   │   ├─ meridian
+    │   │   │   ├─ prime
+    │   │   │   ├─ anti
+    │   │   │   └─ full
+    │   │   ├─ polarCircle
+    │   │   │   ├─ antarctic
+    │   │   │   ├─ arctic
+    │   │   │   └─ full
+    │   │   ├─ poles
+    │   │   │   ├─ north
+    │   │   │   ├─ south
+    │   │   │   └─ full
+    │   │   └─ tropic
+    │   │       ├─ capricorn
+    │   │       ├─ cancer
+    │   │       └─ full
+    │   └─ land
+    │       ├─ large 
+    │       ├─ normalized
+    │       └─ relative
+    │   
+    ├─ land
+    │   ├─ d1MajorDetails
+    │   │   ├─ fill
+    │   │   └─ stroke
+    │   ├─ d2MinorDetails
+    │   │   ├─ fill
+    │   │   └─ stroke
+    │   └─ d3TinyDetails
+    │       ├─ fill
+    │       └─ stroke
+    │      
+    │   
+    ├─ landlines
+    │   ├─ 
     │   │   ├─ 
-    │   │   └─
-    │   │     └─
-    │   ├─
-    │   ├─
-    │   └─
+    │   │   │   ├─ 
+    │   │   │   └─ 
+    │   │   └─ 
+    │   │       ├─ 
+    │   │       └─ 
+    │   ├─ 
+    │   └─ 
     │   
-    ├─land
-    │   │  ├─ 
-    │   │  └─
-    │   │     └─
-    │   ├─
-    │   ├─
-    │   └─
-    │   
-    ├─landlines
-    │   │  ├─ 
-    │   │  └─
-    │   │     └─
-    │   ├─
-    │   ├─
-    │   └─
-    │   
-    └─titlebox
-        ├─border
-        │   ├─combined
-        │   ├─fill
-        │   └─stroke
-        │       ├─black
-        │       └─white
-        └─text  
-            ├─black
-            └─white
+    └─ titlebox
+        ├─ border
+        │   ├─ combined
+        │   ├─ fill
+        │   └─ stroke
+        │       ├─ black
+        │       └─ white
+        └─ text  
+            ├─ black
+            └─ white
+
+    │   ├─ 
+    │   │   ├─ 
+    │   │   │   ├─ 
+    │   │   │   └─ 
+    │   │   └─ 
+    │   │       ├─ 
+    │   │       └─ 
+    │   ├─ 
+    │   └─ 
 
 */
 
