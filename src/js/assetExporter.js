@@ -3,157 +3,153 @@ import { isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
 const defaultPath = '../../assets/png/map/';
 const defaultExtension = '.png';
 
-/*
-Enum images tree (to replace arbitrary recursive proxy obj stuff)
-
-╔═══════╗   
-║  map  ║     
-╚═══╤═══╝   
-    │       
-    ├─ gcs 
-    │   ├─ complete » .............................. gcs-complete.png
-    │   ├─ equator » ............................... gcs-equator_dotted.png
-    │   │   ├─ dotted » ............................ gcs-equator_dotted.png
-    │   │   ├─ solid » ............................. gcs-equator_solid.png
-    │   │   └─ tropicsAndPolarCircles » ............ gcs-equator_tropics_polar_circles.png
-    │   ├─ latitude » .............................. gcs-latitude.png
-    │   │   ├─ equator » ........................... gcs-latitude_with_dotted_equator.png
-    │   │   └─ tropicsAndPolarCircles » ............ gcs-latitude_with_tropics_and_polar_circles.png
-    │   ├─ latLong » ............................... gcs-latlong.png
-    │   │   ├─ deg15 » ............................. gcs-latlong_15deg_dotted.png
-    │   │   ├─ deg30 » ............................. gcs-latlong_30deg_dotted.png
-    │   │   └─ equatorAndMeridians » ............... gcs-latlong_with_dotted_equator_meridians.png
-    │   ├─ longitude » ............................. gcs-longitude.png
-    │   │   └─ meridians » ......................... gcs-longitude_with_dotted_meridians.png
-    │   ├─ tropics » ............................... gcs-tropics.png
-    │   │   └─ polarCircles » ...................... gcs-tropics_and_polar_circles.png
-    │   │       └─ equator » ....................... gcs-equator_tropics_polar_circles.png
-    │   └─ polarCircles » .......................... gcs-polar_circles.png
-    │       └─ tropics » ........................... gcs-tropics_and_polar_circles.png
-    │           └─ equator » ....................... gcs-equator_tropics_polar_circles.png
-    │   
-    ├─ labels
-    │   ├─ gcs
-    │   │   ├─ latitude
-    │   │   │   ├─ deg15 » ......................... 
-    │   │   │   └─ deg30 » ......................... 
-    │   │   ├─ latLong
-    │   │   │   ├─ deg15 » ......................... 
-    │   │   │   └─ deg30 » ......................... 
-    │   │   ├─ longitude
-    │   │   │   ├─ deg15 » ......................... 
-    │   │   │   └─ deg30 » ......................... 
-    │   │   ├─ meridian
-    │   │   │   ├─ prime » ......................... 
-    │   │   │   ├─ anti » .......................... 
-    │   │   │   └─ full » .......................... 
-    │   │   ├─ polarCircle
-    │   │   │   ├─ antarctic » ..................... 
-    │   │   │   ├─ arctic » ........................ 
-    │   │   │   └─ full » .......................... 
-    │   │   ├─ poles
-    │   │   │   ├─ north » ......................... 
-    │   │   │   ├─ south » ......................... 
-    │   │   │   └─ full » .......................... 
-    │   │   └─ tropic
-    │   │       ├─ capricorn » ..................... 
-    │   │       ├─ cancer » ........................ 
-    │   │       └─ full » .......................... 
-    │   └─ land
-    │       ├─ large » ............................. 
-    │       ├─ normalized » ........................ 
-    │       └─ relative » .......................... 
-    │   
-    ├─ land
-    │   ├─ d1MajorDetails
-    │   │   ├─ fill » .............................. 
-    │   │   └─ stroke » ............................ 
-    │   ├─ d2MinorDetails
-    │   │   ├─ fill » .............................. 
-    │   │   └─ stroke » ............................ 
-    │   └─ d3TinyDetails
-    │       ├─ fill » .............................. 
-    │       └─ stroke » ............................ 
-    │      
-    │    
-    ├─ landlines
-    │   ├─ horizontal
-    │   │   ├─ d1MajorDetails » .................... 
-    │   │   ├─ d2MinorDetails » .................... 
-    │   │   └─ d3TinyDetails » ..................... 
-    │   ├─ latitudinal
-    │   │   ├─ d1MajorDetails » .................... 
-    │   │   ├─ d2MinorDetails » .................... 
-    │   │   └─ d3TinyDetails » ..................... 
-    │   ├─ longitudinal
-    │   │   ├─ d1MajorDetails » .................... 
-    │   │   ├─ d2MinorDetails » .................... 
-    │   │   └─ d3TinyDetails » ..................... 
-    │   └─ vertical
-    │       ├─ d1MajorDetails » .................... 
-    │       ├─ d2MinorDetails » .................... 
-    │       └─ d3TinyDetails » ..................... 
-    │   
-    └─ titlebox
-        ├─ frame
-        │   ├─ combined
-        │   │   ├─ duck » .......................... 
-        │   │   │   ├─ shadowA » ................... 
-        │   │   │   └─ shadowB » ................... 
-        │   │   ├─ picframe » ...................... 
-        │   │   │   └─ shadow » .................... 
-        │   │   ├─ rounded » ....................... 
-        │   │   │   └─ shadow » .................... 
-        │   │   └─ square » ........................ 
-        │   │       └─ shadow » .................... 
-        │   ├─ fill
-        │   │   ├─ duck » .......................... 
-        │   │   │   ├─ mergedA » ................... 
-        │   │   │   ├─ mergedB » ................... 
-        │   │   │   ├─ shadowA » ................... 
-        │   │   │   └─ shadowB » ................... 
-        │   │   ├─ picframe » ...................... 
-        │   │   │   ├─ merged » .................... 
-        │   │   │   └─ shadow » .................... 
-        │   │   ├─ rounded » ....................... 
-        │   │   │   ├─ merged » .................... 
-        │   │   │   └─ shadow » .................... 
-        │   │   └─ square » ........................ 
-        │   │       ├─ merged » .................... 
-        │   │       └─ shadow » .................... 
-        │   └─ stroke
-        │       ├─ black
-        │       │   ├─ duck » ...................... 
-        │       │   │   ├─ shadowA » ............... 
-        │       │   │   └─ shadowB » ............... 
-        │       │   ├─ picframe » .................. 
-        │       │   │   └─ shadow » ................ 
-        │       │   ├─ rounded » ................... 
-        │       │   │   └─ shadow » ................ 
-        │       │   └─ square » .................... 
-        │       │       └─ shadow » ................ 
-        │       └─ white
-        │           ├─ duck » ...................... 
-        │           │   ├─ shadowA » ............... 
-        │           │   └─ shadowB » ............... 
-        │           ├─ picframe » .................. 
-        │           │   └─ shadow » ................ 
-        │           ├─ rounded » ................... 
-        │           │   └─ shadow » ................ 
-        │           └─ square » .................... 
-        │               └─ shadow » ................ 
-        └─ text  
-            ├─ black
-            │   ├─ body » .......................... 
-            │   ├─ full » .......................... 
-            │   └─ title » ......................... 
-            └─ white
-                ├─ body » .......................... 
-                ├─ full » .......................... 
-                └─ title » ......................... 
-           
-           
-
+/* Images Enum Map
+                                            
+╔═══════╗                                   
+║  map  ║                                   [ src/assets/png/map... ] 
+╚═══╤═══╝                                   
+    │                                       
+    ├─ gcs                                  [ ...map/gcs/ ] 
+    │   ├─ complete » ..................... gcs-complete.png 
+    │   ├─ equator » ...................... gcs-equator_dotted.png 
+    │   │   ├─ dotted » ................... gcs-equator_dotted.png 
+    │   │   ├─ solid » .................... gcs-equator_solid.png 
+    │   │   └─ tropicsAndPolarCircles » ... gcs-equator_tropics_polar_circles.png 
+    │   ├─ latitude » ..................... gcs-latitude.png 
+    │   │   ├─ equator » .................. gcs-latitude_with_dotted_equator.png 
+    │   │   └─ tropicsAndPolarCircles » ... gcs-latitude_with_tropics_and_polar_circles.png 
+    │   ├─ latLong » ...................... gcs-latlong.png 
+    │   │   ├─ deg15 » .................... gcs-latlong_15deg_dotted.png 
+    │   │   ├─ deg30 » .................... gcs-latlong_30deg_dotted.png 
+    │   │   └─ equatorAndMeridians » ...... gcs-latlong_with_dotted_equator_meridians.png 
+    │   ├─ longitude » .................... gcs-longitude.png 
+    │   │   └─ meridians » ................ gcs-longitude_with_dotted_meridians.png 
+    │   ├─ tropics » ...................... gcs-tropics.png 
+    │   │   └─ polarCircles » ............. gcs-tropics_and_polar_circles.png 
+    │   │       └─ equator » .............. gcs-equator_tropics_polar_circles.png 
+    │   └─ polarCircles » ................. gcs-polar_circles.png 
+    │       └─ tropics » .................. gcs-tropics_and_polar_circles.png 
+    │           └─ equator » .............. gcs-equator_tropics_polar_circles.png 
+    │                                       
+    ├─ labels                               [ ...map/labels/ ] 
+    │   ├─ gcs                              
+    │   │   ├─ latitude                     
+    │   │   │   ├─ deg15 » ................ label-gcs_latitude_15deg.png 
+    │   │   │   └─ deg30 » ................ label-gcs_latitude_30deg.png 
+    │   │   ├─ latLong                      
+    │   │   │   ├─ deg15 » ................ label-gcs_latlong_15deg.png 
+    │   │   │   └─ deg30 » ................ label-gcs_latlong_30deg.png 
+    │   │   ├─ longitude                    
+    │   │   │   ├─ deg15 » ................ label-gcs_longitude_15deg.png 
+    │   │   │   └─ deg30 » ................ label-gcs_longitude_30deg.png 
+    │   │   ├─ meridian                     
+    │   │   │   ├─ anti » ................. label-gcs_meridian_antimeridian.png 
+    │   │   │   ├─ full » ................. label-gcs_meridian_full.png 
+    │   │   │   └─ prime » ................ label-gcs_meridian_primemeridian.png 
+    │   │   ├─ polarCircle                  
+    │   │   │   ├─ antarctic » ............ label-gcs_polarcircle_antarctic.png 
+    │   │   │   ├─ arctic » ............... label-gcs_polarcircle_arctic.png 
+    │   │   │   └─ full » ................. label-gcs_polarcircle_full.png 
+    │   │   ├─ poles                        
+    │   │   │   ├─ full » ................. label-gcs_poles_full.png 
+    │   │   │   ├─ north » ................ label-gcs_poles_north.png 
+    │   │   │   └─ south » ................ label-gcs_poles_south.png 
+    │   │   └─ tropic                       
+    │   │       ├─ cancer » ............... label-gcs_tropic_cancer.png 
+    │   │       ├─ capricorn » ............ label-gcs_tropic_capricorn.png 
+    │   │       └─ full » ................. label-gcs_tropic_full.png 
+    │   └─ land                             
+    │       ├─ large » .................... label-land_large.png 
+    │       ├─ normalized » ............... label-land_normalized.png 
+    │       └─ relative » ................. label-land_relative.png 
+    │                                       
+    ├─ land                                 [ ...map/land/ ] 
+    │   ├─ d1MajorDetails                   
+    │   │   ├─ fill » ..................... land-d1major_fill.png 
+    │   │   └─ stroke » ................... land-d1major_stroke.png 
+    │   ├─ d2MinorDetails                   
+    │   │   ├─ fill » ..................... land-d2minor_fill.png 
+    │   │   └─ stroke » ................... land-d2minor_stroke.png 
+    │   └─ d3TinyDetails                    
+    │       ├─ fill » ..................... land-d3tiny_fill.png 
+    │       └─ stroke » ................... land-d3tiny_stroke.png 
+    │                                       
+    ├─ landlines                            [ ...map/landlines/ ] 
+    │   ├─ horizontal                       
+    │   │   ├─ d1MajorDetails » ........... line-horz_d1major.png 
+    │   │   ├─ d2MinorDetails » ........... line-horz_d2minor.png 
+    │   │   └─ d3TinyDetails » ............ line-horz_d3tiny.png 
+    │   ├─ latitudinal                      
+    │   │   ├─ d1MajorDetails » ........... line-lat_d1major.png 
+    │   │   ├─ d2MinorDetails » ........... line-lat_d2minor.png 
+    │   │   └─ d3TinyDetails » ............ line-lat_d3tiny.png 
+    │   ├─ longitudinal                     
+    │   │   ├─ d1MajorDetails » ........... line-long_d1major.png 
+    │   │   ├─ d2MinorDetails » ........... line-long_d2minor.png 
+    │   │   └─ d3TinyDetails » ............ line-long_d3tiny.png 
+    │   └─ vertical                         
+    │       ├─ d1MajorDetails » ........... line-vert_d1major.png 
+    │       ├─ d2MinorDetails » ........... line-vert_d2minor.png 
+    │       └─ d3TinyDetails » ............ line-vert_d3tiny.png 
+    │                                       
+    └─ titlebox                             [ ...map/titlebox/... ] 
+        ├─ frame                            
+        │   ├─ combined                     [ ...titlebox/frame_combined ] 
+        │   │   ├─ duck » ................. titlebox-frame_combined_duck.png 
+        │   │   │   ├─ shadowA » .......... titlebox-frame_combined_duck_shadow.png 
+        │   │   │   └─ shadowB » .......... titlebox-frame_combined_duck_shadow_alt.png 
+        │   │   ├─ picframe » ............. titlebox-frame_combined_picframe.png 
+        │   │   │   └─ shadow » ........... titlebox-frame_combined_picframe_shadow.png 
+        │   │   ├─ rounded » .............. titlebox-frame_combined_rounded.png 
+        │   │   │   └─ shadow » ........... titlebox-frame_combined_rounded_shadow.png 
+        │   │   └─ square » ............... titlebox-frame_combined_square.png 
+        │   │       └─ shadow » ........... titlebox-frame_combined_square_shadow.png 
+        │   ├─ fill                         [ ...titlebox/frame_fill ] 
+        │   │   ├─ duck » ................. titlebox-frame_fill_duck.png 
+        │   │   │   ├─ mergedA » .......... titlebox-frame_fill_duck_merged.png 
+        │   │   │   ├─ mergedB » .......... titlebox-frame_fill_duck_merged_alt.png 
+        │   │   │   ├─ shadowA » .......... titlebox-frame_fill_duck_shadow.png 
+        │   │   │   └─ shadowB » .......... titlebox-frame_fill_duck_shadow_alt.png 
+        │   │   ├─ picframe » ............. titlebox-frame_fill_picframe.png 
+        │   │   │   ├─ merged » ........... titlebox-frame_fill_picframe.png 
+        │   │   │   └─ shadow » ........... titlebox-frame_fill_picframe_shadow.png 
+        │   │   ├─ rounded » .............. titlebox-frame_fill_rounded.png 
+        │   │   │   ├─ merged » ........... titlebox-frame_fill_rounded.png 
+        │   │   │   └─ shadow » ........... titlebox-frame_fill_rounded_shadow.png 
+        │   │   └─ square » ............... titlebox-frame_fill_square.png 
+        │   │       ├─ merged » ........... titlebox-frame_fill_square.png 
+        │   │       └─ shadow » ........... titlebox-frame_fill_square_shadow.png 
+        │   └─ stroke                       
+        │       ├─ black                    [ ...titlebox/frame_stroke_black ]
+        │       │   ├─ duck » ............. titlebox-frame_stroke_duck.png 
+        │       │   │   ├─ shadowA » ...... titlebox-frame_stroke_duck_shadow.png 
+        │       │   │   └─ shadowB » ...... titlebox-frame_stroke_duck_shadow_alt.png 
+        │       │   ├─ picframe » ......... titlebox-frame_stroke_picframe.png 
+        │       │   │   └─ shadow » ....... titlebox-frame_stroke_picframe_shadow.png 
+        │       │   ├─ rounded » .......... titlebox-frame_stroke_rounded.png 
+        │       │   │   └─ shadow » ....... titlebox-frame_stroke_rounded_shadow.png 
+        │       │   └─ square » ........... titlebox-frame_stroke_square.png 
+        │       │       └─ shadow » ....... titlebox-frame_stroke_square_shadow.png 
+        │       └─ white                    [ ...titlebox/frame_stroke_white ]
+        │           ├─ duck » ............. titlebox-frame_stroke_duck.png 
+        │           │   ├─ shadowA » ...... titlebox-frame_stroke_duck_shadow.png 
+        │           │   └─ shadowB » ...... titlebox-frame_stroke_duck_shadow_alt.png 
+        │           ├─ picframe » ......... titlebox-frame_stroke_picframe.png 
+        │           │   └─ shadow » ....... titlebox-frame_stroke_picframe_shadow.png 
+        │           ├─ rounded » .......... titlebox-frame_stroke_rounded.png 
+        │           │   └─ shadow » ....... titlebox-frame_stroke_rounded_shadow.png 
+        │           └─ square » ........... titlebox-frame_stroke_square.png 
+        │               └─ shadow » ....... titlebox-frame_stroke_square_shadow.png 
+        └─ text                             
+            ├─ black                        [ .../text_black ]
+            │   ├─ body » ................. titlebox-text_body.png 
+            │   ├─ full » ................. titlebox-text_full.png 
+            │   └─ title » ................ titlebox-text_title.png 
+            └─ white                        [ .../text_white ]
+                ├─ body » ................. titlebox-text_body.png 
+                ├─ full » ................. titlebox-text_full.png 
+                └─ title » ................ titlebox-text_title.png 
+                                            
 */
 
 
