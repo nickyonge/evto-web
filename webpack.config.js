@@ -90,112 +90,126 @@
 
 // https://webpack.js.org/configuration/
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');        // const reference to webpack's html plugin
-const path = require('path');                                    // const convenience reference to the local filepath
+const path = require('path');
+const webpack = require('webpack');                                  // const convenience reference to the local filepath
 
+const HtmlWebpackPlugin = require('html-webpack-plugin');        // const reference to webpack's html plugin
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts'); // ← add
 
-module.exports = {
+/** Export webpack bundle in Production mode, or Development? */
+const PRODUCTION_BUILD = true;
 
-    //                                                  set export mode
-    // mode: 'production',
-    mode: 'development',
+module.exports = () => {
 
-    context: path.resolve(__dirname, 'src'),
+    const mode = PRODUCTION_BUILD ? 'production' : 'development'; // argv.mode || 'development';
 
-    // enable Watch Mode (auto refresh changes), 
-    watch: true, // see: https://webpack.js.org/guides/development/#using-watch-mode
+    return {
 
-    entry: { //                                         entry: place to begin generating webpage from
-        index: './js/index.js',
-    },
-    plugins: [
-        new RemoveEmptyScriptsPlugin(),
-        new HtmlWebpackPlugin({
-            //                                          webpage title here
-            title: 'Canvas Visualizer',
-        }),
-        new MiniCssExtractPlugin({
-            filename: '[name].css',
-            chunkFilename: '[name].css',
-            runtime: false,
-        }),
-    ],
+        //                                                  set export mode
+        mode: PRODUCTION_BUILD ? 'production' : 'development',
 
-    // enable inline source mapping, so we can see lines/error info in browser console output
-    devtool: 'inline-source-map', // see: https://webpack.js.org/guides/development/#using-source-maps
+        context: path.resolve(__dirname, 'src'),
 
-    // enable webpack dev server so we can locally test 
-    // run: npm install webpack-dev-server --save
-    // remember to also add check "optimization" at bottom
-    // see: https://webpack.js.org/guides/development/#using-webpack-dev-server
-    devServer: {
-        static: path.resolve(__dirname, 'dist'),
-    },
+        // enable Watch Mode (auto refresh changes), 
+        watch: true, // see: https://webpack.js.org/guides/development/#using-watch-mode
 
-    module: {
-        rules: [
-            //                                          module rules (with some presets)
-
-            // Jquery (requires library): npm install jquery --save
-            {
-                test: require.resolve("jquery"),
-                loader: "expose-loader",
-                options: {
-                    exposes: ["$", "jQuery"],
-                },
-            },
-
-            // CSS (requires loader): npm install style-loader css-loader postcss-loader --save
-            {
-                test: /\.(sc|c)ss$/i,
-                use: [
-                    MiniCssExtractPlugin.loader, // extract css to subfolder 
-                    'css-loader',
-                    'postcss-loader',
-                    // 'sass-loader',
-                    // 'style-loader',
-                ],
-            },
-
-            // Images asset loading
-            {
-                test: /\.(png|svg|jpg|jpeg|gif)$/i,
-                type: 'asset/resource',
-            },
-
-            // Fonts asset loading
-            {
-                test: /\.(woff|woff2|eot|ttf|otf)$/i,
-                type: 'asset/resource',
-            },
-
-        ],
-    },
-    output: {
-        // filename: '[name].bundle.js',
-        filename: '[name].bundle.js',
-        // TODO: cleanup filenames in /dist, create asset subdirectories
-        // Issue URL: https://github.com/nickyonge/evto-web/issues/19
-        path: path.resolve(__dirname, 'dist'),
-        assetModuleFilename: '[path][name][ext]',
-        clean: true,
-    },
-    // build time optimization, see https://webpack.js.org/guides/development/#using-webpack-dev-server 
-    optimization: {
-        // runtimeChunk: 'single',
-        runtimeChunk: false,
-        splitChunks: {
-            cacheGroups: {
-                styles: {
-                    name: 'styles',
-                    type: 'css/mini-extract', // use type, not test 
-                    chunks: 'all',
-                    enforce: true,
-                },
-            },
+        entry: { //                                         entry: place to begin generating webpage from
+            index: './js/index.js',
         },
-        removeEmptyChunks: true,
-    },
+        plugins: [
+            new RemoveEmptyScriptsPlugin(),
+            new HtmlWebpackPlugin({
+                //                                          webpage title here
+                title: 'Canvas Visualizer',
+            }),
+            new MiniCssExtractPlugin({
+                filename: '[name].css',
+                chunkFilename: '[name].css',
+                runtime: false,
+            }),
+
+            // define a plugin to definitively set the mode to the bundle 
+            new webpack.DefinePlugin({
+                'process.env.NODE_ENV': JSON.stringify(mode),
+                __DEV__: JSON.stringify(!PRODUCTION_BUILD)
+            }),
+        ],
+
+        // enable inline source mapping, so we can see lines/error info in browser console output
+        devtool: true ? 'source-map' : 'inline-source-map', // see: https://webpack.js.org/guides/development/#using-source-maps
+
+        // enable webpack dev server so we can locally test 
+        // run: npm install webpack-dev-server --save
+        // remember to also add check "optimization" at bottom
+        // see: https://webpack.js.org/guides/development/#using-webpack-dev-server
+        devServer: {
+            static: path.resolve(__dirname, 'dist'),
+        },
+
+        module: {
+            rules: [
+                //                                          module rules (with some presets)
+
+                // Jquery (requires library): npm install jquery --save
+                {
+                    test: require.resolve("jquery"),
+                    loader: "expose-loader",
+                    options: {
+                        exposes: ["$", "jQuery"],
+                    },
+                },
+
+                // CSS (requires loader): npm install style-loader css-loader postcss-loader --save
+                {
+                    test: /\.(sc|c)ss$/i,
+                    use: [
+                        MiniCssExtractPlugin.loader, // extract css to subfolder 
+                        'css-loader',
+                        'postcss-loader',
+                        // 'sass-loader',
+                        // 'style-loader',
+                    ],
+                },
+
+                // Images asset loading
+                {
+                    test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                    type: 'asset/resource',
+                },
+
+                // Fonts asset loading
+                {
+                    test: /\.(woff|woff2|eot|ttf|otf)$/i,
+                    type: 'asset/resource',
+                },
+
+            ],
+        },
+        output: {
+            // filename: '[name].bundle.js',
+            filename: '[name].bundle.js',
+            // TODO: cleanup filenames in /dist, create asset subdirectories
+            // Issue URL: https://github.com/nickyonge/evto-web/issues/19
+            path: path.resolve(__dirname, 'dist'),
+            assetModuleFilename: '[path][name][ext]',
+            clean: true,
+        },
+        // build time optimization, see https://webpack.js.org/guides/development/#using-webpack-dev-server 
+        optimization: {
+            // runtimeChunk: 'single',
+            runtimeChunk: false,
+            splitChunks: {
+                cacheGroups: {
+                    styles: {
+                        name: 'styles',
+                        type: 'css/mini-extract', // use type, not test 
+                        chunks: 'all',
+                        enforce: true,
+                    },
+                },
+            },
+            removeEmptyChunks: true,
+        },
+    };
 };
