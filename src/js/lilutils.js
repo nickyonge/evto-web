@@ -983,4 +983,52 @@ export function TimeBetweenTwoTimestamps(timestampA, timestampB) {
     return timestampA - timestampB;
 }
 
+
+// #region Environment 
+
+/**
+ * Is the {@link _env_currentEnv current} environment `development`/`dev`?
+ * 
+ * **Note:** also `true` if environment is `null`\`undefined`\`""`.
+ * 
+ * **Note:** if {@linkcode __TESTING_IS_DEVELOPMENT} is `true`, the environment `testing`/`test` will also return `true`. 
+ * @see `PRODUCTION_BUILD` in `webpack.config.js` */
+export const _env_isDevelopment =
+    _env_currentEnv === null || _env_currentEnv === undefined || _env_currentEnv === '' ||
+    _env_currentEnv === 'development' || _env_currentEnv === 'dev' ||
+    !_env_isProduction && (!_env_isTest || __TESTING_IS_DEVELOPMENT);
+/**
+ * Is the {@link _env_currentEnv current} environment `production`/`prod`?
+ * 
+ * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, the environment `staging` will also return `true`. 
+ * @see `PRODUCTION_BUILD` in `webpack.config.js` */
+export const _env_isProduction =
+    _env_currentEnv === 'production' || _env_currentEnv === 'prod' ||
+    (_env_isStaging && __STAGING_IS_PRODUCTION);
+/**
+ * Is the {@link _env_currentEnv current} environment `staging`?
+ * 
+ * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, {@linkcode _env_isProduction} will also return `true`. 
+ * @see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) */
+export const _env_isStaging = _env_currentEnv === 'staging';
+/** 
+ * Is the {@link _env_currentEnv current} environment `testing`/`test`?
+ * 
+ * **Note:** if {@linkcode __TESTING_IS_DEVELOPMENT} is `true`, {@linkcode _env_isDevelopment} will also return `true`. 
+ * @see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) */
+export const _env_isTest = _env_currentEnv === 'testing' || _env_currentEnv === 'test';
+/** 
+ * Returns the current `process.env.NODE_EVN` environment. Typically `"development"` or `"production"`.
+ * @see `PRODUCTION_BUILD` in `webpack.config.js` 
+ * @see {@linkcode _env_isDevelopment} 
+ * @see {@linkcode _env_isProduction} 
+ * @see https://www.geeksforgeeks.org/node-js/what-is-node_env-in-node-js/ */
+export const _env_currentEnv = process.env.NODE_ENV;
+/** If process.env.NODE_EVN is 'testing', should {@linkcode _env_isDevelopment} return `true`? */
+const __TESTING_IS_DEVELOPMENT = true;
+/** If process.env.NODE_EVN is 'staging', should {@linkcode _env_isProduction} return `true`? */
+const __STAGING_IS_PRODUCTION = true;
+
+// #endregion Environment
+
 // TODO: organize lilutils better, so similar utilities are grouped // Issue URL: https://github.com/nickyonge/evto-web/issues/10
