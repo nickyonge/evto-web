@@ -1024,6 +1024,25 @@ export function TimeBetweenTwoTimestamps(timestampA, timestampB) {
 
 // #region Environment 
 
+/** 
+ * Returns the current `process.env.NODE_EVN` environment. Typically `"development"` or `"production"`.
+ * @see `PRODUCTION_BUILD` in `webpack.config.js` 
+ * @see {@linkcode _env_isDevelopment} 
+ * @see {@linkcode _env_isProduction} 
+ * @see https://www.geeksforgeeks.org/node-js/what-is-node_env-in-node-js/ */
+export const _env_currentEnv = process.env.NODE_ENV;
+/**
+ * Is the {@link _env_currentEnv current} environment `staging`?
+ * 
+ * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, {@linkcode _env_isProduction} will also return `true`. 
+ * @see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) */
+export const _env_isStaging = _env_currentEnv === 'staging';
+/** 
+ * Is the {@link _env_currentEnv current} environment `testing`/`test`?
+ * 
+ * **Note:** if {@linkcode __TESTING_IS_DEVELOPMENT} is `true`, {@linkcode _env_isDevelopment} will also return `true`. 
+ * @see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) */
+export const _env_isTest = _env_currentEnv === 'testing' || _env_currentEnv === 'test';
 /**
  * Is the {@link _env_currentEnv current} environment `development`/`dev`?
  * 
@@ -1043,25 +1062,6 @@ export const _env_isDevelopment =
 export const _env_isProduction =
     _env_currentEnv === 'production' || _env_currentEnv === 'prod' ||
     (_env_isStaging && __STAGING_IS_PRODUCTION);
-/**
- * Is the {@link _env_currentEnv current} environment `staging`?
- * 
- * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, {@linkcode _env_isProduction} will also return `true`. 
- * @see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) */
-export const _env_isStaging = _env_currentEnv === 'staging';
-/** 
- * Is the {@link _env_currentEnv current} environment `testing`/`test`?
- * 
- * **Note:** if {@linkcode __TESTING_IS_DEVELOPMENT} is `true`, {@linkcode _env_isDevelopment} will also return `true`. 
- * @see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) */
-export const _env_isTest = _env_currentEnv === 'testing' || _env_currentEnv === 'test';
-/** 
- * Returns the current `process.env.NODE_EVN` environment. Typically `"development"` or `"production"`.
- * @see `PRODUCTION_BUILD` in `webpack.config.js` 
- * @see {@linkcode _env_isDevelopment} 
- * @see {@linkcode _env_isProduction} 
- * @see https://www.geeksforgeeks.org/node-js/what-is-node_env-in-node-js/ */
-export const _env_currentEnv = process.env.NODE_ENV;
 /** If process.env.NODE_EVN is 'testing', should {@linkcode _env_isDevelopment} return `true`? */
 const __TESTING_IS_DEVELOPMENT = true;
 /** If process.env.NODE_EVN is 'staging', should {@linkcode _env_isProduction} return `true`? */
