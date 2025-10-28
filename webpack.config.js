@@ -97,8 +97,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');        // const refere
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts'); // ← add
 
-/** Export webpack bundle in Production mode, or Development? */
-const PRODUCTION_BUILD = true;
+/** 
+ * Export webpack bundle in Production mode, or Development? 
+ */
+const PRODUCTION_BUILD = false; // remember to restart Webpack if changed, `npm start`
 
 module.exports = () => {
 
