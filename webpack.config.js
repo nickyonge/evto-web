@@ -86,12 +86,15 @@
 
 // tutorial complete~
 // done? consider deleting the above tutorial section, or moving it to the end of this file.
-// you may end up modifying webpack config quite a bit! might as well have the content up top. 
+// you may end up modifying webpack config quite a bit! might as well have the content up top.
 
 // https://webpack.js.org/configuration/
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');      // const reference to webpack's html plugin
-const path = require('path');                                  // const convenience reference to the local filepath
+const HtmlWebpackPlugin = require('html-webpack-plugin');        // const reference to webpack's html plugin
+const path = require('path');                                    // const convenience reference to the local filepath
+
+const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 
+const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts'); // ← add
 
 module.exports = {
 
@@ -106,9 +109,15 @@ module.exports = {
         index: './src/js/index.js',
     },
     plugins: [
+        new RemoveEmptyScriptsPlugin(),
         new HtmlWebpackPlugin({
             //                                          webpage title here
             title: 'Canvas Visualizer',
+        }),
+        new MiniCssExtractPlugin({
+            filename: 'src/[name].css',
+            chunkFilename: 'src/[name].css',
+            runtime: false,
         }),
     ],
 
@@ -128,7 +137,7 @@ module.exports = {
             //                                          module rules (with some presets)
 
             // Jquery (requires library): npm install jquery --save
-            { 
+            {
                 test: require.resolve("jquery"),
                 loader: "expose-loader",
                 options: {
@@ -138,8 +147,14 @@ module.exports = {
 
             // CSS (requires loader): npm install style-loader css-loader postcss-loader --save
             {
-                test: /\.css$/i,
-                use: ['style-loader', 'css-loader', 'postcss-loader'],
+                test: /\.(sc|c)ss$/i,
+                use: [
+                    MiniCssExtractPlugin.loader, // extract css to subfolder 
+                    'css-loader',
+                    'postcss-loader',
+                    // 'sass-loader',
+                    // 'style-loader',
+                ],
             },
 
             // Images asset loading
@@ -157,15 +172,28 @@ module.exports = {
         ],
     },
     output: {
-        filename: '[name].bundle.js',
+        // filename: 'src/[name].bundle.js',
+        filename: 'src/[name].bundle.js',
         // TODO: cleanup filenames in /dist, create asset subdirectories
         // Issue URL: https://github.com/nickyonge/evto-web/issues/19
         path: path.resolve(__dirname, 'dist'),
-        assetModuleFilename: "[name][ext]",
+        assetModuleFilename: '[path][name][ext]',
         clean: true,
     },
     // build time optimization, see https://webpack.js.org/guides/development/#using-webpack-dev-server 
     optimization: {
-        runtimeChunk: 'single',
+        // runtimeChunk: 'single',
+        runtimeChunk: false,
+        splitChunks: {
+            cacheGroups: {
+                styles: {
+                    name: 'styles',
+                    type: 'css/mini-extract', // use type, not test 
+                    chunks: 'all',
+                    enforce: true,
+                },
+            },
+        },
+        removeEmptyChunks: true,
     },
 };
