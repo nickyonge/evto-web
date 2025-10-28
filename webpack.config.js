@@ -102,11 +102,13 @@ module.exports = {
     // mode: 'production',
     mode: 'development',
 
+    context: path.resolve(__dirname, 'src'),
+
     // enable Watch Mode (auto refresh changes), 
     watch: true, // see: https://webpack.js.org/guides/development/#using-watch-mode
 
     entry: { //                                         entry: place to begin generating webpage from
-        index: './src/js/index.js',
+        index: './js/index.js',
     },
     plugins: [
         new RemoveEmptyScriptsPlugin(),
@@ -115,8 +117,8 @@ module.exports = {
             title: 'Canvas Visualizer',
         }),
         new MiniCssExtractPlugin({
-            filename: 'src/[name].css',
-            chunkFilename: 'src/[name].css',
+            filename: '[name].css',
+            chunkFilename: '[name].css',
             runtime: false,
         }),
     ],
@@ -129,7 +131,7 @@ module.exports = {
     // remember to also add check "optimization" at bottom
     // see: https://webpack.js.org/guides/development/#using-webpack-dev-server
     devServer: {
-        static: './dist',
+        static: path.resolve(__dirname, 'dist'),
     },
 
     module: {
@@ -172,8 +174,8 @@ module.exports = {
         ],
     },
     output: {
-        // filename: 'src/[name].bundle.js',
-        filename: 'src/[name].bundle.js',
+        // filename: '[name].bundle.js',
+        filename: '[name].bundle.js',
         // TODO: cleanup filenames in /dist, create asset subdirectories
         // Issue URL: https://github.com/nickyonge/evto-web/issues/19
         path: path.resolve(__dirname, 'dist'),
