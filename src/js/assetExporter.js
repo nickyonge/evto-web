@@ -150,7 +150,17 @@ import { isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
                                             
 */
 
+export function testExport() {
+}
 
+/**
+ * 
+ * @param {string} path 
+ * @param {object[]} children 
+ * @returns 
+ */
+function nestedNode(path, children = {}) {
+}
 
 
 /*
