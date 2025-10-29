@@ -150,29 +150,46 @@ import { isBlank, isString, isStringNotBlank, ReturnStringNotBlank } from "./lil
                                             
 */
 
-const name = 'bluesky';
-const path = `../assets/svg/${name}.svg`;
-console.log("path: " + path);
-const url = new URL(/* webpackInclude: /\.svg$/ */ path);
-console.log(url);
+// generate a list of all the PNGs in the png/map folder (path, incl subfolders, extension regexp)
+const pngMapContext = require.context('../assets/png/map', true, /\.png$/);
+
+export const mapAssetPNGs = Object.fromEntries(
+    pngMapContext.keys().map((_path) => {
+        // first, ensure path is a string
+        const path = _path == null ? '' : String(_path);
+        // next, normalze path by removing 
+        const normalizedPath = path.startsWith('./') ? path.slice(2) : path;
+        // next, create a Webpack-friendly asset module out of the path 
+        const assetModule = pngMapContext(path);
+        // last, extract the URL from the asset module, and return the normalized path plus url 
+        const url = assetModule == null ? null : assetModule.default == null ? assetModule : assetModule.default;
+        return [normalizedPath, url];
+    })
+);
+
+export const getMapAsset = (path) => {
+    return mapAssetPNGs[path];
+};
+
+console.log(mapAssetPNGs);
 
 // import {
 //     'gcs-complete.png' as gcsComplete,
-    // 'gcs-equator_dotted.png',
-    // 'gcs-equator_solid.png',
-    // 'gcs-equator_tropics_polar_circles.png',
-    // 'gcs-latitude_with_dotted_equator.png',
-    // 'gcs-latitude_with_tropics_and_polar_circles.png',
-    // 'gcs-latitude.png',
-    // 'gcs-latlong_15deg_dotted.png',
-    // 'gcs-latlong_30deg_dotted.png',
-    // 'gcs-latlong_with_dotted_equator_meridians.png',
-    // 'gcs-latlong.png',
-    // 'gcs-longitude_with_dotted_meridians.png',
-    // 'gcs-longitude.png',
-    // 'gcs-polar_circles.png',
-    // 'gcs-tropics_and_polar_circles.png',
-    // 'gcs-tropics.png'
+// 'gcs-equator_dotted.png',
+// 'gcs-equator_solid.png',
+// 'gcs-equator_tropics_polar_circles.png',
+// 'gcs-latitude_with_dotted_equator.png',
+// 'gcs-latitude_with_tropics_and_polar_circles.png',
+// 'gcs-latitude.png',
+// 'gcs-latlong_15deg_dotted.png',
+// 'gcs-latlong_30deg_dotted.png',
+// 'gcs-latlong_with_dotted_equator_meridians.png',
+// 'gcs-latlong.png',
+// 'gcs-longitude_with_dotted_meridians.png',
+// 'gcs-longitude.png',
+// 'gcs-polar_circles.png',
+// 'gcs-tropics_and_polar_circles.png',
+// 'gcs-tropics.png'
 // } from '../assets/png/map/gcs/';
 
 
@@ -212,7 +229,7 @@ function nestedPath(path, children = {}) {
         hint === 'number' ? NaN :
             hint === 'boolean' ? !isBlank(path) :
                 path;
-    
+
     // ensure children are appropriately assigned 
     Object.assign(node, children);
 

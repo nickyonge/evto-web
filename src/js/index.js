@@ -68,11 +68,6 @@ window.addEventListener('load', function () {
 
         // display ui
         DisplayUI();
-
-        console.log("test log, env: " + _env_currentEnv);
-        console.warn("test warning");
-        console.error("test error");
-        let a = b;
         
     }, 0);
 });
