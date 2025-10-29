@@ -150,6 +150,33 @@ import { isBlank, isString, isStringNotBlank, ReturnStringNotBlank } from "./lil
                                             
 */
 
+const name = 'bluesky';
+const path = `../assets/svg/${name}.svg`;
+console.log("path: " + path);
+const url = new URL(/* webpackInclude: /\.svg$/ */ path);
+console.log(url);
+
+// import {
+//     'gcs-complete.png' as gcsComplete,
+    // 'gcs-equator_dotted.png',
+    // 'gcs-equator_solid.png',
+    // 'gcs-equator_tropics_polar_circles.png',
+    // 'gcs-latitude_with_dotted_equator.png',
+    // 'gcs-latitude_with_tropics_and_polar_circles.png',
+    // 'gcs-latitude.png',
+    // 'gcs-latlong_15deg_dotted.png',
+    // 'gcs-latlong_30deg_dotted.png',
+    // 'gcs-latlong_with_dotted_equator_meridians.png',
+    // 'gcs-latlong.png',
+    // 'gcs-longitude_with_dotted_meridians.png',
+    // 'gcs-longitude.png',
+    // 'gcs-polar_circles.png',
+    // 'gcs-tropics_and_polar_circles.png',
+    // 'gcs-tropics.png'
+// } from '../assets/png/map/gcs/';
+
+
+
 export function testExport() {
 }
 
