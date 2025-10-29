@@ -304,12 +304,17 @@ export const getMapAsset = (path) => {
     if (!path.endsWith('.png')) {
         path += path.endsWith('.') ? 'png' : '.png';
     }
-    return mapAssetPNGs[path];
+    console.log("Success! Attempting to get map asset from path: \n" + path);
+    path = mapAssetPNGs[path];
+    if (path == null || isBlank(path)) { console.warn(`WARNING: mapAssetPNG not found at path ${path}, ensure asset ${asset}.png exists in mapAssetPNGs \n`, mapAssetPNGs); return undefined; }
+    return path;
 };
 
 console.log(mapAssetPNGs);
+console.log(getMapAsset('gcs-complete'));
 console.log(getMapAsset('label-gcs_meridian_primemeridian'));
-console.log(getMapAsset('gcs/gcs-complete'));
+console.log(getMapAsset('titlebox-frame_stroke_black_duck_shadow_alt'));
+console.log(getMapAsset('titlebox-text_white_body'));
 
 // import {
 //     'gcs-complete.png' as gcsComplete,
