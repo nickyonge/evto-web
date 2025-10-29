@@ -1,4 +1,4 @@
-import { isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
+import { isString, isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
 
 
 /* Images Enum Map
@@ -153,15 +153,39 @@ import { isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
 export function testExport() {
 }
 
+
+
+
 /**
  * 
  * @param {string} path 
  * @param {object[]} children 
- * @returns 
+ * @returns {object}
  */
-function nestedNode(path, children = {}) {
-}
+function nestedPath(path, children = {}) {
+    // create new node 
+    const node = Object.create(null);
 
+    if (path == null || !isString(path)) { path = ''; }
+
+    // define the path property 
+    Object.defineProperty(node, 'path', {
+        get: () => path,
+        enumerable: true,
+    });
+
+    // define default methods to retrieve the path
+    node.toString = () => path;
+    node.valueOf = () => path;
+    node.value = path == null ? '' : String(path);
+    // node.path = path == null ? '' : String(path);
+    
+    // ensure children are appropriately assigned 
+    Object.assign(node, children);
+
+    // freeze and return node 
+    return Object.freeze(node);
+}
 
 /*
 
