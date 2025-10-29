@@ -119,34 +119,34 @@ import { EnsureToNumber, isBlank, isString, isStringNotBlank, ReturnStringNotBla
         │   │       └─ shadow » ........... titlebox-frame_fill_square_shadow.png 
         │   └─ stroke                       
         │       ├─ black                    [ ...titlebox/frame_stroke_black ]
-        │       │   ├─ duck » ............. titlebox-frame_stroke_duck.png 
-        │       │   │   ├─ shadowA » ...... titlebox-frame_stroke_duck_shadow.png 
-        │       │   │   └─ shadowB » ...... titlebox-frame_stroke_duck_shadow_alt.png 
-        │       │   ├─ picframe » ......... titlebox-frame_stroke_picframe.png 
-        │       │   │   └─ shadow » ....... titlebox-frame_stroke_picframe_shadow.png 
-        │       │   ├─ rounded » .......... titlebox-frame_stroke_rounded.png 
-        │       │   │   └─ shadow » ....... titlebox-frame_stroke_rounded_shadow.png 
-        │       │   └─ square » ........... titlebox-frame_stroke_square.png 
-        │       │       └─ shadow » ....... titlebox-frame_stroke_square_shadow.png 
+        │       │   ├─ duck » ............. titlebox-frame_stroke_black_duck.png 
+        │       │   │   ├─ shadowA » ...... titlebox-frame_stroke_black_duck_shadow.png 
+        │       │   │   └─ shadowB » ...... titlebox-frame_stroke_black_duck_shadow_alt.png 
+        │       │   ├─ picframe » ......... titlebox-frame_stroke_black_picframe.png 
+        │       │   │   └─ shadow » ....... titlebox-frame_stroke_black_picframe_shadow.png 
+        │       │   ├─ rounded » .......... titlebox-frame_stroke_black_rounded.png 
+        │       │   │   └─ shadow » ....... titlebox-frame_stroke_black_rounded_shadow.png 
+        │       │   └─ square » ........... titlebox-frame_stroke_black_square.png 
+        │       │       └─ shadow » ....... titlebox-frame_stroke_black_square_shadow.png 
         │       └─ white                    [ ...titlebox/frame_stroke_white ]
-        │           ├─ duck » ............. titlebox-frame_stroke_duck.png 
-        │           │   ├─ shadowA » ...... titlebox-frame_stroke_duck_shadow.png 
-        │           │   └─ shadowB » ...... titlebox-frame_stroke_duck_shadow_alt.png 
-        │           ├─ picframe » ......... titlebox-frame_stroke_picframe.png 
-        │           │   └─ shadow » ....... titlebox-frame_stroke_picframe_shadow.png 
-        │           ├─ rounded » .......... titlebox-frame_stroke_rounded.png 
-        │           │   └─ shadow » ....... titlebox-frame_stroke_rounded_shadow.png 
-        │           └─ square » ........... titlebox-frame_stroke_square.png 
-        │               └─ shadow » ....... titlebox-frame_stroke_square_shadow.png 
+        │           ├─ duck » ............. titlebox-frame_stroke_white_duck.png 
+        │           │   ├─ shadowA » ...... titlebox-frame_stroke_white_duck_shadow.png 
+        │           │   └─ shadowB » ...... titlebox-frame_stroke_white_duck_shadow_alt.png 
+        │           ├─ picframe » ......... titlebox-frame_stroke_white_picframe.png 
+        │           │   └─ shadow » ....... titlebox-frame_stroke_white_picframe_shadow.png 
+        │           ├─ rounded » .......... titlebox-frame_stroke_white_rounded.png 
+        │           │   └─ shadow » ....... titlebox-frame_stroke_white_rounded_shadow.png 
+        │           └─ square » ........... titlebox-frame_stroke_white_square.png 
+        │               └─ shadow » ....... titlebox-frame_stroke_white_square_shadow.png 
         └─ text                             
             ├─ black                        [ .../text_black ]
-            │   ├─ body » ................. titlebox-text_body.png 
-            │   ├─ full » ................. titlebox-text_full.png 
-            │   └─ title » ................ titlebox-text_title.png 
+            │   ├─ body » ................. titlebox-text_black_body.png 
+            │   ├─ full » ................. titlebox-text_black_full.png 
+            │   └─ title » ................ titlebox-text_black_title.png 
             └─ white                        [ .../text_white ]
-                ├─ body » ................. titlebox-text_body.png 
-                ├─ full » ................. titlebox-text_full.png 
-                └─ title » ................ titlebox-text_title.png 
+                ├─ body » ................. titlebox-text_white_body.png 
+                ├─ full » ................. titlebox-text_white_full.png 
+                └─ title » ................ titlebox-text_white_title.png 
                                             
 */
 
@@ -344,58 +344,58 @@ export {
 
 export {
 
-    'border_combined/titlebox_frame_combined_duck_shadow_alt.png',
-    'border_combined/titlebox_frame_combined_duck_shadow.png',
-    'border_combined/titlebox_frame_combined_duck.png',
-    'border_combined/titlebox_frame_combined_picframe_shadow.png',
-    'border_combined/titlebox_frame_combined_picframe.png',
-    'border_combined/titlebox_frame_combined_rounded_shadow.png',
-    'border_combined/titlebox_frame_combined_rounded.png',
-    'border_combined/titlebox_frame_combined_square_shadow.png',
-    'border_combined/titlebox_frame_combined_square.png',
+    'border_combined/titlebox-frame_combined_duck_shadow_alt.png',
+    'border_combined/titlebox-frame_combined_duck_shadow.png',
+    'border_combined/titlebox-frame_combined_duck.png',
+    'border_combined/titlebox-frame_combined_picframe_shadow.png',
+    'border_combined/titlebox-frame_combined_picframe.png',
+    'border_combined/titlebox-frame_combined_rounded_shadow.png',
+    'border_combined/titlebox-frame_combined_rounded.png',
+    'border_combined/titlebox-frame_combined_square_shadow.png',
+    'border_combined/titlebox-frame_combined_square.png',
 
-    'border_fill/titlebox_frame_fill_duck_merged_alt.png',
-    'border_fill/titlebox_frame_fill_duck_merged.png',
-    'border_fill/titlebox_frame_fill_duck_shadow_alt.png',
-    'border_fill/titlebox_frame_fill_duck_shadow.png',
-    'border_fill/titlebox_frame_fill_duck.png',
-    'border_fill/titlebox_frame_fill_picframe_merged.png',
-    'border_fill/titlebox_frame_fill_picframe_shadow.png',
-    'border_fill/titlebox_frame_fill_picframe.png',
-    'border_fill/titlebox_frame_fill_rounded_merged.png',
-    'border_fill/titlebox_frame_fill_rounded_shadow.png',
-    'border_fill/titlebox_frame_fill_rounded.png',
-    'border_fill/titlebox_frame_fill_square_merged.png',
-    'border_fill/titlebox_frame_fill_square_shadow.png',
-    'border_fill/titlebox_frame_fill_square.png',
+    'border_fill/titlebox-frame_fill_duck_merged_alt.png',
+    'border_fill/titlebox-frame_fill_duck_merged.png',
+    'border_fill/titlebox-frame_fill_duck_shadow_alt.png',
+    'border_fill/titlebox-frame_fill_duck_shadow.png',
+    'border_fill/titlebox-frame_fill_duck.png',
+    'border_fill/titlebox-frame_fill_picframe_merged.png',
+    'border_fill/titlebox-frame_fill_picframe_shadow.png',
+    'border_fill/titlebox-frame_fill_picframe.png',
+    'border_fill/titlebox-frame_fill_rounded_merged.png',
+    'border_fill/titlebox-frame_fill_rounded_shadow.png',
+    'border_fill/titlebox-frame_fill_rounded.png',
+    'border_fill/titlebox-frame_fill_square_merged.png',
+    'border_fill/titlebox-frame_fill_square_shadow.png',
+    'border_fill/titlebox-frame_fill_square.png',
 
-    'border_stroke_black/titlebox_frame_stroke_duck_shadow_alt.png',
-    'border_stroke_black/titlebox_frame_stroke_duck_shadow.png',
-    'border_stroke_black/titlebox_frame_stroke_duck.png',
-    'border_stroke_black/titlebox_frame_stroke_picframe_shadow.png',
-    'border_stroke_black/titlebox_frame_stroke_picframe.png',
-    'border_stroke_black/titlebox_frame_stroke_rounded_shadow.png',
-    'border_stroke_black/titlebox_frame_stroke_rounded.png',
-    'border_stroke_black/titlebox_frame_stroke_square_shadow.png',
-    'border_stroke_black/titlebox_frame_stroke_square.png',
+    'border_stroke_black/titlebox-frame_stroke_black_duck_shadow_alt.png',
+    'border_stroke_black/titlebox-frame_stroke_black_duck_shadow.png',
+    'border_stroke_black/titlebox-frame_stroke_black_duck.png',
+    'border_stroke_black/titlebox-frame_stroke_black_picframe_shadow.png',
+    'border_stroke_black/titlebox-frame_stroke_black_picframe.png',
+    'border_stroke_black/titlebox-frame_stroke_black_rounded_shadow.png',
+    'border_stroke_black/titlebox-frame_stroke_black_rounded.png',
+    'border_stroke_black/titlebox-frame_stroke_black_square_shadow.png',
+    'border_stroke_black/titlebox-frame_stroke_black_square.png',
 
-    'border_stroke_white/titlebox_frame_stroke_duck_shadow_alt.png',
-    'border_stroke_white/titlebox_frame_stroke_duck_shadow.png',
-    'border_stroke_white/titlebox_frame_stroke_duck.png',
-    'border_stroke_white/titlebox_frame_stroke_picframe_shadow.png',
-    'border_stroke_white/titlebox_frame_stroke_picframe.png',
-    'border_stroke_white/titlebox_frame_stroke_rounded_shadow.png',
-    'border_stroke_white/titlebox_frame_stroke_rounded.png',
-    'border_stroke_white/titlebox_frame_stroke_square_shadow.png',
-    'border_stroke_white/titlebox_frame_stroke_square.png',
+    'border_stroke_white/titlebox-frame_stroke_white_duck_shadow_alt.png',
+    'border_stroke_white/titlebox-frame_stroke_white_duck_shadow.png',
+    'border_stroke_white/titlebox-frame_stroke_white_duck.png',
+    'border_stroke_white/titlebox-frame_stroke_white_picframe_shadow.png',
+    'border_stroke_white/titlebox-frame_stroke_white_picframe.png',
+    'border_stroke_white/titlebox-frame_stroke_white_rounded_shadow.png',
+    'border_stroke_white/titlebox-frame_stroke_white_rounded.png',
+    'border_stroke_white/titlebox-frame_stroke_white_square_shadow.png',
+    'border_stroke_white/titlebox-frame_stroke_white_square.png',
 
-    'text_black/titlebox-text_body.png',
-    'text_black/titlebox-text_full.png',
-    'text_black/titlebox-text_title.png',
+    'text_black/titlebox-text_black_body.png',
+    'text_black/titlebox-text_black_full.png',
+    'text_black/titlebox-text_black_title.png',
 
-    'text_white/titlebox-text_body.png',
-    'text_white/titlebox-text_full.png',
-    'text_white/titlebox-text_title.png'
+    'text_white/titlebox-text_white_body.png',
+    'text_white/titlebox-text_white_full.png',
+    'text_white/titlebox-text_white_title.png'
 
 } from '../../assets/png/map/titlebox/';
 */
