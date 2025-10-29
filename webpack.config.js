@@ -135,9 +135,8 @@ module.exports = () => {
                 runtime: false,
             }),
 
-            // define a plugin to definitively set the mode to the bundle 
+            // define a plugin to ensure globally accessible __DEV__ and __PROD__ flags (prolly redundant, maybe remove later)
             new webpack.DefinePlugin({
-                'process.env.NODE_ENV': JSON.stringify(mode),
                 __DEV__: JSON.stringify(!PRODUCTION_BUILD),
                 __PROD__: JSON.stringify(PRODUCTION_BUILD),
             }),
