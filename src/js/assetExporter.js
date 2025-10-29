@@ -1,4 +1,4 @@
-import { isBlank, isString, isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
+import { EnsureToNumber, isBlank, isString, isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
 
 
 /* Images Enum Map
@@ -167,11 +167,20 @@ export const mapAssetPNGs = Object.fromEntries(
     })
 );
 
+/**
+ * Gets an asset URL for a map PNG, able to be directly assigned to img.src
+ * @param {string} path Path to the image, relative to `src/assets/png/map/` (does not have to end in `.png`, added if missing)
+ * @returns {string}
+ */
 export const getMapAsset = (path) => {
+    if (!path.endsWith('.png')) {
+        path += path.endsWith('.') ? 'png' : '.png';
+    }
     return mapAssetPNGs[path];
 };
 
 console.log(mapAssetPNGs);
+console.log(getMapAsset('gcs/gcs-complete'));
 
 // import {
 //     'gcs-complete.png' as gcsComplete,
@@ -201,8 +210,8 @@ export function testExport() {
 
 
 /**
- * 
- * @param {string} path 
+ * Create a nested hierarchy of nodes and children, to hold the given values in a tree structure
+ * @param {any} value 
  * @param {object[]} children 
  * @returns {object}
  */
@@ -225,10 +234,36 @@ function nestedPath(path, children = {}) {
     // node.path = path == null ? '' : String(path);
 
     // define the implicit primitive value based on hint 
-    node[Symbol.toPrimitive] = (hint) =>
-        hint === 'number' ? NaN :
-            hint === 'boolean' ? !isBlank(path) :
-                path;
+    node[Symbol.toPrimitive] = (hint) => {
+        // return null/undefined value directly 
+        if (value == null) { return value; }
+        switch (hint) {
+            case 'number':
+                // seeking a number 
+                return EnsureToNumber(value);
+            case 'string':
+                // seeking a string 
+                return String(value);
+            case 'boolean':
+                // seeking a boolean 
+                switch (typeof value) {
+                    case 'boolean':
+                        return value;
+                    case 'string':
+                        if (isBlank(value)) { return false; }
+                        let v = value.toLowerCase();
+                        if (v == '0' || v.startsWith('f')) { return false; }
+                        if (v == '1' || v.startsWith('t')) { return false; }
+                        return Boolean(value);
+                    default:
+                        return Boolean(value);
+                }
+            case 'object':
+            default:
+                // seeking an object, or something else - just return the value  
+                return value;
+        }
+    }
 
     // ensure children are appropriately assigned 
     Object.assign(node, children);
