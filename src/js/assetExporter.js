@@ -1,4 +1,4 @@
-import { EnsureToNumber, isBlank, isString, isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
+import { EnsureToNumber, isBlank, isString } from "./lilutils";
 
 
 /* Images Enum Map
@@ -310,37 +310,8 @@ export const getMapAsset = (path) => {
     return path;
 };
 
-console.log(mapAssetPNGs);
-console.log(getMapAsset('gcs-complete'));
-console.log(getMapAsset('label-gcs_meridian_primemeridian'));
-console.log(getMapAsset('titlebox-frame_stroke_black_duck_shadow_alt'));
-console.log(getMapAsset('titlebox-text_white_body'));
-
-// import {
-//     'gcs-complete.png' as gcsComplete,
-// 'gcs-equator_dotted.png',
-// 'gcs-equator_solid.png',
-// 'gcs-equator_tropics_polar_circles.png',
-// 'gcs-latitude_with_dotted_equator.png',
-// 'gcs-latitude_with_tropics_and_polar_circles.png',
-// 'gcs-latitude.png',
-// 'gcs-latlong_15deg_dotted.png',
-// 'gcs-latlong_30deg_dotted.png',
-// 'gcs-latlong_with_dotted_equator_meridians.png',
-// 'gcs-latlong.png',
-// 'gcs-longitude_with_dotted_meridians.png',
-// 'gcs-longitude.png',
-// 'gcs-polar_circles.png',
-// 'gcs-tropics_and_polar_circles.png',
-// 'gcs-tropics.png'
-// } from '../assets/png/map/gcs/';
-
-
-
 export function testExport() {
 }
-
-
 
 
 /**
@@ -394,7 +365,7 @@ function nestedPath(path, children = {}) {
                 }
             case 'object':
             default:
-                // seeking an object, or something else - just return the value  
+                // seeking an object, or something else - just return the value 
                 return value;
         }
     }
