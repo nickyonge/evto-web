@@ -98,8 +98,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin'); //
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts'); // ← add
 
 
-/** Export webpack bundle in Production mode, or Development? */
-const PRODUCTION_BUILD = false; // remember to restart Webpack if changed, `npm start`
+/** Export webpack bundle in Production mode, or Development? 
+ * 
+ * **Note:** Remember to close & restart Webpack if changed, `npm start` @returns {boolean} */
+const PRODUCTION_BUILD = false; 
 
 
 module.exports = () => {
@@ -114,8 +116,9 @@ module.exports = () => {
 
         context: path.resolve(__dirname, 'src'),
 
-        // enable Watch Mode (auto refresh changes), 
-        watch: true, // see: https://webpack.js.org/guides/development/#using-watch-mode
+        // enable Watch Mode (auto refresh changes),
+        // watch: true, // see: https://webpack.js.org/guides/development/#using-watch-mode
+        // commenting out as watch performance is implied via devServer
 
         entry: { //                                         entry: place to begin generating webpage from
             index: './js/index.js',
