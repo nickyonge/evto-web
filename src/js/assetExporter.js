@@ -1,4 +1,4 @@
-import { isString, isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
+import { isBlank, isString, isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
 
 
 /* Images Enum Map
@@ -179,6 +179,12 @@ function nestedPath(path, children = {}) {
     node.valueOf = () => path;
     node.value = path == null ? '' : String(path);
     // node.path = path == null ? '' : String(path);
+
+    // define the implicit primitive value based on hint 
+    node[Symbol.toPrimitive] = (hint) =>
+        hint === 'number' ? NaN :
+            hint === 'boolean' ? !isBlank(path) :
+                path;
     
     // ensure children are appropriately assigned 
     Object.assign(node, children);
