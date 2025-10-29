@@ -97,19 +97,20 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');        // const refere
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts'); // ← add
 
-/** 
- * Export webpack bundle in Production mode, or Development? 
- */
+
+/** Export webpack bundle in Production mode, or Development? */
 const PRODUCTION_BUILD = false; // remember to restart Webpack if changed, `npm start`
+
 
 module.exports = () => {
 
     const mode = PRODUCTION_BUILD ? 'production' : 'development'; // argv.mode || 'development';
+    // PRODUCTION_BUILD
 
     return {
 
-        //                                                  set export mode
-        mode: PRODUCTION_BUILD ? 'production' : 'development',
+        mode: mode,
+        // mode: PRODUCTION_BUILD ? 'production' : 'development',
 
         context: path.resolve(__dirname, 'src'),
 
@@ -134,19 +135,23 @@ module.exports = () => {
             // define a plugin to definitively set the mode to the bundle 
             new webpack.DefinePlugin({
                 'process.env.NODE_ENV': JSON.stringify(mode),
-                __DEV__: JSON.stringify(!PRODUCTION_BUILD)
+                __DEV__: JSON.stringify(!PRODUCTION_BUILD),
+                __PROD__: JSON.stringify(PRODUCTION_BUILD),
             }),
         ],
 
         // enable inline source mapping, so we can see lines/error info in browser console output
-        devtool: true ? 'source-map' : 'inline-source-map', // see: https://webpack.js.org/guides/development/#using-source-maps
+        devtool: PRODUCTION_BUILD ? 'source-map' : 'eval-cheap-source-map', // see: https://webpack.js.org/guides/development/#using-source-maps
+        // for prod builds, either use 'source-map' (full exposure of source in separate file, easy live debugging) or false (no sourcemap included)
+        // see: https://webpack.js.org/configuration/devtool/#devtool
 
         // enable webpack dev server so we can locally test 
         // run: npm install webpack-dev-server --save
         // remember to also add check "optimization" at bottom
         // see: https://webpack.js.org/guides/development/#using-webpack-dev-server
         devServer: {
-            static: path.resolve(__dirname, 'dist'),
+            static: 'dist',
+            // static: path.resolve(__dirname, 'dist'),
         },
 
         module: {
@@ -191,8 +196,6 @@ module.exports = () => {
         output: {
             // filename: '[name].bundle.js',
             filename: '[name].bundle.js',
-            // TODO: cleanup filenames in /dist, create asset subdirectories
-            // Issue URL: https://github.com/nickyonge/evto-web/issues/19
             path: path.resolve(__dirname, 'dist'),
             assetModuleFilename: '[path][name][ext]',
             clean: true,

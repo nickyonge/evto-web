@@ -5,7 +5,7 @@ import { SetupArtWindow } from './contentArt';
 import { DisconnectObserver, StartObservation } from './mutationObserver';
 import Coloris from "@melloware/coloris";
 import { BasicComponent } from './components/base';
-import { GetParentWithClass } from './lilutils';
+import { _env_currentEnv, GetParentWithClass } from './lilutils';
 import { testExport } from './assetExporter';
 
 import { GenerateCSS as ComponentsCSS } from './components';
@@ -68,6 +68,11 @@ window.addEventListener('load', function () {
 
         // display ui
         DisplayUI();
+
+        console.log("test log, env: " + _env_currentEnv);
+        console.warn("test warning");
+        console.error("test error");
+        let a = b;
         
     }, 0);
 });
