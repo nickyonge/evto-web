@@ -169,10 +169,138 @@ export const mapAssetPNGs = Object.fromEntries(
 
 /**
  * Gets an asset URL for a map PNG, able to be directly assigned to img.src
+ * 
+ * **Note:** so long as image is a valid png in the `src/assets/png/map/` directory, 
+ * you should be able to simply type the name of the asset and it will be retrieved - eg, `gcs-complete`.
  * @param {string} path Path to the image, relative to `src/assets/png/map/` (does not have to end in `.png`, added if missing)
  * @returns {string}
  */
 export const getMapAsset = (path) => {
+    // ensure path is valid
+    console.log("Attempting to parse path: \n" + path);
+    if (path == null || typeof path !== 'string') {
+        console.warn(`can't get map asset from null/invalid path ${path}, returning null`, path);
+        return null;
+    }
+    // ensure path starts with valid subfolder 
+    let hyphenIndex = path.indexOf('-');
+    if (hyphenIndex == -1) { console.warn(`WARNING: map asset path MUST contain a hyphen to indicate target folder, path: ${path}`, path); }
+    let folderIndex = path.indexOf('/');
+    let lastFolderIndex = path.lastIndexOf('/');
+    let targetFolder = path.slice(lastFolderIndex + 1, hyphenIndex);
+    let asset = path.slice(lastFolderIndex + 1); // filename without png 
+    if (asset.toLowerCase().endsWith('png')) {
+        asset = asset.slice(0, asset.length - (asset.toLowerCase().endsWith('.png') ? 4 : 3))
+    }
+    if (folderIndex == -1) {
+        // no subfolder specified
+        if (hyphenIndex > 0) {
+            // yes, path has a hyphen
+            let targetFolder = path.slice(0, hyphenIndex);
+            switch (targetFolder) {
+                case 'gcs':
+                    path = 'gcs/' + path;
+                    break;
+                case 'label':
+                    path = 'labels/' + path;
+                    break;
+                case 'land':
+                    path = 'land/' + path;
+                    break;
+                case 'line':
+                    path = 'landlines/' + path;
+                    break;
+                case 'titlebox':
+                    // more complex, check titlebox subfolders
+                    let pathPrefix = 'titlebox/';
+                    let dir = path.slice(hyphenIndex + 1)?.split('_');
+                    if (dir == null) { console.warn(`WARNING: invalid path ${path} in titlebox subdir, dir null`, path); return null; }
+                    if (dir.length == 0) { console.warn(`WARNING: invalid path ${path} in titlebox subdir, dir empty`, path); return null; }
+                    // iteratively check subfolders, adding path prefixes as we go 
+                    switch (dir[0]) {
+                        case 'frame':
+                            pathPrefix += 'frame_';
+                            switch (dir[1]) {
+                                case 'combined':
+                                case 'fill':
+                                    pathPrefix += dir[i];
+                                    break;
+                                case 'stroke':
+                                    pathPrefix += 'stroke_';
+                                    switch (dir[2]) {
+                                        case 'black':
+                                            pathPrefix += 'black';
+                                            break;
+                                        case 'white':
+                                            pathPrefix += 'white';
+                                            break;
+                                        default:
+                                            console.warn(`WARNING: invalid path ${path} in titlebox/frame/stroke subdir, dir[2] ${dir[2]} invalid, dir: ${dir}`, path);
+                                            return null;
+                                    }
+                                    break;
+                                default:
+                                    console.warn(`WARNING: invalid path ${path} in titlebox/frame subdir, dir[1] ${dir[1]} invalid, dir: ${dir}`, path);
+                                    return null;
+                            }
+                            break;
+                        case 'text':
+                            pathPrefix += 'text_';
+                            switch (dir[1]) {
+                                case 'black':
+                                    pathPrefix += 'black';
+                                    break;
+                                case 'white':
+                                    pathPrefix += 'white';
+                                    break;
+                                default:
+                                    console.warn(`WARNING: invalid path ${path} in titlebox/text subdir, dir[1] ${dir[1]} invalid, dir: ${dir}`, path);
+                                    return null;
+                            }
+                            break;
+                        default:
+                            console.warn(`WARNING: invalid path ${path} in titlebox subdir, dir[0] ${dir[0]} invalid, dir: ${dir}`, path);
+                            return null;
+                    }
+                    // add determined path prefix
+                    path = `${pathPrefix}/${path}`;
+                    break;
+            }
+        }
+    } else {
+        // path does start with a folder, ensure valid
+        let folder = path.slice(0, folderIndex);
+        switch (targetFolder) {
+            // compare folder (the first defined value before /) and targetFolder (the value between the last / and - )
+            case 'gcs': if (folder != 'gcs') { console.warn(`WARNING: folder ${folder} and targetFolder ${targetFolder} mismatch, can't get png map asset`, path); return null; } break;
+            case 'label': if (folder != 'labels') { console.warn(`WARNING: folder ${folder} and targetFolder ${targetFolder} mismatch, can't get png map asset`, path); return null; } break;
+            case 'land': if (folder != 'land') { console.warn(`WARNING: folder ${folder} and targetFolder ${targetFolder} mismatch, can't get png map asset`, path); return null; } break;
+            case 'line': if (folder != 'landlines') { console.warn(`WARNING: folder ${folder} and targetFolder ${targetFolder} mismatch, can't get png map asset`, path); return null; } break;
+            case 'titlebox':
+                if (folderIndex == lastFolderIndex) {
+                    // failed to insert specific titlebox subfolder
+                    console.warn(`WARNING: failed to specify unique titlebox subfolder, ensure to specify it, attempting to infer from asset name: ${asset}`, path);
+                    return getMapAsset(asset);
+                }
+                let subfolder = path.slice(folderIndex + 1, lastFolderIndex);
+                if (subfolder.indexOf('/') == -1) { console.warn(`WARNING: too many titlebox subfolders specified: ${subfolder}`, path); return null; }
+                switch (subfolder) {
+                    case 'frame_combined':
+                    case 'frame_fill':
+                    case 'frame_stroke_black':
+                    case 'frame_stroke_white':
+                    case 'text_black':
+                    case 'text_white':
+                        // valid!
+                        break;
+                    default:
+                        console.warn(`WARNING: Invalid titlebox subfolder ${subfolder}`, path);
+                        return null;
+                }
+                break;
+        }
+    }
+    // ensure path ends with .png 
     if (!path.endsWith('.png')) {
         path += path.endsWith('.') ? 'png' : '.png';
     }
@@ -180,6 +308,7 @@ export const getMapAsset = (path) => {
 };
 
 console.log(mapAssetPNGs);
+console.log(getMapAsset('label-gcs_meridian_primemeridian'));
 console.log(getMapAsset('gcs/gcs-complete'));
 
 // import {
