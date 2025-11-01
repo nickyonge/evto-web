@@ -167,6 +167,8 @@ export const mapAssetPNGs = Object.fromEntries(
     })
 );
 
+const DEBUG_GET_MAP_ASSET = true;
+
 /**
  * Gets an asset URL for a map PNG, able to be directly assigned to img.src
  * 
@@ -177,7 +179,7 @@ export const mapAssetPNGs = Object.fromEntries(
  */
 export const getMapAsset = (path) => {
     // ensure path is valid
-    console.log("Attempting to parse path: \n" + path);
+    console.if(DEBUG_GET_MAP_ASSET, "Attempting to parse path: \n" + path);
     if (path == null || typeof path !== 'string') {
         console.warn(`can't get map asset from null/invalid path ${path}, returning null`, path);
         return null;
@@ -304,7 +306,7 @@ export const getMapAsset = (path) => {
     if (!path.endsWith('.png')) {
         path += path.endsWith('.') ? 'png' : '.png';
     }
-    console.log("Success! Attempting to get map asset from path: \n" + path);
+    console.if(DEBUG_GET_MAP_ASSET, "Success! Attempting to get map asset from path: \n" + path);
     path = mapAssetPNGs[path];
     if (path == null || isBlank(path)) { console.warn(`WARNING: mapAssetPNG not found at path ${path}, ensure asset ${asset}.png exists in mapAssetPNGs \n`, mapAssetPNGs); return undefined; }
     return path;
@@ -313,11 +315,20 @@ export const getMapAsset = (path) => {
 export function testExport() {
 }
 
+/**
+ * Convenience, gets a {@link nestedPath} while first converting the path to a map asset path ({@linkcode getMapAsset})
+ * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
+ * @param {object[]} children Optional children of this node 
+ * @returns {object}
+ */
+function nestedAsset(assetPath, children = {}) {
+    return nestedPath(getMapAsset(assetPath), children);
+}
 
 /**
  * Create a nested hierarchy of nodes and children, to hold the given values in a tree structure
- * @param {any} value 
- * @param {object[]} children 
+ * @param {string} path Filepath stored into this node 
+ * @param {object[]} children Optional children of this node 
  * @returns {object}
  */
 function nestedPath(path, children = {}) {
