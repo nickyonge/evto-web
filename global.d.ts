@@ -304,6 +304,22 @@ declare global {
          * @see {@linkcode https://nodejs.org/docs/latest-v24.x/api/util.html#utilformatformat-args util.format()} for more information.
          */
         if(conditional: boolean, message?: any, ...optionalParams: any[]): void;
+
+
+        /**
+         * Return the current stack trace, formatted as an array
+         * where each index is the next line in the stack output.
+         * @returns {string[]} Stack trace, formatted into a string array */
+        stack: string;
+
+        /**
+         * Return the current stack trace as an unformatted string. 
+         * 
+         * Equivalent to calling `new Error().stack;`
+         * @type {string}
+         */
+        stackString: string;
+        
     }
 
 }
