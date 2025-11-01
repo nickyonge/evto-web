@@ -332,7 +332,7 @@ export const getMapAsset = (path) => {
 /** @typedef {{
  *  gcs: {
  *      complete: nPath,
-//  *      equator: nPath & {
+//  *      equator: nPath & { // gotta figure out how to do this properly
  *      equator: {
  *          dotted: nPath, 
  *          solid: nPath,
@@ -359,6 +359,7 @@ export const getMapAsset = (path) => {
 
 /** @type {ImagesTree} */
 export const images = Object.freeze({
+
     gcs: {
         complete: nestedAsset('gcs-complete'),
         equator: nestedAsset('gcs-equator_dotted', {
@@ -366,8 +367,33 @@ export const images = Object.freeze({
             solid: nestedAsset('gcs-equator_solid'),
             tropicsAndPolarCircles: nestedAsset('gcs-equator_tropics_polar_circles'),
         }),
-
+        latitude: nestedAsset('gcs-latitude', {
+            equator: nestedAsset('gcs-latitude_with_dotted_equator'),
+            tropicsAndPolarCircles: nestedAsset('gcs-latitude_with_tropics_and_polar_circles'),
+        }),
+        latLong: nestedAsset('gcs-latlong', {
+            deg15: nestedAsset('gcs-latlong_15deg_dotted'),
+            deg30: nestedAsset('gcs-latlong_30deg_dotted'),
+            equatorAndMeridians: nestedAsset('gcs-latlong_with_dotted_equator_meridians'),
+        }),
+        longitude: nestedAsset('gcs-longitude', {
+            meridians: nestedAsset('gcs-longitude_with_dotted_meridians'),
+        }),
+        tropics: nestedAsset('gcs-latitude', {
+            polarCircles: nestedAsset('gcs-tropics_and_polar_circles', {
+                equator: nestedAsset('gcs-equator_tropics_polar_circles')
+            }),
+        }),
+        polarCircles: nestedAsset('gcs-latitude', {
+            tropics: nestedAsset('gcs-tropics_and_polar_circles', {
+                equator: nestedAsset('gcs-equator_tropics_polar_circles')
+            }),
+        }),
     },
+
+    labels: {
+
+    }, 
 
 
     // SAMPLE 
