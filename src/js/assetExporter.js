@@ -313,7 +313,7 @@ export const getMapAsset = (path) => {
 };
 
 
-// SAMPLE 
+// SAMPLE
 // const applePieImg = 'apple.png';
 // const pumpkinPieImg = 'pumpkin.png';
 // const plainCookieImg = 'cookie.png';
@@ -356,11 +356,13 @@ export const getMapAsset = (path) => {
  *  turkeyDinner: nPath
  * }} ImagesTree */
 
+const _ASSIGN_ME_ = 'ASSIGN THIS VALUE';
+
 
 /** @type {ImagesTree} */
 export const images = Object.freeze({
 
-    gcs: {
+    gcs: nestedPath(undefined, {
         complete: nestedAsset('gcs-complete'),
         equator: nestedAsset('gcs-equator_dotted', {
             dotted: nestedAsset('gcs-equator_dotted'),
@@ -389,12 +391,71 @@ export const images = Object.freeze({
                 equator: nestedAsset('gcs-equator_tropics_polar_circles')
             }),
         }),
-    },
+    }),
 
-    labels: {
+    labels: nestedAsset(undefined, {
+        gcs: nestedAsset(undefined, {
+            latitude: nestedAsset(undefined, {
+            }),
+            latLong: nestedAsset(undefined, {
+            }),
+            longitude: nestedAsset(undefined, {
+            }),
+            meridian: nestedAsset(undefined, {
+            }),
+            polarCircle: nestedAsset(undefined, {
+            }),
+            poles: nestedAsset(undefined, {
+            }),
+            tropic: nestedAsset(undefined, {
+            }),
+        }),
+        text: nestedAsset(undefined, {
+        }),
+    }),
 
-    }, 
+    land: nestedAsset(undefined, {
+        d1MajorDetails: nestedAsset(undefined, {
+        }),
+        d2MinorDetails: nestedAsset(undefined, {
+        }),
+        d3TinyDetails: nestedAsset(undefined, {
+        }),
+    }),
 
+    landlines: nestedAsset(undefined, {
+        horizontal: nestedAsset(undefined, {
+        }),
+        latitudinal: nestedAsset(undefined, {
+        }),
+        longitudinal: nestedAsset(undefined, {
+        }),
+        vertical: nestedAsset(undefined, {
+        }),
+    }),
+
+    titlebox: nestedAsset(undefined, {
+        frame: nestedAsset(undefined, {
+            combined: nestedAsset(undefined, {
+            }),
+            fill: nestedAsset(undefined, {
+            }),
+            stroke: nestedAsset(undefined, {
+                black: nestedAsset(undefined, {
+                }),
+                white: nestedAsset(undefined, {
+                }),
+            }),
+        }),
+        text: nestedAsset(undefined, {
+            black: nestedAsset(undefined, {
+            }),
+            white: nestedAsset(undefined, {
+            }),
+        }),
+    }),
+
+    // _ASSIGN_ME_
 
     // SAMPLE 
     // desserts: {
@@ -434,7 +495,7 @@ export function testExport() {
  * @returns {object}
  */
 function nestedAsset(assetPath, children = {}) {
-    return nestedPath(getMapAsset(assetPath), children);
+    return nestedPath(assetPath === undefined ? undefined : getMapAsset(assetPath), children);
 }
 
 /**
