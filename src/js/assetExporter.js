@@ -396,61 +396,163 @@ export const images = Object.freeze({
     labels: nestedAsset(undefined, {
         gcs: nestedAsset(undefined, {
             latitude: nestedAsset(undefined, {
+                deg15: nestedAsset('label-gcs_latitude_15deg'),
+                deg30: nestedAsset('label-gcs_latitude_15deg'),
             }),
             latLong: nestedAsset(undefined, {
+                deg15: nestedAsset('label-gcs_latlong_15deg'),
+                deg30: nestedAsset('label-gcs_latlong_30deg'),
             }),
             longitude: nestedAsset(undefined, {
+                deg15: nestedAsset('label-gcs_longitude_15deg'),
+                deg30: nestedAsset('label-gcs_longitude_30deg'),
             }),
             meridian: nestedAsset(undefined, {
+                anti: nestedAsset('label-gcs_meridian_antimeridian'),
+                full: nestedAsset('label-gcs_meridian_full'),
+                prime: nestedAsset('label-gcs_meridian_primemeridian'),
             }),
             polarCircle: nestedAsset(undefined, {
+                antarctic: nestedAsset('label-gcs_polarcircle_antarctic'),
+                arctic: nestedAsset('label-gcs_polarcircle_arctic'),
+                full: nestedAsset('label-gcs_polarcircle_full'),
             }),
             poles: nestedAsset(undefined, {
+                full: nestedAsset('label-gcs_poles_full'),
+                north: nestedAsset('label-gcs_poles_north'),
+                south: nestedAsset('label-gcs_poles_south'),
             }),
             tropic: nestedAsset(undefined, {
+                capricorn: nestedAsset('label-gcs_tropic_cancer'),
+                cancer: nestedAsset('label-gcs_tropic_capricorn'),
+                full: nestedAsset('label-gcs_tropic_full'),
             }),
         }),
-        text: nestedAsset(undefined, {
+        land: nestedAsset(undefined, {
+            large: nestedAsset('label-land_large'),
+            normalzed: nestedAsset('label-land_normalized'),
+            relative: nestedAsset('label-land_relative'),
         }),
     }),
 
     land: nestedAsset(undefined, {
         d1MajorDetails: nestedAsset(undefined, {
+            fill: nestedAsset('land-d1major_fill'),
+            stroke: nestedAsset('land-d1major_stroke'),
         }),
         d2MinorDetails: nestedAsset(undefined, {
+            fill: nestedAsset('land-d2minor_fill'),
+            stroke: nestedAsset('land-d2minor_stroke'),
         }),
         d3TinyDetails: nestedAsset(undefined, {
+            fill: nestedAsset('land-d3tiny_fill'),
+            stroke: nestedAsset('land-d3tiny_stroke'),
         }),
     }),
 
     landlines: nestedAsset(undefined, {
         horizontal: nestedAsset(undefined, {
+            d1MajorDetails: nestedAsset('line-horz_d1major'),
+            d2MinorDetails: nestedAsset('line-horz_d2minor'),
+            d3TinyDetails: nestedAsset('line-horz_d3tiny'),
         }),
         latitudinal: nestedAsset(undefined, {
+            d1MajorDetails: nestedAsset('line-lat_d1major'),
+            d2MinorDetails: nestedAsset('line-lat_d2minor'),
+            d3TinyDetails: nestedAsset('line-lat_d3tiny'),
         }),
         longitudinal: nestedAsset(undefined, {
+            d1MajorDetails: nestedAsset('line-long_d1major'),
+            d2MinorDetails: nestedAsset('line-long_d2minor'),
+            d3TinyDetails: nestedAsset('line-long_d3tiny'),
         }),
         vertical: nestedAsset(undefined, {
+            d1MajorDetails: nestedAsset('line-vert_d1major'),
+            d2MinorDetails: nestedAsset('line-vert_d2minor'),
+            d3TinyDetails: nestedAsset('line-vert_d3tiny'),
         }),
     }),
 
     titlebox: nestedAsset(undefined, {
         frame: nestedAsset(undefined, {
             combined: nestedAsset(undefined, {
+                duck: nestedAsset('titlebox-frame_combined_duck', {
+                    shadowA: nestedAsset('titlebox-frame_combined_duck_shadow'),
+                    shadowB: nestedAsset('titlebox-frame_combined_duck_shadow_alt'),
+                }),
+                picframe: nestedAsset('titlebox-frame_combined_picframe', {
+                    shadow: nestedAsset('titlebox-frame_combined_picframe_shadow'),
+                }),
+                rounded: nestedAsset('titlebox-frame_combined_rounded', {
+                    shadow: nestedAsset('titlebox-frame_combined_rounded_shadow'),
+                }),
+                square: nestedAsset('titlebox-frame_combined_square', {
+                    shadow: nestedAsset('titlebox-frame_combined_square_shadow'),
+                }),
             }),
             fill: nestedAsset(undefined, {
+                duck: nestedAsset('titlebox-frame_fill_duck', {
+                    mergedA: nestedAsset('titlebox-frame_fill_duck_merged'),
+                    mergedB: nestedAsset('titlebox-frame_fill_duck_merged_alt'),
+                    shadowA: nestedAsset('titlebox-frame_fill_duck_shadow'),
+                    shadowB: nestedAsset('titlebox-frame_fill_duck_shadow_alt'),
+                }),
+                picframe: nestedAsset('titlebox-frame_fill_picframe', {
+                    merged: nestedAsset('titlebox-frame_fill_picframe'),
+                    shadow: nestedAsset('titlebox-frame_fill_picframe_shadow'),
+                }),
+                rounded: nestedAsset('titlebox-frame_fill_rounded', {
+                    merged: nestedAsset('titlebox-frame_fill_rounded'),
+                    shadow: nestedAsset('titlebox-frame_fill_rounded_shadow'),
+                }),
+                square: nestedAsset('titlebox-frame_fill_square', {
+                    merged: nestedAsset('titlebox-frame_fill_square'),
+                    shadow: nestedAsset('titlebox-frame_fill_square_shadow'),
+                }),
             }),
             stroke: nestedAsset(undefined, {
                 black: nestedAsset(undefined, {
+                    duck: nestedAsset('titlebox-frame_stroke_black_duck', {
+                        shadowA: nestedAsset('titlebox-frame_stroke_black_duck_shadow'),
+                        shadowB: nestedAsset('titlebox-frame_stroke_black_duck_shadow_alt'),
+                    }),
+                    picframe: nestedAsset('titlebox-frame_stroke_black_picframe', {
+                        shadow: nestedAsset('titlebox-frame_stroke_black_picframe_shadow'),
+                    }),
+                    rounded: nestedAsset('titlebox-frame_stroke_black_rounded', {
+                        shadow: nestedAsset('titlebox-frame_stroke_black_rounded_shadow'),
+                    }),
+                    square: nestedAsset('titlebox-frame_stroke_black_square', {
+                        shadow: nestedAsset('titlebox-frame_stroke_black_square_shadow'),
+                    }),
                 }),
                 white: nestedAsset(undefined, {
+                    duck: nestedAsset('titlebox-frame_stroke_white_duck', {
+                        shadowA: nestedAsset('titlebox-frame_stroke_white_duck_shadow'),
+                        shadowB: nestedAsset('titlebox-frame_stroke_white_duck_shadow_alt'),
+                    }),
+                    picframe: nestedAsset('titlebox-frame_stroke_white_picframe', {
+                        shadow: nestedAsset('titlebox-frame_stroke_white_picframe_shadow'),
+                    }),
+                    rounded: nestedAsset('titlebox-frame_stroke_white_rounded', {
+                        shadow: nestedAsset('titlebox-frame_stroke_white_rounded_shadow'),
+                    }),
+                    square: nestedAsset('titlebox-frame_stroke_white_square', {
+                        shadow: nestedAsset('titlebox-frame_stroke_white_square_shadow'),
+                    }),
                 }),
             }),
         }),
         text: nestedAsset(undefined, {
             black: nestedAsset(undefined, {
+                body: nestedAsset('titlebox-text_black_body'),
+                full: nestedAsset('titlebox-text_black_full'),
+                title: nestedAsset('titlebox-text_black_title'),
             }),
             white: nestedAsset(undefined, {
+                body: nestedAsset('titlebox-text_white_body'),
+                full: nestedAsset('titlebox-text_white_full'),
+                title: nestedAsset('titlebox-text_white_title'),
             }),
         }),
     }),
