@@ -1,4 +1,5 @@
-import './css'; // import css classes 
+import './sys'; // system/window-level utility code 
+import './css'; // import css classes
 import { BuildUI, DisplayUI } from './uiMain';
 import { SetupDataWindow } from './contentData';
 import { SetupArtWindow } from './contentArt';
@@ -10,7 +11,7 @@ import { testExport } from './assetExporter';
 
 import { GenerateCSS as ComponentsCSS } from './components';
 
-import './doc'; // should be called after all other imports 
+import './doc'; // document-level utility could. Should be called after all other imports 
 
 let _onLoadCompleteCallbacks = [];
 

@@ -1,6 +1,8 @@
 //@ts-check
 // script for document-level architecture
 
+// DOCUMENT-LEVEL - imported to index LAST, after all other imports are completed 
+
 // #region Node 
 
 import { BasicComponent } from "./components/base";
@@ -508,11 +510,11 @@ Number.prototype.isEven = function () {
         throw new Error(`ERROR: value ${this.valueOf()} is not finite, cannot determine if even/odd`);
     }
     return this.valueOf() % 2 == 0;
-}
+};
 /**
  * Checks if this number is odd, returning `true`, or even, returning `false`
  * @see {@link Number.isEven isEven}
  * @returns {boolean} */
-Number.prototype.isOdd = function () { return !this.valueOf().isEven; }
+Number.prototype.isOdd = function () { return !this.valueOf().isEven; };
 
 // #endregion Number 
