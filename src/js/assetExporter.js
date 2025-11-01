@@ -312,7 +312,93 @@ export const getMapAsset = (path) => {
     return path;
 };
 
+
+// SAMPLE 
+// const applePieImg = 'apple.png';
+// const pumpkinPieImg = 'pumpkin.png';
+// const plainCookieImg = 'cookie.png';
+// const chocolateChipCookieImg = 'chocchip.png';
+// const oatmealCookieImg = 'oatmeal.png';
+// const oatmealRaisinCookieImg = 'oatmeal-raisin.png';
+// const waterImg = 'water.png';
+// const icedTeaImg = 'icedtea.png';
+// const sweetenedIcedTeaImg = 'icedtea-sweet.png';
+// const turkeyDinnerImg = 'turkey.png';
+
+
+/** 
+ * @typedef {ReturnType<typeof nestedPath>} nPath
+*/
+/** @typedef {{
+ *  gcs: {
+ *      complete: nPath,
+//  *      equator: nPath & {
+ *      equator: {
+ *          dotted: nPath, 
+ *          solid: nPath,
+ *          tropicsAndPolarCircles: nPath,
+ *      },
+ *  },
+ * 
+ * 
+ *  SAMPLE
+ * 
+ *  desserts: {
+ *    cookie: {
+ *      chocolatechip: nPath,
+ *      oatmeal: nPath & { raisin: nPath }
+ *    }
+ *  },
+ *  drinks: {
+ *    water: nPath,
+ *    icedtea: nPath & { sweetened: nPath }
+ *  },
+ *  turkeyDinner: nPath
+ * }} ImagesTree */
+
+
+/** @type {ImagesTree} */
+export const images = Object.freeze({
+    gcs: {
+        complete: nestedAsset('gcs-complete'),
+        equator: nestedAsset('gcs-equator_dotted', {
+            dotted: nestedAsset('gcs-equator_dotted'),
+            solid: nestedAsset('gcs-equator_solid'),
+            tropicsAndPolarCircles: nestedAsset('gcs-equator_tropics_polar_circles'),
+        }),
+
+    },
+
+
+    // SAMPLE 
+    // desserts: {
+    //     pie: nestedPath(undefined, {
+    //         apple: nestedPath(applePieImg),
+    //         pumpkin: nestedPath(pumpkinPieImg),
+    //     }),
+    //     // default is plainCookieImg, but you can still go deeper
+    //     cookie: nestedPath(plainCookieImg, {
+    //         chocolatechip: nestedPath(chocolateChipCookieImg),
+    //         oatmeal: nestedPath(oatmealCookieImg, {
+    //             raisin: nestedPath(oatmealRaisinCookieImg),
+    //         }),
+    //     }),
+    // },
+    // drinks: {
+    //     water: nestedPath(waterImg),
+    //     icedtea: nestedPath(icedTeaImg, {
+    //         sweetened: nestedPath(sweetenedIcedTeaImg),
+    //     }),
+    // },
+    // turkeyDinner: nestedPath(turkeyDinnerImg),
+});
+
+console.log(images.gcs.equator);
+
 export function testExport() {
+
+
+    console.log(images.desserts.cookie);
 }
 
 /**
