@@ -2,6 +2,8 @@
 
 import { EnsureToNumber, isBlank, isString } from "./lilutils";
 
+/** debug output to confirm getMapAsset functionality */
+const DEBUG_GET_MAP_ASSET = false;
 
 /* Images Enum Map
                                             
@@ -169,8 +171,6 @@ export const mapAssetPNGs = Object.fromEntries(
     })
 );
 
-const DEBUG_GET_MAP_ASSET = true;
-
 /**
  * Gets an asset URL for a map PNG, able to be directly assigned to img.src
  * 
@@ -314,11 +314,9 @@ export const getMapAsset = (path) => {
     return path;
 };
 
-
 /**
  * @typedef {object} nestedNode Nodes created via a {@link nestedPath} 
- * @property {string} path Filepath stored into this node 
- * @property {object} children Optional children of this node 
+ * @property {string} URL Filepath stored into this node 
  */
 
 /**
@@ -334,7 +332,7 @@ function nestedPath(path, children = undefined) {
     if (path == null || !isString(path)) { path = ''; }
 
     // define the path property 
-    Object.defineProperty(node, 'path', {
+    Object.defineProperty(node, 'URL', {
         get: () => path,
         enumerable: true,
     });
@@ -343,7 +341,6 @@ function nestedPath(path, children = undefined) {
     node.toString = () => path;
     node.valueOf = () => path;
     node.value = path == null ? '' : String(path);
-    // node.path = path == null ? '' : String(path);
 
     // define the implicit primitive value based on hint 
     node[Symbol.toPrimitive] = (hint) => {
@@ -379,51 +376,14 @@ function nestedPath(path, children = undefined) {
 
     // ensure children are appropriately assigned 
     Object.assign(node, children);
-
+    
     // freeze and return node 
     return Object.freeze(node);
 }
 
-//  *      equator: nestedPath & { // gotta figure out how to do this properly
-//  * @typedef {ReturnType<nestedPath>} nPath
-
-
-/** 
- * @x type {{
- *      _gcs: nestedNode & {
- *          _complete: nestedNode,
- *          _equator: nestedNode & {
- *              _dotted: nestedNode, 
- *              _solid: nestedNode,
- *              _tropicsAndPolarCircles: nestedNode,
- *          },
- *          _latitude: nestedNode & {
- *              _equator: nestedNode, 
- *              _tropicsAndPolarCircles: nestedNode
- *          },
- *          _latLong: nestedNode & {
- *              _deg15: nestedNode, 
- *              _deg30: nestedNode,
- *              _equatorAndMeridians: nestedNode
- *          },
- *          _longitude: nestedNode & {
- *              _meridians: nestedNode
- *          },
- *          _tropics: nestedNode & {
- *              _polarCircles: nestedNode & {
- *                  _equator: nestedNode
- *              }
- *          },
- *          _polarCircles: nestedNode & {
- *              _tropics: nestedNode & {
- *                  _equator: nestedNode
- *              }
- *          },
- *      }
- *  }} 
- * */
-let x;
-
+/**
+ * Nested map of all map PNG assets and their URL references 
+ */
 export const map = Object.freeze({
 
     _gcs: nestedAsset(undefined, {
@@ -628,27 +588,9 @@ export const map = Object.freeze({
     //   replace: $1$3
 });
 
-console.log(map._gcs._equator);
-
 export function testExport() {
-
-
-    // console.log(images.desserts.cookie);
+    console.log(map._gcs._complete.URL);
 }
-
-/**
-//  * @typedef {object} nestedAsset
- * 
- */
-
-/**
- * Convenience, gets a {@link nestedPath} while first converting the path to a map asset path ({@linkcode getMapAsset})
- * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
- * @param {object} children Optional children of this node 
- * @returns {object}
- */
-let xx;
-
 
 /**
  * Gets a {@linkcode nestedNode} via {@linkcode nestedPath}, while passing `assetPath` 
@@ -678,131 +620,3 @@ function nestedAsset(assetPath, children = undefined) {
     }
     return nestedPath(getMapAsset(assetPath), children);
 }
-
-/*
-
-export {
-    'gcs-complete.png',
-    'gcs-equator_dotted.png',
-    'gcs-equator_solid.png',
-    'gcs-equator_tropics_polar_circles.png',
-    'gcs-latitude_with_dotted_equator.png',
-    'gcs-latitude_with_tropics_and_polar_circles.png',
-    'gcs-latitude.png',
-    'gcs-latlong_15deg_dotted.png',
-    'gcs-latlong_30deg_dotted.png',
-    'gcs-latlong_with_dotted_equator_meridians.png',
-    'gcs-latlong.png',
-    'gcs-longitude_with_dotted_meridians.png',
-    'gcs-longitude.png',
-    'gcs-polar_circles.png',
-    'gcs-tropics_and_polar_circles.png',
-    'gcs-tropics.png'
-} from '../../assets/png/map/gcs/';
-
-export {
-    'label-gcs_equator',
-    'label-gcs_latitude_15deg',
-    'label-gcs_latitude_30deg',
-    'label-gcs_latlong_15deg',
-    'label-gcs_latlong_30deg',
-    'label-gcs_longitude_15deg',
-    'label-gcs_longitude_30deg',
-    'label-gcs_meridian_antimeridian',
-    'label-gcs_meridian_full',
-    'label-gcs_meridian_primemeridian',
-    'label-gcs_polarcircle_antarctic',
-    'label-gcs_polarcircle_arctic',
-    'label-gcs_polarcircle_full',
-    'label-gcs_poles_full',
-    'label-gcs_poles_north',
-    'label-gcs_poles_south',
-    'label-gcs_tropic_cancer',
-    'label-gcs_tropic_capricorn',
-    'label-gcs_tropic_full',
-    'label-land_large',
-    'label-land_normalized',
-    'label-land_relative'
-} from '../../assets/png/map/land/labels';
-
-export {
-    'land-d1major_fill.png',
-    'land-d2minor_fill.png',
-    'land-d3tiny_fill.png',
-    'land-d1major_stroke.png',
-    'land-d2minor_stroke.png',
-    'land-d3tiny_stroke.png'
-} from '../../assets/png/map/land/';
-
-export {
-    'line-horz_d1major.png',
-    'line-horz_d2minor.png',
-    'line-horz_d3tiny.png',
-    'line-lat_d1major.png',
-    'line-lat_d2minor.png',
-    'line-lat_d3tiny.png',
-    'line-long_d1major.png',
-    'line-long_d2minor.png',
-    'line-long_d3tiny.png',
-    'line-vert_d1major.png',
-    'line-vert_d2minor.png',
-    'line-vert_d3tiny.png'
-} from '../../assets/png/map/landlines/';
-
-export {
-
-    'border_combined/titlebox-frame_combined_duck_shadow_alt.png',
-    'border_combined/titlebox-frame_combined_duck_shadow.png',
-    'border_combined/titlebox-frame_combined_duck.png',
-    'border_combined/titlebox-frame_combined_picframe_shadow.png',
-    'border_combined/titlebox-frame_combined_picframe.png',
-    'border_combined/titlebox-frame_combined_rounded_shadow.png',
-    'border_combined/titlebox-frame_combined_rounded.png',
-    'border_combined/titlebox-frame_combined_square_shadow.png',
-    'border_combined/titlebox-frame_combined_square.png',
-
-    'border_fill/titlebox-frame_fill_duck_merged_alt.png',
-    'border_fill/titlebox-frame_fill_duck_merged.png',
-    'border_fill/titlebox-frame_fill_duck_shadow_alt.png',
-    'border_fill/titlebox-frame_fill_duck_shadow.png',
-    'border_fill/titlebox-frame_fill_duck.png',
-    'border_fill/titlebox-frame_fill_picframe_merged.png',
-    'border_fill/titlebox-frame_fill_picframe_shadow.png',
-    'border_fill/titlebox-frame_fill_picframe.png',
-    'border_fill/titlebox-frame_fill_rounded_merged.png',
-    'border_fill/titlebox-frame_fill_rounded_shadow.png',
-    'border_fill/titlebox-frame_fill_rounded.png',
-    'border_fill/titlebox-frame_fill_square_merged.png',
-    'border_fill/titlebox-frame_fill_square_shadow.png',
-    'border_fill/titlebox-frame_fill_square.png',
-
-    'border_stroke_black/titlebox-frame_stroke_black_duck_shadow_alt.png',
-    'border_stroke_black/titlebox-frame_stroke_black_duck_shadow.png',
-    'border_stroke_black/titlebox-frame_stroke_black_duck.png',
-    'border_stroke_black/titlebox-frame_stroke_black_picframe_shadow.png',
-    'border_stroke_black/titlebox-frame_stroke_black_picframe.png',
-    'border_stroke_black/titlebox-frame_stroke_black_rounded_shadow.png',
-    'border_stroke_black/titlebox-frame_stroke_black_rounded.png',
-    'border_stroke_black/titlebox-frame_stroke_black_square_shadow.png',
-    'border_stroke_black/titlebox-frame_stroke_black_square.png',
-
-    'border_stroke_white/titlebox-frame_stroke_white_duck_shadow_alt.png',
-    'border_stroke_white/titlebox-frame_stroke_white_duck_shadow.png',
-    'border_stroke_white/titlebox-frame_stroke_white_duck.png',
-    'border_stroke_white/titlebox-frame_stroke_white_picframe_shadow.png',
-    'border_stroke_white/titlebox-frame_stroke_white_picframe.png',
-    'border_stroke_white/titlebox-frame_stroke_white_rounded_shadow.png',
-    'border_stroke_white/titlebox-frame_stroke_white_rounded.png',
-    'border_stroke_white/titlebox-frame_stroke_white_square_shadow.png',
-    'border_stroke_white/titlebox-frame_stroke_white_square.png',
-
-    'text_black/titlebox-text_black_body.png',
-    'text_black/titlebox-text_black_full.png',
-    'text_black/titlebox-text_black_title.png',
-
-    'text_white/titlebox-text_white_body.png',
-    'text_white/titlebox-text_white_full.png',
-    'text_white/titlebox-text_white_title.png'
-
-} from '../../assets/png/map/titlebox/';
-*/
