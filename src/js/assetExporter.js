@@ -314,10 +314,120 @@ export const getMapAsset = (path) => {
     return path;
 };
 
+
+
 /**
- * @typedef {object} nestedNode Nodes created via a {@link nestedPath} 
+ * @typedef {object} deadNode Node of a {@link nestedPath}, with neither a filepath URL nor children
+ */
+/**
+ * @typedef {object} leafNode Node of a {@link nestedPath}, with a filepath URL and no children
  * @property {string} URL Filepath stored into this node 
  */
+/**
+ * @typedef {object} containerNode Node of a {@link nestedPath}, with children but no filepath URL 
+ * @property {string[]} Children Array of all child nodes nested in this node 
+ */
+/**
+ * @typedef {object} nestedNode Node of a {@link nestedPath}, with both a filepath URL and children
+ * @property {string} URL Filepath stored into this node 
+ * @property {string[]} Children Array of all child nodes nested in this node 
+ */
+
+//* ------------------ 
+/**
+ * Gets a {@linkcode deadNode} via {@linkcode nestedPath}, 
+ * which contains neither `URL` nor any child nodes.
+ * @template {Record<string, any>} nestedChildren 
+ * @overload containerNode - no url, no children 
+ * @returns {deadNode}
+ */
+//* ------------------ 
+/**
+ * Gets a {@linkcode deadNode} via {@linkcode nestedPath}, 
+ * which contains neither `URL` nor any child nodes.
+ * @template {Record<string, any>} nestedChildren 
+ * @overload containerNode - no url, no children 
+ * @param {undefined|null} assetPath `undefined`/`null` path, passed directly to {@linkcode nestedAsset} 
+ * @returns {deadNode}
+ */
+//* ------------------ 
+/**
+ * Gets a {@linkcode deadNode} via {@linkcode nestedPath}, 
+ * which contains neither `URL` nor any child nodes.
+ * @template {Record<string, any>} nestedChildren 
+ * @overload containerNode - no url, no children 
+ * @param {undefined|null} assetPath `undefined`/`null` path, passed directly to {@linkcode nestedAsset} 
+ * @param {undefined|null} children `undefined`/`null` children, node has no children 
+ * @returns {deadNode}
+ */
+//* ------------------ 
+/**
+ * Gets a {@linkcode leafNode} via {@linkcode nestedPath}, 
+ * which contains a `URL` parsed via {@linkcode getMapAsset}.
+ * @template {Record<string, any>} nestedChildren 
+ * @overload nestedAsset(assetPath); // yes url, no children 
+ * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
+ * @returns {leafNode} 
+*/
+//* ------------------ 
+/**
+ * Gets a {@linkcode leafNode} via {@linkcode nestedPath}, 
+ * which contains a `URL` parsed via {@linkcode getMapAsset}.
+ * @template {Record<string, any>} nestedChildren 
+ * @overload nestedAsset(assetPath); // yes url, no children 
+ * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
+ * @param {undefined|null} children `undefined`/`null` children, node has no children 
+ * @returns {leafNode} 
+*/
+//* ------------------ 
+/**
+ * Gets a {@linkcode containerNode} via {@linkcode nestedPath}, 
+ * which contains child nodes but does not itself have a `URL`. 
+ * @template {Record<string, any>} nestedChildren 
+ * @overload containerNode - no url, yes children
+ * @param {undefined|null} assetPath `undefined`/`null` path, passed directly to {@linkcode nestedAsset} 
+ * @param {nestedChildren} children Children of this node 
+ * @returns {containerNode & { [key in keyof nestedChildren]: nestedChildren[key] }}
+ */
+//* ------------------ 
+/**
+ * Gets a {@linkcode containerNode} via {@linkcode nestedPath}, 
+ * which contains child nodes but does not itself have a `URL`. 
+ * @overload containerNode - no url, yes children
+ * @param {undefined|null} assetPath `undefined`/`null` path, passed directly to {@linkcode nestedAsset} 
+ * @returns {containerNode & { [key in keyof nestedChildren]: nestedChildren[key] }}
+ */
+//* ------------------ 
+/**
+ * Gets a {@linkcode containerNode} via {@linkcode nestedPath}, 
+ * which contains child nodes but does not itself have a `URL`. 
+ * @overload containerNode - no url, yes children
+ * @param {nestedChildren} children Children of this node 
+ * @returns {containerNode & { [key in keyof nestedChildren]: nestedChildren[key] }}
+ */
+//* ------------------ 
+/**
+ * Gets a {@linkcode nestedNode} via {@linkcode nestedPath}, which contains
+ * children of its own, and a `URL` parsed via {@linkcode getMapAsset}.
+ * @template {Record<string, any>} nestedChildren 
+ * @overload nestedNode - yes url, yes children 
+ * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
+ * @param {nestedChildren} children Children of this node 
+ * @returns {nestedNode & { [key in keyof nestedChildren]: nestedChildren[key] }}
+ */
+//* ------------------ 
+/**
+ * @template {Record<string, any>} [nestedChildren=Record<string, never>]
+ * @param {string|undefined|null} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
+ * @param {nestedChildren} [children = undefined] Optional children of this node 
+ * @returns {nestedNode}
+ */
+function nestedAsset(assetPath, children = undefined) {
+    if (assetPath === undefined) {
+        return nestedPath(undefined, children);
+    }
+    return nestedPath(getMapAsset(assetPath), children);
+}
 
 /**
  * Create a nested hierarchy of {@link nestedNode nestedNodes}, to hold the given values in a tree structure
@@ -334,7 +444,7 @@ function nestedPath(path, children = undefined) {
     // define the path property 
     Object.defineProperty(node, 'URL', {
         get: () => path,
-        enumerable: true,
+        enumerable: path != '', // only enumerable if path exists 
     });
 
     // define default methods to retrieve the path
@@ -374,9 +484,18 @@ function nestedPath(path, children = undefined) {
         }
     }
 
-    // ensure children are appropriately assigned 
+    // make children references accessible 
+    let childList = children ? Object.keys(children) : [];
+    Object.defineProperty(node, 'Children', {
+        value: childList,
+        writable: false,
+        // get: () => childList,
+        // enumerable: false, // skip enumeration altogether 
+        enumerable: childList.length > 0, // only enumerable if children are present 
+    });
+    // ensure children are appropriately assigned
     Object.assign(node, children);
-    
+
     // freeze and return node 
     return Object.freeze(node);
 }
@@ -588,34 +707,5 @@ export const map = Object.freeze({
 });
 
 export function testExport() {
-    console.log(map._gcs._complete.URL);
-}
-
-/**
- * Gets a {@linkcode nestedNode} via {@linkcode nestedPath}, while passing `assetPath` 
- * through {@linkcode getMapAsset} to parse a valid asset path URL.
- * @template {Record<string, any>} nestedChildren 
- * @overload nestedAsset(assetPath,children); 
- * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
- * @param {nestedChildren} children Optional children of this node 
- * @returns {nestedNode & { [key in keyof nestedChildren]: nestedChildren[key] }}
- */
-/**
- * Gets a {@linkcode nestedNode} via {@linkcode nestedPath}, while passing `assetPath` 
- * through {@linkcode getMapAsset} to parse a valid asset path URL.
- * @overload nestedAsset(assetPath); // no children defined 
- * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
- * @returns {nestedNode}
- */
-/**
- * @template {Record<string, any>} [nestedChildren=Record<string, undefined>]
- * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
- * @param {nestedChildren} [children = undefined] Optional children of this node 
- * @returns {nestedNode}
- */
-function nestedAsset(assetPath, children = undefined) {
-    if (assetPath === undefined) {
-        return nestedPath(undefined, children);
-    }
-    return nestedPath(getMapAsset(assetPath), children);
+    console.log(map.gcs);
 }
