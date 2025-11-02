@@ -1,5 +1,8 @@
 {
-  "include": [
-    "global.d.ts"
-  ]
+  "compilerOptions": {
+    "checkJs": true,
+    "allowJs": true,
+    "lib": ["es2022", "dom"]
+  },
+  "include": ["global.d.ts", "src/**/*.js"]   // <— adjust paths to your layout
 }

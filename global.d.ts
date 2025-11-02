@@ -1,5 +1,7 @@
 import type { BasicComponent } from "./src/js/components/base";
 
+export { };
+
 declare global {
 
     interface Node {
@@ -284,6 +286,7 @@ declare global {
     }
 
     interface Console {
+
         /**
          * Conditional-based log - only outputs if the given conditional value is `true`.
          * Basically {@linkcode console.assert console.assert()}, except does NOT throw 
@@ -305,7 +308,6 @@ declare global {
          */
         if(conditional: boolean, message?: any, ...optionalParams: any[]): void;
 
-
         /**
          * Return the current stack trace, formatted as an array
          * where each index is the next line in the stack output.
@@ -319,7 +321,7 @@ declare global {
          * @type {string}
          */
         stackString: string;
-        
+
     }
 
 }
