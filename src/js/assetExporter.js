@@ -164,7 +164,7 @@ const DEBUG_GET_MAP_ASSET = false;
 const pngMapContext = require.context('../assets/png/map', true, /\.png$/);
 
 export const mapAssetPNGs = Object.fromEntries(
-    pngMapContext.keys().map((_path) => {
+    pngMapContext.keys().map((/** @type {string} */_path) => {
         // first, ensure path is a string
         const path = _path == null ? '' : String(_path);
         // next, normalze path by removing 
@@ -182,8 +182,8 @@ export const mapAssetPNGs = Object.fromEntries(
  * 
  * **Note:** so long as image is a valid png in the `src/assets/png/map/` directory, 
  * you should be able to simply type the name of the asset and it will be retrieved - eg, `gcs-complete`.
- * @param {string} path Path to the image, relative to `src/assets/png/map/` (does not have to end in `.png`, added if missing)
- * @returns {string}
+ * @param {string|undefined|null} path Path to the image, relative to `src/assets/png/map/` (does not have to end in `.png`, added if missing)
+ * @returns {string|undefined|null}
  */
 export const getMapAsset = (path) => {
     // ensure path is valid
@@ -341,6 +341,20 @@ export const getMapAsset = (path) => {
  * @property {string[]} Children Array of all child nodes nested in this node 
  */
 
+/** 
+ * @typedef {nestedNode|containerNode|leafNode|deadNode} pathNode 
+ * Any type of node created via {@link nestedPath} 
+ * - {@linkcode nestedNode}: node with both a `URL` and `Children` 
+ * - {@linkcode containerNode}: node with no `URL` but with `Children` 
+ * - {@linkcode leafNode}: node with a `URL` but no `Children` 
+ * - {@linkcode deadNode}: node with neither a `URL` nor `Children` 
+ */
+
+/** 
+ * A collection of child {@link pathNode nodes}
+ * @typedef {Record<string, pathNode>} nestedChildren 
+ */
+
 //* ------------------ deadNode (no url, no children) 
 /**
  * Gets a {@linkcode deadNode} via {@linkcode nestedPath}, 
@@ -416,19 +430,20 @@ export const getMapAsset = (path) => {
  * @template {Record<string, any>} [nestedChildren=Record<string, never>]
  * @param {string|undefined|null} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
  * @param {nestedChildren|undefined|null} [children = undefined] Optional children of this node 
- * @returns {(nestedNode | nestedNode & { [key in keyof nestedChildren]: nestedChildren[key] } | containerNode | containerNode & { [key in keyof nestedChildren]: nestedChildren[key] } | leafNode | deadNode)}
- */
+ * @returns {pathNode|pathNode & { [key in keyof nestedChildren]: nestedChildren[key] }}
+*/
 function nestedAsset(assetPath, children = undefined) {
     if (assetPath === undefined) {
         return nestedPath(undefined, children);
     }
     return nestedPath(getMapAsset(assetPath), children);
 }
+//  * @returns {(nestedNode|nestedNode & { [key in keyof nestedChildren]: nestedChildren[key] }|containerNode|containerNode & { [key in keyof nestedChildren]: nestedChildren[key] }|leafNode|deadNode)}
 
 /**
  * Create a nested hierarchy of {@link nestedNode nestedNodes}, to hold the given values in a tree structure
- * @param {string} path Filepath stored into this node 
- * @param {object} children Optional children of this node 
+ * @param {string|undefined|null} path Filepath stored into this node 
+ * @param {nestedChildren|undefined|null} children Optional children of this node 
  * @returns {nestedNode}
  */
 function nestedPath(path, children = undefined) {
@@ -448,7 +463,7 @@ function nestedPath(path, children = undefined) {
     node.valueOf = () => path;
     node.value = path == null ? '' : String(path);
 
-    // define the implicit primitive value based on hint 
+    /** define the implicit primitive value based on hint @param {any} hint @returns {any} */
     node[Symbol.toPrimitive] = (hint) => {
         // return null/undefined value directly 
         if (path == null) { return path; }
