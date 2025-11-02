@@ -5,6 +5,8 @@ import { EnsureToNumber, isBlank, isString } from "./lilutils";
 /** debug output to confirm getMapAsset functionality */
 const DEBUG_GET_MAP_ASSET = false;
 
+// #region Map Viz
+
 /* Images Enum Map
                                             
 ╔═══════╗                                   
@@ -153,6 +155,10 @@ const DEBUG_GET_MAP_ASSET = false;
                 └─ title » ................ titlebox-text_white_title.png 
                                             
 */
+
+// #endregion Map Viz
+
+// #region Assets Retrieval
 
 // @ts-ignore generate a list of all the PNGs in the png/map folder (path, incl subfolders, extension regexp) 
 const pngMapContext = require.context('../assets/png/map', true, /\.png$/);
@@ -314,7 +320,9 @@ export const getMapAsset = (path) => {
     return path;
 };
 
+// #endregion Assets Retrieval
 
+// #region Construction & Typedef
 
 /**
  * @typedef {{}} deadNode Node of a {@link nestedPath}, with neither a filepath URL nor children
@@ -333,14 +341,14 @@ export const getMapAsset = (path) => {
  * @property {string[]} Children Array of all child nodes nested in this node 
  */
 
-//* ------------------ 
+//* ------------------ deadNode (no url, no children) 
 /**
  * Gets a {@linkcode deadNode} via {@linkcode nestedPath}, 
  * which contains neither `URL` nor any child nodes.
  * @overload containerNode - no url, no children 
  * @returns {deadNode}
  */
-//* ------------------ 
+//* ------------------ deadNode (undefined url, no children) 
 /**
  * Gets a {@linkcode deadNode} via {@linkcode nestedPath}, 
  * which contains neither `URL` nor any child nodes.
@@ -348,7 +356,7 @@ export const getMapAsset = (path) => {
  * @param {undefined|null} assetPath `undefined`/`null` path, passed directly to {@linkcode nestedAsset} 
  * @returns {deadNode}
  */
-//* ------------------ 
+//* ------------------ deadNode (undefined url, undefined children) 
 /**
  * Gets a {@linkcode deadNode} via {@linkcode nestedPath}, 
  * which contains neither `URL` nor any child nodes.
@@ -357,7 +365,7 @@ export const getMapAsset = (path) => {
  * @param {undefined|null} children `undefined`/`null` children, node has no children 
  * @returns {deadNode}
  */
-//* ------------------ 
+//* ------------------ leafNode (yes url, no children) 
 /**
  * Gets a {@linkcode leafNode} via {@linkcode nestedPath}, 
  * which contains a `URL` parsed via {@linkcode getMapAsset}.
@@ -365,7 +373,7 @@ export const getMapAsset = (path) => {
  * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
  * @returns {leafNode} 
 */
-//* ------------------ 
+//* ------------------ leafNode (yes url, undefined children) 
 /**
  * Gets a {@linkcode leafNode} via {@linkcode nestedPath}, 
  * which contains a `URL` parsed via {@linkcode getMapAsset}.
@@ -374,7 +382,16 @@ export const getMapAsset = (path) => {
  * @param {undefined|null} children `undefined`/`null` children, node has no children 
  * @returns {leafNode} 
 */
-//* ------------------ 
+//* ------------------ containerNode (no url, yes children) 
+/**
+ * Gets a {@linkcode containerNode} via {@linkcode nestedPath}, 
+ * which contains child nodes but does not itself have a `URL`. 
+ * @template {Record<string, any>} nestedChildren 
+ * @overload containerNode - no url, yes children
+ * @param {nestedChildren} children Children of this node 
+ * @returns {containerNode & { [key in keyof nestedChildren]: nestedChildren[key] }}
+ */
+//* ------------------ containerNode (undefined url, yes children) 
 /**
  * Gets a {@linkcode containerNode} via {@linkcode nestedPath}, 
  * which contains child nodes but does not itself have a `URL`. 
@@ -384,7 +401,7 @@ export const getMapAsset = (path) => {
  * @param {nestedChildren} children Children of this node 
  * @returns {containerNode & { [key in keyof nestedChildren]: nestedChildren[key] }}
  */
-//* ------------------ 
+//* ------------------ nestedNode (yes url, yes children) 
 /**
  * Gets a {@linkcode nestedNode} via {@linkcode nestedPath}, which contains
  * children of its own, and a `URL` parsed via {@linkcode getMapAsset}.
@@ -394,7 +411,7 @@ export const getMapAsset = (path) => {
  * @param {nestedChildren} children Children of this node 
  * @returns {nestedNode & { [key in keyof nestedChildren]: nestedChildren[key] }}
  */
-//* ------------------ 
+//* ------------------ general node fallback implementation 
 /**
  * @template {Record<string, any>} [nestedChildren=Record<string, never>]
  * @param {string|undefined|null} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
@@ -479,8 +496,12 @@ function nestedPath(path, children = undefined) {
     return Object.freeze(node);
 }
 
+// #endregion Construction & Typedef
+
+// #region Map Declaration 
+
 /**
- * Nested map of all map PNG assets and their URL references 
+ * Nested map of all map PNG assets and their URL references (use `.URL`, or parse output as string)
  */
 export const map = Object.freeze({
     gcs: nestedAsset(undefined, {
@@ -685,6 +706,4 @@ export const map = Object.freeze({
     //   replace: $1$3
 });
 
-export function testExport() {
-    console.log(map.gcs);
-}
+// #endregion Map Declaration 
