@@ -225,7 +225,7 @@ export const getMapAsset = (path) => {
                             switch (dir[1]) {
                                 case 'combined':
                                 case 'fill':
-                                    pathPrefix += dir[i];
+                                    pathPrefix += dir[1];
                                     break;
                                 case 'stroke':
                                     pathPrefix += 'stroke_';
@@ -313,298 +313,17 @@ export const getMapAsset = (path) => {
 };
 
 
-// SAMPLE
-// const applePieImg = 'apple.png';
-// const pumpkinPieImg = 'pumpkin.png';
-// const plainCookieImg = 'cookie.png';
-// const chocolateChipCookieImg = 'chocchip.png';
-// const oatmealCookieImg = 'oatmeal.png';
-// const oatmealRaisinCookieImg = 'oatmeal-raisin.png';
-// const waterImg = 'water.png';
-// const icedTeaImg = 'icedtea.png';
-// const sweetenedIcedTeaImg = 'icedtea-sweet.png';
-// const turkeyDinnerImg = 'turkey.png';
-
-
-/** 
- * @typedef {ReturnType<typeof nestedPath>} nPath
-*/
-/** @typedef {{
- *  gcs: {
- *      complete: nPath,
-//  *      equator: nPath & { // gotta figure out how to do this properly
- *      equator: {
- *          dotted: nPath, 
- *          solid: nPath,
- *          tropicsAndPolarCircles: nPath,
- *      },
- *  },
- * 
- * 
- *  SAMPLE
- * 
- *  desserts: {
- *    cookie: {
- *      chocolatechip: nPath,
- *      oatmeal: nPath & { raisin: nPath }
- *    }
- *  },
- *  drinks: {
- *    water: nPath,
- *    icedtea: nPath & { sweetened: nPath }
- *  },
- *  turkeyDinner: nPath
- * }} ImagesTree */
-
-const _ASSIGN_ME_ = 'ASSIGN THIS VALUE';
-
-
-/** @type {ImagesTree} */
-export const images = Object.freeze({
-
-    gcs: nestedPath(undefined, {
-        complete: nestedAsset('gcs-complete'),
-        equator: nestedAsset('gcs-equator_dotted', {
-            dotted: nestedAsset('gcs-equator_dotted'),
-            solid: nestedAsset('gcs-equator_solid'),
-            tropicsAndPolarCircles: nestedAsset('gcs-equator_tropics_polar_circles'),
-        }),
-        latitude: nestedAsset('gcs-latitude', {
-            equator: nestedAsset('gcs-latitude_with_dotted_equator'),
-            tropicsAndPolarCircles: nestedAsset('gcs-latitude_with_tropics_and_polar_circles'),
-        }),
-        latLong: nestedAsset('gcs-latlong', {
-            deg15: nestedAsset('gcs-latlong_15deg_dotted'),
-            deg30: nestedAsset('gcs-latlong_30deg_dotted'),
-            equatorAndMeridians: nestedAsset('gcs-latlong_with_dotted_equator_meridians'),
-        }),
-        longitude: nestedAsset('gcs-longitude', {
-            meridians: nestedAsset('gcs-longitude_with_dotted_meridians'),
-        }),
-        tropics: nestedAsset('gcs-latitude', {
-            polarCircles: nestedAsset('gcs-tropics_and_polar_circles', {
-                equator: nestedAsset('gcs-equator_tropics_polar_circles')
-            }),
-        }),
-        polarCircles: nestedAsset('gcs-latitude', {
-            tropics: nestedAsset('gcs-tropics_and_polar_circles', {
-                equator: nestedAsset('gcs-equator_tropics_polar_circles')
-            }),
-        }),
-    }),
-
-    labels: nestedAsset(undefined, {
-        gcs: nestedAsset(undefined, {
-            latitude: nestedAsset(undefined, {
-                deg15: nestedAsset('label-gcs_latitude_15deg'),
-                deg30: nestedAsset('label-gcs_latitude_15deg'),
-            }),
-            latLong: nestedAsset(undefined, {
-                deg15: nestedAsset('label-gcs_latlong_15deg'),
-                deg30: nestedAsset('label-gcs_latlong_30deg'),
-            }),
-            longitude: nestedAsset(undefined, {
-                deg15: nestedAsset('label-gcs_longitude_15deg'),
-                deg30: nestedAsset('label-gcs_longitude_30deg'),
-            }),
-            meridian: nestedAsset(undefined, {
-                anti: nestedAsset('label-gcs_meridian_antimeridian'),
-                full: nestedAsset('label-gcs_meridian_full'),
-                prime: nestedAsset('label-gcs_meridian_primemeridian'),
-            }),
-            polarCircle: nestedAsset(undefined, {
-                antarctic: nestedAsset('label-gcs_polarcircle_antarctic'),
-                arctic: nestedAsset('label-gcs_polarcircle_arctic'),
-                full: nestedAsset('label-gcs_polarcircle_full'),
-            }),
-            poles: nestedAsset(undefined, {
-                full: nestedAsset('label-gcs_poles_full'),
-                north: nestedAsset('label-gcs_poles_north'),
-                south: nestedAsset('label-gcs_poles_south'),
-            }),
-            tropic: nestedAsset(undefined, {
-                capricorn: nestedAsset('label-gcs_tropic_cancer'),
-                cancer: nestedAsset('label-gcs_tropic_capricorn'),
-                full: nestedAsset('label-gcs_tropic_full'),
-            }),
-        }),
-        land: nestedAsset(undefined, {
-            large: nestedAsset('label-land_large'),
-            normalzed: nestedAsset('label-land_normalized'),
-            relative: nestedAsset('label-land_relative'),
-        }),
-    }),
-
-    land: nestedAsset(undefined, {
-        d1MajorDetails: nestedAsset(undefined, {
-            fill: nestedAsset('land-d1major_fill'),
-            stroke: nestedAsset('land-d1major_stroke'),
-        }),
-        d2MinorDetails: nestedAsset(undefined, {
-            fill: nestedAsset('land-d2minor_fill'),
-            stroke: nestedAsset('land-d2minor_stroke'),
-        }),
-        d3TinyDetails: nestedAsset(undefined, {
-            fill: nestedAsset('land-d3tiny_fill'),
-            stroke: nestedAsset('land-d3tiny_stroke'),
-        }),
-    }),
-
-    landlines: nestedAsset(undefined, {
-        horizontal: nestedAsset(undefined, {
-            d1MajorDetails: nestedAsset('line-horz_d1major'),
-            d2MinorDetails: nestedAsset('line-horz_d2minor'),
-            d3TinyDetails: nestedAsset('line-horz_d3tiny'),
-        }),
-        latitudinal: nestedAsset(undefined, {
-            d1MajorDetails: nestedAsset('line-lat_d1major'),
-            d2MinorDetails: nestedAsset('line-lat_d2minor'),
-            d3TinyDetails: nestedAsset('line-lat_d3tiny'),
-        }),
-        longitudinal: nestedAsset(undefined, {
-            d1MajorDetails: nestedAsset('line-long_d1major'),
-            d2MinorDetails: nestedAsset('line-long_d2minor'),
-            d3TinyDetails: nestedAsset('line-long_d3tiny'),
-        }),
-        vertical: nestedAsset(undefined, {
-            d1MajorDetails: nestedAsset('line-vert_d1major'),
-            d2MinorDetails: nestedAsset('line-vert_d2minor'),
-            d3TinyDetails: nestedAsset('line-vert_d3tiny'),
-        }),
-    }),
-
-    titlebox: nestedAsset(undefined, {
-        frame: nestedAsset(undefined, {
-            combined: nestedAsset(undefined, {
-                duck: nestedAsset('titlebox-frame_combined_duck', {
-                    shadowA: nestedAsset('titlebox-frame_combined_duck_shadow'),
-                    shadowB: nestedAsset('titlebox-frame_combined_duck_shadow_alt'),
-                }),
-                picframe: nestedAsset('titlebox-frame_combined_picframe', {
-                    shadow: nestedAsset('titlebox-frame_combined_picframe_shadow'),
-                }),
-                rounded: nestedAsset('titlebox-frame_combined_rounded', {
-                    shadow: nestedAsset('titlebox-frame_combined_rounded_shadow'),
-                }),
-                square: nestedAsset('titlebox-frame_combined_square', {
-                    shadow: nestedAsset('titlebox-frame_combined_square_shadow'),
-                }),
-            }),
-            fill: nestedAsset(undefined, {
-                duck: nestedAsset('titlebox-frame_fill_duck', {
-                    mergedA: nestedAsset('titlebox-frame_fill_duck_merged'),
-                    mergedB: nestedAsset('titlebox-frame_fill_duck_merged_alt'),
-                    shadowA: nestedAsset('titlebox-frame_fill_duck_shadow'),
-                    shadowB: nestedAsset('titlebox-frame_fill_duck_shadow_alt'),
-                }),
-                picframe: nestedAsset('titlebox-frame_fill_picframe', {
-                    merged: nestedAsset('titlebox-frame_fill_picframe'),
-                    shadow: nestedAsset('titlebox-frame_fill_picframe_shadow'),
-                }),
-                rounded: nestedAsset('titlebox-frame_fill_rounded', {
-                    merged: nestedAsset('titlebox-frame_fill_rounded'),
-                    shadow: nestedAsset('titlebox-frame_fill_rounded_shadow'),
-                }),
-                square: nestedAsset('titlebox-frame_fill_square', {
-                    merged: nestedAsset('titlebox-frame_fill_square'),
-                    shadow: nestedAsset('titlebox-frame_fill_square_shadow'),
-                }),
-            }),
-            stroke: nestedAsset(undefined, {
-                black: nestedAsset(undefined, {
-                    duck: nestedAsset('titlebox-frame_stroke_black_duck', {
-                        shadowA: nestedAsset('titlebox-frame_stroke_black_duck_shadow'),
-                        shadowB: nestedAsset('titlebox-frame_stroke_black_duck_shadow_alt'),
-                    }),
-                    picframe: nestedAsset('titlebox-frame_stroke_black_picframe', {
-                        shadow: nestedAsset('titlebox-frame_stroke_black_picframe_shadow'),
-                    }),
-                    rounded: nestedAsset('titlebox-frame_stroke_black_rounded', {
-                        shadow: nestedAsset('titlebox-frame_stroke_black_rounded_shadow'),
-                    }),
-                    square: nestedAsset('titlebox-frame_stroke_black_square', {
-                        shadow: nestedAsset('titlebox-frame_stroke_black_square_shadow'),
-                    }),
-                }),
-                white: nestedAsset(undefined, {
-                    duck: nestedAsset('titlebox-frame_stroke_white_duck', {
-                        shadowA: nestedAsset('titlebox-frame_stroke_white_duck_shadow'),
-                        shadowB: nestedAsset('titlebox-frame_stroke_white_duck_shadow_alt'),
-                    }),
-                    picframe: nestedAsset('titlebox-frame_stroke_white_picframe', {
-                        shadow: nestedAsset('titlebox-frame_stroke_white_picframe_shadow'),
-                    }),
-                    rounded: nestedAsset('titlebox-frame_stroke_white_rounded', {
-                        shadow: nestedAsset('titlebox-frame_stroke_white_rounded_shadow'),
-                    }),
-                    square: nestedAsset('titlebox-frame_stroke_white_square', {
-                        shadow: nestedAsset('titlebox-frame_stroke_white_square_shadow'),
-                    }),
-                }),
-            }),
-        }),
-        text: nestedAsset(undefined, {
-            black: nestedAsset(undefined, {
-                body: nestedAsset('titlebox-text_black_body'),
-                full: nestedAsset('titlebox-text_black_full'),
-                title: nestedAsset('titlebox-text_black_title'),
-            }),
-            white: nestedAsset(undefined, {
-                body: nestedAsset('titlebox-text_white_body'),
-                full: nestedAsset('titlebox-text_white_full'),
-                title: nestedAsset('titlebox-text_white_title'),
-            }),
-        }),
-    }),
-
-    // _ASSIGN_ME_
-
-    // SAMPLE 
-    // desserts: {
-    //     pie: nestedPath(undefined, {
-    //         apple: nestedPath(applePieImg),
-    //         pumpkin: nestedPath(pumpkinPieImg),
-    //     }),
-    //     // default is plainCookieImg, but you can still go deeper
-    //     cookie: nestedPath(plainCookieImg, {
-    //         chocolatechip: nestedPath(chocolateChipCookieImg),
-    //         oatmeal: nestedPath(oatmealCookieImg, {
-    //             raisin: nestedPath(oatmealRaisinCookieImg),
-    //         }),
-    //     }),
-    // },
-    // drinks: {
-    //     water: nestedPath(waterImg),
-    //     icedtea: nestedPath(icedTeaImg, {
-    //         sweetened: nestedPath(sweetenedIcedTeaImg),
-    //     }),
-    // },
-    // turkeyDinner: nestedPath(turkeyDinnerImg),
-});
-
-console.log(images.gcs.equator);
-
-export function testExport() {
-
-
-    console.log(images.desserts.cookie);
-}
-
 /**
- * Convenience, gets a {@link nestedPath} while first converting the path to a map asset path ({@linkcode getMapAsset})
- * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
- * @param {object[]} children Optional children of this node 
- * @returns {object}
+ * @typedef {object} nestedNode Nodes created via a {@link nestedPath} 
+ * @property {string} path Filepath stored into this node 
+ * @property {object[]} children Optional children of this node 
  */
-function nestedAsset(assetPath, children = {}) {
-    return nestedPath(assetPath === undefined ? undefined : getMapAsset(assetPath), children);
-}
 
 /**
- * Create a nested hierarchy of nodes and children, to hold the given values in a tree structure
+ * Create a nested hierarchy of {@link nestedNode nestedNodes}, to hold the given values in a tree structure
  * @param {string} path Filepath stored into this node 
  * @param {object[]} children Optional children of this node 
- * @returns {object}
+ * @returns {nestedNode}
  */
 function nestedPath(path, children = {}) {
     // create new node 
@@ -661,6 +380,271 @@ function nestedPath(path, children = {}) {
 
     // freeze and return node 
     return Object.freeze(node);
+}
+
+//  *      equator: nestedPath & { // gotta figure out how to do this properly
+//  * @typedef {ReturnType<nestedPath>} nPath
+
+/** 
+ * @typedef {{
+ *      _gcs: nestedPath & {
+ *          _complete: nestedNode,
+ *          _equator: nestedNode & {
+ *              _dotted: nestedNode, 
+ *              _solid: nestedPath,
+ *              _tropicsAndPolarCircles: nestedPath
+ *          },
+ *          _latitude: nestedPath & {
+ *              _equator: nestedPath, 
+ *              _tropicsAndPolarCircles: nestedPath
+ *          },
+ *          _latLong: nestedPath & {
+ *              _deg15: nestedPath, 
+ *              _deg30: nestedPath,
+ *              _equatorAndMeridians: nestedPath
+ *          },
+ *          _longitude: nestedPath & {
+ *              _meridians: nestedPath
+ *          },
+ *          _tropics: nestedPath & {
+ *              _polarCircles: nestedPath & {
+ *                  _equator: nestedPath
+ *              }
+ *          },
+ *          _polarCircles: nestedPath & {
+ *              _tropics: nestedPath & {
+ *                  _equator: nestedPath
+ *              }
+ *          }
+ *      }
+ *  }} nestedMapPNGs 
+ * */
+
+/** @type {nestedMapPNGs} */
+export const images = Object.freeze({
+
+    _gcs: nestedAsset(undefined, {
+        _complete: nestedAsset('gcs-complete'),
+        _equator: nestedAsset('gcs-equator_dotted', {
+            _dotted: nestedAsset('gcs-equator_dotted'),
+            _solid: nestedAsset('gcs-equator_solid'),
+            _tropicsAndPolarCircles: nestedAsset('gcs-equator_tropics_polar_circles'),
+        }),
+        _latitude: nestedAsset('gcs-latitude', {
+            _equator: nestedAsset('gcs-latitude_with_dotted_equator'),
+            _tropicsAndPolarCircles: nestedAsset('gcs-latitude_with_tropics_and_polar_circles'),
+        }),
+        _latLong: nestedAsset('gcs-latlong', {
+            _deg15: nestedAsset('gcs-latlong_15deg_dotted'),
+            _deg30: nestedAsset('gcs-latlong_30deg_dotted'),
+            _equatorAndMeridians: nestedAsset('gcs-latlong_with_dotted_equator_meridians'),
+        }),
+        _longitude: nestedAsset('gcs-longitude', {
+            _meridians: nestedAsset('gcs-longitude_with_dotted_meridians'),
+        }),
+        _tropics: nestedAsset('gcs-latitude', {
+            _polarCircles: nestedAsset('gcs-tropics_and_polar_circles', {
+                _equator: nestedAsset('gcs-equator_tropics_polar_circles')
+            }),
+        }),
+        _polarCircles: nestedAsset('gcs-latitude', {
+            _tropics: nestedAsset('gcs-tropics_and_polar_circles', {
+                _equator: nestedAsset('gcs-equator_tropics_polar_circles')
+            }),
+        }),
+    }),
+
+    _labels: nestedAsset(undefined, {
+        _gcs: nestedAsset(undefined, {
+            _latitude: nestedAsset(undefined, {
+                _deg15: nestedAsset('label-gcs_latitude_15deg'),
+                _deg30: nestedAsset('label-gcs_latitude_15deg'),
+            }),
+            _latLong: nestedAsset(undefined, {
+                _deg15: nestedAsset('label-gcs_latlong_15deg'),
+                _deg30: nestedAsset('label-gcs_latlong_30deg'),
+            }),
+            _longitude: nestedAsset(undefined, {
+                _deg15: nestedAsset('label-gcs_longitude_15deg'),
+                _deg30: nestedAsset('label-gcs_longitude_30deg'),
+            }),
+            _meridian: nestedAsset(undefined, {
+                _anti: nestedAsset('label-gcs_meridian_antimeridian'),
+                _full: nestedAsset('label-gcs_meridian_full'),
+                _prime: nestedAsset('label-gcs_meridian_primemeridian'),
+            }),
+            _polarCircle: nestedAsset(undefined, {
+                _antarctic: nestedAsset('label-gcs_polarcircle_antarctic'),
+                _arctic: nestedAsset('label-gcs_polarcircle_arctic'),
+                _full: nestedAsset('label-gcs_polarcircle_full'),
+            }),
+            _poles: nestedAsset(undefined, {
+                _full: nestedAsset('label-gcs_poles_full'),
+                _north: nestedAsset('label-gcs_poles_north'),
+                _south: nestedAsset('label-gcs_poles_south'),
+            }),
+            _tropic: nestedAsset(undefined, {
+                _capricorn: nestedAsset('label-gcs_tropic_cancer'),
+                _cancer: nestedAsset('label-gcs_tropic_capricorn'),
+                _full: nestedAsset('label-gcs_tropic_full'),
+            }),
+        }),
+        _land: nestedAsset(undefined, {
+            _large: nestedAsset('label-land_large'),
+            _normalzed: nestedAsset('label-land_normalized'),
+            _relative: nestedAsset('label-land_relative'),
+        }),
+    }),
+
+    _land: nestedAsset(undefined, {
+        _d1MajorDetails: nestedAsset(undefined, {
+            _fill: nestedAsset('land-d1major_fill'),
+            _stroke: nestedAsset('land-d1major_stroke'),
+        }),
+        _d2MinorDetails: nestedAsset(undefined, {
+            _fill: nestedAsset('land-d2minor_fill'),
+            _stroke: nestedAsset('land-d2minor_stroke'),
+        }),
+        _d3TinyDetails: nestedAsset(undefined, {
+            _fill: nestedAsset('land-d3tiny_fill'),
+            _stroke: nestedAsset('land-d3tiny_stroke'),
+        }),
+    }),
+
+    _landlines: nestedAsset(undefined, {
+        _horizontal: nestedAsset(undefined, {
+            _d1MajorDetails: nestedAsset('line-horz_d1major'),
+            _d2MinorDetails: nestedAsset('line-horz_d2minor'),
+            _d3TinyDetails: nestedAsset('line-horz_d3tiny'),
+        }),
+        _latitudinal: nestedAsset(undefined, {
+            _d1MajorDetails: nestedAsset('line-lat_d1major'),
+            _d2MinorDetails: nestedAsset('line-lat_d2minor'),
+            _d3TinyDetails: nestedAsset('line-lat_d3tiny'),
+        }),
+        _longitudinal: nestedAsset(undefined, {
+            _d1MajorDetails: nestedAsset('line-long_d1major'),
+            _d2MinorDetails: nestedAsset('line-long_d2minor'),
+            _d3TinyDetails: nestedAsset('line-long_d3tiny'),
+        }),
+        _vertical: nestedAsset(undefined, {
+            _d1MajorDetails: nestedAsset('line-vert_d1major'),
+            _d2MinorDetails: nestedAsset('line-vert_d2minor'),
+            _d3TinyDetails: nestedAsset('line-vert_d3tiny'),
+        }),
+    }),
+
+    _titlebox: nestedAsset(undefined, {
+        _frame: nestedAsset(undefined, {
+            _combined: nestedAsset(undefined, {
+                _duck: nestedAsset('titlebox-frame_combined_duck', {
+                    _shadowA: nestedAsset('titlebox-frame_combined_duck_shadow'),
+                    _shadowB: nestedAsset('titlebox-frame_combined_duck_shadow_alt'),
+                }),
+                _picframe: nestedAsset('titlebox-frame_combined_picframe', {
+                    _shadow: nestedAsset('titlebox-frame_combined_picframe_shadow'),
+                }),
+                _rounded: nestedAsset('titlebox-frame_combined_rounded', {
+                    _shadow: nestedAsset('titlebox-frame_combined_rounded_shadow'),
+                }),
+                _square: nestedAsset('titlebox-frame_combined_square', {
+                    _shadow: nestedAsset('titlebox-frame_combined_square_shadow'),
+                }),
+            }),
+            _fill: nestedAsset(undefined, {
+                _duck: nestedAsset('titlebox-frame_fill_duck', {
+                    _mergedA: nestedAsset('titlebox-frame_fill_duck_merged'),
+                    _mergedB: nestedAsset('titlebox-frame_fill_duck_merged_alt'),
+                    _shadowA: nestedAsset('titlebox-frame_fill_duck_shadow'),
+                    _shadowB: nestedAsset('titlebox-frame_fill_duck_shadow_alt'),
+                }),
+                _picframe: nestedAsset('titlebox-frame_fill_picframe', {
+                    _merged: nestedAsset('titlebox-frame_fill_picframe'),
+                    _shadow: nestedAsset('titlebox-frame_fill_picframe_shadow'),
+                }),
+                _rounded: nestedAsset('titlebox-frame_fill_rounded', {
+                    _merged: nestedAsset('titlebox-frame_fill_rounded'),
+                    _shadow: nestedAsset('titlebox-frame_fill_rounded_shadow'),
+                }),
+                _square: nestedAsset('titlebox-frame_fill_square', {
+                    _merged: nestedAsset('titlebox-frame_fill_square'),
+                    _shadow: nestedAsset('titlebox-frame_fill_square_shadow'),
+                }),
+            }),
+            _stroke: nestedAsset(undefined, {
+                _black: nestedAsset(undefined, {
+                    _duck: nestedAsset('titlebox-frame_stroke_black_duck', {
+                        _shadowA: nestedAsset('titlebox-frame_stroke_black_duck_shadow'),
+                        _shadowB: nestedAsset('titlebox-frame_stroke_black_duck_shadow_alt'),
+                    }),
+                    _picframe: nestedAsset('titlebox-frame_stroke_black_picframe', {
+                        _shadow: nestedAsset('titlebox-frame_stroke_black_picframe_shadow'),
+                    }),
+                    _rounded: nestedAsset('titlebox-frame_stroke_black_rounded', {
+                        _shadow: nestedAsset('titlebox-frame_stroke_black_rounded_shadow'),
+                    }),
+                    _square: nestedAsset('titlebox-frame_stroke_black_square', {
+                        _shadow: nestedAsset('titlebox-frame_stroke_black_square_shadow'),
+                    }),
+                }),
+                _white: nestedAsset(undefined, {
+                    _duck: nestedAsset('titlebox-frame_stroke_white_duck', {
+                        _shadowA: nestedAsset('titlebox-frame_stroke_white_duck_shadow'),
+                        _shadowB: nestedAsset('titlebox-frame_stroke_white_duck_shadow_alt'),
+                    }),
+                    _picframe: nestedAsset('titlebox-frame_stroke_white_picframe', {
+                        _shadow: nestedAsset('titlebox-frame_stroke_white_picframe_shadow'),
+                    }),
+                    _rounded: nestedAsset('titlebox-frame_stroke_white_rounded', {
+                        _shadow: nestedAsset('titlebox-frame_stroke_white_rounded_shadow'),
+                    }),
+                    _square: nestedAsset('titlebox-frame_stroke_white_square', {
+                        _shadow: nestedAsset('titlebox-frame_stroke_white_square_shadow'),
+                    }),
+                }),
+            }),
+        }),
+        _text: nestedAsset(undefined, {
+            _black: nestedAsset(undefined, {
+                _body: nestedAsset('titlebox-text_black_body'),
+                _full: nestedAsset('titlebox-text_black_full'),
+                _title: nestedAsset('titlebox-text_black_title'),
+            }),
+            _white: nestedAsset(undefined, {
+                _body: nestedAsset('titlebox-text_white_body'),
+                _full: nestedAsset('titlebox-text_white_full'),
+                _title: nestedAsset('titlebox-text_white_title'),
+            }),
+        }),
+    }),
+    // regex used to get the start of all values and prefx "_"
+    //   find: ^(\s+)([a-zA-Z0-9]+[:]\s\bnested[AP])
+    //   replace: $1_$2
+    // regex to undo that change:
+    //   find: ^(\s+)([_])([a-zA-Z0-9]+[:]\s\bnested[AP])
+    //   replace: $1$3
+});
+
+console.log(images._gcs._equator);
+
+export function testExport() {
+
+
+    // console.log(images.desserts.cookie);
+}
+
+/**
+ * Convenience, gets a {@link nestedPath} while first converting the path to a map asset path ({@linkcode getMapAsset})
+ * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
+ * @param {object[]} children Optional children of this node 
+ * @returns {object}
+ */
+function nestedAsset(assetPath, children = {}) {
+    if (assetPath === undefined) {
+        return nestedPath(undefined, children);
+    }
+    console.log(assetPath);
+    return nestedPath(getMapAsset(assetPath), children);
 }
 
 /*
