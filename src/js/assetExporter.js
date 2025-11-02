@@ -1,3 +1,5 @@
+// @ts-check
+
 import { EnsureToNumber, isBlank, isString } from "./lilutils";
 
 
@@ -150,7 +152,7 @@ import { EnsureToNumber, isBlank, isString } from "./lilutils";
                                             
 */
 
-// generate a list of all the PNGs in the png/map folder (path, incl subfolders, extension regexp)
+// @ts-ignore generate a list of all the PNGs in the png/map folder (path, incl subfolders, extension regexp) 
 const pngMapContext = require.context('../assets/png/map', true, /\.png$/);
 
 export const mapAssetPNGs = Object.fromEntries(
@@ -316,16 +318,16 @@ export const getMapAsset = (path) => {
 /**
  * @typedef {object} nestedNode Nodes created via a {@link nestedPath} 
  * @property {string} path Filepath stored into this node 
- * @property {object[]} children Optional children of this node 
+ * @property {object} children Optional children of this node 
  */
 
 /**
  * Create a nested hierarchy of {@link nestedNode nestedNodes}, to hold the given values in a tree structure
  * @param {string} path Filepath stored into this node 
- * @param {object[]} children Optional children of this node 
+ * @param {object} children Optional children of this node 
  * @returns {nestedNode}
  */
-function nestedPath(path, children = {}) {
+function nestedPath(path, children = undefined) {
     // create new node 
     const node = Object.create(null);
 
@@ -346,32 +348,32 @@ function nestedPath(path, children = {}) {
     // define the implicit primitive value based on hint 
     node[Symbol.toPrimitive] = (hint) => {
         // return null/undefined value directly 
-        if (value == null) { return value; }
+        if (path == null) { return path; }
         switch (hint) {
             case 'number':
                 // seeking a number 
-                return EnsureToNumber(value);
+                return EnsureToNumber(path);
             case 'string':
                 // seeking a string 
-                return String(value);
+                return String(path);
             case 'boolean':
                 // seeking a boolean 
-                switch (typeof value) {
+                switch (typeof path) {
                     case 'boolean':
-                        return value;
+                        return path;
                     case 'string':
-                        if (isBlank(value)) { return false; }
-                        let v = value.toLowerCase();
-                        if (v == '0' || v.startsWith('f')) { return false; }
-                        if (v == '1' || v.startsWith('t')) { return false; }
-                        return Boolean(value);
+                        if (isBlank(path)) { return false; }
+                        let p = path.toLowerCase();
+                        if (p == '0' || p.startsWith('f')) { return false; }
+                        if (p == '1' || p.startsWith('t')) { return false; }
+                        return Boolean(path);
                     default:
-                        return Boolean(value);
+                        return Boolean(path);
                 }
             case 'object':
             default:
                 // seeking an object, or something else - just return the value 
-                return value;
+                return path;
         }
     }
 
@@ -385,43 +387,44 @@ function nestedPath(path, children = {}) {
 //  *      equator: nestedPath & { // gotta figure out how to do this properly
 //  * @typedef {ReturnType<nestedPath>} nPath
 
+
 /** 
- * @typedef {{
- *      _gcs: nestedPath & {
+ * @x type {{
+ *      _gcs: nestedNode & {
  *          _complete: nestedNode,
  *          _equator: nestedNode & {
  *              _dotted: nestedNode, 
- *              _solid: nestedPath,
- *              _tropicsAndPolarCircles: nestedPath
+ *              _solid: nestedNode,
+ *              _tropicsAndPolarCircles: nestedNode,
  *          },
- *          _latitude: nestedPath & {
- *              _equator: nestedPath, 
- *              _tropicsAndPolarCircles: nestedPath
+ *          _latitude: nestedNode & {
+ *              _equator: nestedNode, 
+ *              _tropicsAndPolarCircles: nestedNode
  *          },
- *          _latLong: nestedPath & {
- *              _deg15: nestedPath, 
- *              _deg30: nestedPath,
- *              _equatorAndMeridians: nestedPath
+ *          _latLong: nestedNode & {
+ *              _deg15: nestedNode, 
+ *              _deg30: nestedNode,
+ *              _equatorAndMeridians: nestedNode
  *          },
- *          _longitude: nestedPath & {
- *              _meridians: nestedPath
+ *          _longitude: nestedNode & {
+ *              _meridians: nestedNode
  *          },
- *          _tropics: nestedPath & {
- *              _polarCircles: nestedPath & {
- *                  _equator: nestedPath
+ *          _tropics: nestedNode & {
+ *              _polarCircles: nestedNode & {
+ *                  _equator: nestedNode
  *              }
  *          },
- *          _polarCircles: nestedPath & {
- *              _tropics: nestedPath & {
- *                  _equator: nestedPath
+ *          _polarCircles: nestedNode & {
+ *              _tropics: nestedNode & {
+ *                  _equator: nestedNode
  *              }
- *          }
+ *          },
  *      }
- *  }} nestedMapPNGs 
+ *  }} 
  * */
+let x;
 
-/** @type {nestedMapPNGs} */
-export const images = Object.freeze({
+export const map = Object.freeze({
 
     _gcs: nestedAsset(undefined, {
         _complete: nestedAsset('gcs-complete'),
@@ -625,7 +628,7 @@ export const images = Object.freeze({
     //   replace: $1$3
 });
 
-console.log(images._gcs._equator);
+console.log(map._gcs._equator);
 
 export function testExport() {
 
@@ -634,16 +637,45 @@ export function testExport() {
 }
 
 /**
+//  * @typedef {object} nestedAsset
+ * 
+ */
+
+/**
  * Convenience, gets a {@link nestedPath} while first converting the path to a map asset path ({@linkcode getMapAsset})
  * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
- * @param {object[]} children Optional children of this node 
+ * @param {object} children Optional children of this node 
  * @returns {object}
  */
-function nestedAsset(assetPath, children = {}) {
+let xx;
+
+
+/**
+ * Gets a {@linkcode nestedNode} via {@linkcode nestedPath}, while passing `assetPath` 
+ * through {@linkcode getMapAsset} to parse a valid asset path URL.
+ * @template {Record<string, any>} nestedChildren 
+ * @overload nestedAsset(assetPath,children); 
+ * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
+ * @param {nestedChildren} children Optional children of this node 
+ * @returns {nestedNode & { [key in keyof nestedChildren]: nestedChildren[key] }}
+ */
+/**
+ * Gets a {@linkcode nestedNode} via {@linkcode nestedPath}, while passing `assetPath` 
+ * through {@linkcode getMapAsset} to parse a valid asset path URL.
+ * @overload nestedAsset(assetPath); // no children defined 
+ * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
+ * @returns {nestedNode}
+ */
+/**
+ * @template {Record<string, any>} [nestedChildren=Record<string, undefined>]
+ * @param {string} assetPath path, passed thru {@linkcode getMapAsset} before passing to {@linkcode nestedAsset} 
+ * @param {nestedChildren} [children = undefined] Optional children of this node 
+ * @returns {nestedNode}
+ */
+function nestedAsset(assetPath, children = undefined) {
     if (assetPath === undefined) {
         return nestedPath(undefined, children);
     }
-    console.log(assetPath);
     return nestedPath(getMapAsset(assetPath), children);
 }
 
