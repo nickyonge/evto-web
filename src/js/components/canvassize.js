@@ -35,7 +35,8 @@ export class CanvasSize extends BasicComponent {
     #parentGrid;
 
     constructor(componentTitle) {
-        super(componentTitle);
+        // super(componentTitle); // if titledcomponent
+        super();
 
         ui.AddClassToDOMs('canvasSize', this.div);
         this.#imageContainer = ui.CreateDivWithClass('canvasSize', 'imageContainer');

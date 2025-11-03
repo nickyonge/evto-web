@@ -10,6 +10,7 @@ import { moSizeSelector } from './pages/uiDataPageSize';
 
 /**
  * Canvas Sizes Enum
+ * @type {object|Number}
  */
 export const Size = Object.freeze({
     SM: 0,
@@ -50,9 +51,7 @@ export function SelectSize(selectedSize) {
     currentSize = NumberToSize(selectedSize, true);
     currentPlusSized = IsPlusSizeNumber(selectedSize);
     BasicComponent.allComponents.forEach(component => {
-        if (component.UpdateCosts) {
-            component.UpdateCosts();
-        }
+        component.UpdateCosts?.();
     });
     // ensure multioption list value is correct if selected via canvas size graphic
     moSizeSelector.selectionIndex = selectedSize;

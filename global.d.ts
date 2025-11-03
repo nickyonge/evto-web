@@ -1,7 +1,5 @@
 import type { BasicComponent } from "./src/js/components/base";
 
-export { };
-
 declare global {
 
     interface Node {
@@ -15,7 +13,7 @@ declare global {
          * {@linkcode Node.prototype.appendChild appendChild} to 
          * allow directly adding {@linkcode BasicComponent} classes.
          */
-        appendChild<T extends Node>(Node: T): Node;
+        appendChild<T extends Node | BasicComponent>(Node: T): Node;
 
     }
 
@@ -322,6 +320,54 @@ declare global {
          */
         stackString: string;
 
+    }
+
+    // #region TypeSafe Declaration 
+    // (there's almost definitely a better way of doing this, but I'm tired of TS telling me that things that DO exist, don't) 
+
+    interface HTMLElement {
+        checked?: boolean;
+        defaultChecked?: boolean;
+        value?: string | number | boolean;
+    }
+
+}
+
+declare module './src/js/components/base' {
+
+    interface BasicComponent {
+
+        /**
+         * Optionally defined method to call `UpdateCosts` on components that have it defined. 
+         * 
+         * Called whenever cost values of maps are updated, eg, when map size is changed. 
+         * 
+         * Invoke with `component.UpdateCosts?.();`
+         * @returns {void}
+         */
+        UpdateCosts?():void;
+
+        /**
+         * Optionally defined method to call `DocumentLoaded` on components that have it defined. 
+         * 
+         * Called in `index.js` one tick after the document has fully completed loading.
+         * 
+         * Invoke with `component.DocumentLoaded?.();`
+         * @returns {void}
+         */
+        DocumentLoaded?(): void;
+        
+        /**
+         * Optionally defined method to call `PositionUpdate` on components that have it defined. 
+         * 
+         * Called typically when a complex component's div is added to a page, 
+         * or when the document's layout or a page's layout changes.
+         * 
+         * Invoke with `component.PositionUpdate?.();`
+         * @param {HTMLElement} [div = undefined]
+         * @returns {void}
+         */
+        PositionUpdate?(div?:HTMLElement): void;
     }
 
 }

@@ -265,7 +265,7 @@ export function EnsureToNumber(value, errorOnFailure = true) {
 export function IsNumberInfiniteOrNaN(num) {
     if (num == null || typeof num != 'number') { return false; }
     if (Number.isFinite(num)) { return false; }
-    return num === Infinity || num === -Infinity || num === NaN;
+    return num === Infinity || num === -Infinity || Number.isNaN(num);
 }
 
 // #endregion Numbers
@@ -306,7 +306,7 @@ export function InverseLerp(value, min, max) {
     if (!Number.isFinite(value) || !Number.isFinite(min) || !Number.isFinite(value)) { return NaN; }
     if (min === max) {
         if (min === value) { return 0; }// could be 0 or 1 
-        if (start === 0) { return NaN; }// can't divide by zero
+        if (min === 0) { return NaN; }// can't divide by zero
         if (value < min) { return -Infinity; } return Infinity;
     }
     return (value - min) / (max - min);
@@ -423,7 +423,7 @@ export function RotatePointAroundOrigin(point, angle, inDegrees = true) {
 
 /** Convert radians to degrees @param {number} radians @see {@link AngleDegreesToRadians} @returns {number} */
 export function AngleRadiansToDegrees(radians) { return radians * (180 / Math.PI); }
-/** Convert degrees to radians @param {number} radians @see {@link AngleRadiansToDegrees} @returns {number} */
+/** Convert degrees to radians @param {number} degrees @see {@link AngleRadiansToDegrees} @returns {number} */
 export function AngleDegreesToRadians(degrees) { return degrees * (Math.PI / 180); }
 
 /**
@@ -469,7 +469,7 @@ export function RotatePointsAroundOrigin(points, angle, inDegrees = true) {
 }
 /**
  * Determines the shared center {@link toPoint point} of all given {@link toPoint points}
- * @param {{x:number, y:number}[]} points Array of {@link toPoint points} to calculate the shared center of 
+ * @param {...{x:number, y:number}[]} points Array of {@link toPoint points} to calculate the shared center of 
  * @returns {{x:number, y:number}} Single XY {@link toPoint point} representing the shared center of all given points */
 export function FindPointsSharedCenter(...points) {
     // ensure non-null and valid, otherwise return point with NaN coords 

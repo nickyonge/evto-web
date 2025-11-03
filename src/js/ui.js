@@ -1,5 +1,9 @@
 /* Basic UI element generation */
 
+/** @typedef {string[] | [string, ...string[]]} spreadString */
+
+/** @typedef { Element | HTMLElement } UIElement */
+
 import { isBlank } from "./lilutils";
 
 // ------------------------------------------------------------------ 
@@ -23,6 +27,15 @@ export function CreateDivWithID(id) {
     div.id = id;
     return div;
 }
+
+/** @typedef {string[] | [string, ...string[]]} spreadString */
+/**
+ * Create a DIV HTMLElement
+ * @returns {HTMLElement} newly made HTML <div> element
+ */
+export function CreateDiv() {
+    return CreateElement('div');
+}
 /**
  * Create a DIV HTMLElement with the given CSS class(es)
  * @param {...string} cssClasses one or more CSS classes to add
@@ -33,6 +46,34 @@ export function CreateDivWithClass(...cssClasses) {
     AddClassesToDOM(div, ...cssClasses);
     return div;
 }
+/**
+ * Adds the given class(es) to the given HTMLElement (one element, multiple classes)
+ * @param {Element} domElement HTMLElement to add the given classes to
+ * @param  {spreadString} cssClasses one or more classes to add to the domElement
+ * @returns 
+ */
+export function AddClassesToDOM(domElement, ...cssClasses) {
+    if (cssClasses.length == 0) {
+        return;
+    }
+    cssClasses = cssClasses.flat();
+    if (domElement.classList.length == 0) {
+        domElement.classList.add(...cssClasses);
+        return;
+    }
+    for (let i = 0; i < cssClasses.length; i++) {
+        if (!domElement.classList.contains(cssClasses[i])) {
+            domElement.classList.add(cssClasses[i]);
+        }
+    }
+}
+const myDiv1 = CreateDivWithClass('class1');                         // should have CSS class1
+const myDiv2 = CreateDivWithClass('class1', 'class2', 'class3');     // class1, 2, and 3
+const classArray = ['class1', 'class2', 'class3'];                   // class1, 2, and 3
+const myDiv3 = CreateDivWithClass(classArray);                       // class1, 2, and 3
+const myDiv4 = CreateDivWithClass(classArray, 'class4', 'class5');   // class1, 2, 3, 4, and 5
+const myDiv5 = CreateDivWithClass(classArray, ['class4', 'class5']); // class1, 2, 3, 4, and 5
+
 /**
  * Create a new HTMLElement of the given type
  * @param {string} newElement type of HTMLElement
@@ -91,7 +132,7 @@ export function CreateInputWithID(type, id, ...cssClasses) {
 /**
  * Creates a new HTMLElement of the given type (newElement) 
  * and appends it as a child to the given pre-existing element (domElement)
- * @param {HTMLElement} domElement existing HTMLElement which will be newElement's parent
+ * @param {Element} domElement existing HTMLElement which will be newElement's parent
  * @param {string} newElement HTMLElement type to create and append as a child to domElement
  * @returns {HTMLElement} returns the newly created HTMLElement
  */
@@ -108,7 +149,7 @@ export function AddElementTo(domElement, newElement) {
 /**
  * Creates a new HTMLElement of the given type (newElement) with the given CSS class(es)
  * and appends it as a child to the given pre-existing element (domElement)
- * @param {HTMLElement} domElement existing HTMLElement which will be newElement's parent
+ * @param {Element} domElement existing HTMLElement which will be newElement's parent
  * @param {string} newElement HTMLElement type to create and append as a child to domElement
  * @param  {...string} cssClasses one or more classes to add to the new element. 
  * If none is specified, uses `newElement` as class name
@@ -125,8 +166,8 @@ export function AddElementWithClassTo(domElement, newElement, ...cssClasses) {
 
 /**
  * Adds the given class(es) to the given HTMLElement (one element, multiple classes)
- * @param {HTMLElement} domElement HTMLElement to add the given classes to
- * @param  {...string} cssClasses one or more classes to add to the domElement
+ * @param {Element} domElement HTMLElement to add the given classes to
+ * @param  {spreadString} cssClasses one or more classes to add to the domElement
  * @returns 
  */
 export function AddClassesToDOM(domElement, ...cssClasses) {
@@ -160,7 +201,7 @@ export function AddClassToDOMs(cssClass, ...domElements) {
 
 /**
  * Removes the given class(es) from the given HTMLElement (one element, multiple classes)
- * @param {HTMLElement} domElement HTMLElement to remove the given classes from
+ * @param {Element} domElement HTMLElement to remove the given classes from
  * @param  {...string} cssClasses one or more classes to remove from the domElement
  * @returns 
  */
@@ -197,7 +238,7 @@ export function RemoveClassFromDOMs(cssClass, ...domElements) {
 
 /**
  * Sets the given attributes on the given HTMLElement (attTypes and attValues lengths must match)
- * @param {HTMLElement} element HTMLElement to add attributes to
+ * @param {Element} element HTMLElement to add attributes to
  * @param {string[]} attTypes Array of attribute types (qualifiedNames)
  * @param {string[]} attValues Array of values of attributes
  */
@@ -213,9 +254,9 @@ export function AddElementAttributes(element, attTypes, attValues) {
 
 /**
  * Sets the given attribute on the given HTMLElement
- * @param {HTMLElement} element HTMLElement to add attribute to
- * @param {string} attTypes Type (qualifiedName) of attribute
- * @param {string} attValues Value of attributue
+ * @param {Element} element HTMLElement to add attribute to
+ * @param {string} attType Type (qualifiedName) of attribute
+ * @param {string} attValue Value of attributue
  */
 export function AddElementAttribute(element, attType, attValue) {
     element.setAttribute(attType, attValue);
@@ -223,7 +264,7 @@ export function AddElementAttribute(element, attType, attValue) {
 
 /**
  * Removes the given attribute from the given HTMLElement
- * @param {HTMLElement} element 
+ * @param {Element} element 
  * @param {string} attType 
  */
 export function RemoveElementAttribute(element, attType) {
@@ -231,7 +272,7 @@ export function RemoveElementAttribute(element, attType) {
 }
 /**
  * Removes all the given attribute from the given HTMLElement
- * @param {HTMLElement} element 
+ * @param {Element} element 
  * @param {string[]} attTypes 
  */
 export function RemoveElementAttributes(element, attTypes) {
@@ -243,7 +284,7 @@ export function RemoveElementAttributes(element, attTypes) {
 /**
  * Get the given attribute's value on the given element. 
  * If attribute isn't found, returns `null`.
- * @param {HTMLElement} element 
+ * @param {Element} element 
  * @param {string} attType 
  * @returns 
  */
@@ -256,7 +297,7 @@ export function GetAttribute(element, attType) {
 
 /**
  * Checks if the given attribute is present on the given HTMLElement
- * @param {HTMLElement} element 
+ * @param {Element} element 
  * @param {string} attType Type (qualifiedName) of attribute to check 
  * @returns {boolean}
  */
@@ -266,7 +307,7 @@ export function HasAttribute(element, attType) {
 /**
  * Checks if the given element has the given attribute, and if its
  * value matches the given attribute value
- * @param {HTMLElement} element 
+ * @param {Element} element 
  * @param {string} attType Type (qualifiedName) of attribute to check 
  * @param {any} attValue Value of the attribute, typically a `string`,
  * `number`, or `boolean`. 
@@ -281,7 +322,7 @@ export function HasAttributeWithValue(element, attType, attValue, countNullAsEmp
 }
 /**
  * Check if the given HTMLElement has any or all of the given attributes
- * @param {HTMLElement} element 
+ * @param {Element} element 
  * @param {string[]} attTypes List of attribute names to check 
  * @param {boolean} [all=true] Check for all attributes? If `true` (default), 
  * only returns `true` if all given attributes are present. If `false`,
@@ -345,7 +386,7 @@ export function CreateImageWithClasses(imgSrc, alt = undefined, ...cssClasses) {
  */
 export function CreateSVGFromPath(path, ...cssClasses) {
     if (path) {
-        return CreateSVG([[path, '#ffffff']], null, ...cssClasses);
+        return CreateSVG([Array.isArray(path) ? path : [path, '#ffffff']], null, ...cssClasses);
     }
     return CreateSVG(null, null, ...cssClasses);
 }
@@ -397,9 +438,9 @@ export function CreateSVG(paths, attributes, ...cssClasses) {
         // type check
         if (typeof paths === 'string') {
             // just a string, assume it's a path D value and add
-            let path = CreateElement('path');
-            AddElementAttributes(path, ['fill', 'd'], ['#ffffff', ParseSVGPathD(path)]);
-            svg.appendChild(path);
+            let pathElement = CreateElement('path');
+            AddElementAttributes(pathElement, ['fill', 'd'], ['#ffffff', ParseSVGPathD(paths)]);
+            svg.appendChild(pathElement);
         } else {
             // should be an array, [['d','fill'],['d','fill']] 
             for (let i = 0; i < paths.length; i++) {
@@ -459,14 +500,14 @@ function ParseSVGPathD(path) {
 /**
  * Make the given HTMLElement appear in the tab index for the page
  * **NOTE:** giving the `tabIndex` value `-1` will make an element untabbable, even if it's tabbable by default.
- * @param {HTMLElement} element HTMLElement to add to the tab index 
+ * @param {Element} element HTMLElement to add to the tab index 
  * @param {number} [tabIndex=0] Optional value to specify tab index. `-1` = not tabbable
  * @param {boolean} [preserve=true] Optionally add a `preservedTabIndex` attribute with the given `tabIndex` value
  */
 export function MakeTabbable(element, tabIndex = 0, preserve = true) {
-    element.setAttribute('tabIndex', tabIndex);
+    element.setAttribute('tabIndex', tabIndex.toString());
     if (preserve) {
-        element.setAttribute('preservedTabIndex', tabIndex);
+        element.setAttribute('preservedTabIndex', tabIndex.toString());
     }
 }
 
@@ -474,8 +515,8 @@ export function MakeTabbable(element, tabIndex = 0, preserve = true) {
  * Makes the given HTMLElement appear in the tab index for the page, 
  * and sends any received keyboard enter/spacebar inputs to `inputToElement`.
  * Eg, if you add a <label> to the tab index, but want to send its input to a different <input> tag.
- * @param {HTMLElement} tabElement HTMLElement to add to the tab index
- * @param {HTMLElement} inputToElement HTMLElement that receives Enter/Spacebar keyboard input from `tabElement` as a `click()`
+ * @param {Element} tabElement HTMLElement to add to the tab index
+ * @param {Element} inputToElement HTMLElement that receives Enter/Spacebar keyboard input from `tabElement` as a `click()`
  * @param {number} [tabIndex=0] Default 0, optional value to specify tab index. `-1` = not tabbable (and no input events are added)
  */
 export function MakeTabbableWithInputTo(tabElement, inputToElement, tabIndex = 0) {
@@ -487,8 +528,8 @@ export function MakeTabbableWithInputTo(tabElement, inputToElement, tabIndex = 0
 
 /**
  * Adds a `keydown` event listener for Enter/Spacebar to `fromElement`, which sends a `click()` event to the `toElement`
- * @param {HTMLElement} fromElement Element that receives the user keyboard input
- * @param {HTMLElement} toElement Element that the `click()` event gets sent to
+ * @param {Element} fromElement Element that receives the user keyboard input
+ * @param {Element} toElement Element that the `click()` event gets sent to
  */
 export function PassKeyboardSelection(fromElement, toElement) {
     fromElement.addEventListener('keydown', e => {

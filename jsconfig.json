@@ -1,8 +1,18 @@
 {
-  "compilerOptions": {
-    "checkJs": true,
-    "allowJs": true,
-    "lib": ["es2022", "dom"]
-  },
-  "include": ["global.d.ts", "src/**/*.js"]   // <— adjust paths to your layout
+    "compilerOptions": {
+        "target": "ES2015",
+        "module": "ESNext",
+        "moduleResolution": "Bundler",
+        "checkJs": true,
+        "allowJs": true,
+        "lib": [
+            "es2022",
+            "dom"
+        ],
+        "allowSyntheticDefaultImports": true
+    },
+    "include": [
+        "global.d.ts",
+        "src/**/*.js"
+    ]
 }

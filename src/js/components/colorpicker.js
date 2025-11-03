@@ -51,6 +51,7 @@ export class ColorPicker extends TitledComponent {
 
         // on change callback returns 2 params, the color changed to, and a reference to this ColorPicker component 
         this.#input.addEventListener('click', function () {
+            // @ts-ignore - just ignoring TS errors on external libraries 
             Coloris({
                 alpha: this.#enableAlpha,
                 onChange: onChangeCallback ? (color) => { onChangeCallback(color, this); } : undefined,

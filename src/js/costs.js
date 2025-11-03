@@ -62,7 +62,6 @@ export const FEAT_LANGUAGE = [
  * Gets the cost value of the given costValues group, using {@link currentSize}, and for the given index
  * @param {number|Array<number>|Array<Array<number>>} costValues Cost, or array of costs per size, 
  * or array of array of costs per size per index value (eg Sm/Md/Lg + Low/Med/High Detail) 
- * @param {Size} size Canvas size cost value
  * @param {number} index Index into the size array to read 
  * @returns {number} Given cost value, or -1 if invalid / error
  */
@@ -105,7 +104,7 @@ export function GetCostForSize(costValues, size, index) {
                             return costValues[0][Math.min(costValues.length - 1, index)];
                         }
                         // 1d array, presume that size doesn't matter
-                        return costValues[Math.min(costValues.length - 1, index)];
+                        return costValues.flat[Math.min(costValues.length - 1, index)];
                     }
                 } else {
                     if (index == null) {
@@ -115,7 +114,7 @@ export function GetCostForSize(costValues, size, index) {
                             return costValues[size][0];
                         }
                         // 1d array, presume that index doesn't matter 
-                        return costValues[size];
+                        return costValues.flat[size];
                     } else {
                         // size and index
                         let s = Math.min(costValues.length - 1, size);
@@ -123,7 +122,7 @@ export function GetCostForSize(costValues, size, index) {
                             let i = Math.min(costValues[s].length - 1, index);
                             return costValues[s][i];
                         }
-                        return costValues[s];
+                        return costValues.flat[s];
                     }
                 }
             }
@@ -172,9 +171,9 @@ export function GetCostArrayForSize(costValues, size) {
                 if (size == null) {
                     // no size
                     console.warn(`WARNING: size is null, returning costValues[0] (${costValues[0]}) array in costValues ${costValues}`);
-                    return costValues[0];
+                    return costValues.flat[0];
                 } else {
-                    return costValues[size];
+                    return costValues.flat[size];
                 }
             }
             break;

@@ -63,5 +63,5 @@ export function BuildUI() {
 
 export function DisplayUI() {
     // done, fade in content 
-    dataWindow.style.opacity = 1;
+    dataWindow.style.opacity = '1';
 }

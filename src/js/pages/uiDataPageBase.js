@@ -50,7 +50,7 @@ export function CreatePage(page) {
             break;
 
         default:
-            throw new Error(`ERROR: invalid page ID, can't create page content. Page ID: ${page.id}, index: ${i}`);
+            throw new Error(`ERROR: invalid page ID, can't create page content. Page ID: ${page.id}`);
     }
 }
 

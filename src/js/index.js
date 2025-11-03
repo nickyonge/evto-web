@@ -4,11 +4,11 @@ import { BuildUI, DisplayUI } from './uiMain';
 import { SetupDataWindow } from './contentData';
 import { SetupArtWindow } from './contentArt';
 import { DisconnectObserver, StartObservation } from './mutationObserver';
-import Coloris from "@melloware/coloris";
+import Coloris from '@melloware/coloris';
 import { BasicComponent } from './components/base';
 import { _env_currentEnv, GetParentWithClass } from './lilutils';
 
-import { GenerateCSS as ComponentsCSS } from './components';
+import { GenerateCSS as ComponentsCSS } from './components/index';
 
 import './doc'; // document-level utility could. Should be called after all other imports 
 
@@ -38,6 +38,7 @@ window.addEventListener('load', function () {
         Coloris.init();
         Coloris({
             margin: 6.9,
+            // @ts-ignore - just ignoring TS errors on external libraries 
             themeMode: 'polaroid',
             alpha: false,
             defaultColor: '#beeeef',
@@ -55,9 +56,7 @@ window.addEventListener('load', function () {
                 return;
             }
             component.parentPage = parentPage;
-            if (component.DocumentLoaded) {
-                component.DocumentLoaded();
-            }
+            component.DocumentLoaded?.();
         });
         if (unparentedComponents.length > 0) {
             let warning = `${unparentedComponents.length} component${unparentedComponents.length > 1 ? 's' : ''}`;
@@ -66,7 +65,7 @@ window.addEventListener('load', function () {
 
         // display ui
         DisplayUI();
-        
+
     }, 0);
 });
 

@@ -1,6 +1,6 @@
 import * as ui from "../ui";
 import { BasicComponent, TitledComponent } from "./base";
-import { ObserveNode, ObserverCallbackOnAdded } from "../mutationObserver";
+import { ObserverCallbackOnAdded } from "../mutationObserver";
 import { GetChildWithClass, GetCSSVariable, GetParentWithClass, GetSiblingWithClass, isBlank } from "../lilutils";
 import * as cost from '../costs';
 
@@ -46,7 +46,7 @@ export class DropdownList extends TitledComponent {
         ObserverCallbackOnAdded(this.div, this.DivAddedToPage);
         this.#selected = ui.CreateDivWithClass('ddSelected');
         this.#selectedCost = ui.CreateDivWithClass('cost', 'inline', 'floating', 'forceSelected');
-        this.#selectedCost.style.opacity = 0;
+        this.#selectedCost.style.opacity = '0';
         this.#selected.appendChild(this.#selectedCost);
         ui.MakeTabbable(this.#dropdown);
         if (options && options.length >= initialValue + 1) {
@@ -116,14 +116,20 @@ export class DropdownList extends TitledComponent {
 
             // add animation complete callback
             this.#optionsContainer.addEventListener('transitionend', () => {
-                this.PositionUpdate(this.div);
+                this.PositionUpdate?.(this.div);
             });
 
             // create change callback
             oInput.addEventListener('change', (event) => {
                 this.#updateSelectedCost();
                 if (onSelectCallback) {
-                    onSelectCallback(i, event.target.id);
+                    let etID = null;
+                    if (event.target != null) {
+                        if (event.target instanceof HTMLElement || 'id' in event.target) {
+                            etID = event.target.id;
+                        }
+                    }
+                    onSelectCallback(i, etID);
                 }
                 if (!this.#initialChange) {
                     // initial option wasn't appearing as selected, manually set and un-set appearance 
@@ -150,7 +156,7 @@ export class DropdownList extends TitledComponent {
             // update appearance after one-tick delay
             window.setTimeout(() => {
                 // one tick delay
-                this.PositionUpdate(this.div);
+                this.PositionUpdate?.(this.div);
                 // this.DivAddedToPage(this.div);
                 this.DropdownAddedToPage(this.#dropdown);
                 this.OptionsAddedToPage(this.#optionsContainer);
@@ -161,7 +167,7 @@ export class DropdownList extends TitledComponent {
         // add help component
         this._addHelpIcon(`help me! ${componentTitle}`);
 
-        this.onScroll = () => { this.PositionUpdate(this.div); };
+        this.onScroll = () => { this.PositionUpdate?.(this.div); };
 
         // update costs 
         this.UpdateCosts();
@@ -175,17 +181,17 @@ export class DropdownList extends TitledComponent {
         if (_cost === 'null' ||
             (typeof _cost === 'string' && isBlank(_cost))) {
             this.#selected.style.marginRight = '-20px';
-            this.#selectedCost.style.opacity = 0;
+            this.#selectedCost.style.opacity = '0';
         } else {
             this.#selectedCost.innerHTML = `<p>${_cost}</p>`;
-            this.#selectedCost.style.opacity = 1;
+            this.#selectedCost.style.opacity = '1';
             this.#selected.style.marginRight = '0px';
         }
     }
 
     DocumentLoaded() {
         this.DivAddedToPage(this.div);
-        this.PositionUpdate(this.div);
+        this.PositionUpdate?.(this.div);
         this.DropdownAddedToPage(this.#dropdown);
         this.OptionsAddedToPage(this.#optionsContainer);
     }
@@ -222,7 +228,7 @@ export class DropdownList extends TitledComponent {
                 } else {
                     ui.RemoveClassesFromDOM(this.#optionsCosts[i], 'smallText', 'tinyText');
                 }
-                this.#optionsCostsP[i].innerText = _cost;
+                this.#optionsCostsP[i].innerText = _cost.toString();
                 ui.AddElementAttribute(this.#optionsLabels[i], 'data-cost', _cost);
                 this.#currentCost = _cost;
             }
@@ -231,6 +237,7 @@ export class DropdownList extends TitledComponent {
         this.#updateSelectedCost();
     }
 
+    /** @param {HTMLElement} div */
     PositionUpdate(div) { // this.div
         const title = GetChildWithClass(div, 'componentTitle');
         const dropdown = GetChildWithClass(div, 'dropdown');
@@ -289,7 +296,7 @@ export class DropdownList extends TitledComponent {
             target.parentElement.addEventListener('scroll', () => {
                 requestAnimationFrame(() => {
                     let component = BasicComponent.GetComponentByDiv(target);
-                    component.PositionUpdate(target);
+                    component.PositionUpdate?.(target);
                     const title = GetChildWithClass(target, 'componentTitle');
                     const dropdown = GetChildWithClass(target, 'dropdown');
                     const titleRect = title.getBoundingClientRect();
