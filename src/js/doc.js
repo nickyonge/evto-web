@@ -1,11 +1,12 @@
 //@ts-check
 // script for document-level architecture
 
-// DOCUMENT-LEVEL - imported to index LAST, after all other imports are completed 
+import { BasicComponent } from "./components/base";
+
+// DOCUMENT-LEVEL - imported to index LAST, after all other imports are completed
+(() => {
 
 // #region Node 
-
-import { BasicComponent } from "./components/base";
 
 /** 
  * The `appendChild()` method of the Node interface adds a node to the end of the list of children of a specified parent node. 
@@ -517,4 +518,6 @@ Number.prototype.isEven = function () {
  * @returns {boolean} */
 Number.prototype.isOdd = function () { return !this.valueOf().isEven; };
 
-// #endregion Number 
+// #endregion Number
+
+})();

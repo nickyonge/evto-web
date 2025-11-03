@@ -1,23 +1,22 @@
 //@ts-check
-// script for document-level architecture
+// script for system/window-level architecture
 
 // SYSTEM/WINDOW-LEVEL - imported to index FIRST, before all other imports are begun
-
-
-// #region Console
-
-/** Prefix applied to {@linkcode console.if()} call message */
-const CONSOLE_IF_PREFIX = '【𝙇𝙤𝙜 𝙄𝙛】[s]\n';
-/** Should {@linkcode console.if()} calls be grouped and output full stack trace? */
-const CONSOLE_IF_OUTPUT_STACK_TRACE = false;
-
-const CONSOLE_STACK_FORMAT_WEBPACK_LINKS = true;
-
-//@ts-ignore
-export const devtoolsURL = import.meta.url;
-
-// Add console.if (log only when the first arg is truthy)
 (() => {
+
+    // #region Console
+
+    /** Prefix applied to {@linkcode console.if()} call message */
+    const CONSOLE_IF_PREFIX = '【𝙇𝙤𝙜 𝙄𝙛】[s]\n';
+    /** Should {@linkcode console.if()} calls be grouped and output full stack trace? */
+    const CONSOLE_IF_OUTPUT_STACK_TRACE = false;
+
+    const CONSOLE_STACK_FORMAT_WEBPACK_LINKS = true;
+
+    //@ts-ignore
+    export const devtoolsURL = import.meta.url;
+
+    // Add console.if (log only when the first arg is truthy)
     // bind initial log and trace vals 
     const log = Function.prototype.bind.call(console.log, console);
     const trace = Function.prototype.bind.call(console.trace, console);
@@ -174,7 +173,121 @@ export const devtoolsURL = import.meta.url;
         enumerable: true
     });
 
+    // #endregion Console
+
+    // #region Spread Params
+
+    /**
+     * Extract primitive types from boxed/wrapped objects 
+     * @param {object|any} obj 
+     * @returns {any}
+     */
+    function ObjectToPrimitive(obj) {
+        return IsObjectBoxed(obj) ? obj.valueOf() : obj;
+    }
+
+    /**
+     * Returns whether the given object is a boxed object or not
+     * @param {object} obj Object to check if it's a boxed wrapper (eg `String("abc")`, returning `true`) or a primitive (eg `"abc"`, returning `false`)
+     * @param {boolean} [preserveType=true] Preserve types on objects that have a `valueOf` that returns the object converted to a different type (eg `Date`, as `Date().valueOf()` returns a `number`). If `preserveType` is true, `Date` would return `false`.
+     * @returns {boolean} 
+     */
+    function IsObjectBoxed(obj, preserveType = true) {
+        if (obj == null) { return false; }
+        // I hate it, but use try/catch in case of proxies, or objects that have mucked with valueOf 
+        try {
+            if (preserveType) {
+                // ensure a specific valid boxed object - strnig, number, boolean, bigint, or symbol
+                let tag = Object.prototype.toString.call(obj);
+                if (tag != null && typeof tag === 'string') { tag = tag.toLowerCase().trim(); }
+                switch (tag) {
+                    case '[object string]':
+                    case '[object number]':
+                    case '[object boolean]':
+                    case '[object bigint]':
+                    case '[object symbol]':
+                        // return the primitive via valueOf
+                        return true;
+                }
+                // passed the switch, presumably not an object or a boxed primitive with alternate value, eg Date, array, objects, etc 
+            } else {
+                // just check if the given object has a valueOf callback
+                if (obj['valueOf'] && typeof obj.valueOf === 'function') {
+                    return true;
+                }
+            }
+        } catch {
+            console.warn(`WARNING: Failed to determine if object: ${obj}, is primitive, preserveType: ${preserveType}, returning false`, obj);
+        }
+        // not a boxed primitive, or it IS a boxed primitive and type is being preserved 
+        return false;
+    }
+    
+    /**
+     * Flatten value into a 1D array (incl recursive arrays), optionally 
+     * skipping null values, and optionally ignoring duplicate values, and
+     * returns the result as a new array.
+     * 
+     * **Note:** Arrays are flattened, but other collections (eg `Set`) are treated as single values.
+     * @this {any} `this` can be of any input type
+     * @param {boolean} [skipNullValues=true] Are `null` and `undefined` values allowed? Default `true`
+     * @param {boolean} [allowDuplicateValues=true] Are duplicate values allowed? Default `true`
+     * @returns {any[]} 
+     */
+    function flattenSpread(skipNullValues = true, allowDuplicateValues = true) {
+
+        // get primitive 
+        const root = ObjectToPrimitive(this);
+
+        // prep output, and if input value isn't an array, make it one
+        /** @type {any[]} */ const out = [];
+        /** @type {any[]} */ const stack = Array.isArray(root) ? [...root] : [root];
+
+        let failsafe = (stack.length) + 999;
+        while (stack.length) {
+            // decrement failsafe 
+            failsafe--;
+
+            // get first value out of the array 
+            const firstValue = stack.shift();
+
+            // check if skipping null/undefined values 
+            if (!skipNullValues && firstValue == null) {
+                out.push(firstValue);
+                continue;
+            }
+
+            // deep flatten nested arrays 
+            if (Array.isArray(firstValue)) {
+                if (firstValue.length > 0) {
+                    failsafe += firstValue.length + 1;
+                    stack.unshift(...firstValue);
+                }
+                continue;
+            }
+
+            // push to output 
+            out.push(firstValue);
+
+            if (failsafe <= 0) {
+                console.error("ERROR: while loop hit failsafe while flattening spread param, this shouldn't happen, investigate", this);
+                break;
+            }
+        }
+
+        // if removing duplicate values, convert out to set 
+        // this remove duplicates while preserving order. objects/functions are compared by reference
+        return allowDuplicateValues ? out : [...new Set(out)];
+    }
+
+    // define the flattenSpread property itself 
+    Object.defineProperty(Object.prototype, 'flattenSpread', {
+        value: flattenSpread,
+        writable: true,
+        configurable: true,
+        enumerable: false
+    });
+
+    // #endregion Spread Params
+
 })();
-
-
-// #endregion Console 

@@ -17,7 +17,33 @@ declare global {
 
     }
 
+    interface Object {
+        /**
+         * Flatten value into a 1D array (incl recursive arrays), optionally 
+         * skipping null values, and optionally ignoring duplicate values, and
+         * returns the result as a new array.
+         * 
+         * **Note:** Arrays are flattened, but other collections (eg `Set`) are treated as single values.
+         * @param {boolean} [skipNullValues=true] Are `null` and `undefined` values allowed? Default `true`
+         * @param {boolean} [allowDuplicateValues=true] Are duplicate values allowed? Default `true`
+         * @returns {any[]} 
+         */
+        flattenSpread(skipNullValues?: boolean, allowDuplicateValues?: boolean): any[];
+    }
+
     interface Array {
+
+        /**
+         * Flatten array values in this array into a 1D array (incl recursive arrays), 
+         * optionally skipping null values, and optionally ignoring duplicate values, 
+         * and return the result as a new array.
+         * 
+         * **Note:** Arrays are flattened, but other collections (eg `Set`) are treated as single values.
+         * @param {boolean} [skipNullValues=true] Are `null` and `undefined` values allowed? Default `true`
+         * @param {boolean} [allowDuplicateValues=true] Are duplicate values allowed? Default `true`
+         * @returns {any[]} 
+         */
+        flattenSpread(skipNullValues?: boolean, allowDuplicateValues?: boolean): any[];
 
         /**
          * Optionally-assigned name for this array 
@@ -283,6 +309,21 @@ declare global {
         isOdd(): boolean;
     }
 
+    interface String {
+        /**
+         * Flatten string into a 1D array (incl recursive arrays), optionally 
+         * skipping null values, and optionally ignoring duplicate values, and
+         * returns the result as a new array. 
+         * 
+         * This is present largely as a typesafe way to accommodate functions 
+         * that take ...spread param input and/or single string input.
+         * @param {boolean} [skipNullValues=true] Are `null` and `undefined` values allowed? Default `true`
+         * @param {boolean} [allowDuplicateValues=true] Are duplicate values allowed? Default `true`
+         * @returns {string[]} 
+         */
+        flattenSpread(skipNullValues?: boolean, allowDuplicateValues?: boolean): string[];
+    }
+
     interface Console {
 
         /**
@@ -322,14 +363,14 @@ declare global {
 
     }
 
-    // #region TypeSafe Declaration 
-    // (there's almost definitely a better way of doing this, but I'm tired of TS telling me that things that DO exist, don't) 
-
     interface HTMLElement {
+        // mostly typesafe declaration 
+        // (there's almost definitely a better way of doing this, but I'm tired of TS telling me that things that DO exist, don't) 
         checked?: boolean;
         defaultChecked?: boolean;
         value?: string | number | boolean;
     }
+
 
 }
 
@@ -345,7 +386,7 @@ declare module './src/js/components/base' {
          * Invoke with `component.UpdateCosts?.();`
          * @returns {void}
          */
-        UpdateCosts?():void;
+        UpdateCosts?(): void;
 
         /**
          * Optionally defined method to call `DocumentLoaded` on components that have it defined. 
@@ -356,7 +397,7 @@ declare module './src/js/components/base' {
          * @returns {void}
          */
         DocumentLoaded?(): void;
-        
+
         /**
          * Optionally defined method to call `PositionUpdate` on components that have it defined. 
          * 
@@ -367,7 +408,7 @@ declare module './src/js/components/base' {
          * @param {HTMLElement} [div = undefined]
          * @returns {void}
          */
-        PositionUpdate?(div?:HTMLElement): void;
+        PositionUpdate?(div?: HTMLElement): void;
     }
 
 }
