@@ -362,15 +362,35 @@ declare global {
         stackString: string;
 
     }
+    
+    interface Element {
 
-    interface HTMLElement {
         // mostly typesafe declaration 
         // (there's almost definitely a better way of doing this, but I'm tired of TS telling me that things that DO exist, don't) 
         checked?: boolean;
         defaultChecked?: boolean;
         value?: string | number | boolean;
-    }
+        draggable?: string | boolean;
+        style?: CSSStyleProperties;
 
+        /** Removes keyboard focus from this element. @returns {void} */
+        blur(): void;
+
+        /** Simulates a mouse click on an element. @returns {void} */
+        click(): void;
+
+        /**
+         * Sets focus on the specified element, if it can be focused. The focused element is the element that will receive keyboard and similar events by default.
+         * @param {object} [options=undefined] An optional object for controlling aspects of the focusing process
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement/focus
+         */
+        focus(options?: {
+            /** A boolean value indicating whether or not the browser should scroll the document to bring the newly-focused element into view. Default `false` */
+            preventScroll?: boolean = false,
+            /** A boolean value that should be set to `true` to force, or `false` to prevent visible indication that the element is focused. Default `undefined`, deferring to browser accessibility settings. */
+            focusVisible?: boolean
+        }): void;
+    }
 
 }
 

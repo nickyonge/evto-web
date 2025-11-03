@@ -28,17 +28,9 @@ export function CreateDivWithID(id) {
     return div;
 }
 
-/** @typedef {string[] | [string, ...string[]]} spreadString */
-/**
- * Create a DIV HTMLElement
- * @returns {HTMLElement} newly made HTML <div> element
- */
-export function CreateDiv() {
-    return CreateElement('div');
-}
 /**
  * Create a DIV HTMLElement with the given CSS class(es)
- * @param {...string} cssClasses one or more CSS classes to add
+ * @param {spreadString} cssClasses one or more CSS classes to add
  * @returns {HTMLElement} newly made HTML <div> element
  */
 export function CreateDivWithClass(...cssClasses) {
@@ -46,33 +38,6 @@ export function CreateDivWithClass(...cssClasses) {
     AddClassesToDOM(div, ...cssClasses);
     return div;
 }
-/**
- * Adds the given class(es) to the given HTMLElement (one element, multiple classes)
- * @param {Element} domElement HTMLElement to add the given classes to
- * @param  {spreadString} cssClasses one or more classes to add to the domElement
- * @returns 
- */
-export function AddClassesToDOM(domElement, ...cssClasses) {
-    if (cssClasses.length == 0) {
-        return;
-    }
-    cssClasses = cssClasses.flat();
-    if (domElement.classList.length == 0) {
-        domElement.classList.add(...cssClasses);
-        return;
-    }
-    for (let i = 0; i < cssClasses.length; i++) {
-        if (!domElement.classList.contains(cssClasses[i])) {
-            domElement.classList.add(cssClasses[i]);
-        }
-    }
-}
-const myDiv1 = CreateDivWithClass('class1');                         // should have CSS class1
-const myDiv2 = CreateDivWithClass('class1', 'class2', 'class3');     // class1, 2, and 3
-const classArray = ['class1', 'class2', 'class3'];                   // class1, 2, and 3
-const myDiv3 = CreateDivWithClass(classArray);                       // class1, 2, and 3
-const myDiv4 = CreateDivWithClass(classArray, 'class4', 'class5');   // class1, 2, 3, 4, and 5
-const myDiv5 = CreateDivWithClass(classArray, ['class4', 'class5']); // class1, 2, 3, 4, and 5
 
 /**
  * Create a new HTMLElement of the given type
@@ -174,7 +139,7 @@ export function AddClassesToDOM(domElement, ...cssClasses) {
     if (cssClasses.length == 0) {
         return;
     }
-    cssClasses = cssClasses.flat();
+    cssClasses = cssClasses.flattenSpread();
     if (domElement.classList.length == 0) {
         domElement.classList.add(...cssClasses);
         return;
@@ -191,7 +156,7 @@ export function AddClassesToDOM(domElement, ...cssClasses) {
  * @param  {...Element} domElements HTMLElement(s) to add the class to
  */
 export function AddClassToDOMs(cssClass, ...domElements) {
-    domElements = domElements.flat();
+    domElements = domElements.flattenSpread();
     for (let i = 0; i < domElements.length; i++) {
         if (!domElements[i].classList.contains(cssClass)) {
             domElements[i].classList.add(cssClass);
@@ -209,7 +174,7 @@ export function RemoveClassesFromDOM(domElement, ...cssClasses) {
     if (domElement.classList.length == 0) {
         return;
     }
-    cssClasses = cssClasses.flat();
+    cssClasses = cssClasses.flattenSpread();
     for (let i = 0; i < cssClasses.length; i++) {
         if (domElement.classList.contains(cssClasses[i])) {
             domElement.classList.remove(cssClasses[i]);
@@ -222,7 +187,7 @@ export function RemoveClassesFromDOM(domElement, ...cssClasses) {
  * @param  {...Element} domElements HTMLElement(s) to remove the class from
  */
 export function RemoveClassFromDOMs(cssClass, ...domElements) {
-    domElements = domElements.flat();
+    domElements = domElements.flattenSpread();
     for (let i = 0; i < domElements.length; i++) {
         if (domElements[i].classList.contains(cssClass)) {
             domElements[i].classList.remove(cssClass);
@@ -256,10 +221,10 @@ export function AddElementAttributes(element, attTypes, attValues) {
  * Sets the given attribute on the given HTMLElement
  * @param {Element} element HTMLElement to add attribute to
  * @param {string} attType Type (qualifiedName) of attribute
- * @param {string} attValue Value of attributue
+ * @param {string|number|boolean|null|undefined} attValue Value of attributue
  */
 export function AddElementAttribute(element, attType, attValue) {
-    element.setAttribute(attType, attValue);
+    element.setAttribute(attType, String(attValue));
 }
 
 /**
@@ -534,7 +499,8 @@ export function MakeTabbableWithInputTo(tabElement, inputToElement, tabIndex = 0
 export function PassKeyboardSelection(fromElement, toElement) {
     fromElement.addEventListener('keydown', e => {
         // much older devices check for "Spacebar", might as well support it 
-        if (e.key === ' ' || e.key === 'Spacebar' || e.key === 'Enter') {
+        let key = /** @type {KeyboardEvent} */ (e).key;
+        if (key === ' ' || key === 'Spacebar' || key === 'Enter') {
             e.preventDefault(); // don't scroll the page down or anything
             toElement.click(); // pass click to new element
         }

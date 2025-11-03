@@ -5,7 +5,7 @@ import * as txt from './text';
 import { PAGE_NAMES } from "./text";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE, PageOpened, PageClosed } from "./contentData";
 import { dataWindow } from "./uiMain";
-import { style, AddAlphaToHex, DeselectElement, SetElementEnabled, GetChildWithClass, GetAllChildrenWithClass } from "./lilutils";
+import { css, AddAlphaToHex, DeselectElement, SetElementEnabled, GetChildWithClass, GetAllChildrenWithClass } from "./lilutils";
 import { CreatePage } from "./pages/uiDataPageBase";
 import { CallOnLoadComplete } from ".";
 import { BasicComponent, basicComponentClass } from "./components/base";
@@ -297,7 +297,7 @@ export function GetPageNumberByID(pageID) {
  */
 function GetBGColor(color) {
     let cssVar = '--color-data-bg-blend-' + color;
-    let cssColor = style.value.getPropertyValue(cssVar);
+    let cssColor = css.style.getPropertyValue(cssVar);
     if (!cssColor) {
         throw new Error(`ERROR: couldn't get CSS variable for BG color: ${color}, parsed to CSS var ${cssVar}`);
     }

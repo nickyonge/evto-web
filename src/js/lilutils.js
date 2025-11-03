@@ -340,7 +340,7 @@ export function isPoint(pt, strict = false) {
  */
 export function arePoints(...pts) {
     if (pts == null || !Array.isArray(pts)) { return false; }
-    pts = pts.flat();
+    pts = pts.flattenSpread();
     for (let i = 0; i < pts.length; i++) {
         if (!isPoint(pts[i])) { return false; }
     }
@@ -433,7 +433,7 @@ export function AngleDegreesToRadians(degrees) { return degrees * (Math.PI / 180
  * @param {boolean} [inDegrees=true] If `angle` in degrees? If false, angle is in radians 
  * @returns {{x:number, y:number}[]} input array, with all points rotated as specified */
 export function RotatePointsAroundSharedCenter(points, angle, inDegrees = true) {
-    let center = FindPointsSharedCenter(points);
+    let center = FindPointsSharedCenter(...points);
     return RotatePointsAroundPivot(points, center, angle, inDegrees);
 }
 /**
@@ -469,12 +469,12 @@ export function RotatePointsAroundOrigin(points, angle, inDegrees = true) {
 }
 /**
  * Determines the shared center {@link toPoint point} of all given {@link toPoint points}
- * @param {...{x:number, y:number}[]} points Array of {@link toPoint points} to calculate the shared center of 
+ * @param {...{x:number, y:number}} points Array of {@link toPoint points} to calculate the shared center of 
  * @returns {{x:number, y:number}} Single XY {@link toPoint point} representing the shared center of all given points */
 export function FindPointsSharedCenter(...points) {
     // ensure non-null and valid, otherwise return point with NaN coords 
     if (points == null) { return { x: NaN, y: NaN }; }
-    points = points.flat();
+    points = points.flattenSpread();
     if (points.length == 0) { return { x: NaN, y: NaN }; }
     if (points.length == 1) { return points[0]; } // single point, it's its own center 
     // add all points coords together, average, return 
@@ -566,13 +566,20 @@ export function ConvertArrayIndicesTo2DArray(array) {
 // #region CSS
 
 /** 
- * Gets the CSS stylesheet for the page.
- * 
- * Remember!!! Use `.value` when accessing `style` (eg, `style.value.getPropertyValue`)
- * @type {CSSStyleDeclaration}
+ * @typedef {object} CSSStyleAccessor Wrapper around Get the {@linkcode CSSStyleDeclaration}, ensuring it's only accessed after the document has fully loaded.
+ * @property {CSSStyleDeclaration} style Get the {@linkcode CSSStyleDeclaration} loaded on this page. Accessing prior to load throws an error. 
  */
-export const style = {
-    get value() {
+
+/** 
+ * Load-safe accessor for the {@link CSSStyleDeclaration CSS stylesheet} on this page.
+ * 
+ * **Note:** Use {@linkcode css.style} when accessing the stylesheet (eg, 
+ * `style.value.getPropertyValue`), as this is just an accessor.
+ * @type {CSSStyleAccessor}
+ * @readonly
+ */
+export const css = {
+    get style() {
         if (!_style) {
             if (!document.body) {
                 throw new Error("Body isn't yet loaded, don't call style until after window is loaded");
@@ -582,21 +589,22 @@ export const style = {
         return _style;
     }
 };
-/** local {@link style} reference for utils
- * @type {CSSStyleDeclaration} */
-let _style;
+/** 
+ * local {@link css} reference for utils
+ * @type {CSSStyleDeclaration|null} */
+let _style = null;
 
 /**
  * Gets a CSS variable from loaded stylesheets
  * @param {string} varName Name of variable. Should start with `--`, but if not, it will be added
- * @returns Value of the given variable
+ * @returns {string|undefined} Value of the given variable
  */
 export function GetCSSVariable(varName) {
     if (isBlank(varName)) { return; }
     if (!varName.startsWith('--')) {
         varName = `${varName.startsWith('-') ? '-' : '--'}${varName}`;
     }
-    return style.value.getPropertyValue(varName);
+    return css.style.getPropertyValue(varName);
 }
 
 // #endregion CSS
@@ -605,8 +613,8 @@ export function GetCSSVariable(varName) {
 
 /**
  * Get all sibling elements to the given element
- * @param {HTMLElement} element 
- * @returns {HTMLElement[]}
+ * @param {Element} element 
+ * @returns {Element[]}
  */
 export function GetAllSiblings(element) {
     if (!element || !element.parentNode) { return []; }
@@ -615,15 +623,15 @@ export function GetAllSiblings(element) {
 }
 /**
  * Get all parent elements to the given child element
- * @param {HTMLElement} child 
- * @returns {HTMLElement[]}
+ * @param {Element} child 
+ * @returns {Element[]}
  */
 export function GetAllParents(child) {
     if (child == null || child.parentElement == null) { return []; }
     let parents = [];
     let currentElement = child;
     while (currentElement && currentElement !== document.body && currentElement !== document.documentElement) {
-        currentElement = currentElement.parentNode;
+        currentElement = currentElement.parentElement;
         if (currentElement) { // Ensure currentElement is not null before pushing
             parents.push(currentElement);
         }
@@ -632,9 +640,9 @@ export function GetAllParents(child) {
 }
 /**
  * Get all children of the given element, optionally recursively getting subsequent children
- * @param {HTMLElement} parent parent element
+ * @param {Element} parent parent element
  * @param {boolean} [recursive = true] include children of children? default true
- * @returns {HTMLElement[]}
+ * @returns {Element[]}
  */
 export function GetAllChildren(parent, recursive = true) {
     if (!recursive) { return [...parent.children]; }
@@ -650,9 +658,9 @@ export function GetAllChildren(parent, recursive = true) {
 /**
  * Returns the first sibling of the given element with the given class found. 
  * If none are found, returns null 
- * @param {HTMLElement} element source element to search siblings 
+ * @param {Element} element source element to search siblings 
  * @param {string} cssClass class name to check for
- * @returns {HTMLElement|null} first found sibling element with class, or null
+ * @returns {Element|null} first found sibling element with class, or null
  */
 export function GetSiblingWithClass(element, cssClass) {
     let siblings = GetAllSiblings(element);
@@ -666,9 +674,9 @@ export function GetSiblingWithClass(element, cssClass) {
 }
 /**
  * Returns all siblings of the given element with the given class found.
- * @param {HTMLElement} element source element to search siblings 
+ * @param {Element} element source element to search siblings 
  * @param {string} cssClass class name to check for
- * @returns {HTMLElement[]} all sibling elements with class
+ * @returns {Element[]} all sibling elements with class
  */
 export function GetAllSiblingsWithClass(element, cssClass) {
     let siblings = GetAllSiblings(element);
@@ -684,9 +692,9 @@ export function GetAllSiblingsWithClass(element, cssClass) {
 /**
  * Returns the first child of the given element with the given class found. 
  * If none are found, returns null 
- * @param {HTMLElement} parentElement source parent element to search the children of 
+ * @param {Element} parentElement source parent element to search the children of 
  * @param {string} cssClass class name to check for 
- * @returns {HTMLElement|null} first found child element with class, or null
+ * @returns {Element|null} first found child element with class, or null
  */
 export function GetChildWithClass(parentElement, cssClass) {
     for (const child of parentElement.children) {
@@ -698,9 +706,9 @@ export function GetChildWithClass(parentElement, cssClass) {
 }
 /**
  * Returns all children of the given element with the given class found
- * @param {HTMLElement} parentElement source parent element to search the children of 
+ * @param {Element} parentElement source parent element to search the children of 
  * @param {string} cssClass class name to check for 
- * @returns {HTMLElement[]} child elements with class
+ * @returns {Element[]} child elements with class
  */
 export function GetAllChildrenWithClass(parentElement, cssClass) {
     let children = GetAllChildren(parentElement);
@@ -716,9 +724,9 @@ export function GetAllChildrenWithClass(parentElement, cssClass) {
 /**
  * Returns the first parent of the given element with the given class found. 
  * If none are found, returns null 
- * @param {HTMLElement} childElement source child element to search the parents of 
+ * @param {Element} childElement source child element to search the parents of 
  * @param {string} cssClass class name to check for 
- * @returns {HTMLElement|null} first found parent element with class, or null
+ * @returns {Element|null} first found parent element with class, or null
  */
 export function GetParentWithClass(childElement, cssClass) {
     let parents = GetAllParents(childElement);
@@ -732,9 +740,9 @@ export function GetParentWithClass(childElement, cssClass) {
 }
 /**
  * Returns all parents of the given element with the given class found. 
- * @param {HTMLElement} childElement source child element to search the parents of 
+ * @param {Element} childElement source child element to search the parents of 
  * @param {string} cssClass class name to check for 
- * @returns {HTMLElement[]} parent elements with class, or null
+ * @returns {Element[]} parent elements with class, or null
  */
 export function GetAllParentsWithClass(childElement, cssClass) {
     let parents = GetAllParents(childElement);
@@ -763,7 +771,7 @@ export function ElementHasClass(element, cssClass) {
 
 /**
  * Deselects (and optionally blurs) the given HTMLElement AND all its children
- * @param {HTMLElement} element HTMLElement to deselect
+ * @param {Element} element HTMLElement to deselect
  * @param {boolean} [alsoBlur=true] also blur (unfocus) the element, or any focused children of the element?  
  */
 export function DeselectElement(element, alsoBlur = true) {
@@ -806,7 +814,7 @@ export function DeselectAll(alsoBlur = true) {
 
 /**
  * Selects the given Element, with optional config parameters
- * @param {HTMLElement} element element to select
+ * @param {Element} element element to select
  * @param {boolean} [focusVisible = true] 
  * @param {boolean} [preventScroll = false] 
  */
@@ -845,7 +853,7 @@ export function IsActiveElement(element) {
  *   - Setting `tabIndex` attribute to `-1`, including to all interactive children
  *   - Setting `aria-hidden` attribute to `true`
  *   - Setting `inert` attribute to `''`
- * @param {HTMLElement} element HTMLElement to fully enable or disable
+ * @param {Element} element HTMLElement to fully enable or disable
  * @param {boolean} [set=true] state to assign, `true` to Enable (default), or `false` to Disable 
  */
 export function SetElementEnabled(element, set = true) {
@@ -893,7 +901,7 @@ export function SetElementEnabled(element, set = true) {
  * - Setting `inert` attribute to `''`
  * 
  * Convenience function; simply calls `SetElementEnabled(element,false);`
- * @param {HTMLElement} element Element to fully disable
+ * @param {Element} element Element to fully disable
  */
 export function SetElementDisabled(element) {
     SetElementEnabled(element, false);
@@ -903,7 +911,7 @@ export function SetElementDisabled(element) {
 
 // #region Timing 
 
-/** local array of intervals and timers @type {Array<Array<string,number>>} */
+/** local array of intervals and timers @type {[string, number][]} */
 let _intervals = [];
 /**
  * sets a given interval timer label to timestamp of `performance.now()`
@@ -1020,13 +1028,19 @@ export function TimeBetweenTwoTimestamps(timestampA, timestampB) {
     return timestampA - timestampB;
 }
 
-// #endregion Timing 
+// #endregion Timing
 
-// #region Environment 
+// #region Environment
+
+/** If process.env.NODE_EVN is 'testing', should {@linkcode _env_isDevelopment} return `true`? */
+const __TESTING_IS_DEVELOPMENT = true;
+/** If process.env.NODE_EVN is 'staging', should {@linkcode _env_isProduction} return `true`? */
+const __STAGING_IS_PRODUCTION = true;
 
 /** 
  * Returns the current `process.env.NODE_EVN` environment. Typically `"development"` or `"production"`.
- * @see `PRODUCTION_BUILD` in `webpack.config.js` 
+ * 
+ * Also see `PRODUCTION_BUILD` in `webpack.config.js` 
  * @see {@linkcode _env_isDevelopment} 
  * @see {@linkcode _env_isProduction} 
  * @see https://www.geeksforgeeks.org/node-js/what-is-node_env-in-node-js/ */
@@ -1044,6 +1058,14 @@ export const _env_isStaging = _env_currentEnv === 'staging';
  * @see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) */
 export const _env_isTest = _env_currentEnv === 'testing' || _env_currentEnv === 'test';
 /**
+ * Is the {@link _env_currentEnv current} environment `production`/`prod`?
+ * 
+ * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, the environment `staging` will also return `true`. 
+ * @see `PRODUCTION_BUILD` in `webpack.config.js` */
+export const _env_isProduction =
+    _env_currentEnv === 'production' || _env_currentEnv === 'prod' ||
+    (_env_isStaging && __STAGING_IS_PRODUCTION);
+/**
  * Is the {@link _env_currentEnv current} environment `development`/`dev`?
  * 
  * **Note:** also `true` if environment is `null`\`undefined`\`""`.
@@ -1054,17 +1076,6 @@ export const _env_isDevelopment =
     _env_currentEnv === null || _env_currentEnv === undefined || _env_currentEnv === '' ||
     _env_currentEnv === 'development' || _env_currentEnv === 'dev' ||
     !_env_isProduction && (!_env_isTest || __TESTING_IS_DEVELOPMENT);
-/**
- * Is the {@link _env_currentEnv current} environment `production`/`prod`?
- * 
- * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, the environment `staging` will also return `true`. 
- * @see `PRODUCTION_BUILD` in `webpack.config.js` */
-export const _env_isProduction =
-    _env_currentEnv === 'production' || _env_currentEnv === 'prod' ||
-    (_env_isStaging && __STAGING_IS_PRODUCTION);
-/** If process.env.NODE_EVN is 'testing', should {@linkcode _env_isDevelopment} return `true`? */
-const __TESTING_IS_DEVELOPMENT = true;
-/** If process.env.NODE_EVN is 'staging', should {@linkcode _env_isProduction} return `true`? */
-const __STAGING_IS_PRODUCTION = true;
+
 
 // #endregion Environment

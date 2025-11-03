@@ -30,7 +30,7 @@ export class BasicComponent {
         return `_uiComponent${this.uniqueComponentID}`;
     }
     /** page that this component has been added to. should only be accessed after UI has finished loading. 
-     * @type {HTMLElement} */
+     * @type {Element} */
     get parentPage() {
         if (this.#parentPage == null) {
             if (this.div == null || this.div.parentElement == null) {
