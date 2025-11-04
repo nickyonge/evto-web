@@ -666,7 +666,7 @@ export class svgHTMLAsset extends svgElement {
                     console.warn(`WARNING: svgHTML[0] definition[1] does not have an ID. Defs need an ID to be used.`, this, definition);
                 }
                 let h = this.IndentHTML(definition.html, 2);
-                if (isBlank(h)) {
+                if (!isBlank(h)) {
                     newSVG += h;
                     if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
                 }
