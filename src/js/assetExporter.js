@@ -518,7 +518,7 @@ function nestedPath(path, children = undefined) {
 /**
  * Nested map of all map PNG assets and their URL references (use `.URL`, or parse output as string)
  */
-export const map = Object.freeze({
+export const mapImg = Object.freeze({
     gcs: nestedAsset(undefined, {
         complete: nestedAsset('gcs-complete'),
         equator: nestedAsset('gcs-equator_dotted', {

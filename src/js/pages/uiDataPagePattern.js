@@ -5,6 +5,7 @@ import { SetElementEnabled } from "../lilutils";
 import { DemoGradient } from "./uiDataPageBase";
 import { svgHTMLAsset } from "../svg/svgElement";
 import { svgGradient } from "../svg/svgGradient";
+import { mapImg } from "../assetExporter";
 
 let currentSectionNum = 0;
 
@@ -55,7 +56,11 @@ export function CreatePagePattern(page) {
 function CreatePatternSection(section) {
     let patternImage = new cmp.ImageField();
     section.appendChild(patternImage);
-    patternImage.CreateDemoImageAndSVG();
+    // patternImage.CreateDemoImageAndSVG();
+
+    // mapImg
+
+
 }
 function CreateColorsSection(section) {
 
