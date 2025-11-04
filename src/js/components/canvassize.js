@@ -3,8 +3,6 @@ import { BasicComponent, TitledComponent } from "./base";
 import * as txt from '../text';
 import { currentSizeNumber, SelectSize } from "../contentData";
 
-import imgTest from './imageTest.png';
-
 
 import canvasBase from '../../assets/png/canvases/evto_paintings_plain_faded.png';
 // import canvasBase from '../../assets/png/canvases/evto_paintings_plain.png';
