@@ -1,10 +1,13 @@
 //@ts-check
 // script for system/window-level architecture
 
+export const devtoolsURL = import.meta.url;
+
 // SYSTEM/WINDOW-LEVEL - imported to index FIRST, before all other imports are begun
 (() => {
 
     // #region Console
+
 
     /** Prefix applied to {@linkcode console.if()} call message */
     const CONSOLE_IF_PREFIX = '【𝙇𝙤𝙜 𝙄𝙛】[s]\n';
@@ -12,9 +15,6 @@
     const CONSOLE_IF_OUTPUT_STACK_TRACE = false;
 
     const CONSOLE_STACK_FORMAT_WEBPACK_LINKS = true;
-
-    //@ts-ignore
-    export const devtoolsURL = import.meta.url;
 
     // Add console.if (log only when the first arg is truthy)
     // bind initial log and trace vals 
@@ -222,7 +222,7 @@
         // not a boxed primitive, or it IS a boxed primitive and type is being preserved 
         return false;
     }
-    
+
     /**
      * Flatten value into a 1D array (incl recursive arrays), optionally 
      * skipping null values, and optionally ignoring duplicate values, and

@@ -147,7 +147,7 @@ export function GetCostArray(costValues) {
  * @param {number|Array<number>|Array<Array<number>>} costValues Cost, or array of costs per size, 
  * or array of array of costs per size per index value (eg Sm/Md/Lg + Low/Med/High Detail) 
  * @param {Size} size Canvas size cost value
- * @returns {Array<number>|null} Given cost value array, or null if invalid / error
+ * @returns {number[]|null} Given cost value array, or null if invalid / error
  */
 export function GetCostArrayForSize(costValues, size) {
     // nullchecks 
@@ -173,7 +173,10 @@ export function GetCostArrayForSize(costValues, size) {
                     console.warn(`WARNING: size is null, returning costValues[0] (${costValues[0]}) array in costValues ${costValues}`);
                     return costValues.flat[0];
                 } else {
-                    return costValues.flat[size];
+                    if (Array.isArray(costValues[0])) {
+                        return /** @type {number[]} */ (costValues[size]);
+                    }
+                    return /** @type {number[]} */ (costValues);
                 }
             }
             break;
