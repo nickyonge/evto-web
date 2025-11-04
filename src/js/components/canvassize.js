@@ -3,9 +3,11 @@ import { BasicComponent, TitledComponent } from "./base";
 import * as txt from '../text';
 import { currentSizeNumber, SelectSize } from "../contentData";
 
+import imgTest from './imageTest.png';
+
+
 import canvasBase from '../../assets/png/canvases/evto_paintings_plain_faded.png';
 // import canvasBase from '../../assets/png/canvases/evto_paintings_plain.png';
-
 import canvasLgP from '../../assets/png/canvases/alpha_assets/cutouts_colour_frames/evto_canvas_frame_6lgp.png';
 import canvasLg from '../../assets/png/canvases/alpha_assets/cutouts_colour_frames/evto_canvas_frame_5lg.png';
 import canvasMdP from '../../assets/png/canvases/alpha_assets/cutouts_colour_frames/evto_canvas_frame_4mdp.png';

@@ -100,7 +100,7 @@ export class TitledComponent extends BasicComponent {
     set title(text) {
         this.#titleText = text;
         if (this.#titleElement) {
-            if (!text || text.isBlank) {
+            if (!text || isBlank(text)) {
                 this.#titleElement.style.display = 'none';
             } else {
                 this.#titleElement.style.display = '';

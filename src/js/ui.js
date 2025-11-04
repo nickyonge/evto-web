@@ -1,6 +1,6 @@
 /* Basic UI element generation */
 
-/** @typedef {string[] | [string, ...string[]]} spreadString */
+/** @typedef {string[] | [string[]] | [string, ...string[]]} spreadString */
 
 /** @typedef { Element | HTMLElement } UIElement */
 
@@ -221,7 +221,7 @@ export function AddElementAttributes(element, attTypes, attValues) {
  * Sets the given attribute on the given HTMLElement
  * @param {Element} element HTMLElement to add attribute to
  * @param {string} attType Type (qualifiedName) of attribute
- * @param {string|number|boolean|null|undefined} attValue Value of attributue
+ * @param {string|number|boolean|null|undefined} [attValue = undefined] Value of attributue
  */
 export function AddElementAttribute(element, attType, attValue) {
     element.setAttribute(attType, String(attValue));
