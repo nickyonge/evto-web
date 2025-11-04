@@ -44,7 +44,8 @@ export class Toggle extends TitledComponent {
 
         if (onChangeCallback) {
             this.#input.addEventListener('change', (event) => {
-                onChangeCallback(event.target.checked);
+                let target = /** @type {Element} */ (event.target);
+                onChangeCallback(target.checked);
             });
         }
         this._addHelpIcon(`help me! ${1}`, true, false);
@@ -63,7 +64,8 @@ export class Toggle extends TitledComponent {
             this.#currentCost = 0;
         } else {
             this.#cost.hidden = false;
-            let _cost = costArray;
+            let _cost = costArray[0];
+            console.log(" --- CHECK TO ENSURE COSTS [0] IS CORRECT --- ");
             if (_cost < -99) { _cost = -99; } else if (_cost > 999) { _cost = 999; }
             if (_cost < -9 || _cost > 99) {
                 ui.AddClassToDOMs('tinyText', this.#cost);
@@ -72,7 +74,7 @@ export class Toggle extends TitledComponent {
             } else {
                 ui.RemoveClassesFromDOM(this.#cost, 'smallText', 'tinyText');
             }
-            this.#costP.innerText = _cost;
+            this.#costP.innerText = String(_cost);
             this.#currentCost = _cost;
         }
     }

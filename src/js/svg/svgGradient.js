@@ -92,16 +92,16 @@ export class svgGradient extends svg.element {
 
     /** radial only, X coord at gradient start circle, convenience, simply gets/sets {@link x1} @type {number|string} */
     get fx() { return this.x1; }
-    set fx(i) { let prev = this.#_x1; this.#_x1 = i; this.#changed('fx', v, prev); }
+    set fx(i) { let prev = this.#_x1; this.#_x1 = i; this.#changed('fx', i, prev); }
     /** radial only, Y coord at gradient start circle, convenience, simply gets/sets {@link y1} @type {number|string} */
     get fy() { return this.y1; }
-    set fy(i) { let prev = this.#_y1; this.#_y1 = i; this.#changed('fy', v, prev); }
+    set fy(i) { let prev = this.#_y1; this.#_y1 = i; this.#changed('fy', i, prev); }
     /** radial only, X coord at gradient end circle, convenience, simply gets/sets {@link x2} @type {number|string} */
     get cx() { return this.x2; }
-    set cx(i) { let prev = this.#_x2; this.#_x2 = i; this.#changed('cx', v, prev); }
+    set cx(i) { let prev = this.#_x2; this.#_x2 = i; this.#changed('cx', i, prev); }
     /** radial only, Y coord at gradient end circle, convenience, simply gets/sets {@link y2} @type {number|string} */
     get cy() { return this.y2; }
-    set cy(i) { let prev = this.#_y2; this.#_y2 = i; this.#changed('cy', v, prev); }
+    set cy(i) { let prev = this.#_y2; this.#_y2 = i; this.#changed('cy', i, prev); }
 
     /** radial-only, radius at end of the gradient @type {number|string} */
     get fr() { return this.#_fr; }
@@ -207,8 +207,8 @@ export class svgGradient extends svg.element {
                                 value += a[i];
                                 break;
                             case 'number':
-                                let as = a[i] * this.scale;
-                                value += (a[i] * this.scale).toMax();
+                                let aScale = this.scale * /** @type {number} */ (a[i]);
+                                value += aScale.toMax();
                                 break;
                         }
                     }
@@ -262,12 +262,12 @@ export class svgGradient extends svg.element {
                     newStop.offset = `${newOffset.toMax()}%`;
                     let h1 = this.stops[i].html;
                     let h2 = newStop.html;
-                    if (!isBlank.h1) {
+                    if (!isBlank(h1)) {
                         if (svg.config.HTML_INDENT) { newGradient += '\t'; }
                         newGradient += h1;
                         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
                     }
-                    if (!isBlank.h2) {
+                    if (!isBlank(h2)) {
                         if (svg.config.HTML_INDENT) { newGradient += '\t'; }
                         newGradient += h2;
                         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
@@ -285,7 +285,7 @@ export class svgGradient extends svg.element {
                     let h = this.stops[i].html;
                     // ensure offset value is reset 
                     if (autoOffset) { this.stops[i].offset = 'auto'; }
-                    if (!isBlank.h) {
+                    if (!isBlank(h)) {
                         if (svg.config.HTML_INDENT) { newGradient += '\t'; }
                         newGradient += h;
                         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
@@ -301,7 +301,7 @@ export class svgGradient extends svg.element {
 
     get data() {
         // process angle (must be done before collecting data)
-        let ProcessAngle = function () {
+        const ProcessAngle = () => {
             if (this.isRadial || this.angle == 0) { return false; } // skip, not modifying the angle
             // determine if all x1/2 y1/2 coords are valid 
             let deX1 = this.DeconstructNumericParam(this.x1, svg.defaults.GRADIENT_X1_SCALEDEFAULT);
@@ -331,8 +331,12 @@ export class svgGradient extends svg.element {
             // NOW do calculations, so we don't calculate a bunch of numbers before finding out half are % and half are px 
             for (let i = 0; i < numberIndices.length; i++) {
                 let n = numberIndices[i];
-                let xy1 = toPoint(deX1[n], deY1[n]);
-                let xy2 = toPoint(deX2[n], deY2[n]);
+                let nx1 = /** @type {number} */ (deX1[n]);
+                let ny1 = /** @type {number} */ (deY1[n]);
+                let nx2 = /** @type {number} */ (deX2[n]);
+                let ny2 = /** @type {number} */ (deY2[n]);
+                let xy1 = toPoint(nx1, ny1);
+                let xy2 = toPoint(nx2, ny2);
                 // rotate around pivot
                 let rotated = RotatePointsAroundPivot([xy1, xy2], this.anglePivotPoint, this.angle);
                 // reassign points
@@ -343,13 +347,14 @@ export class svgGradient extends svg.element {
                 deX2[n] = xy2.x;
                 deY2[n] = xy2.y;
             }
-            let xyArray = [deX1, deY1, deX2, deY2];
-            for (let i = 0; i < xyArray.length; i++) {
-                xyArray[i] = this.ReconstructNumericParam(xyArray[i]);
-            }
+            let xyArray = [
+                this.ReconstructNumericParam(deX1),
+                this.ReconstructNumericParam(deY1),
+                this.ReconstructNumericParam(deX2),
+                this.ReconstructNumericParam(deY2)];
             this.xy12 = xyArray;
             return true;
-        }.bind(this);
+        };
 
         this.__suppressOnChange = true;
         let xyOrig = this.xy12;
@@ -404,6 +409,7 @@ export class svgGradient extends svg.element {
      * @returns {[number,number,number,number]}
      */
     get xy12() { return [this.x1, this.y1, this.x2, this.y2]; }
+    /** @param {*} values should be a string, array of numbers, or array of XY points */
     set xy12(values) {
         if (values == null) { this.x1 = null; this.y1 = null; this.x2 = null; this.y2 = null; }
         if (Array.isArray(values)) {
@@ -479,7 +485,7 @@ export class svgGradient extends svg.element {
         }
         return stop;
     }
-    AddStop(color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) {
+    AddNewStop(color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) {
         let prev = this.stops;
         let stop = new svgGradientStop(color, opacity, offset);
         this.stops.push(stop);
@@ -496,7 +502,7 @@ export class svgGradient extends svg.element {
     SetStop(index, stop) {
         return this.#setStop(index, stop);
     }
-    SetStop(index, color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) {
+    SetNewStop(index, color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) {
         let stop = this.GetStop(index);
         if (stop == null) {
             stop = new svgGradientStop(color, opacity, offset);
@@ -532,7 +538,7 @@ export class svgGradient extends svg.element {
     InsertStop(index, stop) {
         return this.#insertStop(index, stop);
     }
-    InsertStop(index, color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) {
+    InsertNewStop(index, color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) {
         let stop = new svgGradientStop(color, opacity, offset);
         return this.#insertStop(index, stop);
     }
@@ -563,13 +569,13 @@ export class svgGradient extends svg.element {
 
     // alt spellings for convenience 
     AddColor(color) { return this.AddStop(color); }
-    AddColor(color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) { return this.AddStop(color, opacity, offset); }
+    AddNewColor(color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) { return this.AddNewStop(color, opacity, offset); }
     SetColors(...colors) { this.SetStops(...colors); }
     SetColor(index, color) { return this.SetStop(index, color); }
-    SetColor(index, color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) { return this.SetStop(index, color, opacity, offset); }
+    SetNewColor(index, color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) { return this.SetNewStop(index, color, opacity, offset); }
     GetColor(index) { return this.GetStop(index); }
     InsertColor(index, stop) { return this.InsertStop(index, stop); }
-    InsertColor(index, color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) { return this.InsertStop(index, color, opacity, offset); }
+    InsertNewColor(index, color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) { return this.InsertNewStop(index, color, opacity, offset); }
 
     // Local change and bubble-on-change settings 
     /** Should changes to this asset bubble up to its {@link svgGradient.parent parent} asset? @type {boolean} */
@@ -577,8 +583,8 @@ export class svgGradient extends svg.element {
     set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
     #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
 
-    /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {Array.prototype} source array object @param {any} returnValue returned value from method */
-    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('gradient')) { source.gradient.#changed(`${source.name}#${type}`, source, returnValue); } };
+    /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {[]} source array object @param {any} returnValue returned value from method */
+    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('gradient')) { source['gradient'].#changed(`${source.name}#${type}`, source, returnValue); } };
     /** Local changed callback that calls {@link onChange} on both this element and its {@link svgGradient.parent parent}. @type {svg.onChange} */
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 }
@@ -658,8 +664,8 @@ class svgGradientStop extends svg.element {
      * {@link svgGradientStop svgGradientStops}. If offsets aren't provided, linearly assigns
      * it based on the length of the supplied array.
      * @see {@link GenerateStop}
-     * @param {[string]|[string,number|string]|[string,number|string,number|string]} colors 1D/2D
-     * array of 1-3 values representing `[color,opacity,offset]`. Arrays and strings can
+     * @param {spreadValue} colors 
+     * Array of 1-3 values representing `[color,opacity,offset]`. Arrays and strings can
      * be intertwined, eg `[string,[string,number],string]`. Solo strings are colors.
      * Both `opacity` or `offset` are optional, and if omitted or null, are not assigned 
      * as `<stop>` attributes and instead skipped.
@@ -670,9 +676,10 @@ class svgGradientStop extends svg.element {
         if (colors == null) { return []; }
         // colors = colors.flat(); // actually don't flatten, ...colors can contain strings alongside 2d arrays // // convert to proper array 
         let stops = [];
-        // TODO: re-use existing stops instead of generating new ones where possible 
+        // TODO: re-use existing stops instead of generating new ones where possible
         // Issue URL: https://github.com/nickyonge/evto-web/issues/56
         // detect and flatten nested array 
+        // colors = colors.flattenSpread(); // flattenSpread might work but also might screw with array nesting, dw for now 
         let failsafe = 999;
         while (colors.length == 1 && Array.isArray(colors[0])) {
             colors = colors.flat();

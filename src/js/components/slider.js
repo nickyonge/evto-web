@@ -1,4 +1,4 @@
-import { GetCSSVariable, InverseLerp, isBlank, SetElementEnabled, StringNumericOnly, StringToNumber } from "../lilutils";
+import { EnsureToNumber, GetCSSVariable, InverseLerp, isBlank, SetElementEnabled, StringNumericOnly, StringToNumber } from "../lilutils";
 import * as ui from "../ui";
 import { TitledComponent } from "./base";
 
@@ -156,7 +156,7 @@ export class Slider extends TitledComponent {
     #updateInput() {
         ui.AddElementAttributes(this.#input,
             ['min', 'max', 'step'],
-            [this.minValue, this.maxValue, this.increment]);
+            [String(this.minValue), String(this.maxValue), String(this.increment)]);
     }
 
     #recalculateIncrementAndSteps(regenerateTickmarks = true) {
@@ -250,11 +250,12 @@ export class Slider extends TitledComponent {
         this.#generateTickMarks(true);
 
         // add callback event 
-        this.#input.addEventListener('input', (e) => {
+        this.#input.addEventListener('input', (event) => {
             this.#bg.style.setProperty('--slider-value', this.valueAsPercent);
             this.#updateText();
             if (onChangeCallback) {
-                onChangeCallback(e.target.value, this);
+                let target = /** @type {Element} */ (event.target);
+                onChangeCallback(target.value, this);
             }
         });
 
@@ -271,7 +272,7 @@ export class Slider extends TitledComponent {
     get valueNormalized() {
         if (this.#input == null) { return NaN; }
         let value = this.#input.value;
-        let n = StringToNumber(value);
+        let n = EnsureToNumber(value);
         if (n == null || !Number.isFinite(n)) {
             console.warn(`WARNING: couldn't parse slider value ${value} to number, can't create percentage`, this);
             return NaN;
@@ -285,15 +286,20 @@ export class Slider extends TitledComponent {
         return `${Math.round(this.valueNormalized * 100)}%`;
     }
 
+    /**
+     * Return the slider's current value as a string, either as direct number (eg, `"50"`) or formatted (eg, `"50%"`). 
+     * @param {boolean} [formatted=true] Format the value? See {@linkcode asPercentage}, {@linkcode valuePrefix}, and {@linkcode valueSuffix}
+     * @returns {string}
+     */
     valueAsString(formatted = true) {
         if (!this.#input) { return null; }
         let override = this.GetCurrentUniqueValueOverride();
-        if (override != null) { return override; }
+        if (override != null) { return String(override); }
         if (!formatted) {
             if (this.disabled) {
-                return this.disabledReturnsZero ? '0' : this.#input.value;
+                return this.disabledReturnsZero ? '0' : this.#input.value.toString();
             } else {
-                return this.#input.value;
+                return this.#input.value.toString();
             }
         }
         let value;
@@ -346,9 +352,11 @@ export class Slider extends TitledComponent {
                 break;
             default:
                 // other type - attempt to coerce to a number, or simply warn and return 
-                const n = Number(value);
+                const n = Number(v); // see note below 
                 if (n == null || typeof n != 'number' || !Number.isFinite(n)) {
-                    console.warn(`WARNING: failed to parse value ${value} of type "${typeof value}" to Number, can't set slider value`, this);
+                    console.warn(`WARNING: faile/d to parse value ${v} of type "${typeof v}" to Number, can't set slider value`, this);  // see note
+                    // note: changed "v" on Number(v) and the console.warn from "value" during TS refactoring. 
+                    //       if it behaves weird, it's possible it was intended to be this.value - unlikely tho 
                     return;
                 }
                 v = n.clamp(this.minValue, this.maxValue);

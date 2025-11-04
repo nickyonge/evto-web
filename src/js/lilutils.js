@@ -76,6 +76,7 @@ export function InsertString(base, insert, index = -1) {
  * @param {string|number} str Input string to convert. If given a number, simply returns it.
  * @param {boolean} [parseToInt = false] If true, returns `int`. If false, returns `Number`. Default `false`. 
  * @returns {number|NaN} The parsed number, or `NaN` if no digits are found.
+ * @see {@linkcode EnsureToNumber} if you need to parse a non-string, non-numeric value
  */
 export function StringToNumber(str, parseToInt = false) {
     if (typeof str === 'number') { return str; }

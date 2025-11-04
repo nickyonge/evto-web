@@ -70,11 +70,12 @@ export class MutliOptionList extends TitledComponent {
             if (onSelectCallback) {
                 input.addEventListener('change', (event) => {
                     // callback has two params: option index, and fully unique id of the option label 
-                    onSelectCallback(i, event.target.id);
+                    let target = /** @type {Element} */ (event.target);
+                    onSelectCallback(i, target.id);
                 });
             }
         }
-        
+
         // check horizontal class
         if (horizontal) {
             ui.AddClassToDOMs('horizontal', this.div, this.#listSelect);
@@ -127,7 +128,7 @@ export class MutliOptionList extends TitledComponent {
                 } else {
                     ui.RemoveClassesFromDOM(this.#costs[i], 'smallText', 'tinyText');
                 }
-                this.#costsP[i].innerText = _cost;
+                this.#costsP[i].innerText = _cost.toString();
                 this.#currentCost = _cost;
             }
         }

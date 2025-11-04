@@ -4,7 +4,7 @@ import { BasicComponent, TitledComponent } from "./base";
 
 import demoImageSrc from '../../assets/png/demo-paintings/demopainting1.png';
 import { svgGradient } from "../svg/svgGradient";
-import { svgElement, svgHTMLAsset } from "../svg/svgElement";
+import * as svg from '../svg/index';
 import { EnsureToNumber, isBlank, isStringAndBlank, isStringNotBlank } from "../lilutils";
 
 export class ImageField extends TitledComponent {
@@ -18,7 +18,7 @@ export class ImageField extends TitledComponent {
     }
 
     #_demoImage;
-    /** @type {svgHTMLAsset} */
+    /** @type {svg.asset} */
     #_demoSvgRect;
 
     IsSVGAdded(svgAsset) {
@@ -54,8 +54,8 @@ export class ImageField extends TitledComponent {
      * Adds an {@link svgHTMLAsset} to this image container. 
      * Returns whether or not the SVG was successfully added.
      * Will return `false` if svgAsset is null, or if it's already added (and `allowDuplicates` if `false`).
-     * @param {svgHTMLAsset} svgAsset SVG asset to add
-     * @param {svgElement.onChangeCallback} [onChangeCallback=null] Additional custom callback for when this SVG is modified (if not already assigned) 
+     * @param {svg.asset} svgAsset SVG asset to add
+     * @param {svg.onChange} [onChangeCallback=null] Additional custom callback for when this SVG is modified (if not already assigned) 
      * @param {boolean} [canvasSized=true] Assign the `canvasSizedImg` CSS class, forcing 2:1 aspect ratio? Default `true` 
      * @param {number} [zSort=0] Assignment for z-index CSS class. 0: leave default, >=1: assign class `onTop`, <=0: assign class `onBottom`. Default 0
      * @param {boolean} [allowDuplicates=false] Allow duplicates, if already added? Default `false`
@@ -86,7 +86,7 @@ export class ImageField extends TitledComponent {
         ui.AddClassesToDOM(e, 'image');
         if (canvasSized) { ui.AddClassesToDOM(e, 'canvasSizedImg'); }
         zSort = EnsureToNumber(zSort, false); // z-index sorting 
-        if (zSort == 0 || zSort == NaN || zSort == null) { } // default z-index, do nothing 
+        if (zSort == 0 || Number.isNaN(zSort) || zSort == null) { } // default z-index, do nothing 
         else if (zSort > 0) { ui.AddClassesToDOM(e, 'onTop'); } // always on top 
         else if (zSort < 0) { ui.AddClassesToDOM(e, 'onBottom'); } // always on bottom 
         if (extraClasses != null) { ui.AddClassesToDOM(e, ...extraClasses); } // extra classes 

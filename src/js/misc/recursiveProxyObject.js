@@ -1,4 +1,4 @@
-import { isStringNotBlank, ReturnStringNotBlank } from "./lilutils";
+import { ReturnStringNotBlank } from "../lilutils";
 
 // script that creates a recursive proxy object - eg, an object with
 // recursive values defined by its own reference.
@@ -70,7 +70,7 @@ function Asset(assetFolderReference, assetName, assetExtension = defaultExtensio
  * @param {string} [prefix=''] Optional prefix before values  
  * @param {string} [suffix=''] Optional suffix before values 
  * @param {boolean} [returnAsString=true] Return values converted to string? If not, returns directly as object 
- * @param {[string|symbol]} __path Internal reference to recursive path generation. Leave blank 
+ * @param {(string|symbol)[]} __path Internal reference to recursive path generation. Leave blank 
  * @returns {object|string} New object or string, with recursively-defined values  
  * @example 
  * let myObject = recursiveProxyObject()

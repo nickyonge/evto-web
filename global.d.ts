@@ -394,6 +394,7 @@ declare global {
         value?: string | number | boolean;
         draggable?: string | boolean;
         style?: CSSStyleProperties;
+        disabled?: boolean;
 
         /** Removes keyboard focus from this element. @returns {void} */
         blur(): void;
