@@ -897,6 +897,7 @@ export class svgHTMLAsset extends svgElement {
             if (v.length == 0) { v = null; this.gradient = v; return; }
             // check if it's all strings, if not, error 
             // TODO: allow assigning an array of svgGradients via svgHTMLAsset.gradient setter 
+            // Issue URL: https://github.com/nickyonge/evto-web/issues/60
             for (let i = 0; i < v.length; i++) {
                 if (typeof v[i] !== 'string') {
                     console.warn("WARNING: if assigning an array to gradient, it MUST be all string values", v, this);
