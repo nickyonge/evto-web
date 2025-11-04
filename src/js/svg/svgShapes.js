@@ -242,7 +242,7 @@ export class svgLine extends svgShape {
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 } // line 
 export class svgPolyline extends svgShape {
-    /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {[number,number]} */
+    /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {number[][]} */
     get points() { return this.#_points; }
     set points(v) { let prev = this.#_points; this.#_points = v; this.#changed('points', v, prev); }
     #_points = svg.defaults.POINTS;
@@ -263,7 +263,7 @@ export class svgPolyline extends svgShape {
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 } // polyline 
 export class svgPolygon extends svgShape {
-    /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {[number,number]} */
+    /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {number[][]} */
     get points() { return this.#_points; }
     set points(v) { let prev = this.#_points; this.#_points = v; this.#changed('points', v, prev); }
     #_points = svg.defaults.POINTS;

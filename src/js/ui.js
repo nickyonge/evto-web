@@ -1,9 +1,5 @@
 /* Basic UI element generation */
 
-/** @typedef {string[] | [string[]] | [string, ...string[]]} spreadString */
-
-/** @typedef { Element | HTMLElement } UIElement */
-
 import { isBlank } from "./lilutils";
 
 // ------------------------------------------------------------------ 

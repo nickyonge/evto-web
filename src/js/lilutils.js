@@ -73,12 +73,13 @@ export function InsertString(base, insert, index = -1) {
 /**
  * Removes {@link StringNumericOnly non-numeric} chars from a string and returns the resulting number. 
  * Returns `NaN` if no number is found. 
- * @param {string} str Input string to convert 
+ * @param {string|number} str Input string to convert. If given a number, simply returns it.
  * @param {boolean} [parseToInt = false] If true, returns `int`. If false, returns `Number`. Default `false`. 
  * @returns {number|NaN} The parsed number, or `NaN` if no digits are found.
  */
 export function StringToNumber(str, parseToInt = false) {
-    if (!isStringNotBlank(str)) { return typeof str == 'number' ? str : NaN; }
+    if (typeof str === 'number') { return str; }
+    if (!isStringNotBlank(str)) { return NaN; }
     let strLow = str.toLowerCase().trim();
     if (strLow == 'infinity') { return Infinity; }
     else if (strLow == '-infinity') { return -Infinity; }
@@ -115,11 +116,12 @@ export function StringNumericToMax(str, maxDecimals = 3, preProcessStringToNumer
  * @example StringAlphanumericOnly('abc123!@#'); // returns 'abc123' */
 export const StringAlphanumericOnly = str => (isBlank(str) ? str : str.replace(/[^a-zA-Z0-9]/g, ''));
 /** Strips away all non-numerical characters from a string
- * @param {string} str string to process
+ * @param {string|number} str string to process (if given a number, returns as a string)
  * @param {boolean} [keepNumericSymbols=true] If true, keeps one `-` at the start of the number, and one `.` within the number
  * @returns {string} 
  * @example StringNumericOnly('abc-12.34!@#'); // returns '-12.34' */
 export function StringNumericOnly(str, keepNumericSymbols = true) {
+    if (typeof str === 'number') { return str.toString(); }
     if (isBlank(str)) { return str; }
     str = str.replace(/[^0-9.-]/g, ''); // remove non-nums, keep . and - 
     str = str.replace(/(?!^)-/g, ''); // keep one - at the start, if present
@@ -129,9 +131,9 @@ export function StringNumericOnly(str, keepNumericSymbols = true) {
     return str;
 };
 /** Strips away all non-alphabetical characters from a string
- * @param {string} str string to process @returns {string} 
+ * @param {string|number} str string to process @returns {string} 
  * @example StringAlphaOnly('abc123!@#'); // returns 'abc' */
-export const StringAlphaOnly = str => (isBlank(str) ? str : str.replace(/[^a-zA-Z]/g, ''));
+export const StringAlphaOnly = str => (typeof str === 'number' ? '' : isBlank(str) ? str : str.replace(/[^a-zA-Z]/g, ''));
 
 /** Strips away all alphanumeric characters from a string
  * @param {string} str string to process @returns {string} 
@@ -1032,36 +1034,40 @@ export function TimeBetweenTwoTimestamps(timestampA, timestampB) {
 
 // #region Environment
 
-/** If process.env.NODE_EVN is 'testing', should {@linkcode _env_isDevelopment} return `true`? */
+/** If process.env.NODE_EVN is 'testing', should {@linkcode _env_isDevelopment} return `true`? */ 
 const __TESTING_IS_DEVELOPMENT = true;
-/** If process.env.NODE_EVN is 'staging', should {@linkcode _env_isProduction} return `true`? */
+/** If process.env.NODE_EVN is 'staging', should {@linkcode _env_isProduction} return `true`? */ 
 const __STAGING_IS_PRODUCTION = true;
 
 /** 
  * Returns the current `process.env.NODE_EVN` environment. Typically `"development"` or `"production"`.
  * 
  * Also see `PRODUCTION_BUILD` in `webpack.config.js` 
+ * 
  * @see {@linkcode _env_isDevelopment} 
  * @see {@linkcode _env_isProduction} 
- * @see https://www.geeksforgeeks.org/node-js/what-is-node_env-in-node-js/ */
+ * @see https://www.geeksforgeeks.org/node-js/what-is-node_env-in-node-js/ */ 
 export const _env_currentEnv = process.env.NODE_ENV;
 /**
  * Is the {@link _env_currentEnv current} environment `staging`?
  * 
- * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, {@linkcode _env_isProduction} will also return `true`. 
- * @see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) */
+ * Also see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) 
+ * 
+ * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, {@linkcode _env_isProduction} will also return `true`. */ 
 export const _env_isStaging = _env_currentEnv === 'staging';
 /** 
  * Is the {@link _env_currentEnv current} environment `testing`/`test`?
  * 
- * **Note:** if {@linkcode __TESTING_IS_DEVELOPMENT} is `true`, {@linkcode _env_isDevelopment} will also return `true`. 
- * @see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) */
+ * Also see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) 
+ * 
+ * **Note:** if {@linkcode __TESTING_IS_DEVELOPMENT} is `true`, {@linkcode _env_isDevelopment} will also return `true`. */ 
 export const _env_isTest = _env_currentEnv === 'testing' || _env_currentEnv === 'test';
 /**
  * Is the {@link _env_currentEnv current} environment `production`/`prod`?
  * 
- * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, the environment `staging` will also return `true`. 
- * @see `PRODUCTION_BUILD` in `webpack.config.js` */
+ * Also see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) 
+ * 
+ * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, the environment `staging` will also return `true`. */ 
 export const _env_isProduction =
     _env_currentEnv === 'production' || _env_currentEnv === 'prod' ||
     (_env_isStaging && __STAGING_IS_PRODUCTION);
@@ -1070,8 +1076,9 @@ export const _env_isProduction =
  * 
  * **Note:** also `true` if environment is `null`\`undefined`\`""`.
  * 
- * **Note:** if {@linkcode __TESTING_IS_DEVELOPMENT} is `true`, the environment `testing`/`test` will also return `true`. 
- * @see `PRODUCTION_BUILD` in `webpack.config.js` */
+ * Also see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) 
+ * 
+ * **Note:** if {@linkcode __TESTING_IS_DEVELOPMENT} is `true`, the environment `testing`/`test` will also return `true`. */ 
 export const _env_isDevelopment =
     _env_currentEnv === null || _env_currentEnv === undefined || _env_currentEnv === '' ||
     _env_currentEnv === 'development' || _env_currentEnv === 'dev' ||

@@ -1,6 +1,27 @@
-import type { BasicComponent } from "./src/js/components/base";
+import type { BasicComponent } from './src/js/components/base';
+import type { svgElement, svgHTMLAsset } from './src/js/svg/svgElement';
 
 declare global {
+
+    /**
+     * Alternative receiving param for string spread params. 
+     * Instead of `...string`, use `spreadString`. Can receive 
+     * single values, arrays, and nested arrays.
+     * 
+     * **Note:** call {@linkcode String.flattenSpread flattenSpread()} 
+     * to convert any received values to a 1D array.
+     * 
+     * A string-limited version of {@linkcode spreadValue}. */
+    type spreadString = string[] | [string[]] | [string, ...string[]];
+    /**
+     * Alternative receiving param for value spread params. 
+     * Instead of `...any`, use `spreadValue`. Can receive 
+     * single values, arrays, and nested arrays.
+     * 
+     * **Note:** call {@linkcode String.flattenSpread flattenSpread()} 
+     * to convert any received values to a 1D array. */
+    type spreadValue = any[] | [any[]] | [any, ...any[]];
+
 
     interface Node {
 
@@ -269,7 +290,8 @@ declare global {
          * Converts the given number to string to the given max number of decimals, 
          * while (unlike `toFixed`) also removing any trailing zeros.
          * @param {number} [maxDecimals=3] 
-         * Maximum, not mandatory, decimal places.
+         * Maximum, not mandatory, decimal places. Default `3`.
+         * 
          * If -1, simply returns the number as string with no limiting. 
          * Otherwise must be between 0-20, per `toFixed` docs.  
          * @returns {string}
@@ -278,16 +300,16 @@ declare global {
          * console.log(toMax(33.3, 3));      // "33.3"
          * console.log(toFixed(33.3, 3));    // "33.300"
          */
-        toMax(maxDecimals: number): string;
+        toMax(maxDecimals?: number): string;
 
         /** 
          * Clamps a number between the given minimum and maximum values.
          * 
          * By default, clamps between 0 and 1.
-         * @param {number} [min = 0] Minimum possible value
-         * @param {number} [max = 1] Maximum possible value
+         * @param {number} [min = 0] Minimum possible value (default `0`)
+         * @param {number} [max = 1] Maximum possible value (default `1`)
          * @returns {number} */
-        clamp(min: number = 0, max: number = 1): number;
+        clamp(min?: number = 0, max?: number = 1): number;
 
         /**
          * Checks if this number is between the given minimum and maximum values.
@@ -295,7 +317,7 @@ declare global {
          * @param {number} max Maximum bound value 
          * @param {boolean} [inclusive=true] Does exactly matching a bound count as being between? Default `true` 
          * @returns {boolean} */
-        isBetween(min: number, max: number, inclusive: boolean = true): boolean;
+        isBetween(min: number, max: number, inclusive?: boolean = true): boolean;
 
         /**
          * Checks if this number is even, returning `true`, or odd, returning `false`
@@ -429,6 +451,29 @@ declare module './src/js/components/base' {
          * @returns {void}
          */
         PositionUpdate?(div?: HTMLElement): void;
+    }
+
+}
+
+declare module './src/js/svg/svgElement' {
+
+    interface svgElement {
+        
+        /**
+         * Optional parent svgElement to this svgElement 
+         * (eg, an `svgGradientStop` will have an `svgGradient` as a parent)
+         * @type {svgElement} */
+        parent?: svgElement;
+
+    }
+
+    interface Array {
+        
+        /**
+         * Optionally-assigned {@link svgHTMLAsset} related to this array object.
+         * @type {svgHTMLAsset} */
+        htmlAsset?: svgHTMLAsset;
+
     }
 
 }

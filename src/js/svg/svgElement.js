@@ -77,7 +77,7 @@ export class svgElement {
          * Returns a list of all entries (properties, property descriptions) on this object AND its class parent prototype
          * @param {Object} obj Object to get properties of
          * @param {boolean} [skipObjectEntries=true] skip the entries from base `Object` prototype? Default `true`
-         * @returns {[string, TypedPropertyDescriptor<any> & PropertyDescriptor]}
+         * @returns {[string, TypedPropertyDescriptor<any> & PropertyDescriptor][] | []}
          */
         function listAll(obj, skipObjectEntries = false) {
             let prototype = Object.getPrototypeOf(obj);
@@ -177,11 +177,12 @@ export class svgElement {
      * **NOTE:** convenience setter! Passes value to {@linkcode AddOnChangeCallback}. 
      * See {@linkcode onChangeCallbacks} for all callbacks, or {@linkcode hasOnChange} 
      * to check if any callback is added. This setter has no getter. 
-     * @param {svg.onChange | svg.onChange[]} onChangeCallback {@link svg.onChange onChange} method to call
-     * @param {string} valueChanged Callback param: The name of the value that was changed 
-     * @param {any} newValue Callback param: The newly assigned value 
-     * @param {any} previousValue Callback param: The old value, for reference  
-     * @param {svgElement} changedElement Callback param: The {@link svgElement} that was changed 
+     * @param {svg.onChange | svg.onChange[]} onChangeCallback {@link svg.onChange onChange} 
+     * onChange method to call. Properties are: 
+     * - `valueChanged:string` — The name of the value that was changed 
+     * - `newValue:any` — The newly assigned value 
+     * - `previousValue:any` — The old value, for reference  
+     * - `changedElement?:changedElement` — The {@link svgElement} that was changed (default `undefined`)
      */
     set onChange(onChangeCallback) {
         this.AddOnChangeCallback(onChangeCallback);
@@ -196,11 +197,12 @@ export class svgElement {
      * 
      * Can handle single {@link svg.onChange onChange} method assignments, or
      * {@link svg.onChange onChange[]} arrays (including nested arrays).
-     * @param {svg.onChange | svg.onChange[]} onChangeCallback {@link svg.onChange onChange} method to call
-     * @param {string} valueChanged Callback param: The name of the value that was changed 
-     * @param {any} newValue Callback param: The newly assigned value 
-     * @param {any} previousValue Callback param: The old value, for reference  
-     * @param {svgElement} changedElement Callback param: The {@link svgElement} that was changed 
+     * @param {svg.onChange | svg.onChange[]} onChangeCallback {@link svg.onChange onChange} 
+     * onChange method to call. Properties are: 
+     * - `valueChanged:string` — The name of the value that was changed 
+     * - `newValue:any` — The newly assigned value 
+     * - `previousValue:any` — The old value, for reference  
+     * - `changedElement?:changedElement` — The {@link svgElement} that was changed (default `undefined`)
      */
     AddOnChangeCallback(onChangeCallback) {
         // if setting null, reset methods 
@@ -291,10 +293,21 @@ export class svgElement {
      */
     __suppressOnChange = false;
 
+    /** 
+     * get the HTML output of this element. 
+     * 
+     * **Note:** returns `""` on {@linkcode svgElement} - used only on subclasses, eg {@linkcode svgHTMLAsset}. */
+    get html() { return ''; }
+    /** 
+     * get the data output of this element, typically to be collected into {@linkcode html}. 
+     * 
+     * **Note:** returns `""` on {@linkcode svgElement} - used only on subclasses, eg {@linkcode svgHTMLAsset}. */
+    get data() { return ''; }
+
 
     /** Parse array of SVG data into HTML-attribute-style `name="value"` format, 
      * with spaces between attributes as needed. 
-     * @param {Array<[string, any]>} data 2d array of properties, `[name,value]` 
+     * @param {([string, any?])[]} data 2d array of properties, `[name,value]` 
      * @returns {string} data formatted like `first="1" second="2" third="3"`
      * @example 
      * let myVar = 1;
@@ -351,7 +364,7 @@ export class svgElement {
      * - If it's non-numeric (including `null`), returns itself 
      * @param {string|number|null} value Value to parse, eg `123`, `"50%"`, `"22.5px"`, `"fit-content"`, `"calc(5px + 10%)"`, etc
      * @param {string|number|null} [defaultValue = null] Optional backup value if the input value is `null` 
-     * @returns {Array<string|number>|null}
+     * @returns {(string|number)[]|[string]|[number]|null}
      * @example 
      * DeconstructNumericParam(123);               // [123] 
      * DeconstructNumericParam("123");             // [123] 
@@ -372,7 +385,7 @@ export class svgElement {
             if (value.length == 1) {
                 if (typeof value[0] == 'number') {
                     // single-element number array, just return it
-                    return value;
+                    return [value[0]];
                 }
                 // flatten and attempt to parse
                 value = value[0];
@@ -410,7 +423,7 @@ export class svgElement {
                 // other type - attempt to coerce to number, or return as string
                 const v = Number(value);
                 if (v == null || typeof v != 'number' || !Number.isFinite(v)) {
-                    return [value.toString()]; // invalid number output, return as string 
+                    return [String(value)]; // invalid number output, return as string 
                 }
                 return [v];
         }
@@ -418,7 +431,7 @@ export class svgElement {
 
     /** 
      * Reconstructs a parameter deconstructed by {@link DeconstructNumericParam}
-     * @param {Array<string|number>} deconstructedParam Array of a deconstructed parameter  
+     * @param {([string | number, any?])[]|(string|number)[]|string|number} deconstructedParam Array of a deconstructed parameter  
      * @returns {string} Parameter, reassembled into an appropriate string 
      * @example 
      * ReconstructNumericParam([123]);                           // "123"
@@ -434,7 +447,7 @@ export class svgElement {
                 return deconstructedParam.toMax();
             case 'string':
                 // check if it's a string of an array of values 
-                if (deconstructedParam.indexOf(',' == -1)) {
+                if (deconstructedParam.indexOf(',') == -1) {
                     // slice off curly brackets if needed 
                     if (deconstructedParam.startsWith('[') &&
                         deconstructedParam.endsWith(']')) {
@@ -443,6 +456,7 @@ export class svgElement {
                     return deconstructedParam;
                 }
                 // convert to array, split along commas, convert num strings to nums
+                /** @type {(string|number)[]} */
                 let dpArray = deconstructedParam.split(',');
                 for (let i = 0; i < dpArray.length; i++) {
                     if (StringNumericOnly(dpArray[i])) {
@@ -460,16 +474,17 @@ export class svgElement {
         let param = '';
         for (let i = 0; i < deconstructedParam.length; i++) {
             if (deconstructedParam[i] == null) { continue; }
-            switch (typeof deconstructedParam[i]) {
+            let dpi = deconstructedParam[i];
+            switch (typeof dpi) {
                 case 'number':
-                    param += deconstructedParam[i].toMax();
+                    param += dpi.toMax();
                     break;
                 case 'string':
-                    param += deconstructedParam[i];
+                    param += dpi;
                     break;
                 default:
-                    console.warn(`WARNING: reconstruction param, index ${i} is ${typeof deconstructedParam[i]}, should be number or string, parsing to string`, deconstructedParam, this);
-                    param += deconstructedParam[i].toString();
+                    console.warn(`WARNING: reconstruction param, index ${i} is ${typeof dpi}, should be number or string, parsing to string`, deconstructedParam, this);
+                    param += String(dpi);
                     break;
             }
         }
@@ -486,7 +501,7 @@ export class svgElement {
      */
     stringToURL(str) {
         if (str == null) { return null; }
-        if (typeof str != 'string') { return this.stringToURL(str.toString()); }
+        if (typeof str != 'string') { return this.stringToURL(String(str)); }
         if (isBlank(str)) { return str; }
         if (this.isURL(str)) { return str; } // already a URL 
         if (str.startsWith('#')) { str = str.slice(1); } // remove to easily reassign below 
@@ -590,7 +605,7 @@ export class svgHTMLAsset extends svgElement {
         v.forEach(shape => { shape.parent = this; });
         this.#_shapes = v;
         this.#_shapes.name = 'shapes';
-        this.#_shapes.htmlAsset = this;
+        this.#_shapes['htmlAsset'] = this;
         this.#_shapes.onChange = this.#arrayChanged;
         this.#changed('shapes', v, prev);
     }
@@ -601,13 +616,11 @@ export class svgHTMLAsset extends svgElement {
         if (v == null) { return; }
         let prev = this.#_definitions;
         v.forEach(def => {
-            if (def.hasOwnProperty('parent')) {
-                def.parent = this;
-            }
+            def.parent = this;
         });
         this.#_definitions = v;
         this.#_definitions.name = 'definitions';
-        this.#_definitions.htmlAsset = this;
+        this.#_definitions['htmlAsset'] = this;
         this.#_definitions.onChange = this.#arrayChanged;
         this.#changed('definitions', v, prev);
     }
@@ -616,7 +629,7 @@ export class svgHTMLAsset extends svgElement {
     get preserveAspectRatio() { return this.#_preserveAspectRatio; }
     set preserveAspectRatio(v) { let prev = this.#_preserveAspectRatio; this.#_preserveAspectRatio = v; this.#changed('preserveAspectRatio', v, prev); }
     #_preserveAspectRatio = svg.defaults.PRESERVEASPECTRATIO;;
-    /** @type {string[][]} */
+    /** @returns {([string, any?])[]} */
     get metadata() { return this.#_metadata; }
     set metadata(v) { let prev = this.#_metadata; this.#_metadata = v; this.#changed('metadata', v, prev); }
     #_metadata = svg.defaults.METADATA;
@@ -653,7 +666,7 @@ export class svgHTMLAsset extends svgElement {
                     console.warn(`WARNING: svgHTML[0] definition[1] does not have an ID. Defs need an ID to be used.`, this, definition);
                 }
                 let h = this.IndentHTML(definition.html, 2);
-                if (!isBlank.h) {
+                if (isBlank(h)) {
                     newSVG += h;
                     if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
                 }
@@ -667,7 +680,7 @@ export class svgHTMLAsset extends svgElement {
             this.shapes.forEach(shape => {
                 if (shape == null) { return; }
                 let h = shape.html;
-                if (!isBlank.h) {
+                if (!isBlank(h)) {
                     if (svg.config.HTML_INDENT) { newSVG += '\t'; }
                     newSVG += h;
                     if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
@@ -710,8 +723,8 @@ export class svgHTMLAsset extends svgElement {
      * Gets the first {@link svg.shape shape} of the given `type`
      * found in {@linkcode shapes} (or, optionally, 
      * in {@linkcode definitions})
-     * @see {@linkcode svg.IsValidShapeType IsValidShapeType}
-     * @param {number} [index = 0] index to return 
+     * @see {@linkcode svg.IsValidShapeType svgShapes.IsValidShapeType} for valid types 
+     * @param {string} type Shape type. See {@linkcode svg.IsValidShapeType svgShapes.IsValidShapeType} for valid types 
      * @param {boolean} [searchDefinitions=false] 
      * search `definitions` array instead of `shapes`?
      * @returns {svg.shape|null}
@@ -723,8 +736,11 @@ export class svgHTMLAsset extends svgElement {
         }
         if (searchDefinitions) {
             for (let i = 0; i < this.definitions.length; i++) {
-                if (this.definitions[i].type == type) {
-                    return this.definitions[i];
+                if (this.definitions[i] instanceof shape) {
+                    let s = /** @type {svg.shape} */ (this.definitions[i]);
+                    if (s.type == type) {
+                        return s;
+                    }
                 }
             }
         } else {
@@ -748,8 +764,11 @@ export class svgHTMLAsset extends svgElement {
     GetShapeWithID(id, searchDefinitions = false) {
         if (searchDefinitions) {
             for (let i = 0; i < this.definitions.length; i++) {
-                if (this.definitions[i].id == id) {
-                    return this.definitions[i];
+                if (this.definitions[i] instanceof shape) {
+                    let s = /** @type {svg.shape} */ (this.definitions[i]);
+                    if (s.id == id) {
+                        return s;
+                    }
                 }
             }
         } else {
@@ -776,13 +795,14 @@ export class svgHTMLAsset extends svgElement {
      */
     GetGradient(gradientIndex = 0) {
         if (this.definitions == null || this.definitions.length <= gradientIndex) { return null; }
-        let g = 0;// gradients-only increment 
+        let gradientCounter = 0;// gradients-only increment 
         for (let i = 0; i < this.definitions.length; i++) {
             if (this.definitions[i] instanceof svg.gradient) {
-                if (g == gradientIndex) {
-                    return this.definitions[i];
+                let g = /** @type {svg.gradient} */ (this.definitions[i]);
+                if (gradientCounter == gradientIndex) {
+                    return g;
                 }
-                g++;
+                gradientCounter++;
             }
         }
         return null;
@@ -805,13 +825,13 @@ export class svgHTMLAsset extends svgElement {
      * Gets the first {@link svg.gradient gradient} with the given
      * {@linkcode svgElement.id ID} found in {@linkcode definitions}
      * @param {string} id ID string to check
-     * @returns {svg.shape|null}
+     * @returns {svg.gradient|null}
      */
     GetGradientWithID(id) {
         for (let i = 0; i < this.definitions.length; i++) {
             if (this.definitions[i] instanceof svg.gradient &&
                 this.definitions[i].id == id) {
-                return this.definitions[i];
+                return /** @type {svg.gradient} */ (this.definitions[i]);
             }
         }
         return null;
@@ -848,6 +868,7 @@ export class svgHTMLAsset extends svgElement {
      * @returns {gradient|null} 
     */
     get gradient() { return this.GetGradient(0); }
+    /** @param {gradient|string[]|null} v  */
     set gradient(v) {
         if (v == null) {
             if (svg.config.SET_GRADIENT_NULL_SETS_FILL_NULL) {
@@ -869,12 +890,13 @@ export class svgHTMLAsset extends svgElement {
                 this.definitions[gdIndex] = v;
                 this.#changed('definitions#setGradient', this.definitions, prev);
             } else {
-                this.NewGradient(null, false, v);
+                this.AddGradient(v);
             }
         } else if (Array.isArray(v)) {
             // it's an array, check if it's empty, if so, treat as null 
             if (v.length == 0) { v = null; this.gradient = v; return; }
             // check if it's all strings, if not, error 
+            // TODO: allow assigning an array of svgGradients via svgHTMLAsset.gradient setter 
             for (let i = 0; i < v.length; i++) {
                 if (typeof v[i] !== 'string') {
                     console.warn("WARNING: if assigning an array to gradient, it MUST be all string values", v, this);
@@ -979,7 +1001,7 @@ export class svgHTMLAsset extends svgElement {
      * 
      * @param {string} [id=null] {@link svg.element.id ID} to assign to this gradient, default `undefined` (auto-set)
      * @param {boolean} isRadial is this a radial gradient, or linear? Default `GRADIENT_ISRADIAL`
-     * @param {...string} colors Array/values of colors used to create this array 
+     * @param {spreadString} colors Array/values of colors used to create this array 
      * @returns {svg.gradient} The newly-created, newly-added gradient
      * */
     NewGradient(id = undefined, isRadial = svg.defaults.GRADIENT_ISRADIAL, ...colors) {
@@ -1043,8 +1065,8 @@ export class svgHTMLAsset extends svgElement {
         return svg.generator.BasicGradientRect(...colors);
     }
 
-    /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {Array.prototype} source array object @param {any} returnValue returned value from method */
-    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('htmlAsset')) { source.htmlAsset.#changed(`${source.name}#${type}`, source, returnValue); } };
+    /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {[]} source array object @param {any} returnValue returned value from method */
+    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('htmlAsset')) { source['htmlAsset'].#changed(`${source.name}#${type}`, source, returnValue); } };
     /** Local changed callback that calls {@link onChange} on this element (separated for easy modification) @type {svg.onChange} */
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); };
 }

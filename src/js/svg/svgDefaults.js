@@ -1,6 +1,7 @@
 import * as svg from './index';
 
 export const PRESERVEASPECTRATIO = null;
+/** @type {([string, any?])[]} */
 export const METADATA = [
     ['xmlns', 'http://www.w3.org/2000/svg'],
     ['xmlns:xlink', 'http://www.w3.org/1999/xlink'],
@@ -70,10 +71,11 @@ export const GRADIENT_STOP_OPACITY = null;
 
 /**
  * Ensures that the given values either have content
- * @param  {...string} colors 
+ * @param  {spreadString} colors 
  * @returns 
  */
 export function EnsureGradientDefaultColors(...colors) {
+    colors = colors.flattenSpread();
     if (colors == null) { colors = []; }
     colors = colors.flat();
     switch (colors.length) {

@@ -5,7 +5,7 @@ import * as txt from './text';
 import { PAGE_NAMES } from "./text";
 import { PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE, PageOpened, PageClosed } from "./contentData";
 import { dataWindow } from "./uiMain";
-import { css, AddAlphaToHex, DeselectElement, SetElementEnabled, GetChildWithClass, GetAllChildrenWithClass } from "./lilutils";
+import { css, AddAlphaToHex, DeselectElement, SetElementEnabled, GetChildWithClass, GetAllChildrenWithClass, StringToNumber } from "./lilutils";
 import { CreatePage } from "./pages/uiDataPageBase";
 import { CallOnLoadComplete } from ".";
 import { BasicComponent, basicComponentClass } from "./components/base";
@@ -30,9 +30,9 @@ const pageIDs = [PG_INTRO, PG_SIZE, PG_FEATURES, PG_PATTERN, PG_SAVE];
 
 let currentPage = -1;
 
-let tabs;
-let content;
-let pages = [];
+/** @type {HTMLElement} */ let tabs;
+/** @type {HTMLElement} */ let content;
+/** @type {HTMLElement[]} */ let pages = [];
 
 /** array of all headers for each of the pages 
  @type {HTMLElement[]} 
@@ -171,7 +171,7 @@ function UpdatePageLayouts() {
         if (gridLayout) {
             // found grid, check for single column, first checking aspect attb
             let singleColumn = false;
-            let maxAspect = ui.GetAttribute(gridLayout, 'maxGridAspect');
+            let maxAspect = StringToNumber(ui.GetAttribute(gridLayout, 'maxGridAspect'));
             if (maxAspect) {
                 // aspect ratio found, compare to content aspect
                 let contentAspect = content.offsetWidth / content.offsetHeight;
@@ -180,9 +180,9 @@ function UpdatePageLayouts() {
             if (!singleColumn) {
                 // no aspect, check for max grid width attb, or use default max width
                 let maxWidth = ui.GetAttribute(gridLayout, 'maxGridWidth');
-                if (maxWidth == null) { maxWidth = maxTwoColumnWidthDefault; }
+                let maxWidthNum = maxWidth == null ? maxTwoColumnWidthDefault : StringToNumber(maxWidth);
                 // check if single column
-                singleColumn = content.offsetWidth < maxWidth;
+                singleColumn = content.offsetWidth < maxWidthNum;
             }
             ui.AddElementAttribute(gridLayout, 'singleColumn', singleColumn);
         }

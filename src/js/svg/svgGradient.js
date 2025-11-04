@@ -142,6 +142,12 @@ export class svgGradient extends svg.element {
     #_parent = null;
     #_firstParentAssigned = false;
 
+    /**
+     * 
+     * @param {string} id 
+     * @param {boolean} isRadial 
+     * @param  {spreadString} colors 
+     */
     constructor(id, isRadial = svg.defaults.GRADIENT_ISRADIAL, ...colors) {
         super(id);
         this.isRadial = isRadial;
