@@ -148,9 +148,12 @@ dataWindow .page .section.active {
     z-index: 3;
     transition: opacity 400ms ease-out;
 }
+
+/* 
 dataWindow .page .section.pattern {
-    /* background-color: #ff0000; */
+    background-color: #ff0000;
 }
 dataWindow .page .section.colors {
-    /* background-color: #0000ff; */
+    background-color: #0000ff;
 }
+ */
