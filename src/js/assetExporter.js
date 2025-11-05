@@ -723,6 +723,59 @@ export const mapImg = Object.freeze({
         }),
     }),
 
+    real: nestedAsset(undefined, {
+        full: nestedAsset(undefined, {
+            color: nestedAsset('real-full_color'),
+            mask: nestedAsset('real-full_mask'),
+        }),
+        land: nestedAsset(undefined, {
+            base: nestedAsset(undefined, {
+                color: nestedAsset('real-land_base_color'),
+                white: nestedAsset('real-land_base_white'),
+            }),
+            desert: nestedAsset(undefined, {
+                color: nestedAsset('real-land_desert_color'),
+                white: nestedAsset('real-land_desert_white'),
+            }),
+            forest: nestedAsset(undefined, {
+                color: nestedAsset('real-land_forest_color'),
+                white: nestedAsset('real-land_forest_white'),
+            }),
+            full: nestedAsset(undefined, {
+                color: nestedAsset('real-land_full_color'),
+                white: nestedAsset('real-land_full_white'),
+            }),
+            snow: nestedAsset(undefined, {
+                color: nestedAsset('real-land_snow_color'),
+                white: nestedAsset('real-land_snow_white'),
+            }),
+        }),
+        ocean: nestedAsset(undefined, {
+            color: nestedAsset(undefined, {
+                shaded: nestedAsset('real-ocean_color_shaded'),
+                solid: nestedAsset('real-ocean_color_solid'),
+            }),
+            mask: nestedAsset(undefined, {
+                shaded: nestedAsset('real-ocean_mask_shaded'),
+                white: nestedAsset('real-ocean_mask_white'),
+            }),
+            shading: nestedAsset(undefined, {
+                black: nestedAsset('real-ocean_shading_black'),
+                white: nestedAsset('real-ocean_shading_white'),
+            }),
+        }),
+        shoreline: nestedAsset(undefined, {
+            land: nestedAsset(undefined, {
+                black: nestedAsset('real-shoreline_land_black'),
+                white: nestedAsset('real-shoreline_land_white'),
+            }),
+            ocean: nestedAsset(undefined, {
+                black: nestedAsset('real-shoreline_ocean_black'),
+                white: nestedAsset('real-shoreline_ocean_white'),
+            }),
+        }),
+    }),
+
     titlebox: nestedAsset(undefined, {
         frame: nestedAsset(undefined, {
             combined: nestedAsset(undefined, {
