@@ -13,6 +13,24 @@ const DEBUG_GET_MAP_ASSET = false;
 ║  map  ║                                   [ src/assets/png/map... ] 
 ╚═══╤═══╝                                   
     │                                       
+    ├─ full                                 [ ...map/full/ ] 
+    │   ├─ artistic                         
+    │   │   ├─ darkRainbow » .............. darkrainbow.png 
+    │   │   └─ threeSplit » ............... threesplit.png 
+    │   ├─ atlas                            
+    │   │   ├─ continents » ............... continents.png 
+    │   │   └─ realWorld » ................ realworld.png 
+    │   ├─ basic                            
+    │   │   ├─ black » .................... basicblack.png 
+    │   │   ├─ red                          
+    │   │   │   ├─ black » ................ redblack.png 
+    │   │   │   └─ white » ................ redwhite.png 
+    │   │   └─ white » .................... basicwhite.png 
+    │   └─ monochrome                       
+    │       ├─ dark » ..................... monochromedark.png 
+    │       └─ light » .................... monochromelight.png 
+    │                                       
+    │                                       
     ├─ gcs                                  [ ...map/gcs/ ] 
     │   ├─ complete » ..................... gcs-complete.png 
     │   ├─ equator » ...................... gcs-equator_dotted.png 
@@ -34,6 +52,7 @@ const DEBUG_GET_MAP_ASSET = false;
     │   └─ polarCircles » ................. gcs-polar_circles.png 
     │       └─ tropics » .................. gcs-tropics_and_polar_circles.png 
     │           └─ equator » .............. gcs-equator_tropics_polar_circles.png 
+    │                                       
     │                                       
     ├─ labels                               [ ...map/labels/ ] 
     │   ├─ gcs                              
@@ -67,6 +86,7 @@ const DEBUG_GET_MAP_ASSET = false;
     │       ├─ normalized » ............... label-land_normalized.png 
     │       └─ relative » ................. label-land_relative.png 
     │                                       
+    │                                       
     ├─ land                                 [ ...map/land/ ] 
     │   ├─ d1MajorDetails                   
     │   │   ├─ fill » ..................... land-d1major_fill.png 
@@ -77,6 +97,7 @@ const DEBUG_GET_MAP_ASSET = false;
     │   └─ d3TinyDetails                    
     │       ├─ fill » ..................... land-d3tiny_fill.png 
     │       └─ stroke » ................... land-d3tiny_stroke.png 
+    │                                       
     │                                       
     ├─ landlines                            [ ...map/landlines/ ] 
     │   ├─ horizontal                       
@@ -95,6 +116,46 @@ const DEBUG_GET_MAP_ASSET = false;
     │       ├─ d1MajorDetails » ........... line-vert_d1major.png 
     │       ├─ d2MinorDetails » ........... line-vert_d2minor.png 
     │       └─ d3TinyDetails » ............ line-vert_d3tiny.png 
+    │                                       
+    │                                       
+    ├─ real                                 [ ...map/real/ ] 
+    │   ├─ full                         
+    │   │   ├─ color » .................... real-full_color.png 
+    │   │   └─ mask » ..................... real-full_mask.png  
+    │   ├─ land                             
+    │   │   ├─ base                         
+    │   │   │   ├─ color » ................ real-land_base_color.png 
+    │   │   │   └─ white » ................ real-land_base_white.png 
+    │   │   ├─ desert                       
+    │   │   │   ├─ color » ................ real-land_desert_color.png 
+    │   │   │   └─ white » ................ real-land_desert_white.png 
+    │   │   ├─ forest                       
+    │   │   │   ├─ color » ................ real-land_forest_color.png 
+    │   │   │   └─ white » ................ real-land_forest_white.png 
+    │   │   ├─ full                         
+    │   │   │   ├─ color » ................ real-land_full_color.png 
+    │   │   │   └─ white » ................ real-land_full_white.png 
+    │   │   └─ snow                         
+    │   │       ├─ color » ................ real-land_snow_color.png 
+    │   │       └─ white » ................ real-land_snow_white.png 
+    │   ├─ ocean                            
+    │   │   ├─ color                        
+    │   │   │   ├─ shaded » ............... real-ocean_color_shaded.png 
+    │   │   │   └─ solid » ................ real-ocean_color_solid.png 
+    │   │   ├─ mask                         
+    │   │   │   ├─ shaded » ............... real-ocean_mask_shaded.png 
+    │   │   │   └─ white » ................ real-ocean_mask_white.png 
+    │   │   └─ shading                      
+    │   │       ├─ black » ................ real-ocean_shading_black.png 
+    │   │       └─ white » ................ real-ocean_shading_white.png 
+    │   └─ shoreline                       
+    │       ├─ land                         
+    │       │   ├─ black » ................ real-shoreline_land_black.png 
+    │       │   └─ white » ................ real-shoreline_land_white.png 
+    │       └─ ocean                      
+    │           ├─ black » ................ real-shoreline_ocean_black.png 
+    │           └─ white » ................ real-shoreline_ocean_white.png 
+    │                                       
     │                                       
     └─ titlebox                             [ ...map/titlebox/... ] 
         ├─ frame                            
