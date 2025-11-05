@@ -254,7 +254,7 @@ export class svgElement {
      * Array of all {@link svg.onChange onChange} methods to call on ths {@link svgElement}, whenever a local change occurs.
      * 
      * **NOTE:** Changing this array or its values itself does NOT invoke a change.
-     * @type {@link svg.onChange[]} 
+     * @type {svg.onChange[]} 
      * */
     onChangeCallbacks = [];
 
