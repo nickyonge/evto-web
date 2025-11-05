@@ -34,7 +34,7 @@ export class ImageField extends TitledComponent {
      * Adds an image div to this image container. 
      * Returns the newly-created `HTMLElement` div for the image.
      * Will return `null` if imgSrc is null/whitespace
-     * @param {string} imgSrc Value to add to the "src" attribute to the new img
+     * @param {string | pathNode} imgSrc Value to add to the "src" attribute to the new img
      * @param {string} [alt=null] Alt text to provide to the new img (optional) 
      * @param {boolean} [canvasSized=true] Assign the `canvasSizedImg` CSS class, forcing 2:1 aspect ratio? Default `true` 
      * @param {number} [zSort=0] Assignment for z-index CSS class. 0: leave default, >=1: assign class `onTop`, <=0: assign class `onBottom`. Default 0
@@ -50,6 +50,7 @@ export class ImageField extends TitledComponent {
         this.#addedImgs.push(newImg);
         return newImg;
     }
+
     /**
      * Adds an {@link svgHTMLAsset} to this image container. 
      * Returns whether or not the SVG was successfully added.

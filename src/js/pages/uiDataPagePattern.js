@@ -58,6 +58,8 @@ function CreatePatternSection(section) {
     section.appendChild(patternImage);
     // patternImage.CreateDemoImageAndSVG();
 
+    patternImage.addImage(mapImg.full.monochrome.light.URL);
+
     // mapImg
 
 

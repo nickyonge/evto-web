@@ -393,34 +393,51 @@ export const getMapAsset = (path) => {
 
 // #region Construction & Typedef
 
-/**
- * @typedef {{}} deadNode Node of a {@link nestedPath}, with neither a filepath URL nor children
- */
-/**
- * @typedef {{URL:string}} leafNode Node of a {@link nestedPath}, with a filepath URL and no children
- * @property {string} URL Filepath stored into this node 
- */
-/**
- * @typedef {{Children:string[]}} containerNode Node of a {@link nestedPath}, with children but no filepath URL 
- * @property {string[]} Children Array of all child nodes nested in this node 
- */
-/**
- * @typedef {{URL:string,Children:string[]}} nestedNode Node of a {@link nestedPath}, with both a filepath URL and children
- * @property {string} URL Filepath stored into this node 
- * @property {string[]} Children Array of all child nodes nested in this node 
+/** 
+ * @typedef {object} _baseNode 
+ * **Note:** Internal use only. You probably want to use {@linkcode pathNode}.
+ * 
+ * Basic type for {@linkcode pathNode} types:
+ * - {@linkcode nestedNode}: node with both a {@linkcode _baseNode.URL URL} and {@linkcode _baseNode.Children Children} 
+ * - {@linkcode containerNode}: node with no {@linkcode _baseNode.URL URL} but with {@linkcode _baseNode.Children Children} 
+ * - {@linkcode leafNode}: node with a {@linkcode _baseNode.URL URL} but no {@linkcode _baseNode.Children Children} 
+ * - {@linkcode deadNode}: node with neither a {@linkcode _baseNode.URL URL} nor {@linkcode _baseNode.Children Children} 
+ * @property {string} URL Filepath URL to the given asset, eg `assets/png/myImage.png' 
+ * @property {string[]} Children Array of nodes, by name reference, childed to this node
  */
 
-/** 
- * @typedef {nestedNode|containerNode|leafNode|deadNode} pathNode 
+/**
+ * @typedef {{ URL?: never, Children?: never }} deadNode 
+ * The {@linkcode pathNode} of a {@link nestedPath}, with neither a filepath URL nor children
+ * - **Note:** Typically only used internally. You probably want to use {@linkcode pathNode}.
+ */
+/**
+ * @typedef {_baseNode & { URL: string, Children?: never }} leafNode 
+ * The {@linkcode pathNode} of a {@link nestedPath}, with a filepath URL and no children
+ * - **Note:** Typically only used internally. You probably want to use {@linkcode pathNode}.
+ */
+/**
+ * @typedef {_baseNode & { Children: string[], URL?: never }} containerNode 
+ * The {@linkcode pathNode} of a {@link nestedPath}, with children but no filepath URL 
+ * - **Note:** Typically only used internally. You probably want to use {@linkcode pathNode}.
+ */
+/**
+ * @typedef {leafNode & containerNode} nestedNode 
+ * The {@linkcode pathNode} of a {@link nestedPath}, with both a filepath URL and children
+ * - **Note:** Typically only used internally. You probably want to use {@linkcode pathNode}.
+ */
+
+/**
+ * @typedef {nestedNode | containerNode | leafNode | deadNode } pathNode
  * Any type of node created via {@link nestedPath} 
- * - {@linkcode nestedNode}: node with both a `URL` and `Children` 
- * - {@linkcode containerNode}: node with no `URL` but with `Children` 
- * - {@linkcode leafNode}: node with a `URL` but no `Children` 
- * - {@linkcode deadNode}: node with neither a `URL` nor `Children` 
+ * - {@linkcode nestedNode}: node with both a {@linkcode _baseNode.URL URL} and {@linkcode _baseNode.Children Children} 
+ * - {@linkcode containerNode}: node with no {@linkcode _baseNode.URL URL} but with {@linkcode _baseNode.Children Children} 
+ * - {@linkcode leafNode}: node with a {@linkcode _baseNode.URL URL} but no {@linkcode _baseNode.Children Children} 
+ * - {@linkcode deadNode}: node with neither a {@linkcode _baseNode.URL URL} nor {@linkcode _baseNode.Children Children} 
  */
 
 /** 
- * A collection of child {@link pathNode nodes}
+ * A collection of child {@link pathNode pathNodes}
  * @typedef {Record<string, pathNode>} nestedChildren 
  */
 
