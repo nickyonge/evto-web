@@ -12,6 +12,7 @@ import { canvasDisplayAspectRatio } from "../components/canvassize";
 import * as pages from './index';
 
 // TODO: separate Page out as a class, not just a concept 
+// Issue URL: https://github.com/nickyonge/evto-web/issues/62
 
 /**
  * Creates the content in a page itself, using the page's `id` to determine page type.
