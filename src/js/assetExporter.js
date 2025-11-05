@@ -15,20 +15,20 @@ const DEBUG_GET_MAP_ASSET = false;
     │                                       
     ├─ full                                 [ ...map/full/ ] 
     │   ├─ artistic                         
-    │   │   ├─ darkRainbow » .............. darkrainbow.png 
-    │   │   └─ threeSplit » ............... threesplit.png 
+    │   │   ├─ darkRainbow » .............. full-dark_rainbow.png 
+    │   │   └─ threeSplit » ............... full-three_split.png 
     │   ├─ atlas                            
-    │   │   ├─ continents » ............... continents.png 
-    │   │   └─ realWorld » ................ realworld.png 
+    │   │   ├─ continents » ............... full-continents.png 
+    │   │   └─ realWorld » ................ full-real_world.png 
     │   ├─ basic                            
-    │   │   ├─ black » .................... basicblack.png 
+    │   │   ├─ black » .................... full-basic_black.png 
     │   │   ├─ red                          
-    │   │   │   ├─ black » ................ redblack.png 
-    │   │   │   └─ white » ................ redwhite.png 
-    │   │   └─ white » .................... basicwhite.png 
+    │   │   │   ├─ black » ................ full-red_black.png 
+    │   │   │   └─ white » ................ full-red_white.png 
+    │   │   └─ white » .................... full-basic_white.png 
     │   └─ monochrome                       
-    │       ├─ dark » ..................... monochromedark.png 
-    │       └─ light » .................... monochromelight.png 
+    │       ├─ dark » ..................... full-monochrome_dark.png 
+    │       └─ light » .................... full-monochrome_light.png 
     │                                       
     │                                       
     ├─ gcs                                  [ ...map/gcs/ ] 
