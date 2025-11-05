@@ -151,12 +151,15 @@ function PagesCreated() {
     UpdatePages();
 }
 
-function OnScroll(e) {
-    let pageNumber = GetPageNumberByID(e.target.id);
+/**
+ * scroll event received on a Page, pass event to any components listening for it 
+ * @param {Event} event 
+ */
+function OnScroll(event) {
+    let target = /** @type {Element} */ (event.target);
+    let pageNumber = GetPageNumberByID(target.id);
     perPageComponents[pageNumber].forEach(component => {
-        if (component.onScroll) {
-            component.onScroll();
-        }
+        component.OnScroll?.();
     });
 }
 

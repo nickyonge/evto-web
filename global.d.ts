@@ -422,7 +422,7 @@ declare module './src/js/components/base' {
     interface BasicComponent {
 
         /**
-         * Optionally defined method to call `UpdateCosts` on components that have it defined. 
+         * Optionally-defined method to call `UpdateCosts` on components that have it defined. 
          * 
          * Called whenever cost values of maps are updated, eg, when map size is changed. 
          * 
@@ -432,7 +432,7 @@ declare module './src/js/components/base' {
         UpdateCosts?(): void;
 
         /**
-         * Optionally defined method to call `DocumentLoaded` on components that have it defined. 
+         * Optionally-defined method to call `DocumentLoaded` on components that have it defined. 
          * 
          * Called in `index.js` one tick after the document has fully completed loading.
          * 
@@ -452,6 +452,16 @@ declare module './src/js/components/base' {
          * @returns {void}
          */
         PositionUpdate?(div?: HTMLElement): void;
+
+        /**
+         * Optionally-defined method to call `OnScroll` on components that have it defined. 
+         * 
+         * Called when a Page is vertically scrolled.
+         * 
+         * Invoke with `component.OnScroll?.();`
+         * @returns {void}
+         */
+        OnScroll?(): void;
     }
 
 }

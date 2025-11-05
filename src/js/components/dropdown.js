@@ -123,13 +123,8 @@ export class DropdownList extends TitledComponent {
             oInput.addEventListener('change', (event) => {
                 this.#updateSelectedCost();
                 if (onSelectCallback) {
-                    let etID = null;
-                    if (event.target != null) {
-                        if (event.target instanceof HTMLElement || 'id' in event.target) {
-                            etID = event.target.id;
-                        }
-                    }
-                    onSelectCallback(i, etID);
+                    let target = /** @type {Element} */ (event.target);
+                    onSelectCallback(i, target == null ? null : target.id);
                 }
                 if (!this.#initialChange) {
                     // initial option wasn't appearing as selected, manually set and un-set appearance 

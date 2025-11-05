@@ -5,10 +5,11 @@ import { HelpIcon } from "./helpicon";
 export const basicComponentClass = '__UICOMP';
 
 export class BasicComponent {
+    /** @type {HTMLElement} */
     div;
-    onScroll;
     hasBeenLoaded = false;
     hasBeenAddedToPage = false;
+    /** @type {Element} */
     #parentPage;
     /** @type {Number} */
     static componentCount = 0;
@@ -73,15 +74,17 @@ export class BasicComponent {
 }
 export class TitledComponent extends BasicComponent {
 
+    /** @type {HTMLElement} */
     #titleElement;
+    /** @type {string} */
     #titleText;
-
+    /** @type {HelpIcon} */
     #helpIcon;
 
     /**
-     * TitledComponent constructor, auto-compiling the 
-     * @param {string} componentTitle 
-     * @param {boolean} [createTitleDiv = true] auto-create title div? 
+     * TitledComponent constructor, auto-compiling the title div 
+     * @param {string} [componentTitle] Optional title to add to this component 
+     * @param {boolean} [createTitleDiv = true] auto-create title div? Default `true`
      * @param {string[]} [titleClasses=['componentTitle', 'listTitle']] CSS classes to apply to title div (if `createTitleDiv` is true)
      */
     constructor(componentTitle, createTitleDiv = true, titleClasses = ['componentTitle', 'listTitle']) {

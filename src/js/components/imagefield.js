@@ -31,25 +31,15 @@ export class ImageField extends TitledComponent {
     /**
      * 
      * @param {string|svg.asset|HTMLElement|pathNode|[string,string]|[pathNode,string]} [src]
-     * @param {string} [componentTitle] 
+     * @param {string} [componentTitle] Optional title to add to this component 
      */
     constructor(src, componentTitle) {
         super(componentTitle);
         ui.AddClassesToDOM(this.div, 'imageField', 'container');
         if (src == null) { return; }
-        if (typeof src === 'string') {
-            // string, presumably img
-            this.addImage(src);
-            return;
-        }
         if (src instanceof svg.asset) {
             // svgHTMLAsset
             this.addSVG(src);
-            return;
-        }
-        if (src instanceof HTMLElement) {
-            // HTMLElement, presumably img
-            this.addImage(src);
             return;
         }
         if (Array.isArray(src)) {
@@ -57,7 +47,7 @@ export class ImageField extends TitledComponent {
             this.addImage(src[0], src[1]);
             return;
         }
-        // by process of elimination, pathNode
+        // string, HTMLElement, or pathNode
         this.addImage(src);
     }
 
