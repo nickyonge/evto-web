@@ -27,6 +27,7 @@ export class ImageField extends TitledComponent {
     #_demoSvgRect;
 
     // TODO ImageField, get/remove img/svg methods
+    // Issue URL: https://github.com/nickyonge/evto-web/issues/61
 
     /**
      * 
