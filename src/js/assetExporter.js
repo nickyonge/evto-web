@@ -119,7 +119,7 @@ const DEBUG_GET_MAP_ASSET = false;
     │                                       
     │                                       
     ├─ real                                 [ ...map/real/ ] 
-    │   ├─ full                         
+    │   ├─ full                             
     │   │   ├─ color » .................... real-full_color.png 
     │   │   └─ mask » ..................... real-full_mask.png  
     │   ├─ land                             
@@ -148,11 +148,11 @@ const DEBUG_GET_MAP_ASSET = false;
     │   │   └─ shading                      
     │   │       ├─ black » ................ real-ocean_shading_black.png 
     │   │       └─ white » ................ real-ocean_shading_white.png 
-    │   └─ shoreline                       
+    │   └─ shoreline                        
     │       ├─ land                         
     │       │   ├─ black » ................ real-shoreline_land_black.png 
     │       │   └─ white » ................ real-shoreline_land_white.png 
-    │       └─ ocean                      
+    │       └─ ocean                        
     │           ├─ black » ................ real-shoreline_ocean_black.png 
     │           └─ white » ................ real-shoreline_ocean_white.png 
     │                                       
@@ -588,6 +588,30 @@ function nestedPath(path, children = undefined) {
  * Nested map of all map PNG assets and their URL references (use `.URL`, or parse output as string)
  */
 export const mapImg = Object.freeze({
+
+    full: nestedAsset(undefined, {
+        artistic: nestedAsset(undefined, {
+            darkRainbow: nestedAsset('full-dark_rainbow'),
+            threeSplit: nestedAsset('full-three_split'),
+        }),
+        atlas: nestedAsset(undefined, {
+            continents: nestedAsset('full-continents'),
+            realWorld: nestedAsset('full-real_world'),
+        }),
+        basic: nestedAsset(undefined, {
+            black: nestedAsset('full-basic_black'),
+            red: nestedAsset(undefined, {
+                black: nestedAsset('full-red_black'),
+                white: nestedAsset('full-red_white'),
+            }),
+            white: nestedAsset('full-basic_white'),
+        }),
+        monochrome: nestedAsset(undefined, {
+            dark: nestedAsset('full-monochrome_dark'),
+            light: nestedAsset('full-monochrome_light'),
+        }),
+    }),
+
     gcs: nestedAsset(undefined, {
         complete: nestedAsset('gcs-complete'),
         equator: nestedAsset('gcs-equator_dotted', {
@@ -782,12 +806,14 @@ export const mapImg = Object.freeze({
             }),
         }),
     }),
+
     // regex used to get the start of all values and prefx "_"
     //   find: ^(\s+)([a-zA-Z0-9]+[:]\s\bnested[AP])
     //   replace: $1_$2
     // regex to undo that change:
     //   find: ^(\s+)([_])([a-zA-Z0-9]+[:]\s\bnested[AP])
     //   replace: $1$3
+    
 });
 
 // #endregion Map Declaration 
