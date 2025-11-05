@@ -165,7 +165,7 @@ export class DropdownList extends TitledComponent {
         }.bind(this));
 
         // add help component
-        this._addHelpIcon(`help me! ${componentTitle}`);
+        this.addHelpIcon(`help me! ${componentTitle}`);
 
         this.onScroll = () => { this.PositionUpdate?.(this.div); };
 

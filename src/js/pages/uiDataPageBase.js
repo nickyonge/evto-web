@@ -11,6 +11,8 @@ import { basicComponentClass } from "../components/base";
 import { canvasDisplayAspectRatio } from "../components/canvassize";
 import * as pages from './index';
 
+// TODO: separate Page out as a class, not just a concept 
+
 /**
  * Creates the content in a page itself, using the page's `id` to determine page type.
  * @param {HTMLElement} page Element of the page itself 

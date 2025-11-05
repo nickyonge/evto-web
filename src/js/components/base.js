@@ -120,22 +120,29 @@ export class TitledComponent extends BasicComponent {
         ui.AddClassToDOMs('componentTitle', titleElement);
         ui.DisableContentSelection(titleElement);// disable selecting text
         this.#titleElement = titleElement;
-        this._updateTitle();
+        this.#updateTitle();
     }
     /** @returns {HTMLElement} Element for the title */
     get _titleElement() { return this.#titleElement; }
 
-    /** Reassigns `title` to itself, re-invoking the setter method */
-    _updateTitle() { this.title = this.title; }
+    /** Reassigns `title` to itself, re-invoking the setter method @returns {void} */
+    #updateTitle() { this.title = this.title; }
 
-    _addHelpIcon(helpText, togglePos = false, rightJustify = true) {
+    /**
+     * Adds (or updates the text of) a {@linkcode HelpIcon} to this component, and returns it 
+     * @param {string} helpText 
+     * @param {boolean} [togglePos=false] 
+     * @param {boolean} [rightJustify=true] 
+     * @returns {HelpIcon}
+     */
+    addHelpIcon(helpText, togglePos = false, rightJustify = true) {
 
         if (this.#helpIcon) {
             console.warn(`help icon already exists, just updating its values instead, element: ${this.#helpIcon}`)
             // TODO: replace help text reset with actual text, not null/lipsum
             // Issue URL: https://github.com/nickyonge/evto-web/issues/35
             this.#helpIcon.setText(helpText, null);
-            return;
+            return this.#helpIcon;
         }
 
         // this.#helpIcon = new HelpIcon(this.div, helpText, togglePos);
@@ -145,6 +152,6 @@ export class TitledComponent extends BasicComponent {
             // this.#helpIcon = new HelpIcon(this.div, helpText, togglePos);
             this.#helpIcon = new HelpIcon(this.#titleElement, helpText, togglePos, rightJustify);
         }
-
+        return this.#helpIcon;
     }
 }

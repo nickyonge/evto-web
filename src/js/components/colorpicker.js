@@ -65,7 +65,7 @@ export class ColorPicker extends TitledComponent {
         // this.#input.addEventListener('input', event => { }); // new color value is selected
         // this.#input.addEventListener('change', event => { }); // colorPicker closed AND changed
 
-        this._addHelpIcon(`help me! ${componentTitle}`);
+        this.addHelpIcon(`help me! ${componentTitle}`);
 
         if (defaultColor) {
             this.color = defaultColor;

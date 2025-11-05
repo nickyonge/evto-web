@@ -93,7 +93,7 @@ export class MutliOptionList extends TitledComponent {
         }
 
         // add help component
-        this._addHelpIcon(`help me! ${componentTitle}`);
+        this.addHelpIcon(`help me! ${componentTitle}`);
 
         // load initial costs 
         this.UpdateCosts();

@@ -262,7 +262,7 @@ export class Slider extends TitledComponent {
         this.div.appendChild(this.#input);
         this.div.appendChild(this.#bg);
 
-        this._addHelpIcon(componentTitle, false, false);
+        this.addHelpIcon(componentTitle, false, false);
 
         // TODO: slider.css vars move to vars.css
         // Issue URL: https://github.com/nickyonge/evto-web/issues/43
