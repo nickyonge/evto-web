@@ -9,32 +9,68 @@ import { EnsureToNumber, isBlank, isStringAndBlank, isStringNotBlank } from "../
 
 export class ImageField extends TitledComponent {
 
+    /** @type {HTMLElement[]} */
     #addedImgs = [];
+    /** @type {svg.asset[]} */
     #addedSVGs = [];
+
+    /** @returns {(HTMLElement|svg.asset)[]} */
     get #addedAssets() {
         if (this.#addedImgs == null) { this.#addedImgs = []; }
         if (this.#addedSVGs == null) { this.#addedSVGs = []; }
-        return this.#addedImgs.concat(this.#addedSVGs);
+        return [...this.#addedImgs, ...this.#addedSVGs];
     }
 
+    /** @type {HTMLElement} */
     #_demoImage;
     /** @type {svg.asset} */
     #_demoSvgRect;
 
-    IsSVGAdded(svgAsset) {
-        return this.#addedSVGs.includes(svgAsset);
-    }
+    // TODO ImageField, get/remove img/svg methods
 
-    constructor(componentTitle) {
+    /**
+     * 
+     * @param {string|svg.asset|HTMLElement|pathNode|[string,string]|[pathNode,string]} [src]
+     * @param {string} [componentTitle] 
+     */
+    constructor(src, componentTitle) {
         super(componentTitle);
         ui.AddClassesToDOM(this.div, 'imageField', 'container');
+        if (src == null) { return; }
+        if (typeof src === 'string') {
+            // string, presumably img
+            this.addImage(src);
+            return;
+        }
+        if (src instanceof svg.asset) {
+            // svgHTMLAsset
+            this.addSVG(src);
+            return;
+        }
+        if (src instanceof HTMLElement) {
+            // HTMLElement, presumably img
+            this.addImage(src);
+            return;
+        }
+        if (Array.isArray(src)) {
+            // [string,string] or [pathNode,string]
+            this.addImage(src[0], src[1]);
+            return;
+        }
+        // by process of elimination, pathNode
+        this.addImage(src);
     }
 
     /**
      * Adds an image div to this image container. 
      * Returns the newly-created `HTMLElement` div for the image.
-     * Will return `null` if imgSrc is null/whitespace
-     * @param {string | pathNode} imgSrc Value to add to the "src" attribute to the new img
+     * Will return `null` if imgSrc is null/whitespace.
+     * 
+     * `imgSrc` can be the following types:
+     * - `string`, used directly as the value for `src` attribute
+     * - `pathNode`, retrieves the `URL` element from the `pathNode`
+     * - `HTMLElement`, uses this element instead of creating a new one 
+     * @param {string | pathNode | HTMLElement} imgSrc Value to add to the "src" attribute to the new img 
      * @param {string} [alt=null] Alt text to provide to the new img (optional) 
      * @param {boolean} [canvasSized=true] Assign the `canvasSizedImg` CSS class, forcing 2:1 aspect ratio? Default `true` 
      * @param {number} [zSort=0] Assignment for z-index CSS class. 0: leave default, >=1: assign class `onTop`, <=0: assign class `onBottom`. Default 0
@@ -43,12 +79,22 @@ export class ImageField extends TitledComponent {
      * @see {@link ui.CreateImage}
      */
     addImage(imgSrc, alt = null, canvasSized = true, zSort = 0, ...extraClasses) {
-        if (!isStringNotBlank(imgSrc)) { return null; }
-        let newImg = ui.CreateImage(imgSrc, alt);
-        this.#prepareHTMLElementImage(newImg, canvasSized, zSort, ...extraClasses);
-        this.div.appendChild(newImg);
-        this.#addedImgs.push(newImg);
-        return newImg;
+        if (imgSrc == null) { return null; }
+        /** @type {HTMLElement} */ let img;
+        if (imgSrc instanceof HTMLElement) {
+            // pre-existing 
+            img = imgSrc;
+        } else {
+            let src = typeof imgSrc === 'string' ? imgSrc : imgSrc.URL;
+            if (src == null) { return null; }
+            src = src.trim();
+            if (isBlank(src)) { return null; }
+            img = ui.CreateImage(src, alt);
+        }
+        this.#prepareHTMLElementImage(img, canvasSized, zSort, ...extraClasses);
+        this.div.appendChild(img);
+        this.#addedImgs.push(img);
+        return img;
     }
 
     /**
@@ -77,20 +123,21 @@ export class ImageField extends TitledComponent {
         return true;
     }
     /** Prep an HTMLElement to be added 
-     * @param {HTMLElement} e HTMLElement to prepare 
+     * @param {HTMLElement} element HTMLElement to prepare 
      * @param {boolean} [canvasSized=true] is this element canvas-sized (2:1)? Default `true` 
      * @param {number} zSort Z-sorting? 0/null/default=none, -1/<0=onBottom, 1/>0=onTop
      * @param  {...string} extraClasses Any additional CSS classes to add 
      */
-    #prepareHTMLElementImage(e, canvasSized = true, zSort = 0, ...extraClasses) {
-        if (e == null) { return; }
-        ui.AddClassesToDOM(e, 'image');
-        if (canvasSized) { ui.AddClassesToDOM(e, 'canvasSizedImg'); }
+    #prepareHTMLElementImage(element, canvasSized = true, zSort = 0, ...extraClasses) {
+        if (element == null) { return; }
+        ui.AddClassesToDOM(element, 'image');
+        if (canvasSized) { ui.AddClassesToDOM(element, 'canvasSizedImg'); }
         zSort = EnsureToNumber(zSort, false); // z-index sorting 
+        ui.RemoveClassesFromDOM(element, 'onTop', 'onBottom'); // just in case it's a pre-existing element 
         if (zSort == 0 || Number.isNaN(zSort) || zSort == null) { } // default z-index, do nothing 
-        else if (zSort > 0) { ui.AddClassesToDOM(e, 'onTop'); } // always on top 
-        else if (zSort < 0) { ui.AddClassesToDOM(e, 'onBottom'); } // always on bottom 
-        if (extraClasses != null) { ui.AddClassesToDOM(e, ...extraClasses); } // extra classes 
+        else if (zSort > 0) { ui.AddClassesToDOM(element, 'onTop'); } // always on top 
+        else if (zSort < 0) { ui.AddClassesToDOM(element, 'onBottom'); } // always on bottom 
+        if (extraClasses != null) { ui.AddClassesToDOM(element, ...extraClasses); } // extra classes 
     }
 
     CreateDemoImageAndSVG() {
@@ -112,6 +159,15 @@ export class ImageField extends TitledComponent {
             this.addSVG(this.#_demoSvgRect);
         }
         return this.#_demoSvgRect;
+    }
+
+    /**
+     * Has the given {@link svg.asset svgHTMLAsset} already been added? 
+     * @param {svg.asset} svgAsset 
+     * @returns {boolean}
+     */
+    IsSVGAdded(svgAsset) {
+        return this.#addedSVGs.includes(svgAsset);
     }
 
     get demoImage() { return this.CreateDemoImage(); }
