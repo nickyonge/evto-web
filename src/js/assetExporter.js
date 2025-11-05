@@ -269,6 +269,9 @@ export const getMapAsset = (path) => {
             // yes, path has a hyphen
             let targetFolder = path.slice(0, hyphenIndex);
             switch (targetFolder) {
+                case 'full':
+                    path = 'full/' + path;
+                    break;
                 case 'gcs':
                     path = 'gcs/' + path;
                     break;
@@ -280,6 +283,9 @@ export const getMapAsset = (path) => {
                     break;
                 case 'line':
                     path = 'landlines/' + path;
+                    break;
+                case 'real':
+                    path = 'real/' + path;
                     break;
                 case 'titlebox':
                     // more complex, check titlebox subfolders
@@ -343,10 +349,12 @@ export const getMapAsset = (path) => {
         let folder = path.slice(0, folderIndex);
         switch (targetFolder) {
             // compare folder (the first defined value before /) and targetFolder (the value between the last / and - )
+            case 'full': if (folder != 'full') { console.warn(`WARNING: folder ${folder} and targetFolder ${targetFolder} mismatch, can't get png map asset`, path); return null; } break;
             case 'gcs': if (folder != 'gcs') { console.warn(`WARNING: folder ${folder} and targetFolder ${targetFolder} mismatch, can't get png map asset`, path); return null; } break;
             case 'label': if (folder != 'labels') { console.warn(`WARNING: folder ${folder} and targetFolder ${targetFolder} mismatch, can't get png map asset`, path); return null; } break;
             case 'land': if (folder != 'land') { console.warn(`WARNING: folder ${folder} and targetFolder ${targetFolder} mismatch, can't get png map asset`, path); return null; } break;
             case 'line': if (folder != 'landlines') { console.warn(`WARNING: folder ${folder} and targetFolder ${targetFolder} mismatch, can't get png map asset`, path); return null; } break;
+            case 'real': if (folder != 'real') { console.warn(`WARNING: folder ${folder} and targetFolder ${targetFolder} mismatch, can't get png map asset`, path); return null; } break;
             case 'titlebox':
                 if (folderIndex == lastFolderIndex) {
                     // failed to insert specific titlebox subfolder
