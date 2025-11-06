@@ -89,6 +89,60 @@ export class ImageField extends TitledComponent {
     }
 
     /**
+     * Gets the given image element, identified by source URL/pathNode/element, 
+     * if it's found in this ImageField?
+     * @param {string | pathNode | HTMLElement} imgSrc `src` value for the image
+     * @returns {HTMLElement | null}
+     */
+    getImage(imgSrc) {
+        let i = this.#getImageIndex(imgSrc);
+        if (i == -1) { return null; }
+        return i > -1 ? this.#addedImgs[i] : null;
+    }
+
+    /**
+     * is the given image, identified by source URL/pathNode/element, in this ImageField?
+     * @param {string | pathNode | HTMLElement} imgSrc `src` value for the image
+     * @returns {boolean}
+     */
+    hasImage(imgSrc) {
+        return this.#getImageIndex(imgSrc) > -1;
+    }
+
+    /**
+     * Extract the source from a given imgSrc, either `string`, `pathNode`, or `HTMLElement`. Returns `null` if src can't be found
+     * @param {string | pathNode | HTMLElement} imgSrc `src` value input. If just a string, returns itself - otherwise, extracts the `src` value as needed 
+     * @returns {string | null}
+     */
+    getImgSrc(imgSrc) {
+        if (imgSrc == null) { return null; }
+        if (typeof imgSrc === 'string') { return imgSrc; }
+        if (imgSrc instanceof HTMLElement) {
+            // HTMLElement, get src attribute 
+            return ui.GetAttribute(imgSrc, 'src');
+        }
+        // process of elimination, pathNode
+        return imgSrc['URL'] ? imgSrc.URL : null;
+    }
+
+    /**
+     * 
+     * @param {string | pathNode | HTMLElement} imgSrc `src` value for the image
+     * @returns {number}
+     */
+    #getImageIndex(imgSrc) {
+        let src = this.getImgSrc(imgSrc);
+        if (src == null) { return -1; }
+        for (let i = 0; i < this.#addedImgs.length; i++) {
+            let addedSrc = this.getImgSrc(this.#addedImgs[i]);
+            if (addedSrc == src) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
      * Adds an {@link svgHTMLAsset} to this image container. 
      * Returns whether or not the SVG was successfully added.
      * Will return `false` if svgAsset is null, or if it's already added (and `allowDuplicates` if `false`).
@@ -102,7 +156,7 @@ export class ImageField extends TitledComponent {
      */
     addSVG(svgAsset, onChangeCallback = null, canvasSized = true, zSort = 0, allowDuplicates = false, ...extraClasses) {
         if (svgAsset == null) { return false; }
-        if (!allowDuplicates && this.IsSVGAdded(svgAsset)) { return false; }
+        if (!allowDuplicates && this.hasSVG(svgAsset)) { return false; }
         let newSVG = ui.CreateDiv();
         this.#prepareHTMLElementImage(newSVG, canvasSized, zSort, ...extraClasses);
         this.div.appendChild(newSVG);
@@ -144,6 +198,11 @@ export class ImageField extends TitledComponent {
         }
         return this.#_demoImage;
     }
+    /**
+     * Creates a demo SVG, with an optional array of colors for a gradient 
+     * @param  {spreadString} [colors] 
+     * @returns {svg.asset}
+     */
     CreateDemoSVG(...colors) {
         if (this.#_demoSvgRect == null) {
             this.#_demoSvgRect = BasicGradientRect(...colors);
@@ -153,12 +212,21 @@ export class ImageField extends TitledComponent {
     }
 
     /**
+     * Returns the index of the given `svgHTMLAsset`, or `-1`
+     * @param {svg.asset} svgAsset 
+     * @returns {number}
+     */
+    #getSVGIndex(svgAsset) {
+        return svgAsset == null ? -1 : this.#addedSVGs.indexOf(svgAsset);
+    }
+
+    /**
      * Has the given {@link svg.asset svgHTMLAsset} already been added? 
      * @param {svg.asset} svgAsset 
      * @returns {boolean}
      */
-    IsSVGAdded(svgAsset) {
-        return this.#addedSVGs.includes(svgAsset);
+    hasSVG(svgAsset) {
+        return this.#getSVGIndex(svgAsset) > -1;
     }
 
     get demoImage() { return this.CreateDemoImage(); }

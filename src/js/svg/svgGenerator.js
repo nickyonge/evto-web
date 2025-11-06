@@ -6,7 +6,7 @@ const FANCYBOX_MAX_SPLITS = 3;
 const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
 
 /** Generate a basic rectangle with a gradient of the given colors, with all default values.
- * @param  {...string} colors Optional array of colors to generate the gradient with
+ * @param  {spreadString} [colors] Optional array of colors to generate the gradient with
  * @returns {svg.asset} new instance of {@linkcode svg.asset svgHTMLAsset} */
 export function BasicGradientRect(...colors) {
     if (colors == null || !Array.isArray(colors)) { colors = []; }

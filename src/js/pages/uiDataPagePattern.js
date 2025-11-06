@@ -60,6 +60,10 @@ function CreatePatternSection(section) {
 
     patternImage.addImage(mapImg.full.monochrome.light);
 
+    let bw = svgHTMLAsset.BasicGradientRect(svgGradient.templates.bw);
+    bw.gradient.opacity = 0.5;
+    
+    patternImage.addSVG(bw);
     // mapImg
 
 
