@@ -2,9 +2,12 @@ import { svgElement } from './svgElement';
 
 export {
     svgElement as element,
+} from './svgElement';
+
+export {
     svgHTMLAsset as asset,
     svgViewBox as viewbox
-} from './svgElement';
+} from './svgHTMLAsset';
 
 export {
     svgShape as shape,

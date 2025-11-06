@@ -3,7 +3,7 @@ import * as ui from '../ui';
 import * as txt from '../text';
 import { SetElementEnabled } from "../lilutils";
 import { DemoGradient } from "./uiDataPageBase";
-import { svgHTMLAsset } from "../svg/svgElement";
+import { svgHTMLAsset } from "../svg/svgHTMLAsset";
 import { svgGradient } from "../svg/svgGradient";
 import { mapImg } from "../assetExporter";
 
