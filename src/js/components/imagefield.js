@@ -11,10 +11,10 @@ export class ImageField extends TitledComponent {
 
     /** @type {HTMLElement[]} */
     #addedImgs = [];
-    /** @type {svg.asset[]} */
+    /** @type {[svg.asset,HTMLElement][]} */
     #addedSVGs = [];
 
-    /** @returns {(HTMLElement|svg.asset)[]} */
+    /** @returns {(HTMLElement|[svg.asset,HTMLElement])[]} */
     get #addedAssets() {
         if (this.#addedImgs == null) { this.#addedImgs = []; }
         if (this.#addedSVGs == null) { this.#addedSVGs = []; }
@@ -25,9 +25,6 @@ export class ImageField extends TitledComponent {
     #_demoImage;
     /** @type {svg.asset} */
     #_demoSvgRect;
-
-    // TODO ImageField, get/remove img/svg methods
-    // Issue URL: https://github.com/nickyonge/evto-web/issues/61
 
     /**
      * 
@@ -91,11 +88,11 @@ export class ImageField extends TitledComponent {
     /**
      * Gets the given image element, identified by source URL/pathNode/element, 
      * if it's found in this ImageField?
-     * @param {string | pathNode | HTMLElement} imgSrc `src` value for the image
+     * @param {string | pathNode | HTMLElement | number} imgSrc `src` value for the image (or index of the image)
      * @returns {HTMLElement | null}
      */
     getImage(imgSrc) {
-        let i = this.#getImageIndex(imgSrc);
+        let i = typeof imgSrc === 'number' ? imgSrc : this.#getImageIndex(imgSrc);
         if (i == -1) { return null; }
         return i > -1 ? this.#addedImgs[i] : null;
     }
@@ -143,6 +140,24 @@ export class ImageField extends TitledComponent {
     }
 
     /**
+     * Remove the given image by source URL/pathNode/HTMLElement. 
+     * Returns `true` if image was successfully found and removed.
+     * @param {string | pathNode | HTMLElement} imgSrc `src` value for the image
+     * @returns {boolean} `true` if the image was removed, `false` if not (either because it couldn't be removed or it wasn't found)
+     */
+    removeImage(imgSrc) {
+        if (imgSrc == null) { return false; }
+        let index = this.#getImageIndex(imgSrc);
+        if (index == -1) { return false; }
+        let img = this.getImage(index);
+        if (img == null) { return false; }
+        // found index and image, remove from array, delete image 
+        let removed = this.#addedImgs.remove(img) != null;
+        img.remove();
+        return removed;
+    }
+
+    /**
      * Adds an {@link svgHTMLAsset} to this image container. 
      * Returns whether or not the SVG was successfully added.
      * Will return `false` if svgAsset is null, or if it's already added (and `allowDuplicates` if `false`).
@@ -157,16 +172,58 @@ export class ImageField extends TitledComponent {
     addSVG(svgAsset, onChangeCallback = null, canvasSized = true, zSort = 0, allowDuplicates = false, ...extraClasses) {
         if (svgAsset == null) { return false; }
         if (!allowDuplicates && this.hasSVG(svgAsset)) { return false; }
-        let newSVG = ui.CreateDiv();
-        this.#prepareHTMLElementImage(newSVG, canvasSized, zSort, ...extraClasses);
-        this.div.appendChild(newSVG);
-        svgAsset.onChange = function () { newSVG.innerHTML = svgAsset.html; };
+        let newSVGDiv = ui.CreateDiv();
+        this.#prepareHTMLElementImage(newSVGDiv, canvasSized, zSort, ...extraClasses);
+        this.div.appendChild(newSVGDiv);
+        svgAsset.onChange = function () { newSVGDiv.innerHTML = svgAsset.html; };
         if (onChangeCallback != null && typeof onChangeCallback === 'function') {
             svgAsset.onChange = onChangeCallback;
         }
-        newSVG.innerHTML = svgAsset.html;
+        newSVGDiv.innerHTML = svgAsset.html;
+        this.#addedSVGs.push([svgAsset, newSVGDiv]);
         return true;
     }
+
+    /**
+     * 
+     * @param {svg.asset|HTMLElement} asset Either an `svgHTMLAsset` or its associated div. 
+     * @returns {boolean}
+     */
+    removeSVG(asset) {
+        if (asset == null) { return false; }
+        let index = this.#getSVGIndex(asset);
+        if (index == -1) { return false; }
+        /** @type {[svg.asset,HTMLElement]} */
+        let removedArray = this.#addedSVGs.removeAt(index);
+        if (removedArray == null) { return false; }
+        removedArray[0] = null; // gosh I hate "just set it to null" as the deletion method 
+        removedArray[1].remove();
+        return true;
+    }
+
+    /**
+     * Removes the current asset div, assuming it's either an image childed to this ImageField,
+     * or the associated div of an SVG related to this ImageField.
+     * @param {HTMLElement} div 
+     * @returns {boolean}
+     */
+    removeAsset(div) {
+        if (div == null) { return false; }
+        let assets = this.#addedAssets;
+        for (let i = 0; i < assets.length; i++) {
+            if (Array.isArray(assets[i])) {
+                if (assets[i][1] === div) {
+                    return this.removeSVG(div);
+                }
+            } else {
+                if (assets[i] === div) {
+                    return this.removeImage(div);
+                }
+            }
+        }
+        return false;
+    }
+
     /** Prep an HTMLElement to be added 
      * @param {HTMLElement} element HTMLElement to prepare 
      * @param {boolean} [canvasSized=true] is this element canvas-sized (2:1)? Default `true` 
@@ -212,12 +269,20 @@ export class ImageField extends TitledComponent {
     }
 
     /**
-     * Returns the index of the given `svgHTMLAsset`, or `-1`
-     * @param {svg.asset} svgAsset 
+     * Returns the index of the given `svgHTMLAsset` or its associated element.
+     * If not found, returns `-1`
+     * @param {svg.asset|HTMLElement} asset 
      * @returns {number}
      */
-    #getSVGIndex(svgAsset) {
-        return svgAsset == null ? -1 : this.#addedSVGs.indexOf(svgAsset);
+    #getSVGIndex(asset) {
+        if (asset == null) { return -1; }
+        let isElement = asset instanceof HTMLElement;
+        for (let i = 0; i < this.#addedSVGs.length; i++) {
+            if (this.#addedAssets[i][isElement ? 1 : 0] === asset) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
