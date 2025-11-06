@@ -2,9 +2,10 @@
 
 import { isBlank } from "./lilutils";
 
-// ------------------------------------------------------------------ 
-// -----------------------------------  BASIC ELEMENT CREATION  ----- 
-// ------------------------------------------------------------------ 
+// ------------------------------------------------------------------
+// -----------------------------------  BASIC ELEMENT CREATION  -----
+// ------------------------------------------------------------------
+// #region Basic Elements 
 
 /**
  * Create a DIV HTMLElement
@@ -103,9 +104,12 @@ export function AddElementTo(domElement, newElement) {
     return element;
 }
 
-// ------------------------------------------------------------------ 
-// ------------------------------------------  CLASSES AND IDs  ----- 
-// ------------------------------------------------------------------ 
+// #endregion Basic Elements
+
+// ------------------------------------------------------------------
+// ------------------------------------------  CLASSES AND IDs  -----
+// ------------------------------------------------------------------
+// #region Classes/IDs 
 
 /**
  * Creates a new HTMLElement of the given type (newElement) with the given CSS class(es)
@@ -191,11 +195,12 @@ export function RemoveClassFromDOMs(cssClass, ...domElements) {
     }
 }
 
+// #endregion Classes / IDs
+
 // ------------------------------------------------------------------ 
 // -----------------------------------------------  ATTRIBUTES  ----- 
 // ------------------------------------------------------------------ 
-
-
+// #region Attributes 
 
 /**
  * Sets the given attributes on the given HTMLElement (attTypes and attValues lengths must match)
@@ -305,10 +310,12 @@ export function HasAttributes(element, attTypes, all = true) {
     return all ? true : false;
 }
 
-// ------------------------------------------------------------------- 
-// --------------------------------------  OTHER BASIC ELEMENTS  ----- 
-// ------------------------------------------------------------------- 
+// #endregion Attributes
 
+// -------------------------------------------------------------------
+// --------------------------------------  OTHER BASIC ELEMENTS  -----
+// -------------------------------------------------------------------
+// #region Other Elements 
 
 /**
  * Creates a new `<img>` element, and assigns the given src attribute (and optional alt text value)
@@ -454,9 +461,12 @@ function ParseSVGPathD(path) {
     return path;
 }
 
-// ------------------------------------------------------------------ 
-// ---------------------------------  NAVIGATION AND SELECTION  ----- 
-// ------------------------------------------------------------------ 
+// #endregion Other Elements 
+
+// ------------------------------------------------------------------
+// ---------------------------------  NAVIGATION AND SELECTION  -----
+// ------------------------------------------------------------------
+// #region Nav/Select 
 
 /**
  * Make the given HTMLElement appear in the tab index for the page
@@ -521,6 +531,8 @@ export function AllowContentSelectionWithTextIndicator(...domElements) {
     RemoveClassFromDOMs('allowSelectDefaultCursor', ...domElements);
     RemoveClassFromDOMs('preventSelect', ...domElements); // default selection type
 }
+
+// #endregion Nav/Select 
 
 // TODO: add Enter input to elements that only function on spacebar (eg, rn the "Subscribe" btn works for Spacebar but not Enter)
 // Issue URL: https://github.com/nickyonge/evto-web/issues/15
