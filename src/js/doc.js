@@ -266,6 +266,35 @@ import { BasicComponent } from "./components/base";
     };
 
     /**
+     * Removes the given value from the array, via {@linkcode splice}.
+     * @param {T} value Value to remove from the array
+     * @type {<T>(value: T) => T}
+     * @returns {T|null} Returns removed value, or `null` if the value wasn't found or couldn't be removed 
+     * @template T 
+     */
+    Array.prototype.remove = function (value) {
+        let i = this.indexOf(value);
+        if (i == -1) { return null; }
+        return this.splice(i, 1)[0];
+    }
+
+    /**
+     * Removes the value at the given index from the array, via {@linkcode splice}.
+     * 
+     * Largely a convenience method, basically just `splice(index)`
+     * @param {number} index Index to remove the value of from the array
+     * @returns {T|null} Returns removed value, or `null` if the index was < 0, or > array length. 
+     * 
+     * **Note:** May also return `null` if the value at the index itself was `null`.
+     * @type {<T>(value: T) => T}
+     * @template T 
+     */
+    Array.prototype.removeAt = function (index) {
+        if (index < 0 || index >= this.length) { return null; }
+        return this.splice(index, 1)[0];
+    }
+
+    /**
      * Reverses the elements in an array in place.
      * This method mutates the array and returns a reference to the same array.
      * @returns {T[]} Returns a reference to this same, now reversed, array 

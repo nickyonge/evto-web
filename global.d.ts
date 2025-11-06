@@ -191,6 +191,26 @@ declare global {
         push<T>(...items: T[]): number;
 
         /**
+         * Removes the given value from the array, via {@linkcode splice}.
+         * @param {T} value Value to remove from the array
+         * @returns {T|null} Returns removed value, or `null` if the value wasn't found or couldn't be removed 
+         * @type {<T>(value: T): T}
+         * @template T 
+         */
+        remove<T>(value: T): T;
+
+        /**
+         * Removes the value at the given index from the array, via {@linkcode splice}.
+         * 
+         * Largely a convenience method, basically just  
+         * @param {number} index Index to remove the value of from the array
+         * @returns {T|null} Returns removed value, or `null` if the value wasn't found or couldn't be removed 
+         * @type {<T>(value: T): T}
+         * @template T 
+         */
+        removeAt<T>(index: number): T;
+
+        /**
          * Reverses the elements in an array in place.
          * This method mutates the array and returns a reference to the same array.
          * @returns {T[]} Returns a reference to this same, now reversed, array 
@@ -384,7 +404,7 @@ declare global {
         stackString: string;
 
     }
-    
+
     interface Element {
 
         // mostly typesafe declaration 
@@ -469,7 +489,7 @@ declare module './src/js/components/base' {
 declare module './src/js/svg/svgElement' {
 
     interface svgElement {
-        
+
         /**
          * Optional parent svgElement to this svgElement 
          * (eg, an `svgGradientStop` will have an `svgGradient` as a parent)
@@ -479,7 +499,7 @@ declare module './src/js/svg/svgElement' {
     }
 
     interface Array {
-        
+
         /**
          * Optionally-assigned {@link svgHTMLAsset} related to this array object.
          * @type {svgHTMLAsset} */
