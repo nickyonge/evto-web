@@ -140,10 +140,16 @@ export class svgElement {
     }
     /** @type {string} */
     #_id;
+    /** local flag for first ID assignment @type {boolean} */
     #_firstIDAssigned = false;
 
+    /** @type {string} */
     get #defaultID() { return `__svgE[${this[__svgElementInstance]}]:${this.constructor.name}`; }
 
+    /**
+     * Base class for all component elements of an SVG asset
+     * @param {string} [id] 
+     */
     constructor(id = null) {
         // record this element's unique instance number
         Object.defineProperty(this, __svgElementInstance, { value: svgElement.#svgElementsCount, configurable: false, enumerable: true, writable: false });
@@ -576,12 +582,29 @@ export class svgHTMLAsset extends svgElement {
     /** Remove all `null` values from the {@linkcode allSVGHTMLAssets} array @returns {void} */
     static #__filterAssetsArray() { svgHTMLAsset.allSVGHTMLAssets = svgHTMLAsset.allSVGHTMLAssets.filter(e => e != null); }
 
+    /** Opacity of the SVG element as a whole.
+     * 
+     * **Note:** If `opacity != 1`, this is applied via setting `style="opacity: X;"` in this svg's
+     * HTML declaration. This may interfere with opacity set via CSS stylesheets. In that case, leave
+     * this as `1`, and change opacity either by setting the opacity of the fill color (eg `#ffffff69`)
+     * or, if using an {@link svg.gradient svgGradient}, you can use 
+     * {@linkcode svg.gradient.opacity svgGradient.opacity}.
+     * 
+     * **Note:** since this is assigning opacity via CSS and not any color or gradient properties, 
+     * things like using a gradient as a mask may not perform as you'd expect. In that case, use
+     * {@linkcode svg.gradient.opacity svgGradient.opacity} instead.
+     * @returns {number} */
+    get opacity() { return this.#_opacity; }
+    set opacity(v) { let prev = this.#_opacity; this.#_opacity = v; this.#changed('opacity', v, prev); }
+    /** @type {number} */
+    #_opacity = svg.defaults.OPACITY;
 
-    /** @type {string} */
+    /** @returns {string} */
     get class() { return this.#_class; }
     set class(v) { let prev = this.#_class; this.#_class = v; this.#changed('class', v, prev); }
+    /** @type {string} */
     #_class;
-    /** @type {svgViewBox} */
+    /** @returns {svgViewBox} */
     get viewBox() { return this.#_viewBox; }
     set viewBox(v) {
         if (this.viewBox == v) { return; }
@@ -594,10 +617,12 @@ export class svgHTMLAsset extends svgElement {
     }
     /** @type {svgViewBox} */
     #_viewBox;
+    /** local flag for first viewbox assignment @type {boolean} */
     #_firstViewboxAssigned = false;
     /** 
      * Array of {@link svg.shape shapes} contained in this SVG 
-     * (excluding any in {@link definitions `<defs>`}) @type {svg.shape[]} */
+     * (excluding any in {@link definitions `<defs>`}) 
+     * @returns {svg.shape[]} */
     get shapes() { return this.#_shapes; }
     set shapes(v) {
         if (v == null) { return; }
@@ -609,6 +634,7 @@ export class svgHTMLAsset extends svgElement {
         this.#_shapes.onChange = this.#arrayChanged;
         this.#changed('shapes', v, prev);
     }
+    /** @type {svg.shape[]} */
     #_shapes = [];
     /** Array of elements contained in this SVG's `<defs>` @type {svgElement[]} */
     get definitions() { return this.#_definitions; }
@@ -624,14 +650,17 @@ export class svgHTMLAsset extends svgElement {
         this.#_definitions.onChange = this.#arrayChanged;
         this.#changed('definitions', v, prev);
     }
+    /** @type {svgElement[]} */
     #_definitions = [];
-    /** @type {boolean} */
+    /** @returns {boolean} */
     get preserveAspectRatio() { return this.#_preserveAspectRatio; }
     set preserveAspectRatio(v) { let prev = this.#_preserveAspectRatio; this.#_preserveAspectRatio = v; this.#changed('preserveAspectRatio', v, prev); }
+    /** @type {boolean} */
     #_preserveAspectRatio = svg.defaults.PRESERVEASPECTRATIO;;
     /** @returns {([string, any?])[]} */
     get metadata() { return this.#_metadata; }
     set metadata(v) { let prev = this.#_metadata; this.#_metadata = v; this.#changed('metadata', v, prev); }
+    /** @type {([string, any?])[]} */
     #_metadata = svg.defaults.METADATA;
 
     /**
@@ -650,9 +679,17 @@ export class svgHTMLAsset extends svgElement {
         svgHTMLAsset.#__filterAssetsArray();
         svgHTMLAsset.allSVGHTMLAssets.push(this);
     }
+    /**
+     * 
+     * @returns {string}
+     */
     get html() {
         let d = this.data;
-        let newSVG = isBlank(d) ? '<svg>' : `<svg ${d}>`;
+        let newSVG = isBlank(d) ? '<svg' : `<svg ${d}`;
+        if (this.opacity != 1) {
+            newSVG += ` style="opacity:${this.opacity};"`;
+        }
+        newSVG += '>';
         if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
         // add SVG definitions
         if (this.definitions != null && this.definitions.length > 0) {

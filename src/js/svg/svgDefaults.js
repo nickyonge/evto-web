@@ -16,6 +16,7 @@ export const WIDTH = 200;
 export const HEIGHT = 100;
 export const FILL = '#beeeef';
 export const STROKE = null;
+export const OPACITY = 1;
 
 export const RECT_RX = null;
 export const RECT_RY = null;
