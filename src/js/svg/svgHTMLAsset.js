@@ -1,6 +1,6 @@
 import * as svg from './index';
 import { shape, rect, circle, ellipse, line, polyline, polygon, path, gradient } from "./index";
-import { isBlank, isStringNotBlank, StringContainsNumeric, StringNumericDivider, StringNumericOnly, StringOnlyNumeric, StringToNumber } from "../lilutils";
+import { isBlank } from "../lilutils";
 
 /** Used to create an SVG element ready to add to the HTML document */
 export class svgHTMLAsset extends svg.element {

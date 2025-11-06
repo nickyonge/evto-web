@@ -1,9 +1,7 @@
 import * as svg from './index';
-import { shape, rect, circle, ellipse, line, polyline, polygon, path, gradient } from "./index";
 import { isBlank, isStringNotBlank, StringContainsNumeric, StringNumericDivider, StringNumericOnly, StringOnlyNumeric, StringToNumber } from "../lilutils";
 
-// #region SVG Element
-
+/** Basic element used to create all assets in this lil SVG system which prolly needs a name */
 export class svgElement {
     /** Array containing all {@linkcode svgElement} instances @type {svgElement[]} */
     static allSVGElements = [];
