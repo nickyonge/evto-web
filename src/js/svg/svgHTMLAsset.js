@@ -192,28 +192,28 @@ export class svgHTMLAsset extends svg.element {
      * found in {@linkcode shapes} (or, optionally, 
      * in {@linkcode definitions})
      * @see {@linkcode svg.IsValidShapeType svgShapes.IsValidShapeType} for valid types 
-     * @param {string} type Shape type. See {@linkcode svg.IsValidShapeType svgShapes.IsValidShapeType} for valid types 
+     * @param {string} shapeType Shape type. See {@linkcode svg.IsValidShapeType svgShapes.IsValidShapeType} for valid types 
      * @param {boolean} [searchDefinitions=false] 
      * search `definitions` array instead of `shapes`?
      * @returns {svg.shape|null}
      */
-    GetFirstShapeOfType(type, searchDefinitions = false) {
-        if (!svg.IsValidShapeType(type)) {
-            console.warn(`WARNING: can't get first shape of invalid shape type ${type}`, this);
+    GetFirstShapeOfType(shapeType, searchDefinitions = false) {
+        if (!svg.IsValidShapeType(shapeType)) {
+            console.warn(`WARNING: can't get first shape of invalid shape type ${shapeType}`, this);
             return null;
         }
         if (searchDefinitions) {
             for (let i = 0; i < this.definitions.length; i++) {
                 if (this.definitions[i] instanceof shape) {
                     let s = /** @type {svg.shape} */ (this.definitions[i]);
-                    if (s.type == type) {
+                    if (s.shapeType == shapeType) {
                         return s;
                     }
                 }
             }
         } else {
             for (let i = 0; i < this.shapes.length; i++) {
-                if (this.shapes[i].type == type) {
+                if (this.shapes[i].shapeType == shapeType) {
                     return this.shapes[i];
                 }
             }

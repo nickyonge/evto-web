@@ -14,18 +14,19 @@ const _PATH = 'path';
 const _ALL_SHAPES = [_RECT, _CIRCLE, _ELLIPSE,
     _LINE, _POLYLINE, _POLYGON, _PATH];
 
-export class svgShape extends svg.element {
+/** Base class for all SVG shapes */
+export class svgShape extends svg.definition {
     /** 
-     * SVG shape type, assigned in {@link svgShape} constructor.
+     * SVG shape type, assigned in {@link svgShape} subclass constructor.
      * @see {@linkcode _ALL_SHAPES}
      * @returns {string} */
-    get type() { return this.#_type; }
-    set type(v) { // can only set shape type once, does not call OnChange 
-        if (this.type != null) { console.warn(`cannot reassign set shape type ${this.type} to ${v}`, this); return; }
+    get shapeType() { return this.#_shapeType; }
+    set shapeType(v) { // can only set shape type once, does not call OnChange 
+        if (this.shapeType != null) { console.warn(`cannot reassign set shape type ${this.shapeType} to ${v}`, this); return; }
         if (!IsValidShapeType(v)) { return; }
-        this.#_type = v;
+        this.#_shapeType = v;
     }
-    #_type = null;
+    #_shapeType = null;
 
     /** 
      * SVG parent {@link svg.asset asset}, assigned by the parent 
@@ -62,15 +63,29 @@ export class svgShape extends svg.element {
     get extraAttributes() { return this.#_extraAttributes; }
     set extraAttributes(v) { let prev = this.#_extraAttributes; this.#_extraAttributes = v; this.#changed('extraAttributes', v, prev); }
     #_extraAttributes = [];
-    // TODO: svg shapes onChange callback for if extraAttributes array is modified, not just directly set 
+    // TODO: svg shapes onChange callback for if extraAttributes array is modified, not just directly set
     // Issue URL: https://github.com/nickyonge/evto-web/issues/54
-    constructor(fill = svg.defaults.FILL) { super(); this.fill = fill; }
+    /**
+     * base class for all SVG Shapes 
+     * @param {string|svg.gradient} [fill] Fill colour (default {@linkcode svg.defaults.FILL svgDefaults.FILL})
+     * @param {string} [shapeType] 
+     */
+    constructor(fill = svg.defaults.FILL, shapeType) {
+        super(undefined, shapeType);
+        if (shapeType == null) {
+            console.warn("WARNING: svgShape must have a defined shapeType, see svgShapes for all valid types", this);
+        }
+        if (fill != null) {
+            if (typeof fill === 'string') { this.fill = fill; }
+            else if (fill instanceof svg.gradient) { this.fillGradient = fill; }
+        }
+    }
     get html() {
-        if (this.type == null) {
+        if (this.shapeType == null) {
             console.error("ERROR: can't get svgShape of null type, specify shape via subclass, returning null");
             return null;
         }
-        return `<${this.type} ${this.data}/>`;
+        return `<${this.shapeType} ${this.data}/>`;
     }
     // get data() { return `${fill != null ? ` fill="${fill}"` : ''}${stroke != null ? ` stroke="${stroke}"` : ''}` }
     // get data() { return `${_pd('fill', this.fill)}${_pd('stroke', this.stroke)}` }
@@ -130,8 +145,9 @@ export class svgRect extends svgShape {
     set ry(v) { let prev = this.#_ry; this.#_ry = v; this.#changed('ry', v, prev); }
     #_ry = svg.defaults.RECT_RY;
     constructor(x = svg.defaults.X, y = svg.defaults.Y, width = svg.defaults.WIDTH, height = svg.defaults.HEIGHT, fill = svg.defaults.FILL) {
-        super(fill);
-        this.type = _RECT;
+        const st = _RECT;
+        super(fill, st);
+        this.shapeType = st;
         this.x = x; this.y = y; this.width = width; this.height = height;
     }
     get data() {
@@ -171,8 +187,9 @@ export class svgCircle extends svgShape {
     set cy(v) { let prev = this.#_cy; this.#_cy = v; this.#changed('cy', v, prev); }
     #_cy = svg.defaults.CY;
     constructor(r = svg.defaults.R, cx = svg.defaults.CX, cy = svg.defaults.CY, fill = svg.defaults.FILL) {
-        super(fill);
-        this.type = _CIRCLE;
+        const st = _CIRCLE;
+        super(fill, st);
+        this.shapeType = st;
         this.r = r; this.cx = cx; this.cy = cy;
     }
     get data() {
@@ -199,8 +216,9 @@ export class svgEllipse extends svgShape {
     set cy(v) { let prev = this.#_cy; this.#_cy = v; this.#changed('cy', v, prev); }
     #_cy = svg.defaults.CY;
     constructor(rx = svg.defaults.ELLIPSE_RX, ry = svg.defaults.ELLIPSE_RY, cx = svg.defaults.CX, cy = svg.defaults.CY, fill = svg.defaults.FILL) {
-        super(fill);
-        this.type = _ELLIPSE;
+        const st = _ELLIPSE;
+        super(fill, st);
+        this.shapeType = st;
         this.rx = rx; this.ry = ry; this.cx = cx; this.cy = cy;
     }
     get data() {
@@ -228,8 +246,9 @@ export class svgLine extends svgShape {
     set y2(v) { let prev = this.#_y2; this.#_y2 = v; this.#changed('y2', v, prev); }
     #_y2 = svg.defaults.Y2;
     constructor(x1 = svg.defaults.X1, y1 = svg.defaults.Y1, x2 = svg.defaults.X2, y2 = svg.defaults.Y2, fill = svg.defaults.FILL) {
-        super(fill);
-        this.type = _LINE;
+        const st = _LINE;
+        super(fill, st);
+        this.shapeType = st;
         this.x1 = x1; this.y1 = y1; this.x2 = x2; this.y2 = y2;
     }
     get data() {
@@ -249,8 +268,9 @@ export class svgPolyline extends svgShape {
     set points(v) { let prev = this.#_points; this.#_points = v; this.#changed('points', v, prev); }
     #_points = svg.defaults.POINTS;
     constructor(points = svg.defaults.POINTS, fill = svg.defaults.FILL) {
-        super(fill);
-        this.type = _POLYLINE;
+        const st = _POLYLINE;
+        super(fill, st);
+        this.shapeType = st;
         this.points = points;
     }
     get data() {
@@ -270,8 +290,9 @@ export class svgPolygon extends svgShape {
     set points(v) { let prev = this.#_points; this.#_points = v; this.#changed('points', v, prev); }
     #_points = svg.defaults.POINTS;
     constructor(points = svg.defaults.POINTS, fill = svg.defaults.FILL) {
-        super(fill);
-        this.type = _POLYGON;
+        const st = _POLYGON;
+        super(fill, st);
+        this.shapeType = st;
         this.points = points;
     }
     get data() {
@@ -293,8 +314,9 @@ export class svgPath extends svgShape {
     set pathLength(v) { let prev = this.#_pathLength; this.#_pathLength = v; this.#changed('pathLength', v, prev); }
     #_pathLength = svg.defaults.PATHLENGTH;
     constructor(d = svg.defaults.D, fill = svg.defaults.FILL) {
-        super(fill);
-        this.type = _PATH;
+        const st = _PATH;
+        super(fill, st);
+        this.shapeType = st;
         this.d = d;
     }
     get data() {
