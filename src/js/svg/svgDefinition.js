@@ -56,6 +56,7 @@ export class svgDefinition extends svg.element {
     }
 
     // TODO: fill out data/html returns for svgDefinition
+    // Issue URL: https://github.com/nickyonge/evto-web/issues/64
     get data() { return ''; }
     get html() { return ''; }
 
