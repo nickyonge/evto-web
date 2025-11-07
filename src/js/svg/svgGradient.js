@@ -151,7 +151,7 @@ export class svgGradient extends svg.definition {
      * @param  {spreadString} colors 
      */
     constructor(id, isRadial = svg.defaults.GRADIENT_ISRADIAL, ...colors) {
-        super(id);
+        super(id, svgGradient.GetGradientTypeFrom(isRadial));
         this.isRadial = isRadial;
         colors = svg.defaults.EnsureGradientDefaultColors(...colors);
         this.SetStops(...colors);
@@ -231,12 +231,26 @@ export class svgGradient extends svg.definition {
         return value;
     }
 
-    get type() { return this.isRadial ? 'radialGradient' : 'linearGradient'; }
+    /**
+     * Gets the string tag associated with this gradient's type, 
+     * either `"radialGradient"` or `"linearGradient"`.
+     * @see {@linkcode svgGradient.isRadial} Flag that determines the returned type 
+     * @returns {string}
+     */
+    get gradientType() { return svgGradient.GetGradientTypeFrom(this.isRadial); }
+    /**
+     * Gets the string tag associated with this gradient type, 
+     * either `"radialGradient"` or `"linearGradient"`
+     * @param {boolean} isRadial Local `isRadial` ref. Also see {@linkcode svgGradient.prototype.isRadial svgGradient.isRadial}
+     * @returns {string}
+     */
+    static GetGradientTypeFrom(isRadial) { return isRadial ? 'radialGradient' : 'linearGradient'; }
+
 
     get html() {
         // collect data, generate base gradient element 
         let d = this.data;
-        let newGradient = `<${this.type}${isBlank(d) ? '' : ` ${d}`}>`;
+        let newGradient = `<${this.gradientType}${isBlank(d) ? '' : ` ${d}`}>`;
         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
         // iterate through stops 
         if (this.stops != null && this.stops.length > 0) {
@@ -298,7 +312,7 @@ export class svgGradient extends svg.definition {
             if (this.mirror) { this.stops = this.stops.reverse(); }
         }
         // done! return new gradient html 
-        return `${newGradient}</${this.type}>`;
+        return `${newGradient}</${this.gradientType}>`;
     }
 
     get data() {
