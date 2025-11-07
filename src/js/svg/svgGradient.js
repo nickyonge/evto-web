@@ -2,7 +2,7 @@ import { arePoints, EnsureToNumber, isBlank, isPoint, Lerp, RotatePointsAroundPi
 import * as svg from './index';
 
 /** Class representing an SVG defined linear or radial gradient */
-export class svgGradient extends svg.element {
+export class svgGradient extends svg.definition {
 
     /**
      * Templates for gradient arrays 
@@ -140,6 +140,7 @@ export class svgGradient extends svg.element {
     }
     /** @type {svg.asset} */
     #_parent = null;
+    /** local flag for first gradient parent assignment @type {boolean} */
     #_firstParentAssigned = false;
 
     /**
@@ -585,7 +586,7 @@ export class svgGradient extends svg.element {
 
     /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {[]} source array object @param {any} returnValue returned value from method */
     #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('gradient')) { source['gradient'].#changed(`${source.name}#${type}`, source, returnValue); } };
-    /** Local changed callback that calls {@link onChange} on both this element and its {@link svgGradient.parent parent}. @type {svg.onChange} */
+    /** Local changed callback that calls {@link onChange} on this element and (if {@linkcode bubbleOnChange} is `true`) its  {@link svgGradient.parent parent}. @type {svg.onChange} */
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 }
 
@@ -619,6 +620,7 @@ class svgGradientStop extends svg.element {
     }
     /** @type {svg.gradient} */
     #_parent = null;
+    /** local flag for first gradient stop parent assignment @type {boolean} */
     #_firstParentAssigned = false;
 
     constructor(color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) {

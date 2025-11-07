@@ -42,6 +42,7 @@ export class svgShape extends svg.element {
     }
     /** @type {svg.asset} */
     #_parent = null;
+    /** local flag for first shapes parent assignment @type {boolean} */
     #_firstParentAssigned = false;
     /** Should changes to this asset bubble up to its {@link parent} asset? @type {boolean} */
     get bubbleOnChange() { return this.#_bubbleOnChange; }

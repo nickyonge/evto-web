@@ -573,6 +573,7 @@ export class svgViewBox extends svg.element {
     }
     /** @type {svg.asset} */
     #_parent = null;
+    /** local flag for first viewbox parent assignment @type {boolean} */
     #_firstParentAssigned = false;
     /** Should changes to this asset bubble up to its {@link svgViewBox.parent parent} asset? @type {boolean} */
     get bubbleOnChange() { return this.#_bubbleOnChange; }

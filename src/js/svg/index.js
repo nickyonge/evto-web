@@ -10,6 +10,10 @@ export {
 } from './svgHTMLAsset';
 
 export {
+    svgDefinition as definition,
+} from './svgDefinition';
+
+export {
     svgShape as shape,
     svgRect as rect,
     svgCircle as circle,
