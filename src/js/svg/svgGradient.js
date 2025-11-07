@@ -134,8 +134,9 @@ export class svgGradient extends svg.definition {
         let prev = this.#_parent;
         this.#_parent = v;
         if (!this.#_firstParentAssigned) {
-            this.#changed('parent', v, prev);
             this.#_firstParentAssigned = true;
+        } else {
+            this.#changed('parent', v, prev);
         }
     }
     /** @type {svg.asset} */
@@ -614,8 +615,9 @@ class svgGradientStop extends svg.element {
         let prev = this.#_parent;
         this.#_parent = v;
         if (!this.#_firstParentAssigned) {
-            this.#changed('parent', v, prev);
             this.#_firstParentAssigned = true;
+        } else {
+            this.#changed('parent', v, prev);
         }
     }
     /** @type {svg.gradient} */

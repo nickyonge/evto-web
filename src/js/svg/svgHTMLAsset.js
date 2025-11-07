@@ -41,8 +41,9 @@ export class svgHTMLAsset extends svg.element {
         let prev = this.#_viewBox;
         this.#_viewBox = v; if (v != null) { v.parent = this; }
         if (!this.#_firstViewboxAssigned) {
-            this.#changed('viewbox', v, prev);
             this.#_firstViewboxAssigned = true;
+        } else {
+            this.#changed('viewbox', v, prev);
         }
     }
     /** @type {svgViewBox} */
@@ -567,8 +568,9 @@ export class svgViewBox extends svg.element {
         let prev = this.#_parent;
         this.#_parent = v;
         if (!this.#_firstParentAssigned) {
-            this.#changed('parent', v, prev);
             this.#_firstParentAssigned = true;
+        } else {
+            this.#changed('parent', v, prev);
         }
     }
     /** @type {svg.asset} */

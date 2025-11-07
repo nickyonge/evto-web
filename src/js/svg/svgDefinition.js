@@ -15,8 +15,9 @@ export class svgDefinition extends svg.element {
         let prev = this.#_type;
         this.#_type = v;
         if (!this.#_firstTypeAssigned) {
-            this.#changed('type', v, prev);
             this.#_firstTypeAssigned = true;
+        } else {
+            this.#changed('type', v, prev);
         }
         // let prev = this.#_type; this.#_type = v; this.#changed('type', v, prev);
     }
@@ -34,8 +35,9 @@ export class svgDefinition extends svg.element {
         let prev = this.#_parent;
         this.#_parent = v;
         if (!this.#_firstParentAssigned) {
-            this.#changed('parent', v, prev);
             this.#_firstParentAssigned = true;
+        } else {
+            this.#changed('parent', v, prev);
         }
     }
     /** @type {svg.asset} */
