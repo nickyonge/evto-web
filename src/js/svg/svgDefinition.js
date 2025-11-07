@@ -27,10 +27,21 @@ export class svgDefinition extends svg.element {
     #_firstTypeAssigned = false;// use these local flags cuz `null` COULD be a valid assignment
 
     /** Array of elements contained in this SVG's `<defs>` @type {svg.definition[]} */
-    get subDefinitions() { return this.#_subDefinitions; }
+    get subDefinitions() {
+        if (this.#_subDefinitions == null) { this.#_subDefinitions = []; }
+        return this.#_subDefinitions;
+    }
     set subDefinitions(v) {
-        if (v == null) { return; }
         let prev = this.#_subDefinitions;
+        if (v == null) {
+            if (svg.config.ARRAY_SET_NULL_CREATES_EMPTY_ARRAY) {
+                v = [];
+            } else {
+                this.#_subDefinitions = null;
+                this.#changed('definitions', v, prev);
+                return;
+            }
+        }
         v.forEach(def => {
             def.parent = this;
         });
@@ -41,7 +52,34 @@ export class svgDefinition extends svg.element {
         this.#changed('definitions', v, prev);
     }
     /** @type {svg.definition[]} */
-    #_subDefinitions = [];
+    #_subDefinitions;
+
+    /** Additional attributes to include in the path, 
+     * in a 2D string array `[ [attr, value], ... ]`
+     * @returns {Array<[string, any]>} */
+    get extraAttributes() {
+        if (this.#_extraAttributes == null) { this.#_extraAttributes = []; }
+        return this.#_extraAttributes;
+    }
+    set extraAttributes(v) {
+        let prev = this.#_extraAttributes;
+        if (v == null) {
+            if (svg.config.ARRAY_SET_NULL_CREATES_EMPTY_ARRAY) {
+                v = [];
+            } else {
+                this.#_extraAttributes = null;
+                this.#changed('extraAttributes', v, prev);
+                return;
+            }
+        }
+        this.#_extraAttributes = v;
+        this.#_extraAttributes.name = 'extraAttributes';
+        this.#_extraAttributes['parent'] = this;
+        this.#_extraAttributes.onChange = this.#arrayChanged;
+        this.#changed('extraAttributes', v, prev);
+    }
+    /** @type {Array<[string, any]>} */
+    #_extraAttributes = [];
 
     /** 
      * SVG parent {@link svg.element svgElement}, assigned by the parent 

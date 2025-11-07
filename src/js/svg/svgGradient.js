@@ -112,12 +112,23 @@ export class svgGradient extends svg.definition {
     get #y2Default() { return this.y2 == null ? svg.defaults.GRADIENT_Y2_SCALEDEFAULT : this.y2; }
 
     /** array for gradient stops @type {svgGradientStop[]} */
-    get stops() { return this.#_stops; }
+    get stops() {
+        if (this.#_stops == null) { this.#_stops = []; }
+        return this.#_stops;
+    }
     set stops(v) {
-        if (v == null) { return; }
         let prev = this.#_stops;
+        if (v == null) {
+            if (svg.config.ARRAY_SET_NULL_CREATES_EMPTY_ARRAY) {
+                v = [];
+            } else {
+                this.#_stops = null;
+                this.#changed('stops', v, prev);
+                return;
+            }
+        }
         this.#_stops = v;
-        this.#_stops.name = 'definitions';
+        this.#_stops.name = 'stops';
         this.#_stops['parent'] = this;
         this.#_stops.onChange = this.#arrayChanged;
         v.forEach(stop => { stop.parent = this; });
@@ -344,7 +355,7 @@ export class svgGradient extends svg.definition {
                     // non-sharp gradient
                     let autoOffset = false;
                     if (typeof this.stops[i].offset == 'string') {
-                         let offset = /** @type {string} */ (this.stops[i].offset);
+                        let offset = /** @type {string} */ (this.stops[i].offset);
                         autoOffset = offset.toLowerCase().trim() == 'auto';
                     }
                     if (autoOffset) {

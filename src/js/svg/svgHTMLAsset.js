@@ -54,10 +54,21 @@ export class svgHTMLAsset extends svg.element {
      * Array of {@link svg.shape shapes} contained in this SVG 
      * (excluding any in {@link definitions `<defs>`}) 
      * @returns {svg.shape[]} */
-    get shapes() { return this.#_shapes; }
+    get shapes() {
+        if (this.#_shapes == null) { this.#_shapes = []; }
+        return this.#_shapes;
+    }
     set shapes(v) {
-        if (v == null) { return; }
         let prev = this.#_shapes;
+        if (v == null) {
+            if (svg.config.ARRAY_SET_NULL_CREATES_EMPTY_ARRAY) {
+                v = [];
+            } else {
+                this.#_shapes = null;
+                this.#changed('shapes', v, prev);
+                return;
+            }
+        }
         v.forEach(shape => { shape.parent = this; });
         this.#_shapes = v;
         this.#_shapes.name = 'shapes';
@@ -66,12 +77,23 @@ export class svgHTMLAsset extends svg.element {
         this.#changed('shapes', v, prev);
     }
     /** @type {svg.shape[]} */
-    #_shapes = [];
+    #_shapes; // don't assign default value to svg element arrays 
     /** Array of elements contained in this SVG's `<defs>` @type {svg.definition[]} */
-    get definitions() { return this.#_definitions; }
+    get definitions() {
+        if (this.#_definitions == null) { this.#_definitions = []; }
+        return this.#_definitions;
+    }
     set definitions(v) {
-        if (v == null) { return; }
         let prev = this.#_definitions;
+        if (v == null) {
+            if (svg.config.ARRAY_SET_NULL_CREATES_EMPTY_ARRAY) {
+                v = [];
+            } else {
+                this.#_definitions = null;
+                this.#changed('definitions', v, prev);
+                return;
+            }
+        }
         v.forEach(def => {
             def.parent = this;
         });
@@ -82,7 +104,8 @@ export class svgHTMLAsset extends svg.element {
         this.#changed('definitions', v, prev);
     }
     /** @type {svg.definition[]} */
-    #_definitions = [];
+    #_definitions; // don't assign default value to svg element arrays 
+
     /** @returns {boolean} */
     get preserveAspectRatio() { return this.#_preserveAspectRatio; }
     set preserveAspectRatio(v) { let prev = this.#_preserveAspectRatio; this.#_preserveAspectRatio = v; this.#changed('preserveAspectRatio', v, prev); }
@@ -474,7 +497,6 @@ export class svgHTMLAsset extends svg.element {
      * @returns {svg.gradient} The newly-created, newly-added gradient
      * */
     NewGradient(id = undefined, isRadial = svg.defaults.GRADIENT_ISRADIAL, ...colors) {
-        if (this.definitions == null) { this.definitions = []; }
         let gradient = new svg.gradient(id, isRadial, ...colors);
         let prev = this.#_definitions;
         this.definitions.push(gradient);
@@ -491,7 +513,6 @@ export class svgHTMLAsset extends svg.element {
      * @returns {svg.gradient} The now-added gradient
      */
     AddGradient(gradient) {
-        if (this.definitions == null) { this.definitions = []; }
         let prev = this.#_definitions;
         this.definitions.push(gradient);
         gradient.parent = this;

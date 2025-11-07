@@ -1,5 +1,6 @@
 import { EnsureGradientDefaultColors } from "./svgDefaults";
-import { svgElement, svgHTMLAsset } from "./svgElement";
+import { svgElement } from "./svgElement";
+import { svgHTMLAsset } from "./svgHTMLAsset";
 import { svgShape } from "./svgShapes";
 
 /**
@@ -9,6 +10,13 @@ import { svgShape } from "./svgShapes";
  * @returns {boolean}
  */
 export const REQUIRE_UNIQUE_SVG_ELEMENT_IDS = true;
+
+/**
+ * Should arrays (such as {@linkcode svgHTMLAsset.shapes} ), when
+ * set to `null`, change the set value to `[]`? If `false`,
+ * sets array to `null` and returns out of the setter.
+ */
+export const ARRAY_SET_NULL_CREATES_EMPTY_ARRAY = true;
 
 /**
  * Should {@link svgElement} HTML code contain 
