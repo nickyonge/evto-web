@@ -67,7 +67,7 @@ export class svgHTMLAsset extends svg.element {
     }
     /** @type {svg.shape[]} */
     #_shapes = [];
-    /** Array of elements contained in this SVG's `<defs>` @type {svg.element[]} */
+    /** Array of elements contained in this SVG's `<defs>` @type {svg.definition[]} */
     get definitions() { return this.#_definitions; }
     set definitions(v) {
         if (v == null) { return; }
@@ -81,7 +81,7 @@ export class svgHTMLAsset extends svg.element {
         this.#_definitions.onChange = this.#arrayChanged;
         this.#changed('definitions', v, prev);
     }
-    /** @type {svg.element[]} */
+    /** @type {svg.definition[]} */
     #_definitions = [];
     /** @returns {boolean} */
     get preserveAspectRatio() { return this.#_preserveAspectRatio; }

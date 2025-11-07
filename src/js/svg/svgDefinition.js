@@ -26,7 +26,7 @@ export class svgDefinition extends svg.element {
     /** local flag for first definition type assignment @type {boolean} */
     #_firstTypeAssigned = false;// use these local flags cuz `null` COULD be a valid assignment
 
-    /** Array of elements contained in this SVG's `<defs>` @type {svg.element[]} */
+    /** Array of elements contained in this SVG's `<defs>` @type {svg.definition[]} */
     get subDefinitions() { return this.#_subDefinitions; }
     set subDefinitions(v) {
         if (v == null) { return; }
@@ -40,12 +40,12 @@ export class svgDefinition extends svg.element {
         this.#_subDefinitions.onChange = this.#arrayChanged;
         this.#changed('definitions', v, prev);
     }
-    /** @type {svg.element[]} */
+    /** @type {svg.definition[]} */
     #_subDefinitions = [];
 
     /** 
-     * SVG parent {@link svg.asset asset}, assigned by the parent 
-     * @returns {svg.asset} */
+     * SVG parent {@link svg.element svgElement}, assigned by the parent 
+     * @returns {svg.element} */
     get parent() { return this.#_parent; }
     set parent(v) {
         if (this.parent == v) { return; }
@@ -57,7 +57,7 @@ export class svgDefinition extends svg.element {
             this.#changed('parent', v, prev);
         }
     }
-    /** @type {svg.asset} */
+    /** @type {svg.element} */
     #_parent = null;
     /** local flag for first definition parent assignment @type {boolean} */
     #_firstParentAssigned = false;

@@ -59,9 +59,10 @@ export class svgShape extends svg.definition {
     #_stroke = svg.defaults.STROKE;
     /** Additional attributes to include in the path, 
      * in a 2D string array `[ [attr, value], ... ]`
-     * @type {Array<[string, any]>} */
+     * @returns {Array<[string, any]>} */
     get extraAttributes() { return this.#_extraAttributes; }
     set extraAttributes(v) { let prev = this.#_extraAttributes; this.#_extraAttributes = v; this.#changed('extraAttributes', v, prev); }
+    /** @type {Array<[string, any]>} */
     #_extraAttributes = [];
     // TODO: svg shapes onChange callback for if extraAttributes array is modified, not just directly set
     // Issue URL: https://github.com/nickyonge/evto-web/issues/54
