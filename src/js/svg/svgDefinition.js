@@ -74,5 +74,6 @@ export class svgDefinition extends svg.element {
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 
     // TODO: svg #changed method, and .parent and .bubbleOnChange properties should prolly be part of svgElement 
+    // Issue URL: https://github.com/nickyonge/evto-web/issues/63
 
 }
