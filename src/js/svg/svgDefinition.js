@@ -9,20 +9,20 @@ export class svgDefinition extends svg.element {
      * @see https://www.w3.org/TR/SVG2/struct.html#DefsElement — all SVG definition types 
      * @returns {string}
     */
-    get type() { return this.#_type; }
-    set type(v) {
-        if (this.type == v) { return; }
-        let prev = this.#_type;
-        this.#_type = v;
+    get defType() { return this.#_defType; }
+    set defType(v) {
+        if (this.defType == v) { return; }
+        let prev = this.#_defType;
+        this.#_defType = v;
         if (!this.#_firstTypeAssigned) {
             this.#_firstTypeAssigned = true;
         } else {
-            this.#changed('type', v, prev);
+            this.#changed('defType', v, prev);
         }
         // let prev = this.#_type; this.#_type = v; this.#changed('type', v, prev);
     }
     /** @type {string} */
-    #_type;
+    #_defType;
     /** local flag for first definition type assignment @type {boolean} */
     #_firstTypeAssigned = false;// use these local flags cuz `null` COULD be a valid assignment 
 
@@ -48,18 +48,11 @@ export class svgDefinition extends svg.element {
     /**
      * 
      * @param {string} [id] unique identifier for this element  
-     * @param {string} [type] definition type. If unassigned, and can't auto-detect, won't be generated in `html`
+     * @param {string} [defType] definition type. If unassigned, and can't auto-detect, won't be generated in `html`
      */
-    constructor(id, type) {
+    constructor(id, defType) {
         super(id);
-        if (this instanceof svg.gradient) {
-            // note: altho type is set here, data/html generation will be handled by svgGradient 
-            this.#_type = this.isRadial ? 'radialGradient' : 'linearGradient';
-            if (type != null && type != 'gradient') {
-                console.warn(`WARNING: conflicting svg def type ${type} found on svg element instanceof svgGradient. Can't be a gradient AND another type`, this);
-                return;
-            }
-        }
+        this.defType = defType;
     }
 
 
