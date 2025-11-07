@@ -55,7 +55,7 @@ export class svgDefinition extends svg.element {
         this.defType = defType;
     }
 
-
+    // TODO: fill out data/html returns for svgDefinition
     get data() { return ''; }
     get html() { return ''; }
 
