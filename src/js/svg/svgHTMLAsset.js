@@ -29,12 +29,12 @@ export class svgHTMLAsset extends svg.element {
     /** @type {number} */
     #_opacity = svg.defaults.OPACITY;
 
-    /** @returns {string} */
+    /** CSS class to apply to this SVG asset @returns {string} */
     get class() { return this.#_class; }
     set class(v) { let prev = this.#_class; this.#_class = v; this.#changed('class', v, prev); }
     /** @type {string} */
     #_class;
-    /** @returns {svgViewBox} */
+    /** Used to define viewbox properties in the SVG HTML element @returns {svgViewBox} */
     get viewBox() { return this.#_viewBox; }
     set viewBox(v) {
         if (this.viewBox == v) { return; }
@@ -129,7 +129,6 @@ export class svgHTMLAsset extends svg.element {
         this.shapes = shapes;
         this.definitions = definitions;
         this.viewBox = viewBox;
-        this.metadata = svg.defaults.METADATA;
         svgHTMLAsset.#__filterAssetsArray();
         svgHTMLAsset.allSVGHTMLAssets.push(this);
     }
