@@ -37,13 +37,14 @@ export class svgElement {
         let prev = this.#_id;
         this.#_id = v;
         if (!this.#_firstIDAssigned) {
+            this.#_firstIDAssigned = true;
+        } else {
             if (!this.__suppressOnChange) {
                 this.__invokeChange('id', v, prev, this);
                 if (this.hasOwnProperty('parent')) {
                     this.parent?.__invokeChange('id', v, prev, this);
                 }
             }
-            this.#_firstIDAssigned = true;
         }
         if (this.__SKIP_ID_UPDATE == true) {
             // do NOT perform ID update 
