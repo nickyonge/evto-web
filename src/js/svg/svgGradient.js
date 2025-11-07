@@ -83,7 +83,7 @@ export class svgGradient extends svg.definition {
         let prev = this.#_stops;
         this.#_stops = v;
         this.#_stops.name = 'definitions';
-        this.#_stops.gradient = this;
+        this.#_stops['parent'] = this;
         this.#_stops.onChange = this.#arrayChanged;
         v.forEach(stop => { stop.parent = this; });
         this.#changed('stops', v, prev);
@@ -600,7 +600,7 @@ export class svgGradient extends svg.definition {
     #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
 
     /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {[]} source array object @param {any} returnValue returned value from method */
-    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('gradient')) { source['gradient'].#changed(`${source.name}#${type}`, source, returnValue); } };
+    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('parent')) { source['parent'].#changed?.(`${source.name}#${type}`, source, returnValue); } };
     /** Local changed callback that calls {@link onChange} on this element and (if {@linkcode bubbleOnChange} is `true`) its  {@link svgGradient.parent parent}. @type {svg.onChange} */
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 }

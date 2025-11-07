@@ -24,7 +24,24 @@ export class svgDefinition extends svg.element {
     /** @type {string} */
     #_defType;
     /** local flag for first definition type assignment @type {boolean} */
-    #_firstTypeAssigned = false;// use these local flags cuz `null` COULD be a valid assignment 
+    #_firstTypeAssigned = false;// use these local flags cuz `null` COULD be a valid assignment
+
+    /** Array of elements contained in this SVG's `<defs>` @type {svg.element[]} */
+    get subDefinitions() { return this.#_subDefinitions; }
+    set subDefinitions(v) {
+        if (v == null) { return; }
+        let prev = this.#_subDefinitions;
+        v.forEach(def => {
+            def.parent = this;
+        });
+        this.#_subDefinitions = v;
+        this.#_subDefinitions.name = 'definitions';
+        this.#_subDefinitions['parent'] = this;
+        this.#_subDefinitions.onChange = this.#arrayChanged;
+        this.#changed('definitions', v, prev);
+    }
+    /** @type {svg.element[]} */
+    #_subDefinitions = [];
 
     /** 
      * SVG parent {@link svg.asset asset}, assigned by the parent 
@@ -66,6 +83,8 @@ export class svgDefinition extends svg.element {
     set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
     #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
 
+    /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {[]} source array object @param {any} returnValue returned value from method */
+    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('parent')) { source['parent'].#changed?.(`${source.name}#${type}`, source, returnValue); } };
     /** Local changed callback that calls {@link onChange} on this element and (if {@linkcode bubbleOnChange} is `true`) its {@link svgDefinition.parent parent}. @type {svg.onChange} */
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 

@@ -61,7 +61,7 @@ export class svgHTMLAsset extends svg.element {
         v.forEach(shape => { shape.parent = this; });
         this.#_shapes = v;
         this.#_shapes.name = 'shapes';
-        this.#_shapes['htmlAsset'] = this;
+        this.#_shapes['parent'] = this;
         this.#_shapes.onChange = this.#arrayChanged;
         this.#changed('shapes', v, prev);
     }
@@ -77,7 +77,7 @@ export class svgHTMLAsset extends svg.element {
         });
         this.#_definitions = v;
         this.#_definitions.name = 'definitions';
-        this.#_definitions['htmlAsset'] = this;
+        this.#_definitions['parent'] = this;
         this.#_definitions.onChange = this.#arrayChanged;
         this.#changed('definitions', v, prev);
     }
@@ -535,7 +535,7 @@ export class svgHTMLAsset extends svg.element {
     }
 
     /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {[]} source array object @param {any} returnValue returned value from method */
-    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('htmlAsset')) { source['htmlAsset'].#changed(`${source.name}#${type}`, source, returnValue); } };
+    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('parent')) { source['parent'].#changed(`${source.name}#${type}`, source, returnValue); } };
     /** Local changed callback that calls {@link onChange} on this element (separated for easy modification) @type {svg.onChange} */
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); };
 }
