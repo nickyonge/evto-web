@@ -57,15 +57,6 @@ export class svgShape extends svg.definition {
     get stroke() { return this.#_stroke; }
     set stroke(v) { let prev = this.#_stroke; this.#_stroke = v; this.#changed('stroke', v, prev); }
     #_stroke = svg.defaults.STROKE;
-    /** Additional attributes to include in the path, 
-     * in a 2D string array `[ [attr, value], ... ]`
-     * @returns {Array<[string, any]>} */
-    get extraAttributes() { return this.#_extraAttributes; }
-    set extraAttributes(v) { let prev = this.#_extraAttributes; this.#_extraAttributes = v; this.#changed('extraAttributes', v, prev); }
-    /** @type {Array<[string, any]>} */
-    #_extraAttributes = [];
-    // TODO: svg shapes onChange callback for if extraAttributes array is modified, not just directly set
-    // Issue URL: https://github.com/nickyonge/evto-web/issues/54
     /**
      * base class for all SVG Shapes 
      * @param {string|svg.gradient} [fill] Fill colour (default {@linkcode svg.defaults.FILL svgDefaults.FILL})
