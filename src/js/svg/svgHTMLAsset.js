@@ -78,7 +78,11 @@ export class svgHTMLAsset extends svg.element {
     }
     /** @type {svg.shape[]} */
     #_shapes; // don't assign default value to svg element arrays 
-    /** Array of elements contained in this SVG's `<defs>` @type {svg.definition[]} */
+    /** 
+     * Array of elements contained in this SVG's `<defs>` 
+     * @returns {svg.definition[]} 
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/defs
+     * */
     get definitions() {
         if (this.#_definitions == null) { this.#_definitions = []; }
         return this.#_definitions;

@@ -1,7 +1,10 @@
 import { isBlank } from '../lilutils';
 import * as svg from './index';
 
-/** Class representing an SVG defined linear or radial gradient */
+/** 
+ * Class representing an SVG definition, typically found in an SVG's `<defs>`
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/defs
+ */
 export class svgDefinition extends svg.element {
 
     /** 
@@ -100,10 +103,13 @@ export class svgDefinition extends svg.element {
     /** local flag for first definition parent assignment @type {boolean} */
     #_firstParentAssigned = false;
 
-    /**
-     * 
+    /** 
+     * Class representing an SVG definition, typically found in an SVG's `<defs>`
      * @param {string} [id] unique identifier for this element  
-     * @param {string} [defType] definition type. If unassigned, and can't auto-detect, won't be generated in `html`
+     * @param {string?} [defType] Definition type. Must be set, but can be set at any time. 
+     * Usually set by the constructor of a subclass inheriting from {@link svgDefinition}.
+     * If unassigned, and can't auto-detect, won't be generated in {@linkcode html}
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/defs
      */
     constructor(id, defType) {
         super(id);
@@ -147,22 +153,63 @@ export class svgDefinition extends svg.element {
         this.extraAttributes.push(attribute);
     }
     /**
+     * Removes the given attribute from this def's {@linkcode extraAttributes}.
      * 
-     * @param {string|[string,any]} attribute 
+     * If the function fails (eg attribute param is `null`), returns `false`.
+     * If the attribute isn't found, returns the value of `returnIfNotFound` (default `true`).
+     * @param {string|[string,any?]} attribute Attribute to remove, either by name or by `[name:string,value:any?]` array
+     * @param {boolean|null|'error'} [returnIfNotFound=true] 
+     * Value to return if attribute isn't found. Used for 
+     * additional disambiguation between "function has failed" and 
+     * "attribute wasn't found" (which typically should still return
+     * `true`, as the attribute isn't there all the same.)
+     * Setting to the string `"error"` will throw an error. Default `true` 
+     * @returns {boolean|null} **Note:** If `returnIfNotFound` is `error`, an Error gets thrown. 
+     * This function can only return `true`, `false`, or `null`.
      */
-    RemoveAttribute(attribute) {
-
+    RemoveAttribute(attribute, returnIfNotFound = true) {
+        if (attribute == null) { return false; }
+        let index = this.#attributeIndex(attribute);
+        if (index == -1) {
+            if (returnIfNotFound === 'error') {
+                throw new Error(`ERROR: attribute ${attribute} not found on svgDefinition ${this}, can't remove`);
+            }
+            return returnIfNotFound;
+        }
+        return this.extraAttributes[index][1];
     }
     /**
+     * Gets the value of the given attribute, if it's in {@linkcode extraAttributes}.
      * 
-     * @param {string|[string,any]} attribute 
+     * If check fails (eg attribute param is `null`), returns `false`.
+     * If the attribute isn't found, returns the value of `returnIfNotFound` (default `null`).
+     * 
+     * **Note:** Even if `attribute` is a `[string,any]` array with a valid value,
+     * if it's not found in {@linkcode extraAttributes}, will still return `returnIfNotFound`. 
+     * in {@linkcode extraAttributes}
+     * @param {string|[string,any?]} attribute Attribute to check, either by name or by `[name:string,value:any?]` array
+     * @param {boolean|null|'error'} [returnIfNotFound=null] 
+     * Value to return if attribute isn't found. Used for 
+     * additional disambiguation between "attribute isn't found" and 
+     * "attribute WAS found and it's value was `false`/`null`". 
+     * Setting to the string `"error"` will throw an error. Default `null` 
+     * @returns {boolean|null} **Note:** If `returnIfNotFound` is `error`, an Error gets thrown. 
+     * This function can only return `true`, `false`, or `null`.
      */
-    GetAttributeValue(attribute) {
-
+    GetAttributeValue(attribute, returnIfNotFound = null) {
+        if (attribute == null) { return false; }
+        let index = this.#attributeIndex(attribute);
+        if (index == -1) {
+            if (returnIfNotFound === 'error') {
+                throw new Error(`ERROR: attribute ${attribute} not found on svgDefinition ${this}, can't get value`);
+            }
+            return returnIfNotFound;
+        }
+        return this.extraAttributes[index][1];
     }
     /**
-     * 
-     * @param {string|[string,any]} attribute 
+     * Quick check if the given attribute has been added to this def's {@linkcode extraAttributes}.
+     * @param {string|[string,any?]} attribute Attribute to check for, either by name or by `[name:string,value:any?]` array
      * @returns {boolean}
      */
     HasAttribute(attribute) {
@@ -173,24 +220,53 @@ export class svgDefinition extends svg.element {
      * in this definition's {@linkcode extraAttributes} array.
      * 
      * If not, or if `attribute` is null, returns `-1`
-     * @param {string|[string,any]} attribute 
+     * @param {string|[string,any?]} attribute Attribute to search, either by name or by `[name:string,value:any?]` array
      * @returns {number}
      */
     #attributeIndex(attribute) {
+        attribute = this.#attributeName(attribute);
         if (attribute == null) { return -1; }
-        let a;
-        if (Array.isArray(attribute)) {
-            if (attribute[0] == null) { return -1; }
-            a = attribute[0];
-        } else { a = attribute; }
-        a = typeof attribute === 'string' ? attribute : attribute[0];
         let e = this.extraAttributes;
         for (let i = 0; i < e.length; i++) {
-            if (e[i][0] == a) {
+            if (e[i][0] == attribute) {
                 return i;
             }
         }
         return -1;
+    }
+
+    /**
+     * Gets the name property of a given attribute. Conveniently handles 
+     * ambiguity between `string` names and `[string,any?]` attributes. 
+     * If name can't be found, returns `null`
+     * @param {string|[string,any?]} attribute Either `string` name of the attribute, or `[string, any]` array where `any` is the (optional) value.
+     * @returns {string}
+     */
+    #attributeName(attribute) {
+        if (attribute = null) { return null; }
+        if (Array.isArray(attribute)) {
+            if (attribute[0] == null) { return null; }
+            return attribute[0];
+        }
+        return attribute;
+    }
+    /**
+     * Gets the value property of a given attribute. Typically you'd just reference it by name, 
+     * but you can pass the same params as you would to {@linkcode AddAttribute}.
+     * 
+     * **Note:** Does not check existing {@linkcode extraAttributes}. For that, use {@linkcode GetAttributeValue}.
+     * @param {string|[string,any?]} attribute Either `string` name of the attribute, or `[string, any]` array where `any` is the (optional) value.
+     * @param {any?} [value] Optional value of the attribute. If non-null, will always return this
+     * @returns {any}
+     */
+    #attributeValue(attribute, value) {
+        if (value != null) { return value; }
+        if (attribute == null) { return null; }
+        if (Array.isArray(attribute)) {
+            if (attribute.length == 1) { return null; }
+            return attribute[1];
+        }
+        return null;
     }
 
     // TODO: fill out data/html returns for svgDefinition
