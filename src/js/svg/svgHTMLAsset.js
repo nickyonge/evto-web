@@ -2,7 +2,30 @@ import * as svg from './index';
 import { shape, rect, circle, ellipse, line, polyline, polygon, path, gradient } from "./index";
 import { isBlank } from "../lilutils";
 
-/** Used to create an SVG element ready to add to the HTML document */
+/** 
+ * Used to create an SVG element ready to add to the HTML document 
+ * @example
+    // import the relevant classes from their scripts
+    // (or, use "import * as svg from './index';" and "svg.htmlAsset" / "svg.gradient") 
+    import { svgHTMLAsset } from "./svg/svgHTMLAsset";
+    import { svgGradient } from "./svg/svgGradient";
+
+    // create the div to hold the SVG's HTML
+    const myDiv = document.createElement("div");
+
+    // create a new SVG asset, or use something like BasicGradientRect for a template 
+    const mySVG = svgHTMLAsset.BasicGradientRect(svgGradient.templates.softrainbow);
+
+    // customize the appearance of the gradient 
+    mySVG.gradient.sharpness = 0.69;
+    mySVG.gradient.angle = 15;
+
+    // assign the HTML to the div. Use mySVG.onChange to auto-update any changes!
+    myDiv.innerHTML = mySVG.html;
+
+    // done! add the div to the page body, and behold a beautiful rainbow
+    document.body.appendChild(myDiv);
+ */
 export class svgHTMLAsset extends svg.element {
 
     /** Array containing all {@linkcode svgHTMLAsset svgHTMLAsset} instances @type {svgHTMLAsset[]} */
@@ -137,9 +160,31 @@ export class svgHTMLAsset extends svg.element {
         svgHTMLAsset.allSVGHTMLAssets.push(this);
     }
     /**
-     * 
-     * @returns {string}
-     */
+     * Creates and outputs the final HTML string that can be
+     * added directly as the `innerHTML` of an `HTMLElement`.
+     * @returns {string} HTML output string, including {@linkcode data}
+     * @example
+    // import the relevant classes from their scripts
+    // (or, use "import * as svg from './index';" and "svg.htmlAsset" / "svg.gradient") 
+    import { svgHTMLAsset } from "./svg/svgHTMLAsset";
+    import { svgGradient } from "./svg/svgGradient";
+
+    // create the div to hold the SVG's HTML
+    const myDiv = document.createElement("div");
+
+    // create a new SVG asset, or use something like BasicGradientRect for a template 
+    const mySVG = svgHTMLAsset.BasicGradientRect(svgGradient.templates.softrainbow);
+
+    // customize the appearance of the gradient 
+    mySVG.gradient.sharpness = 0.69;
+    mySVG.gradient.angle = 15;
+
+    // assign the HTML to the div. Use mySVG.onChange to auto-update any changes!
+    myDiv.innerHTML = mySVG.html;
+
+    // done! add the div to the page body, and behold a beautiful rainbow
+    document.body.appendChild(myDiv);
+ */
     get html() {
         let d = this.data;
         let newSVG = isBlank(d) ? '<svg' : `<svg ${d}`;
@@ -183,6 +228,10 @@ export class svgHTMLAsset extends svg.element {
         }
         return `${newSVG}</svg>`;
     }
+    /**
+     * Collects and returns all the data relevant to this asset, 
+     * generally to be used in {@linkcode html} to for the final output.
+     */
     get data() {
         if (this.viewBox == null) { this.viewBox = new svgViewBox(); }
         if (this.metadata == null) { this.metadata = svg.defaults.METADATA; }
@@ -551,7 +600,7 @@ export class svgHTMLAsset extends svg.element {
     }
 
     /** Generate a basic rectangle with a gradient of the given colors, with all default values.
-     * @param  {...any} colors Array of colors to generate the gradient with
+     * @param  {spreadString} [colors] Optional array of colors to generate the gradient with
      * @returns {svg.asset} new instance of {@linkcode svg.asset svgHTMLAsset}
      * @see {@linkcode svg.generator.BasicGradientRect svgGenerator.BasicGradientRect}, which this static method calls */
     static BasicGradientRect(...colors) {

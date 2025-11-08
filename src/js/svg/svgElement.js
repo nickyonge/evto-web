@@ -1,7 +1,11 @@
 import * as svg from './index';
 import { isBlank, isStringNotBlank, StringContainsNumeric, StringNumericDivider, StringNumericOnly, StringOnlyNumeric, StringToNumber } from "../lilutils";
 
-/** Basic element used to create all assets in this lil SVG system which prolly needs a name */
+/** 
+ * Basic element used to create all assets in this lil SVG system (which prolly needs a name)
+ * 
+ * For the class that you can actually add to your document, see {@linkcode svg.asset svgHTMLAsset}.
+ */
 export class svgElement {
     /** Array containing all {@linkcode svgElement} instances @type {svgElement[]} */
     static allSVGElements = [];
