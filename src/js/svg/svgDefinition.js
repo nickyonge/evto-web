@@ -22,7 +22,6 @@ export class svgDefinition extends svg.element {
         } else {
             this.#changed('defType', v, prev);
         }
-        // let prev = this.#_type; this.#_type = v; this.#changed('type', v, prev);
     }
     /** @type {string} */
     #_defType;
@@ -126,7 +125,6 @@ export class svgDefinition extends svg.element {
     AddAttribute(attribute, value = null, returnIfAlreadyAdded = true) {
         if (attribute == null) { return false; }
         // pass array to string/any attribute/value
-        // defer to array 
         if (!Array.isArray(attribute)) {
             attribute = [attribute, value];
         } else {
@@ -137,14 +135,6 @@ export class svgDefinition extends svg.element {
                 attribute[1] = value;// non-null value overrides
             }
         }
-        // defer to string/value
-        // if (Array.isArray(attribute)) {
-        //     if (attribute[0] == null) { return; }
-        //     if (value == null && attribute.length >= 2) {
-        //         value = attribute[1];
-        //     }
-        //     attribute = attribute[0];
-        // }
         let index = this.#attributeIndex(attribute[0]);
         if (index >= 0) {
             this.extraAttributes[index][1] = attribute[1];
