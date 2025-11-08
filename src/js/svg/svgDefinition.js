@@ -111,12 +111,40 @@ export class svgDefinition extends svg.element {
     }
 
     /**
-     * 
-     * @param {string|[string,any]} attribute 
-     * @param {any} [value] Value to assign  
+     * Add an attribute to this def's {@linkcode extraAttributes}, or if the attribute already exists, updates its value
+     * @param {string|[string,any?]} attribute Either `string` name of the attribute, or `[string, any]` array where `any` is the (optional) value.
+     * @param {any?} [value] Optional value of the attribute. Will override a value set in `attribute` if `value` is non-null and `attribute` is a `[string, any?]` array.
+     * @param {boolean?} [returnIfAlreadyAdded=true] Value to return if the attribute has already been added to this def. Default `true` 
+     * @returns {boolean} `true` if attribute was successfully added, `false` if failed to add, `returnIfAlreadyAdded` if attribute already exists
      */
-    AddAttribute(attribute, value) {
-
+    AddAttribute(attribute, value = null, returnIfAlreadyAdded = true) {
+        if (attribute == null) { return false; }
+        // pass array to string/any attribute/value
+        // defer to array 
+        if (!Array.isArray(attribute)) {
+            attribute = [attribute, value];
+        } else {
+            if (attribute[0] == null) { return false; }
+            if (attribute.length == 1) {
+                attribute.push(value);// null/undefined is okay
+            } else if (value != null) {
+                attribute[1] = value;// non-null value overrides
+            }
+        }
+        // defer to string/value
+        // if (Array.isArray(attribute)) {
+        //     if (attribute[0] == null) { return; }
+        //     if (value == null && attribute.length >= 2) {
+        //         value = attribute[1];
+        //     }
+        //     attribute = attribute[0];
+        // }
+        let index = this.#attributeIndex(attribute[0]);
+        if (index >= 0) {
+            this.extraAttributes[index][1] = attribute[1];
+            return returnIfAlreadyAdded;
+        }
+        this.extraAttributes.push(attribute);
     }
     /**
      * 
@@ -135,7 +163,7 @@ export class svgDefinition extends svg.element {
     /**
      * 
      * @param {string|[string,any]} attribute 
-     * @returns 
+     * @returns {boolean}
      */
     HasAttribute(attribute) {
         return this.#attributeIndex(attribute) >= 0;
