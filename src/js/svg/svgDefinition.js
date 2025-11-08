@@ -110,6 +110,61 @@ export class svgDefinition extends svg.element {
         this.defType = defType;
     }
 
+    /**
+     * 
+     * @param {string|[string,any]} attribute 
+     * @param {any} [value] Value to assign  
+     */
+    AddAttribute(attribute, value) {
+
+    }
+    /**
+     * 
+     * @param {string|[string,any]} attribute 
+     */
+    RemoveAttribute(attribute) {
+
+    }
+    /**
+     * 
+     * @param {string|[string,any]} attribute 
+     */
+    GetAttributeValue(attribute) {
+
+    }
+    /**
+     * 
+     * @param {string|[string,any]} attribute 
+     * @returns 
+     */
+    HasAttribute(attribute) {
+        return this.#attributeIndex(attribute) >= 0;
+    }
+    /**
+     * Get the index for the given attribute, if it's found
+     * in this definition's {@linkcode extraAttributes} array.
+     * 
+     * If not, or if `attribute` is null, returns `-1`
+     * @param {string|[string,any]} attribute 
+     * @returns {number}
+     */
+    #attributeIndex(attribute) {
+        if (attribute == null) { return -1; }
+        let a;
+        if (Array.isArray(attribute)) {
+            if (attribute[0] == null) { return -1; }
+            a = attribute[0];
+        } else { a = attribute; }
+        a = typeof attribute === 'string' ? attribute : attribute[0];
+        let e = this.extraAttributes;
+        for (let i = 0; i < e.length; i++) {
+            if (e[i][0] == a) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     // TODO: fill out data/html returns for svgDefinition
     // Issue URL: https://github.com/nickyonge/evto-web/issues/64
     get data() { return ''; }
