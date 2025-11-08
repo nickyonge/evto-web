@@ -28,7 +28,20 @@ export class svgGradient extends svg.definition {
 
     /** 
      * How sharp is the gradient? If 0, fully smooth. If 1, completely sharp. 
-     * Clamped between 0 and 1. @returns {number} */
+     * 
+     * Clamped between `0` and `1`*.
+     * 
+     * **\*:** If 
+     * {@linkcode svg.config.GRADIENT_SHARPNESS_CAPPED svgConfig.GRADIENT_SHARPNESS_CAPPED} 
+     * is `true`, max cap of value is `0.992`, not `1`.
+     * 
+     * **Note:** If you wan't a visually sharp gradient, but are using a 
+     * non-zero {@linkcode angle}, a sharpness of `1` will produce 
+     * {@link https://en.wikipedia.org/wiki/Jaggies jaggies}. In almost all
+     * cases, it's preferable to use a max sharpness of `0.992`. This is done 
+     * automatically by enabling the {@linkcode svg.config svgConfig} flag 
+     * {@linkcode svg.config.GRADIENT_SHARPNESS_CAPPED GRADIENT_SHARPNESS_CAPPED}.
+     * @returns {number} */
     get sharpness() { return this.#_sharpness; }
     set sharpness(v) { let prev = this.#_sharpness; this.#_sharpness = v; this.#changed('sharpness', v, prev); }
     /** @type {number} */
@@ -320,7 +333,7 @@ export class svgGradient extends svg.definition {
             // apply mirroring, reverse stops array 
             if (this.mirror) { this.stops = this.stops.reverse(); }
             // apply iterated stops 
-            let sharpness = EnsureToNumber(this.sharpness).clamp(0, 1);
+            let sharpness = EnsureToNumber(this.sharpness).clamp(0, svg.config.GRADIENT_SHARPNESS_CAPPED ? 0.992 : 1);
             for (let i = 0; i < this.stops.length; i++) {
                 if (this.stops[i] == null) { continue; }
                 // check for auto offset calculation, changing 'auto' to a linearly-assigned % based on array size 

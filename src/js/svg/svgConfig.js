@@ -2,12 +2,13 @@ import { EnsureGradientDefaultColors } from "./svgDefaults";
 import { svgElement } from "./svgElement";
 import { svgHTMLAsset } from "./svgHTMLAsset";
 import { svgShape } from "./svgShapes";
+import { svgGradient } from "./svgGradient";
 
 /**
  * Are unique IDs on {@link svgElement svgElements} REQUIRED? 
  * If `true`, already-used IDs will not be permitted. If `false`,
  * they will still produce a warning. IDs that are `null` are ignored.
- * @returns {boolean}
+ * @type {boolean}
  */
 export const REQUIRE_UNIQUE_SVG_ELEMENT_IDS = true;
 
@@ -21,22 +22,36 @@ export const ARRAY_SET_NULL_CREATES_EMPTY_ARRAY = true;
 /**
  * Should {@link svgElement} HTML code contain 
  * `\n` newlines for each element?
- * @returns {boolean} 
+ * @type {boolean} 
  */
 export const HTML_NEWLINE = true;
 /** 
  * Should {@link svgElement} HTML code be `\t` indented? 
  * @see {@linkcode HTML_NEWLINE} must also be `true`.
- * @returns {boolean}
+ * @type {boolean}
  * */
 export const HTML_INDENT = true && HTML_NEWLINE;
 /** 
  * Should {@link svgHTMLAsset} HTML generation warn if it 
  * finds any {@link svgHTMLAsset.definitions definitions}
  * that do not have an {@link svgElement.id ID}?
- * @returns {boolean}
+ * @type {boolean}
  */
 export const HTML_WARN_DEFS_NO_ID = true;
+
+/**
+ * Should {@linkcode svgGradient.sharpness} be capped at `0.992`?
+ * If `false`, allows gradient sharpness to fully clamp between `0`
+ * and `1`.
+ * 
+ * Capping has no affect on performance. Any non-zero/non-null value 
+ * for {@linkcode svgGradient.sharpness} will have the same effect.
+ * 
+ * **Note:** A value of `1` can produce 
+ * {@link https://en.wikipedia.org/wiki/Jaggies jaggies} when
+ * `angle` is non-zero.
+ */
+export const GRADIENT_SHARPNESS_CAPPED = true;
 
 /**
  * Does setting {@linkcode svgHTMLAsset.gradient} to `null`
@@ -44,18 +59,23 @@ export const HTML_WARN_DEFS_NO_ID = true;
  * {@link svgHTMLAsset.shapes shapes} on that
  * {@link svgHTMLAsset asset} using the existing gradient?
  */
-export const SET_GRADIENT_NULL_SETS_FILL_NULL = true;
+export const GRADIENT_SET_NULL_SETS_FILL_NULL = true;
 
 /**
  * Should {@linkcode EnsureGradientDefaultColors}
  * force a single color array to add a second value?
- * @returns {boolean}
+ * @type {boolean}
  */
-export const DEFAULT_COLORARRAY_FORCE_TWO_VALUES = false;
+export const GRADIENT_DEFAULT_COLORARRAY_FORCE_TWO_VALUES = false;
 
 /**
- * Class constructor names to NOT auto-add an ID to in {@link svgElement}
- * @returns {string[]}
+ * Class constructor names to NOT auto-add an ID to in {@link svgElement}.
+ * 
+ * If a class name is listed here, and an element's {@linkcode svgElement.id} 
+ * is `null` or blank, and that element's {@linkcode svgElement.className} 
+ * matches one of the class names listed here, its {@linkcode svgElement.id id} 
+ * will NOT be assigned to `svgElement.#defaultID`.
+ * @type {string[]}
  */
 export const IGNORE_AUTO_ID_CLASSES = [
     // 'svgGradientStop'
