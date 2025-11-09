@@ -11,10 +11,10 @@ export class ImageField extends TitledComponent {
 
     /** @type {HTMLElement[]} */
     #addedImgs = [];
-    /** @type {[svg.asset,HTMLElement][]} */
+    /** @type {[svg.htmlAsset,HTMLElement][]} */
     #addedSVGs = [];
 
-    /** @returns {(HTMLElement|[svg.asset,HTMLElement])[]} */
+    /** @returns {(HTMLElement|[svg.htmlAsset,HTMLElement])[]} */
     get #addedAssets() {
         if (this.#addedImgs == null) { this.#addedImgs = []; }
         if (this.#addedSVGs == null) { this.#addedSVGs = []; }
@@ -23,19 +23,19 @@ export class ImageField extends TitledComponent {
 
     /** @type {HTMLElement} */
     #_demoImage;
-    /** @type {svg.asset} */
+    /** @type {svg.htmlAsset} */
     #_demoSvgRect;
 
     /**
      * 
-     * @param {string|svg.asset|HTMLElement|pathNode|[string,string]|[pathNode,string]} [src]
+     * @param {string|svg.htmlAsset|HTMLElement|pathNode|[string,string]|[pathNode,string]} [src]
      * @param {string} [componentTitle] Optional title to add to this component 
      */
     constructor(src, componentTitle) {
         super(componentTitle);
         ui.AddClassesToDOM(this.div, 'imageField', 'container');
         if (src == null) { return; }
-        if (src instanceof svg.asset) {
+        if (src instanceof svg.htmlAsset) {
             // svgHTMLAsset
             this.addSVG(src);
             return;
@@ -161,7 +161,7 @@ export class ImageField extends TitledComponent {
      * Adds an {@link svgHTMLAsset} to this image container. 
      * Returns whether or not the SVG was successfully added.
      * Will return `false` if svgAsset is null, or if it's already added (and `allowDuplicates` if `false`).
-     * @param {svg.asset} svgAsset SVG asset to add
+     * @param {svg.htmlAsset} svgAsset SVG asset to add
      * @param {svg.onChange} [onChangeCallback=null] Additional custom callback for when this SVG is modified (if not already assigned) 
      * @param {boolean} [canvasSized=true] Assign the `canvasSizedImg` CSS class, forcing 2:1 aspect ratio? Default `true` 
      * @param {number} [zSort=0] Assignment for z-index CSS class. 0: leave default, >=1: assign class `onTop`, <=0: assign class `onBottom`. Default 0
@@ -186,14 +186,14 @@ export class ImageField extends TitledComponent {
 
     /**
      * 
-     * @param {svg.asset|HTMLElement} asset Either an `svgHTMLAsset` or its associated div. 
+     * @param {svg.htmlAsset|HTMLElement} asset Either an `svgHTMLAsset` or its associated div. 
      * @returns {boolean}
      */
     removeSVG(asset) {
         if (asset == null) { return false; }
         let index = this.#getSVGIndex(asset);
         if (index == -1) { return false; }
-        /** @type {[svg.asset,HTMLElement]} */
+        /** @type {[svg.htmlAsset,HTMLElement]} */
         let removedArray = this.#addedSVGs.removeAt(index);
         if (removedArray == null) { return false; }
         removedArray[0] = null; // gosh I hate "just set it to null" as the deletion method 
@@ -258,7 +258,7 @@ export class ImageField extends TitledComponent {
     /**
      * Creates a demo SVG, with an optional array of colors for a gradient 
      * @param  {spreadString} [colors] 
-     * @returns {svg.asset}
+     * @returns {svg.htmlAsset}
      */
     CreateDemoSVG(...colors) {
         if (this.#_demoSvgRect == null) {
@@ -271,7 +271,7 @@ export class ImageField extends TitledComponent {
     /**
      * Returns the index of the given `svgHTMLAsset` or its associated element.
      * If not found, returns `-1`
-     * @param {svg.asset|HTMLElement} asset 
+     * @param {svg.htmlAsset|HTMLElement} asset 
      * @returns {number}
      */
     #getSVGIndex(asset) {
@@ -286,8 +286,8 @@ export class ImageField extends TitledComponent {
     }
 
     /**
-     * Has the given {@link svg.asset svgHTMLAsset} already been added? 
-     * @param {svg.asset} svgAsset 
+     * Has the given {@link svg.htmlAsset svgHTMLAsset} already been added? 
+     * @param {svg.htmlAsset} svgAsset 
      * @returns {boolean}
      */
     hasSVG(svgAsset) {

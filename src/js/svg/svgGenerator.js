@@ -1,18 +1,18 @@
 import { isBlank, StringAlphanumericOnly } from "../lilutils";
 import * as svg from './index';
-import { asset, gradient } from "./index";
+import { htmlAsset, gradient } from "./index";
 
 const FANCYBOX_MAX_SPLITS = 3;
 const FANCYBOX_FIRST_SPLIT_IS_BASE = true;
 
 /** Generate a basic rectangle with a gradient of the given colors, with all default values.
  * @param  {spreadString} [colors] Optional array of colors to generate the gradient with
- * @returns {svg.asset} new instance of {@linkcode svg.asset svgHTMLAsset} */
+ * @returns {svg.htmlAsset} new instance of {@linkcode svg.htmlAsset svgHTMLAsset} */
 export function BasicGradientRect(...colors) {
     if (colors == null || !Array.isArray(colors)) { colors = []; }
     colors.removeNullValues();
     if (colors.length == 0) { colors = svg.gradient.templates.softrainbow; }
-    let svgAsset = new asset();
+    let svgAsset = new htmlAsset();
     svgAsset.NewRect(svg.defaults.X, svg.defaults.Y, svg.defaults.WIDTH, svg.defaults.HEIGHT, svgAsset.NewGradient(null, svg.defaults.GRADIENT_ISRADIAL, ...colors).idURL);
     return svgAsset;
 }

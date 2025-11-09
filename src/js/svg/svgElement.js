@@ -4,7 +4,7 @@ import { isBlank, isStringNotBlank, StringContainsNumeric, StringNumericDivider,
 /** 
  * Basic element used to create all assets in this lil SVG system (which prolly needs a name)
  * 
- * For the class that you can actually add to your document, see {@linkcode svg.asset svgHTMLAsset}.
+ * For the class that you can actually add to your document, see {@linkcode svg.htmlAsset svgHTMLAsset}.
  */
 export class svgElement {
     /** Array containing all {@linkcode svgElement} instances @type {svgElement[]} */

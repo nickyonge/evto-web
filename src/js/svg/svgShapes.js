@@ -29,8 +29,8 @@ export class svgShape extends svg.definition {
     #_shapeType = null;
 
     /** 
-     * SVG parent {@link svg.asset asset}, assigned by the parent 
-     * @returns {svg.asset} */
+     * SVG parent {@link svg.htmlAsset asset}, assigned by the parent 
+     * @returns {svg.htmlAsset} */
     get parent() { return this.#_parent; }
     set parent(v) {
         if (this.parent == v) { return; }
@@ -42,7 +42,7 @@ export class svgShape extends svg.definition {
             this.#changed('parent', v, prev);
         }
     }
-    /** @type {svg.asset} */
+    /** @type {svg.htmlAsset} */
     #_parent = null;
     /** local flag for first shapes parent assignment @type {boolean} */
     #_firstParentAssigned = false;

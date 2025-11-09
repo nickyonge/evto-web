@@ -597,7 +597,7 @@ export class svgHTMLAsset extends svg.element {
 
     /** Generate a basic rectangle with a gradient of the given colors, with all default values.
      * @param  {spreadString} [colors] Optional array of colors to generate the gradient with
-     * @returns {svg.asset} new instance of {@linkcode svg.asset svgHTMLAsset}
+     * @returns {svg.htmlAsset} new instance of {@linkcode svg.htmlAsset svgHTMLAsset}
      * @see {@linkcode svg.generator.BasicGradientRect svgGenerator.BasicGradientRect}, which this static method calls */
     static BasicGradientRect(...colors) {
         return svg.generator.BasicGradientRect(...colors);
@@ -629,8 +629,8 @@ export class svgViewBox extends svg.element {
     get html() { return `viewBox="${this.data}"`; }
     get data() { return `${this.x} ${this.y} ${this.width} ${this.height}`; }
     /** 
-     * SVG parent {@link svg.asset asset}, assigned by the parent 
-     * @returns {svg.asset} */
+     * SVG parent {@link svg.htmlAsset asset}, assigned by the parent 
+     * @returns {svg.htmlAsset} */
     get parent() { return this.#_parent; }
     set parent(v) {
         if (this.parent == v) { return; }
@@ -642,7 +642,7 @@ export class svgViewBox extends svg.element {
             this.#changed('parent', v, prev);
         }
     }
-    /** @type {svg.asset} */
+    /** @type {svg.htmlAsset} */
     #_parent = null;
     /** local flag for first viewbox parent assignment @type {boolean} */
     #_firstParentAssigned = false;

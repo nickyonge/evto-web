@@ -201,8 +201,8 @@ export class svgGradient extends svg.definition {
     #_href = svg.defaults.GRADIENT_HREF;
 
     /** 
-     * SVG parent {@link svg.asset asset}, assigned by the parent 
-     * @returns {svg.asset} */
+     * SVG parent {@link svg.htmlAsset asset}, assigned by the parent 
+     * @returns {svg.htmlAsset} */
     get parent() { return this.#_parent; }
     set parent(v) {
         if (this.parent == v) { return; }
@@ -214,7 +214,7 @@ export class svgGradient extends svg.definition {
             this.#changed('parent', v, prev);
         }
     }
-    /** @type {svg.asset} */
+    /** @type {svg.htmlAsset} */
     #_parent = null;
     /** local flag for first gradient parent assignment @type {boolean} */
     #_firstParentAssigned = false;

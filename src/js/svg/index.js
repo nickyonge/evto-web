@@ -3,7 +3,7 @@ export {
 } from './svgElement';
 
 export {
-    svgHTMLAsset, svgHTMLAsset as asset,
+    svgHTMLAsset, svgHTMLAsset as htmlAsset,
     svgViewBox, svgViewBox as viewbox
 } from './svgHTMLAsset';
 
