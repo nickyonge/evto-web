@@ -64,6 +64,7 @@ export class svgShape extends svg.definition {
      */
     constructor(fill = svg.defaults.FILL, shapeType) {
         super(undefined, shapeType);
+        this.subclassHandlesHTML = true;
         if (shapeType == null) {
             console.warn("WARNING: svgShape must have a defined shapeType, see svgShapes for all valid types", this);
         }
@@ -73,23 +74,18 @@ export class svgShape extends svg.definition {
         }
     }
     get html() {
+        super.html;
         if (this.shapeType == null) {
             console.error("ERROR: can't get svgShape of null type, specify shape via subclass, returning null");
             return null;
         }
         return `<${this.shapeType} ${this.data}/>`;
     }
-    // get data() { return `${fill != null ? ` fill="${fill}"` : ''}${stroke != null ? ` stroke="${stroke}"` : ''}` }
-    // get data() { return `${_pd('fill', this.fill)}${_pd('stroke', this.stroke)}` }
     get data() {
-        let d = this.ParseData([
+        let d = super.data;
+        d += this.ParseData([
             ['fill', this.fill],
             ['stroke', this.stroke]]);
-        // check for and include extraAttributes
-        if (this.extraAttributes != null && this.extraAttributes.length > 0) {
-            let ea = this.ParseData(this.extraAttributes);
-            if (!isBlank(ea)) { d = `${d} ${ea}`; }
-        }
         return d;
     }
 
