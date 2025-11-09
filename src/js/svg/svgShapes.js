@@ -74,12 +74,14 @@ export class svgShape extends svg.definition {
         }
     }
     get html() {
+        // if subClassHandlesHTML wasn't true, this COULD just return super.html, 
+        // but this is an example of how to use it and also get subDefinitions html properly 
         super.html;
         if (this.shapeType == null) {
             console.error("ERROR: can't get svgShape of null type, specify shape via subclass, returning null");
             return null;
         }
-        return `<${this.shapeType} ${this.data}/>`;
+        return `<${this.shapeType} ${this.data}>${this.subDefinitionsHTML}</${this.shapeType}`;
     }
     get data() {
         let d = super.data;

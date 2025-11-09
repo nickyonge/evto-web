@@ -141,6 +141,7 @@ export class svgDefinition extends svg.element {
             return returnIfAlreadyAdded;
         }
         this.extraAttributes.push(attribute);
+        return true;
     }
     /**
      * Removes the given attribute from this def's {@linkcode extraAttributes}.
@@ -279,35 +280,15 @@ export class svgDefinition extends svg.element {
             console.warn(`WARNING: svgDefinition doesn't have an assigned definition type (defType), can't produce HTML`, this);
         }
         if (this.subclassHandlesHTML || isBlank(this.defType)) { return ''; }
-        let h = `<${this.defType} ${this.data}`;
+        let d = this.data;
+        console.log(this.defType + " d: " + d);
+        let h = `<${this.defType}${isBlank(d) ? '' : ` ${d}`}`;
         // get sub-definitions, minus invalid/null entries 
-        let subs = [...this.subDefinitions];
-        if (subs.length > 0) {
-            for (let i = 0; i < subs.length; i++) {
-                if (subs[i] == null) { continue; }
-                if (!subs[i].isHTMLValid) { subs[i] = null; }
-                subs.removeNullValues();
-            }
-        }
-        if (this.subDefinitions.length == 0) {
-            h += ' />';
+        let subs = this.subDefinitionsHTML;
+        if (isBlank(subs)) {
+            h += `${isBlank(d) ? '' : ' '}/>`;
         } else {
-            h += '>';
-            if (this._subDefinitionIndent == null ||
-                this._subDefinitionIndent <= 0 || 
-                Number.isNaN(this._subDefinitionIndent)) {
-                this._subDefinitionIndent = 1;
-            }
-            for (let i = 0; i < subs.length; i++) {
-                subs[i]._subDefinitionIndent = this._subDefinitionIndent + 1;
-                let subHTML = subs[i].html;
-                if (!isBlank(subHTML)) {
-                    subHTML = this.IndentHTML(subHTML, this._subDefinitionIndent);
-                    h += subHTML;
-                    if (svg.config.HTML_NEWLINE) { h += '\n'; }
-                }
-            }
-            h += `</${this.defType}>`;
+            h += `>${subs}</${this.defType}>`;
         }
         return h;
     }
@@ -320,10 +301,49 @@ export class svgDefinition extends svg.element {
         // check for and include extraAttributes
         if (this.extraAttributes != null && this.extraAttributes.length > 0) {
             let ea = this.ParseData(this.extraAttributes);
-            if (!isBlank(ea)) { d = `${d} ${ea}`; }
+            if (!isBlank(ea)) { d += ea; }
         }
         return d;
     }
+
+    /** Gets the HTML of all this definition's 
+     * {@linkcode subDefinitions} */
+    get subDefinitionsHTML() {
+        let h = '';
+        let subs = [...this.subDefinitions];
+        console.log(this.defType + " subs: " + subs);
+        if (subs.length > 0) {
+            for (let i = 0; i < subs.length; i++) {
+                if (subs[i] == null) { continue; }
+                if (!subs[i].isHTMLValid) { subs[i] = null; }
+                subs.removeNullValues();
+            }
+        }
+        if (this.subDefinitions.length == 0) {
+            return '';
+        } else {
+            let firstIteration =
+                this._subDefinitionIndent == null ||
+                this._subDefinitionIndent <= this.#_minSubDefIncrement ||
+                Number.isNaN(this._subDefinitionIndent);
+            if (firstIteration) {
+                this._subDefinitionIndent = this.#_minSubDefIncrement;
+            }
+            for (let i = 0; i < subs.length; i++) {
+                subs[i]._subDefinitionIndent = this._subDefinitionIndent + 1;
+                let subHTML = subs[i].html;
+                if (!isBlank(subHTML)) {
+                    subHTML = this.IndentHTML(subHTML, this._subDefinitionIndent);
+                    h += subHTML;
+                    if (svg.config.HTML_NEWLINE) { h += '\n'; }
+                }
+            }
+        }
+        return h;
+    }
+
+    /** absolute minimum increment for sub definitions @type {number} */
+    #_minSubDefIncrement = 1;
 
     /** 
      * Is this definition's {@linkcode html} output valid? 
