@@ -1,6 +1,7 @@
 import { EnsureGradientDefaultColors } from "./svgDefaults";
 import { svgElement } from "./svgElement";
 import { svgHTMLAsset } from "./svgHTMLAsset";
+import { svgDefinition } from "./svgDefinition";
 import { svgShape } from "./svgShapes";
 import { svgGradient } from "./svgGradient";
 
@@ -31,13 +32,26 @@ export const HTML_NEWLINE = true;
  * @type {boolean}
  * */
 export const HTML_INDENT = true && HTML_NEWLINE;
+
 /** 
- * Should {@link svgHTMLAsset} HTML generation warn if it 
- * finds any {@link svgHTMLAsset.definitions definitions}
- * that do not have an {@link svgElement.id ID}?
+ * Should {@linkcode svgDefinition} output a warning
+ * during {@linkcode svgDefinition.html html} generation 
+ * if it does not have an {@linkcode svgElement.id}?
  * @type {boolean}
  */
 export const HTML_WARN_DEFS_NO_ID = true;
+/** 
+ * Should {@linkcode svgDefinition} output a warning
+ * during {@linkcode svgDefinition.html html} generation 
+ * if it doesn't have a {@linkcode svgDefinition.defType defType}?
+ * 
+ * **Note:** even if {@linkcode svgDefinition.subclassHandlesHTML}
+ * is `true`, a missing `defType` on the parent svgDefinition will
+ * still output this error. Consider passing `defType` through
+ * the subclass's constructor `super()`, even if `id` is `null`.
+ * @type {boolean}
+ */
+export const HTML_WARN_DEFS_NO_DEFTYPE = true;
 
 /**
  * Should {@linkcode svgGradient.sharpness} be capped at `0.992`?

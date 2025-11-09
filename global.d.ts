@@ -1,5 +1,8 @@
 import type { BasicComponent } from './src/js/components/base';
-import type { svgElement, svgHTMLAsset } from './src/js/svg/svgElement';
+import type { svgElement } from './src/js/svg/svgElement';
+import type { svgHTMLAsset } from './src/js/svg/svgHTMLAsset';
+import type { svgDefinition } from './src/js/svg/svgDefinition';
+import { config as svgConfig } from './src/js/svg';
 
 declare global {
 
@@ -504,6 +507,40 @@ declare module './src/js/svg/svgElement' {
          * Optionally-assigned {@link svgHTMLAsset} related to this array object.
          * @type {svgHTMLAsset} */
         htmlAsset?: svgHTMLAsset;
+
+    }
+
+}
+
+declare module './src/js/svg/svgDefinition' {
+    
+    interface svgDefinition {
+
+        /**
+         * Does a subclass handle {@linkcode svgDefinition.html html}
+         * generation for this definition? If `true`, the `.html` getter
+         * on this definition will return `null` (but `.html` getters on
+         * subclasses will still be functional).
+         * 
+         * **Note:** you should still call `super.html` in the subclass's
+         * `html` getter, because {@linkcode svgDefinition.html} has some
+         * checks for warnings defined in {@linkcode svgConfig}. This flag
+         * exists to access those warnings without wasting time in `html`.
+         * @example
+           mySubclass extends svgDefinition {
+               constructor() {
+                   super();
+                   this.subclassHandlesHTML = true;
+               }
+               get html() {
+                   super.html; // using the return value is optional 
+                   let h = '<myDefinition>';
+                   // compile subclass html here 
+                   return h;
+               }
+           }
+         * @type {boolean} */
+        subclassHandlesHTML?: boolean;
 
     }
 
