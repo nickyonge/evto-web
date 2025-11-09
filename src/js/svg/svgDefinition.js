@@ -29,6 +29,7 @@ export class svgDefinition extends svg.element {
     #_firstTypeAssigned = false;// use these local flags cuz `null` COULD be a valid assignment
 
    // TODO: svgDef subDefinitions AddSubDef, RemoveSubDef, Get, Has, etc 
+   // Issue URL: https://github.com/nickyonge/evto-web/issues/65
 
     /** Array of elements contained in this SVG's `<defs>` @type {svg.definition[]} */
     get subDefinitions() {
