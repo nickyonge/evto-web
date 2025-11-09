@@ -261,8 +261,94 @@ export class svgDefinition extends svg.element {
 
     // TODO: fill out data/html returns for svgDefinition
     // Issue URL: https://github.com/nickyonge/evto-web/issues/64
-    get data() { return ''; }
-    get html() { return ''; }
+
+    /**
+     * Creates and outputs the HTML string associated with this
+     * definition, including its attributes and any sub definitions.
+     * 
+     * **Note:** If {@linkcode defType} is null or blank, returns `''`.
+     * @returns {string}
+     */
+    get html() {
+        if (svg.config.HTML_WARN_DEFS_NO_ID && isBlank(this.id)) {
+            // check if definition lacks an ID 
+            console.warn(`WARNING: svgDefinition doesn't have an assigned id value, and won't be able to be externally referenced`, this);
+        }
+        if (svg.config.HTML_WARN_DEFS_NO_DEFTYPE && isBlank(this.defType)) {
+            // check if definition lacks an ID 
+            console.warn(`WARNING: svgDefinition doesn't have an assigned definition type (defType), can't produce HTML`, this);
+        }
+        if (this.subclassHandlesHTML || isBlank(this.defType)) { return ''; }
+        let h = `<${this.defType} ${this.data}`;
+        // get sub-definitions, minus invalid/null entries 
+        let subs = [...this.subDefinitions];
+        if (subs.length > 0) {
+            for (let i = 0; i < subs.length; i++) {
+                if (subs[i] == null) { continue; }
+                if (!subs[i].isHTMLValid) { subs[i] = null; }
+                subs.removeNullValues();
+            }
+        }
+        if (this.subDefinitions.length == 0) {
+            h += ' />';
+        } else {
+            h += '>';
+            if (this._subDefinitionIndent == null ||
+                this._subDefinitionIndent <= 0 || 
+                Number.isNaN(this._subDefinitionIndent)) {
+                this._subDefinitionIndent = 1;
+            }
+            for (let i = 0; i < subs.length; i++) {
+                subs[i]._subDefinitionIndent = this._subDefinitionIndent + 1;
+                let subHTML = subs[i].html;
+                if (!isBlank(subHTML)) {
+                    subHTML = this.IndentHTML(subHTML, this._subDefinitionIndent);
+                    h += subHTML;
+                    if (svg.config.HTML_NEWLINE) { h += '\n'; }
+                }
+            }
+            h += `</${this.defType}>`;
+        }
+        return h;
+    }
+    /**
+     * Collects and returns all the data relevant to this asset, 
+     * generally to be used in {@linkcode html} to for the final output.
+     */
+    get data() {
+        let d = '';
+        // check for and include extraAttributes
+        if (this.extraAttributes != null && this.extraAttributes.length > 0) {
+            let ea = this.ParseData(this.extraAttributes);
+            if (!isBlank(ea)) { d = `${d} ${ea}`; }
+        }
+        return d;
+    }
+
+    /** 
+     * Is this definition's {@linkcode html} output valid? 
+     * Returns `false` if {@linkcode defType} is unassigned,
+     * UNLESS {@linkcode subclassHandlesHTML} is `true`, in
+     * which case it's assumed that a subclass is validly
+     * handling the HTML output.
+     * 
+     * **Note:** even if this check returns `true`, reading 
+     * `.html` from this definition will still return  `''` 
+     * if {@linkcode subclassHandlesHTML} is `true` but the 
+     * subclass does NOT have its own `html` override. 
+     */
+    get isHTMLValid() {
+        if (this.subclassHandlesHTML) { return true; }
+        if (isBlank(this.defType)) { return false; }
+        return true;
+    }
+
+    /**
+     * Internal-use only. Keeps track of incremental  
+     * tab indentation across child definitions.
+     * @see {@linkcode svg.config.HTML_INDENT svgConfig.HTML_INDENT}
+     * @protected @type {number} */
+    _subDefinitionIndent;
 
     // Local change and bubble-on-change settings 
     /** Should changes to this asset bubble up to its {@link svgGradient.parent parent} asset? @type {boolean} */

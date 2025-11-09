@@ -200,10 +200,6 @@ export class svgHTMLAsset extends svg.element {
             if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
             this.definitions.forEach(definition => {
                 if (definition == null) { return; }
-                if (svg.config.HTML_WARN_DEFS_NO_ID && definition.id == null) {
-                    // check if definition lacks an ID 
-                    console.warn(`WARNING: svgHTML[0] definition[1] does not have an ID. Defs need an ID to be used.`, this, definition);
-                }
                 let h = this.IndentHTML(definition.html, 2);
                 if (!isBlank(h)) {
                     newSVG += h;
