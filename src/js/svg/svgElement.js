@@ -333,8 +333,10 @@ export class svgElement {
         return d.join(' ');
     }
     /** Parse individual property data for use as an SVG attribute. Returns `''` if invalid.
+     * 
+     * **Note:** If `value` is an `object`, it will be parsed using `JSON.strngify` 
      * @param {string} name name of property. Can't be null or blank or whitespace
-     * @param {*} value value of property. Can't be null, but CAN be blank or whitespace
+     * @param {any} value value of property. Can't be null, but CAN be blank or whitespace
      * @returns {string} datum formatted like `myName="myValue"`, or `''` if name is empty/null or value is null
      * @example
      * console.log(#ParseDatum('myNumber', 123));  // Output: 'myNumber="123"'
@@ -342,7 +344,10 @@ export class svgElement {
      * console.log(#ParseDatum('isNull', null));   // Output: 'isNull=""'
      * console.log(#ParseDatum(null, 'nullName')); // Output: ''
      * */
-    #ParseDatum(name, value) { return `${value == null || isBlank(name) ? '' : `${name}="${value}"`}`; }
+    #ParseDatum(name, value) {
+        return `${value == null || isBlank(name) ? '' :
+            `${name}=${typeof value === 'object' ? JSON.stringify(value) : `"${value}`}"`}`;
+    }
 
     /**
      * add indentation (`\t`) to the give html string, 
