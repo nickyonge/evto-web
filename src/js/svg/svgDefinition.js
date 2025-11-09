@@ -281,7 +281,6 @@ export class svgDefinition extends svg.element {
         }
         if (this.subclassHandlesHTML || isBlank(this.defType)) { return ''; }
         let d = this.data;
-        console.log(this.defType + " d: " + d);
         let h = `<${this.defType}${isBlank(d) ? '' : ` ${d}`}`;
         // get sub-definitions, minus invalid/null entries 
         let subs = this.subDefinitionsHTML;
@@ -311,7 +310,6 @@ export class svgDefinition extends svg.element {
     get subDefinitionsHTML() {
         let h = '';
         let subs = [...this.subDefinitions];
-        console.log(this.defType + " subs: " + subs);
         if (subs.length > 0) {
             for (let i = 0; i < subs.length; i++) {
                 if (subs[i] == null) { continue; }

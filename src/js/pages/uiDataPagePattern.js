@@ -6,7 +6,6 @@ import { DemoGradient } from "./uiDataPageBase";
 import { svgHTMLAsset } from "../svg/svgHTMLAsset";
 import { svgGradient } from "../svg/svgGradient";
 import { mapImg } from "../assetExporter";
-import { svgDefinition } from "../svg";
 
 let currentSectionNum = 0;
 
@@ -66,23 +65,8 @@ function CreatePatternSection(section) {
     // bw.gradient.opacity = 0.5;
     bw.opacity = 0.5;
 
-    let def = new svgDefinition('newDef1', 'hecker');
-    let def2 = new svgDefinition('newDef2', 'checker');
-    def2.AddAttribute('wowie', {and:'zowie'});
-    def.subDefinitions.push(def2);
-    bw.GetShape().subDefinitions.push(def);
-    
-    let att = bw.GetShape().AddAttribute('butt', 'ample');
-    console.log("add shape attr: " + att);
-
     patternImage.addSVG(bw);
     // mapImg
-
-    
-    let myObject = { testA: 123, testB: "hello world" };
-    console.log(JSON.stringify(myObject));
-
-
 }
 
 function CreateColorsSection(section) {

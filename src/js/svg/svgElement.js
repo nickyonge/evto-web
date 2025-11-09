@@ -313,7 +313,6 @@ export class svgElement {
      * **Note:** returns `""` on {@linkcode svgElement} - used only on subclasses, eg {@linkcode svgHTMLAsset}. */
     get data() { return ''; }
 
-
     /** Parse array of SVG data into HTML-attribute-style `name="value"` format, 
      * with spaces between attributes as needed. 
      * @param {([string, any?])[]} data 2d array of properties, `[name,value]` 
