@@ -28,6 +28,8 @@ export class svgDefinition extends svg.element {
     /** local flag for first definition type assignment @type {boolean} */
     #_firstTypeAssigned = false;// use these local flags cuz `null` COULD be a valid assignment
 
+   // TODO: svgDef subDefinitions AddSubDef, RemoveSubDef, Get, Has, etc 
+
     /** Array of elements contained in this SVG's `<defs>` @type {svg.definition[]} */
     get subDefinitions() {
         if (this.#_subDefinitions == null) { this.#_subDefinitions = []; }
@@ -260,9 +262,6 @@ export class svgDefinition extends svg.element {
         return null;
     }
 
-    // TODO: fill out data/html returns for svgDefinition
-    // Issue URL: https://github.com/nickyonge/evto-web/issues/64
-
     /**
      * Creates and outputs the HTML string associated with this
      * definition, including its attributes and any sub definitions.
@@ -305,8 +304,7 @@ export class svgDefinition extends svg.element {
         return d;
     }
 
-    /** Gets the HTML of all this definition's 
-     * {@linkcode subDefinitions} */
+    /** Gets the {@linkcode html} of all this definition's {@linkcode subDefinitions} */
     get subDefinitionsHTML() {
         let h = '';
         let subs = [...this.subDefinitions];

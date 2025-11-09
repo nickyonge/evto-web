@@ -1,9 +1,6 @@
 import { isBlank } from '../lilutils';
 import * as svg from './index';
 
-// TODO add <use> as an svgShape
-// Issue URL: https://github.com/nickyonge/evto-web/issues/47
-
 const _RECT = 'rect';
 const _CIRCLE = 'circle';
 const _ELLIPSE = 'ellipse';

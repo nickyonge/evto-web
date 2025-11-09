@@ -184,7 +184,7 @@ export class svgHTMLAsset extends svg.element {
 
     // done! add the div to the page body, and behold a beautiful rainbow
     document.body.appendChild(myDiv);
- */
+    */
     get html() {
         let d = this.data;
         let newSVG = isBlank(d) ? '<svg' : `<svg ${d}`;
