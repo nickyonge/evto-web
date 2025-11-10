@@ -1,5 +1,5 @@
 import * as svg from './index';
-import { svgHTMLAsset } from './index';
+import { svgHTMLAsset, svgConfig } from './index';
 import { isBlank, isStringNotBlank, StringContainsNumeric, StringNumericDivider, StringNumericOnly, StringOnlyNumeric, StringToNumber } from "../lilutils";
 
 /** 
@@ -26,6 +26,10 @@ export class svgElement {
      **/
     get id() { return this.#_id; };
     set id(v) {
+        // check if we reset null values to default uniqueID 
+        if (v == null && svgConfig.SETTING_ELEMENT_ID_NULL_SETS_TO_UNIQUE) {
+            v = this.uniqueID;
+        }
         if (this.#_id == v) { return; }
         // ensure ID is unique 
         if (v != null) {

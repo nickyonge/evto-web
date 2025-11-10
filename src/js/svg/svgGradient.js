@@ -267,7 +267,7 @@ export class svgGradient extends svg.definition {
      */
     static fullParams(id = undefined, isRadial = svg.defaults.GRADIENT_ISRADIAL, ...colors) {
         let svg = new svgGradient(isRadial, ...colors);
-        if (id != null) { svg.id = id; }
+        svg.id = id;
         return svg;
     }
 

@@ -6,7 +6,15 @@ import { svgShape } from "./svgShapes";
 import { svgGradient } from "./svgGradient";
 
 /**
- * Are unique IDs on {@link svgElement svgElements} REQUIRED? 
+ * Does setting an {@linkcode svgElement.id svgElement's ID} to `null`
+ * reset it to its {@linkcode svgElement.uniqueID uniqueID} value?
+ * If `false`, `null` IDs are permitted. 
+ * @type {boolean}
+ */
+export const SETTING_ELEMENT_ID_NULL_SETS_TO_UNIQUE = true;
+
+/**
+ * Are unique IDs on {@link svgElement svgElements} *required*? 
  * If `true`, already-used IDs will not be permitted. If `false`,
  * they will still produce a warning. IDs that are `null` are ignored.
  * @type {boolean}
