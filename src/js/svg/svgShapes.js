@@ -104,14 +104,14 @@ export class svgShape extends svg.definition {
      * @param {svgGradient} gradient 
      */
     set fillGradient(gradient) {
-        if (!gradient) { return; }
+        if (gradient == null) { return; }
         if (isBlank(gradient.id)) {
             console.warn(`WARNING: can't assign a gradient without an ID to an SVG shape`, gradient, this);
             return;
         }
         this.fillURL = gradient.id;
         // if gradient does not exist on parent, add it there too 
-        if (this.parent.GetGradientWithID(gradient.id) == null) {
+        if (this.parent != null && this.parent.GetGradientWithID(gradient.id) == null) {
             this.parent.AddGradient(gradient);
         }
     }
