@@ -249,7 +249,7 @@ export class svgGradient extends svg.definition {
                 }
             }
         }
-        super(undefined, svgGradient.GetGradientTypeFrom(isRadial));
+        super(null, svgGradient.GetGradientTypeFrom(isRadial));
         this.isRadial = isRadial;
         colors = svg.defaults.EnsureGradientDefaultColors(...colors);
         this.SetStops(...colors);
@@ -259,7 +259,7 @@ export class svgGradient extends svg.definition {
      * and has isRadial as a fully separate parameter
      * @param {string} [id = undefined] 
      * @param {boolean} [isRadial] Is this a radial or linear gradient? Can be changed later.  
-     * @param  {...any} [colors] Spread params string array of colors used for this gradient.
+     * @param  {spreadString} [colors] Spread params string array of colors used for this gradient.
      * 
      * Optional. If no colors are set, {@linkcode svgDefaults.EnsureGradientDefaultColors} 
      * is called to ensure default gradient colors are used. 
@@ -267,7 +267,7 @@ export class svgGradient extends svg.definition {
      */
     static fullParams(id = undefined, isRadial = svg.defaults.GRADIENT_ISRADIAL, ...colors) {
         let svg = new svgGradient(isRadial, ...colors);
-        svg.id = id;
+        if (id != null) { svg.id = id; }
         return svg;
     }
 

@@ -63,12 +63,12 @@ function CreatePatternSection(section) {
 
     patternImage.addImage(mapImg.full.monochrome.light);
 
-    patternAlphaRect = new svgRect();
-    patternAlphaSVG = new svgHTMLAsset(patternAlphaRect);
-    patternAlphaGradient = new svgGradient()
+    // patternAlphaRect = new svgRect();
+    // patternAlphaSVG = new svgHTMLAsset(patternAlphaRect);
+    // patternAlphaGradient = new svgGradient()
 
     let bw = svgHTMLAsset.BasicGradientRect(svgGradient.templates.bw);
-    // bw.gradient.opacity = 0.5;
+    bw.gradient.opacity = 1;
     bw.opacity = 0.5;
 
     patternImage.addSVG(bw);
