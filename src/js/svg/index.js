@@ -23,7 +23,7 @@ export {
     IsValidShapeType
 } from './svgShapes';
 
-export { svgGradient as gradient } from './svgGradient';
+export { svgGradient, svgGradient as gradient } from './svgGradient';
 
 export * as config from './svgConfig';
 export * as svgConfig from './svgConfig';

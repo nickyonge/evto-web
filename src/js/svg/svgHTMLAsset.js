@@ -1,4 +1,5 @@
 import * as svg from './index';
+import { svgElement, svgShape, svgDefinition } from './index';
 import { shape, rect, circle, ellipse, line, polyline, polygon, path, gradient } from "./index";
 import { isBlank } from "../lilutils";
 
@@ -40,12 +41,12 @@ export class svgHTMLAsset extends svg.element {
      * **Note:** If `opacity != 1`, this is applied via setting `style="opacity: X;"` in this svg's
      * HTML declaration. This may interfere with opacity set via CSS stylesheets. In that case, leave
      * this as `1`, and change opacity either by setting the opacity of the fill color (eg `#ffffff69`)
-     * or, if using an {@link svg.gradient svgGradient}, you can use 
-     * {@linkcode svg.gradient.opacity svgGradient.opacity}.
+     * or, if using an {@link svgGradient}, you can use 
+     * {@linkcode svgGradient.opacity svgGradient.opacity}.
      * 
      * **Note:** since this is assigning opacity via CSS and not any color or gradient properties, 
      * things like using a gradient as a mask may not perform as you'd expect. In that case, use
-     * {@linkcode svg.gradient.opacity svgGradient.opacity} instead.
+     * {@linkcode svgGradient.opacity svgGradient.opacity} instead.
      * @returns {number} */
     get opacity() { return this.#_opacity; }
     set opacity(v) { let prev = this.#_opacity; this.#_opacity = v; this.#changed('opacity', v, prev); }
@@ -147,13 +148,13 @@ export class svgHTMLAsset extends svg.element {
     /**
      * Create a new SVG HTML asset, with optionally 
      * supplied shapes, definitions, and viewbox.
-     * @param {svg.shape[]} shapes Optional array of {@link svg.shape shapes} 
-     * @param {svg.shape[]} definitions Optional array of {@link svg.element svgElements} for `<defs>` 
+     * @param {svg.shape|svg.shape[]} shapes Optional array of {@link svgShape svgShapes} 
+     * @param {svg.definition[]} definitions Optional array of {@link svgDefinition svgDefinitions} for `<defs>` 
      * @param {svgViewBox} viewBox Optional {@link svgViewBox viewbox}. If omitted, creates a new viewbox with default values.
      */
     constructor(shapes = [], definitions = [], viewBox = new svgViewBox()) {
         super();
-        this.shapes = shapes;
+        this.shapes = Array.isArray(shapes) ? shapes : [shapes];
         this.definitions = definitions;
         this.viewBox = viewBox;
         svgHTMLAsset.#__filterAssetsArray();
@@ -321,7 +322,7 @@ export class svgHTMLAsset extends svg.element {
     }
 
     /**
-     * Gets the Nth {@link svg.gradient svgGradient} found in 
+     * Gets the Nth {@link svgGradient} found in 
      * {@linkcode definitions}, where N (`index`) increments 
      * through just the gradient elements found. By default,
      * returns the first gradient found. 
@@ -347,7 +348,7 @@ export class svgHTMLAsset extends svg.element {
         return null;
     }
     /**
-     * Gets the index of the first {@link svg.gradient svgGradient}
+     * Gets the index of the first {@link svgGradient}
      * found in {@linkcode definitions}, or `-1` if none are found.
      * @returns {number}
      */
