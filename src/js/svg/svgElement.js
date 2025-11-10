@@ -1,4 +1,5 @@
 import * as svg from './index';
+import { svgHTMLAsset } from './index';
 import { isBlank, isStringNotBlank, StringContainsNumeric, StringNumericDivider, StringNumericOnly, StringOnlyNumeric, StringToNumber } from "../lilutils";
 
 /** 
@@ -16,7 +17,13 @@ export class svgElement {
     /** Counter for all {@linkcode svgElement svgElements} ever instanced, ensuring unique IDs for each one. */
     static #svgElementsCount = 0;
 
-    /** unique identifier for this element @type {string} */
+    /** 
+     * Unique identifier for this svgElement. 
+     * 
+     * Every svgElement *must* have a unique ID, but they will be 
+     * automatically generated if not manually assigned in the constructor.
+     * @type {string} 
+     **/
     get id() { return this.#_id; };
     set id(v) {
         if (this.#_id == v) { return; }
@@ -146,8 +153,13 @@ export class svgElement {
     /** local flag for first ID assignment @type {boolean} */
     #_firstIDAssigned = false;
 
-    /** @type {string} */
-    get #defaultID() { return `__svgE[${this[__svgElementInstance]}]:${this.constructor.name}`; }
+    /** The guaranteed-unique ID value for this svgElement, combining
+     * {@linkcode svgInstanceNumber} and {@linkcode svgConstructor} @type {string} */
+    get uniqueID() { return `__svgE[${this.svgInstanceNumber}]:${this.svgConstructor}`; }
+    /** The guaranteed-unique instance ID assigned to every svgElement @returns {number} */
+    get svgInstanceNumber() { return this[__svgElementInstance]; }
+    /** The name of this SVG class constructor, eg {@linkcode svgHTMLAsset.constructor "svgHTMLAsset"} @returns {string} */
+    get svgConstructor() { return this.constructor.name; }
 
     /**
      * Base class for all component elements of an SVG asset
@@ -160,7 +172,7 @@ export class svgElement {
         let skipAutoID = svg.config.IGNORE_AUTO_ID_CLASSES.contains(this.className);
         if (isBlank(id)) {
             if (!skipAutoID) {
-                id = this.#defaultID;
+                id = this.uniqueID;
             }
         }
         let skip = this.hasOwnProperty('__SKIP_ID_UPDATE');

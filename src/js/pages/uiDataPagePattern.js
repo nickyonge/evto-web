@@ -1,7 +1,7 @@
 import * as cmp from "../components";
 import * as ui from '../ui';
 import * as txt from '../text';
-import { svgHTMLAsset, svgShape, svgGradient } from "../svg/index";
+import { svgHTMLAsset, svgShape, svgGradient, svgRect } from "../svg/index";
 import { SetElementEnabled } from "../lilutils";
 import { DemoGradient } from "./uiDataPageBase";
 import { mapImg } from "../assetExporter";
@@ -52,7 +52,9 @@ export function CreatePagePattern(page) {
     SelectPatternPage(currentSectionNum);
 }
 
+let patternAlphaRect;
 let patternAlphaSVG;
+let patternAlphaGradient;
 
 function CreatePatternSection(section) {
     let patternImage = new cmp.ImageField();
@@ -61,8 +63,9 @@ function CreatePatternSection(section) {
 
     patternImage.addImage(mapImg.full.monochrome.light);
 
-    let alphaRect = new svgShape();
-    patternAlphaSVG = new svgHTMLAsset(alphaRect)
+    patternAlphaRect = new svgRect();
+    patternAlphaSVG = new svgHTMLAsset(patternAlphaRect);
+    patternAlphaGradient = new svgGradient()
 
     let bw = svgHTMLAsset.BasicGradientRect(svgGradient.templates.bw);
     // bw.gradient.opacity = 0.5;

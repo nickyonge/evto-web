@@ -1,5 +1,5 @@
 import * as svg from './index';
-import { svgElement, svgShape, svgDefinition } from './index';
+import { svgElement, svgShape, svgDefinition, svgGradient } from './index';
 import { shape, rect, circle, ellipse, line, polyline, polygon, path, gradient } from "./index";
 import { isBlank } from "../lilutils";
 
@@ -540,13 +540,13 @@ export class svgHTMLAsset extends svg.element {
      * Create and add a new {@link svg.gradient gradient} 
      * to the {@linkcode definitions} array
      * 
-     * @param {string} [id=null] {@link svg.element.id ID} to assign to this gradient, default `undefined` (auto-set)
+     * @param {string} [id=undefined] {@link svg.element.id ID} to assign to this gradient, default `undefined` (auto-set)
      * @param {boolean} isRadial is this a radial gradient, or linear? Default `GRADIENT_ISRADIAL`
      * @param {spreadString} colors Array/values of colors used to create this array 
      * @returns {svg.gradient} The newly-created, newly-added gradient
      * */
     NewGradient(id = undefined, isRadial = svg.defaults.GRADIENT_ISRADIAL, ...colors) {
-        let gradient = new svg.gradient(id, isRadial, ...colors);
+        let gradient = svgGradient.fullParams(id, isRadial, ...colors);
         let prev = this.#_definitions;
         this.definitions.push(gradient);
         this.gradient.parent = this;

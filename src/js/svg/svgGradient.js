@@ -1,5 +1,6 @@
 import { arePoints, EnsureToNumber, isBlank, isPoint, Lerp, RotatePointsAroundPivot, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
 import * as svg from './index';
+import { svgDefaults } from './index';
 
 /** Class representing an SVG defined linear or radial gradient */
 export class svgGradient extends svg.definition {
@@ -221,15 +222,53 @@ export class svgGradient extends svg.definition {
 
     /**
      * 
-     * @param {string} id 
-     * @param {boolean} isRadial 
-     * @param  {spreadString} colors 
+     * @param {boolean|string|spreadString} [isRadialOrColors] 
+     * Value that can either be a boolean to set {@linkcode svgGradient.isRadial isRadial},
+     * or a string/spread params string array representing this gradient's colors. 
+     * 
+     * If not a boolean, any colors are also combined with the following `colors` spread param.
+     * The default value of {@linkcode svgDefaults.GRADIENT_ISRADIAL} is used for 
+     * {@linkcode svgGradient.isRadial isRadial}.
+     * @param  {spreadString} [colors] Spread params string array of colors used for this gradient.
+     * 
+     * Optional. If no colors are set, {@linkcode svgDefaults.EnsureGradientDefaultColors} 
+     * is called to ensure default gradient colors are used. 
      */
-    constructor(id, isRadial = svg.defaults.GRADIENT_ISRADIAL, ...colors) {
-        super(id, svgGradient.GetGradientTypeFrom(isRadial));
+    constructor(isRadialOrColors, ...colors) {
+        if (colors == null) { colors = []; }
+        let isRadial;
+        if (typeof isRadialOrColors === 'boolean') {
+            isRadial = isRadialOrColors;
+        } else {
+            isRadial = svg.defaults.GRADIENT_ISRADIAL;
+            if (isRadialOrColors != null) {
+                if (typeof isRadialOrColors === 'string') {
+                    colors = [isRadialOrColors, ...colors.flattenSpread()];
+                } else {
+                    colors = [...isRadialOrColors.flattenSpread(), ...colors.flattenSpread()];
+                }
+            }
+        }
+        super(undefined, svgGradient.GetGradientTypeFrom(isRadial));
         this.isRadial = isRadial;
         colors = svg.defaults.EnsureGradientDefaultColors(...colors);
         this.SetStops(...colors);
+    }
+    /**
+     * Original {@linkcode svgGradient.constructor} that also assigns the ID, 
+     * and has isRadial as a fully separate parameter
+     * @param {string} [id = undefined] 
+     * @param {boolean} [isRadial] Is this a radial or linear gradient? Can be changed later.  
+     * @param  {...any} [colors] Spread params string array of colors used for this gradient.
+     * 
+     * Optional. If no colors are set, {@linkcode svgDefaults.EnsureGradientDefaultColors} 
+     * is called to ensure default gradient colors are used. 
+     * @returns {svgGradient}
+     */
+    static fullParams(id = undefined, isRadial = svg.defaults.GRADIENT_ISRADIAL, ...colors) {
+        let svg = new svgGradient(isRadial, ...colors);
+        svg.id = id;
+        return svg;
     }
 
     /**
