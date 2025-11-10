@@ -333,6 +333,7 @@ export class svgDefinition extends svg.element {
     get subDefinitionsHTML() {
         let h = '';
         // todo: svgDefinition sub-definitions should also respect <defs> hierarchy (storeInDefsElement)
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/66
         let subs = [...this.subDefinitions];
         if (subs.length > 0) {
             for (let i = 0; i < subs.length; i++) {
