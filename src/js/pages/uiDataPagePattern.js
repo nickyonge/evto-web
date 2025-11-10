@@ -73,6 +73,8 @@ function CreatePatternSection(section) {
     patternMaskDefinition = new svgDefinition(pmDefID, 'mask');
     patternMaskDefinition.storeInDefsElement = false;
     patternMaskDefinition.AddAttribute('maskUnits', 'userSpaceOnUse');
+    // TODO: replace multi references to an SVG shape with a use URL reference
+    // this is a good example of using one shape multiple times that should be a <use> shape ref
     patternMaskDefinition.subDefinitions.push(patternAlphaRect);
     patternAlphaSVG.definitions.push(patternMaskDefinition);
     
