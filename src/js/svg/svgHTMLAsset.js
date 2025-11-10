@@ -198,74 +198,37 @@ export class svgHTMLAsset extends svg.element {
         newSVG += '>';
         if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
         // collect SVG definitions and shapes 
-        /** defs HTML directly childed to this asset @type {string[]} */
+        /** defs directly childed to this asset @type {svgDefinition[]} */
         let directChildren = [];
-        /** defs HTML stored in `<defs>` @type {string[]} */
+        /** defs stored in `<defs>` @type {svgDefinition[]} */
         let defs = [];
         if (this.definitions != null && this.definitions.length > 0) {
             this.definitions.forEach(definition => {
                 if (definition == null) { return; }
-                let h = definition.html;
-                if (!isBlank(h)) {
-                    if (definition.storeInDefsElement) {
-                        defs.push(h);
-                    } else {
-                        directChildren.push(h);
-                    }
+                if (definition.storeInDefsElement) {
+                    defs.push(definition);
+                } else {
+                    directChildren.push(definition);
                 }
             });
         }
         if (this.shapes != null && this.shapes.length > 0) {
             this.shapes.forEach(shape => {
                 if (shape == null) { return; }
-                let h = shape.html;
-                if (!isBlank(h)) {
-                    if (shape.storeInDefsElement) {
-                        defs.push(h);
-                    } else {
-                        directChildren.push(h);
-                    }
+                if (shape.storeInDefsElement) {
+                    defs.push(shape);
+                } else {
+                    directChildren.push(shape);
                 }
             });
         }
         // add defs to the html output
-        //*
         // defs 
         if (defs.length > 0) {
             if (svg.config.HTML_INDENT) { newSVG += '\t'; }
             newSVG += '<defs>';
             if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
-            defs.forEach(html => {
-                if (html == null) { return; }
-                let h = this.IndentHTML(html, 2);
-                if (!isBlank(h)) {
-                    newSVG += h;
-                    if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
-                }
-            });
-            if (svg.config.HTML_INDENT) { newSVG += '\t'; }
-            newSVG += '</defs>';
-            if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
-        }
-        // direct children 
-        if (directChildren.length > 0) {
-            directChildren.forEach(html => {
-                if (html == null) { return; }
-                if (!isBlank(html)) {
-                    if (svg.config.HTML_INDENT) { newSVG += '\t'; }
-                    newSVG += html;
-                    if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
-                }
-            });
-        }
-        /* */
-        
-        /*
-        if (this.definitions != null && this.definitions.length > 0) {
-            if (svg.config.HTML_INDENT) { newSVG += '\t'; }
-            newSVG += '<defs>';
-            if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
-            this.definitions.forEach(definition => {
+            defs.forEach(definition => {
                 if (definition == null) { return; }
                 let h = this.IndentHTML(definition.html, 2);
                 if (!isBlank(h)) {
@@ -277,11 +240,12 @@ export class svgHTMLAsset extends svg.element {
             newSVG += '</defs>';
             if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
         }
-        // add SVG shapes 
-        if (this.shapes != null && this.shapes.length > 0) {
-            this.shapes.forEach(shape => {
-                if (shape == null) { return; }
-                let h = shape.html;
+        // direct children 
+        if (directChildren.length > 0) {
+            directChildren.forEach(definition => {
+                if (definition == null) { return; }
+                let h = definition.html;
+                console.log(h);
                 if (!isBlank(h)) {
                     if (svg.config.HTML_INDENT) { newSVG += '\t'; }
                     newSVG += h;
@@ -289,7 +253,6 @@ export class svgHTMLAsset extends svg.element {
                 }
             });
         }
-        /**/
 
         return `${newSVG}</svg>`;
     }
