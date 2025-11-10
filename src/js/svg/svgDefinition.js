@@ -1,5 +1,6 @@
 import { isBlank } from '../lilutils';
 import * as svg from './index';
+import { svgShape, svgConfig, svgGradient } from './index';
 
 /** 
  * Class representing an SVG definition, typically found in an SVG's `<defs>`
@@ -28,8 +29,8 @@ export class svgDefinition extends svg.element {
     /** local flag for first definition type assignment @type {boolean} */
     #_firstTypeAssigned = false;// use these local flags cuz `null` COULD be a valid assignment
 
-   // TODO: svgDef subDefinitions AddSubDef, RemoveSubDef, Get, Has, etc 
-   // Issue URL: https://github.com/nickyonge/evto-web/issues/65
+    // TODO: svgDef subDefinitions AddSubDef, RemoveSubDef, Get, Has, etc 
+    // Issue URL: https://github.com/nickyonge/evto-web/issues/65
 
     /** Array of elements contained in this SVG's `<defs>` @type {svg.definition[]} */
     get subDefinitions() {
@@ -104,6 +105,29 @@ export class svgDefinition extends svg.element {
     #_parent = null;
     /** local flag for first definition parent assignment @type {boolean} */
     #_firstParentAssigned = false;
+
+    /** 
+     * Should this definition be stored in its {@linkcode svgDefinition.parent parent} 
+     * element's `<defs>` in the DOM (`true`), or as a direct child (`false`)? 
+     * 
+     * Default `null`. If `null`, returns `false` if this def is any instance of 
+     * {@linkcode svgShape}; otherwise, returns `true`.
+     * @returns {boolean|null} */
+    get storeInDefsElement() {
+        if (this.#_storeInDefsElement == null) {
+            return this.isShape ? false : true;
+        }
+        return this.#_storeInDefsElement;
+    }
+    set storeInDefsElement(v) {
+        if (this.#_storeInDefsElement == v) { return; }
+        let prev = this.#_storeInDefsElement;
+        this.#_storeInDefsElement = v;
+        this.#changed('storeInDefsElement', v, prev);
+        this.#_storeInDefsElement = v;
+    }
+    /** @type {boolean|null} */
+    #_storeInDefsElement = null;
 
     /** 
      * Class representing an SVG definition, typically found in an SVG's `<defs>`
@@ -308,6 +332,7 @@ export class svgDefinition extends svg.element {
     /** Gets the {@linkcode html} of all this definition's {@linkcode subDefinitions} */
     get subDefinitionsHTML() {
         let h = '';
+        // todo: svgDefinition sub-definitions should also respect <defs> hierarchy (storeInDefsElement)
         let subs = [...this.subDefinitions];
         if (subs.length > 0) {
             for (let i = 0; i < subs.length; i++) {
@@ -360,10 +385,13 @@ export class svgDefinition extends svg.element {
         return true;
     }
 
+    /** is this def an instance of any svgShape? */
+    get isShape() { return this instanceof svgShape }
+
     /**
      * Internal-use only. Keeps track of incremental  
      * tab indentation across child definitions.
-     * @see {@linkcode svg.config.HTML_INDENT svgConfig.HTML_INDENT}
+     * @see {@linkcode svgConfig.HTML_INDENT}
      * @protected @type {number} */
     _subDefinitionIndent;
 

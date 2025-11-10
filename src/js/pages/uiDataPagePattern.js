@@ -71,6 +71,7 @@ function CreatePatternSection(section) {
     patternAlphaGradient = new svgGradient(svgGradient.templates.bw);
     patternAlphaRect.gradient = patternAlphaGradient;
     patternMaskDefinition = new svgDefinition(pmDefID, 'mask');
+    patternMaskDefinition.storeInDefsElement = false;
     patternMaskDefinition.AddAttribute('maskUnits', 'userSpaceOnUse');
     patternMaskDefinition.subDefinitions.push(patternAlphaRect);
     patternAlphaSVG.definitions.push(patternMaskDefinition);

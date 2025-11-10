@@ -93,7 +93,10 @@ export class svgHTMLAsset extends svg.element {
                 return;
             }
         }
-        v.forEach(shape => { shape.parent = this; });
+        v.forEach(shape => {
+            shape.storeInDefsElement = false;
+            shape.parent = this;
+        });
         this.#_shapes = v;
         this.#_shapes.name = 'shapes';
         this.#_shapes['parent'] = this;
@@ -194,7 +197,70 @@ export class svgHTMLAsset extends svg.element {
         }
         newSVG += '>';
         if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
-        // add SVG definitions
+        // collect SVG definitions and shapes 
+        /** defs HTML directly childed to this asset @type {string[]} */
+        let directChildren = [];
+        /** defs HTML stored in `<defs>` @type {string[]} */
+        let defs = [];
+        if (this.definitions != null && this.definitions.length > 0) {
+            this.definitions.forEach(definition => {
+                if (definition == null) { return; }
+                let h = definition.html;
+                if (!isBlank(h)) {
+                    if (definition.storeInDefsElement) {
+                        defs.push(h);
+                    } else {
+                        directChildren.push(h);
+                    }
+                }
+            });
+        }
+        if (this.shapes != null && this.shapes.length > 0) {
+            this.shapes.forEach(shape => {
+                if (shape == null) { return; }
+                let h = shape.html;
+                if (!isBlank(h)) {
+                    if (shape.storeInDefsElement) {
+                        defs.push(h);
+                    } else {
+                        directChildren.push(h);
+                    }
+                }
+            });
+        }
+        // add defs to the html output
+        //*
+        // defs 
+        if (defs.length > 0) {
+            if (svg.config.HTML_INDENT) { newSVG += '\t'; }
+            newSVG += '<defs>';
+            if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
+            defs.forEach(html => {
+                if (html == null) { return; }
+                let h = this.IndentHTML(html, 2);
+                if (!isBlank(h)) {
+                    newSVG += h;
+                    if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
+                }
+            });
+            if (svg.config.HTML_INDENT) { newSVG += '\t'; }
+            newSVG += '</defs>';
+            if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
+        }
+        // direct children 
+        if (directChildren.length > 0) {
+            directChildren.forEach(html => {
+                if (html == null) { return; }
+                if (!isBlank(html)) {
+                    if (svg.config.HTML_INDENT) { newSVG += '\t'; }
+                    newSVG += html;
+                    if (svg.config.HTML_NEWLINE) { newSVG += '\n'; }
+                }
+            });
+        }
+        /* */
+        
+        /*
         if (this.definitions != null && this.definitions.length > 0) {
             if (svg.config.HTML_INDENT) { newSVG += '\t'; }
             newSVG += '<defs>';
@@ -223,6 +289,8 @@ export class svgHTMLAsset extends svg.element {
                 }
             });
         }
+        /**/
+
         return `${newSVG}</svg>`;
     }
     /**
@@ -575,23 +643,25 @@ export class svgHTMLAsset extends svg.element {
 
     /**
      * Local ref to push a shape/element to {@link shapes} or {@link definitions}
-     * @param {svg.shape|svg.element} element {@link svg.shape svgShape} or {@link svg.element svgElement} to push
+     * @param {svgShape|svgDefinition} shapeDef {@link svgShape} or {@link svgDefinition} to push
      * @param {boolean} [asDefinition=false] Push this shape as a definition? Default `false`
      */
-    #PushShape(element, asDefinition = false) {
+    #PushShape(shapeDef, asDefinition = false) {
         let prev;
+        // storeInDefsElement has made "shapes" as separate elements redundant tbh 
+        shapeDef.storeInDefsElement = asDefinition;
         if (asDefinition) {
             prev = this.#_definitions;
-            this.definitions.push(element);
-            if (element.hasOwnProperty('parent')) { element.parent = this; }
+            this.definitions.push(shapeDef);
+            if (shapeDef.hasOwnProperty('parent')) { shapeDef.parent = this; }
             if (!this.definitions.hasOwnProperty('onChange')) {
                 this.#changed('definitions#push', this.definitions, prev);
             }
         }
         else {
             prev = this.#_shapes;
-            this.shapes.push(element);
-            if (element.hasOwnProperty('parent')) { element.parent = this; }
+            this.shapes.push(shapeDef);
+            if (shapeDef.hasOwnProperty('parent')) { shapeDef.parent = this; }
             if (!this.shapes.hasOwnProperty('onChange')) {
                 this.#changed('shapes#push', this.shapes, prev);
             }
