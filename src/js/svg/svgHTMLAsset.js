@@ -363,7 +363,9 @@ export class svgHTMLAsset extends svg.element {
     }
     /**
      * Gets the first {@link svg.gradient gradient} with the given
-     * {@linkcode svg.element.id ID} found in {@linkcode definitions}
+     * {@linkcode svg.element.id ID} found in {@linkcode definitions}.
+     * 
+     * If not found, returns `null`
      * @param {string} id ID string to check
      * @returns {svg.gradient|null}
      */

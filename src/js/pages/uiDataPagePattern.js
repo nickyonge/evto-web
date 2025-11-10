@@ -1,7 +1,7 @@
 import * as cmp from "../components";
 import * as ui from '../ui';
 import * as txt from '../text';
-import { svgHTMLAsset, svgShape, svgGradient, svgRect } from "../svg/index";
+import { svgHTMLAsset, svgShape, svgGradient, svgRect, svgDefinition } from "../svg/index";
 import { SetElementEnabled } from "../lilutils";
 import { DemoGradient } from "./uiDataPageBase";
 import { mapImg } from "../assetExporter";
@@ -52,9 +52,12 @@ export function CreatePagePattern(page) {
     SelectPatternPage(currentSectionNum);
 }
 
-let patternAlphaRect;
 let patternAlphaSVG;
+let patternAlphaRect;
 let patternAlphaGradient;
+let patternMaskDefinition;
+
+const pmDefID = 'patternAlphaMask';
 
 function CreatePatternSection(section) {
     let patternImage = new cmp.ImageField();
@@ -63,15 +66,23 @@ function CreatePatternSection(section) {
 
     patternImage.addImage(mapImg.full.monochrome.light);
 
-    // patternAlphaRect = new svgRect();
-    // patternAlphaSVG = new svgHTMLAsset(patternAlphaRect);
-    // patternAlphaGradient = new svgGradient()
+    patternAlphaRect = new svgRect();
+    patternAlphaSVG = new svgHTMLAsset(patternAlphaRect);
+    patternAlphaGradient = new svgGradient(svgGradient.templates.bw);
+    patternAlphaRect.gradient = patternAlphaGradient;
+    patternMaskDefinition = new svgDefinition(pmDefID, 'mask');
+    patternMaskDefinition.AddAttribute('maskUnits', 'userSpaceOnUse');
+    patternMaskDefinition.subDefinitions.push(patternAlphaRect);
+    patternAlphaSVG.definitions.push(patternMaskDefinition);
+    
 
-    let bw = svgHTMLAsset.BasicGradientRect(svgGradient.templates.bw);
-    bw.gradient.opacity = 1;
-    bw.opacity = 0.5;
+    patternImage.addSVG(patternAlphaSVG);
 
-    patternImage.addSVG(bw);
+    // let bw = svgHTMLAsset.BasicGradientRect(svgGradient.templates.bw);
+    // bw.gradient.opacity = 0.5;
+    // bw.opacity = 0.5;
+
+    // patternImage.addSVG(bw);
     // mapImg
 }
 

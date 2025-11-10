@@ -1,5 +1,6 @@
 import { isBlank } from '../lilutils';
 import * as svg from './index';
+import { svgGradient } from './index';
 
 const _RECT = 'rect';
 const _CIRCLE = 'circle';
@@ -97,9 +98,10 @@ export class svgShape extends svg.definition {
     set fillURL(targetID) {
         this.fill = targetID.startsWith('url(#') ? targetID : `url(#${targetID})`;
     }
-
     /**
-     * @param {svg.gradient} gradient 
+     * Sets the {@linkcode fill} property to a URL pointing
+     * to the given {@linkcode svgGradient}
+     * @param {svgGradient} gradient 
      */
     set fillGradient(gradient) {
         if (!gradient) { return; }
@@ -108,6 +110,20 @@ export class svgShape extends svg.definition {
             return;
         }
         this.fillURL = gradient.id;
+        // if gradient does not exist on parent, add it there too 
+        if (this.parent.GetGradientWithID(gradient.id) == null) {
+            this.parent.AddGradient(gradient);
+        }
+    }
+    /**
+     * Sets the {@linkcode fill} property to a URL pointing
+     * to the given {@linkcode svgGradient}.
+     * 
+     * Convenience, passed to {@linkcode fillGradient}
+     * @param {svgGradient} gradient 
+     */
+    set gradient(gradient) {
+        this.fillGradient = gradient;
     }
     /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
     #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
