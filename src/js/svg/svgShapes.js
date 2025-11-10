@@ -79,7 +79,7 @@ export class svgShape extends svg.definition {
             console.error("ERROR: can't get svgShape of null type, specify shape via subclass, returning null");
             return null;
         }
-        return `<${this.shapeType} ${this.data}>${this.subDefinitionsHTML}</${this.shapeType}`;
+        return `<${this.shapeType} ${this.data}>${this.subDefinitionsHTML}</${this.shapeType}>`;
     }
     get data() {
         let d = super.data;
