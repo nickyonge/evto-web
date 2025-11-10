@@ -1,6 +1,6 @@
 import { isBlank } from '../lilutils';
 import * as svg from './index';
-import { svgGradient } from './index';
+import { svgGradient, svgDefaults } from './index';
 
 const _RECT = 'rect';
 const _CIRCLE = 'circle';
@@ -56,9 +56,13 @@ export class svgShape extends svg.definition {
     set stroke(v) { let prev = this.#_stroke; this.#_stroke = v; this.#changed('stroke', v, prev); }
     #_stroke = svg.defaults.STROKE;
     /**
-     * base class for all SVG Shapes 
-     * @param {string|svg.gradient} [fill] Fill colour (default {@linkcode svg.defaults.FILL svgDefaults.FILL})
-     * @param {string} [shapeType] 
+     * Base class for all SVG Shapes 
+     * @param {string|svgGradient|spreadString} [fill] Fill colour, or gradient. 
+     * If multiple colours as an array, creates a new `linearGradient`. 
+     * Default {@linkcode svgDefaults.FILL}
+     * @param {string} [shapeType] Must be a valid shape type. 
+     * Refer to {@linkcode IsValidShapeType} or {@linkcode _ALL_SHAPES}.
+     * Can be defined later.
      */
     constructor(fill = svg.defaults.FILL, shapeType) {
         super(undefined, shapeType);
@@ -69,6 +73,10 @@ export class svgShape extends svg.definition {
         if (fill != null) {
             if (typeof fill === 'string') { this.fill = fill; }
             else if (fill instanceof svg.gradient) { this.fillGradient = fill; }
+            else { 
+                // must be array, treat as linear gradient 
+                this.fillGradient = new svgGradient(fill);
+            }
         }
     }
     get html() {
@@ -147,7 +155,16 @@ export class svgRect extends svgShape {
     get ry() { return this.#_ry; }
     set ry(v) { let prev = this.#_ry; this.#_ry = v; this.#changed('ry', v, prev); }
     #_ry = svg.defaults.RECT_RY;
+    /**
+     * 
+     * @param {number} x 
+     * @param {number} y 
+     * @param {number} width 
+     * @param {number} height 
+     * @param {string|svgGradient|spreadString} [fill] Fill colour, or gradient. If multiple colours as an array, creates a new `linearGradient`. Optional, default {@linkcode svgDefaults.FILL}
+     */
     constructor(x = svg.defaults.X, y = svg.defaults.Y, width = svg.defaults.WIDTH, height = svg.defaults.HEIGHT, fill = svg.defaults.FILL) {
+        // TODO: svgShapes, allow non-numeric CSS values for things like width/height (eg 100px)
         const st = _RECT;
         super(fill, st);
         this.shapeType = st;
@@ -189,6 +206,13 @@ export class svgCircle extends svgShape {
     get cy() { return this.#_cy; }
     set cy(v) { let prev = this.#_cy; this.#_cy = v; this.#changed('cy', v, prev); }
     #_cy = svg.defaults.CY;
+    /**
+     * 
+     * @param {number} r 
+     * @param {number} cx 
+     * @param {number} cy 
+     * @param {string|svgGradient|spreadString} [fill] Fill colour, or gradient. If multiple colours as an array, creates a new `linearGradient`. Optional, default {@linkcode svgDefaults.FILL} 
+     */
     constructor(r = svg.defaults.R, cx = svg.defaults.CX, cy = svg.defaults.CY, fill = svg.defaults.FILL) {
         const st = _CIRCLE;
         super(fill, st);
@@ -218,6 +242,14 @@ export class svgEllipse extends svgShape {
     get cy() { return this.#_cy; }
     set cy(v) { let prev = this.#_cy; this.#_cy = v; this.#changed('cy', v, prev); }
     #_cy = svg.defaults.CY;
+    /**
+     * 
+     * @param {number} rx 
+     * @param {number} ry 
+     * @param {number} cx 
+     * @param {number} cy 
+     * @param {string|svgGradient|spreadString} [fill] Fill colour, or gradient. If multiple colours as an array, creates a new `linearGradient`. Optional, default {@linkcode svgDefaults.FILL} 
+     */
     constructor(rx = svg.defaults.ELLIPSE_RX, ry = svg.defaults.ELLIPSE_RY, cx = svg.defaults.CX, cy = svg.defaults.CY, fill = svg.defaults.FILL) {
         const st = _ELLIPSE;
         super(fill, st);
@@ -248,6 +280,14 @@ export class svgLine extends svgShape {
     get y2() { return this.#_y2; }
     set y2(v) { let prev = this.#_y2; this.#_y2 = v; this.#changed('y2', v, prev); }
     #_y2 = svg.defaults.Y2;
+    /**
+     * 
+     * @param {number} x1 
+     * @param {number} y1 
+     * @param {number} x2 
+     * @param {number} y2 
+     * @param {string|svgGradient|spreadString} [fill] Fill colour, or gradient. If multiple colours as an array, creates a new `linearGradient`. Optional, default {@linkcode svgDefaults.FILL} 
+     */
     constructor(x1 = svg.defaults.X1, y1 = svg.defaults.Y1, x2 = svg.defaults.X2, y2 = svg.defaults.Y2, fill = svg.defaults.FILL) {
         const st = _LINE;
         super(fill, st);
@@ -270,6 +310,11 @@ export class svgPolyline extends svgShape {
     get points() { return this.#_points; }
     set points(v) { let prev = this.#_points; this.#_points = v; this.#changed('points', v, prev); }
     #_points = svg.defaults.POINTS;
+    /**
+     * 
+     * @param {number[][]} points 
+     * @param {string|svgGradient|spreadString} [fill] Fill colour, or gradient. If multiple colours as an array, creates a new `linearGradient`. Optional, default {@linkcode svgDefaults.FILL} 
+     */
     constructor(points = svg.defaults.POINTS, fill = svg.defaults.FILL) {
         const st = _POLYLINE;
         super(fill, st);
@@ -292,6 +337,11 @@ export class svgPolygon extends svgShape {
     get points() { return this.#_points; }
     set points(v) { let prev = this.#_points; this.#_points = v; this.#changed('points', v, prev); }
     #_points = svg.defaults.POINTS;
+    /**
+     * 
+     * @param {number[][]} points 
+     * @param {string|svgGradient|spreadString} [fill] Fill colour, or gradient. If multiple colours as an array, creates a new `linearGradient`. Optional, default {@linkcode svgDefaults.FILL} 
+     */
     constructor(points = svg.defaults.POINTS, fill = svg.defaults.FILL) {
         const st = _POLYGON;
         super(fill, st);
@@ -316,6 +366,11 @@ export class svgPath extends svgShape {
     get pathLength() { return this.#_pathLength; }
     set pathLength(v) { let prev = this.#_pathLength; this.#_pathLength = v; this.#changed('pathLength', v, prev); }
     #_pathLength = svg.defaults.PATHLENGTH;
+    /**
+     * 
+     * @param {string} d 
+     * @param {string|svgGradient|spreadString} [fill] Fill colour, or gradient. If multiple colours as an array, creates a new `linearGradient`. Optional, default {@linkcode svgDefaults.FILL} 
+     */
     constructor(d = svg.defaults.D, fill = svg.defaults.FILL) {
         const st = _PATH;
         super(fill, st);
