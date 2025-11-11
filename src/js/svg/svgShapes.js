@@ -165,6 +165,7 @@ export class svgRect extends svgShape {
      */
     constructor(x = svg.defaults.X, y = svg.defaults.Y, width = svg.defaults.WIDTH, height = svg.defaults.HEIGHT, fill = svg.defaults.FILL) {
         // TODO: svgShapes, allow non-numeric CSS values for things like width/height (eg 100px)
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/68
         const st = _RECT;
         super(fill, st);
         this.shapeType = st;
