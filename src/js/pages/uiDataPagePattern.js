@@ -53,44 +53,40 @@ export function CreatePagePattern(page) {
 }
 
 let patternAlphaSVG;
-// let patternAlphaRect;
 let patternAlphaGradient;
 let patternMaskDefinition;
 let patternMaskRect;
 let patternAlphaImage;
 
-
 const pMaskID = 'patternMask';
 const pImageID = 'patternMaskedImage';
+const imageURL = mapImg.full.monochrome.light.URL;
 
 function CreatePatternSection(section) {
     let patternImage = new cmp.ImageField();
     section.appendChild(patternImage);
-    // patternImage.CreateDemoImageAndSVG();
-    
-    // patternImage.addImage(mapImg.full.monochrome.light);
 
-    let imageURL = mapImg.full.monochrome.light.URL;
-
+    // basic param definitions     
     let x = 0;
     let y = 0;
     let width = 500;
     let height = width / 2;
-
+    
+    // viewbox and html asset
     let viewBox = new svgViewBox(x, y, width, height);
     patternAlphaSVG = new svgHTMLAsset();
     patternAlphaSVG.viewBox = viewBox;
-
     
+    // svg gradient 
     patternAlphaGradient = new svgGradient(svgGradient.templates.bw);
+    
+    // svg mask 
     patternMaskDefinition = new svgDefinition(pMaskID, 'mask');
     patternMaskDefinition.AddAttribute('maskUnits', 'userSpaceOnUse');
-    
-    // patternAlphaRect = new svgRect(x, y, width, height);
     patternMaskRect = new svgRect(x, y, width, height, patternAlphaGradient);
     patternMaskRect.storeInDefsElement = false;
-    patternMaskDefinition.subDefinitions.push(patternMaskRect);
     
+    // alpha image and attributes
     patternAlphaImage = new svgDefinition(pImageID, 'image');
     patternAlphaImage.storeInDefsElement = false;
     patternAlphaImage.AddAttributes([
@@ -100,27 +96,22 @@ function CreatePatternSection(section) {
         ['mask', `url(#${pMaskID})`],
     ]);
 
+    // push definitions 
+    patternMaskDefinition.subDefinitions.push(patternMaskRect);
     patternAlphaSVG.definitions.push(patternAlphaGradient, patternMaskDefinition, patternAlphaImage);
 
-
-    // patternAlphaRect.gradient = patternAlphaGradient;
-    // patternMaskDefinition.storeInDefsElement = false;
-    // TODO: replace multi references to an SVG shape with a use URL reference
-    // Issue URL: https://github.com/nickyonge/evto-web/issues/67
-    // this is a good example of using one shape multiple times that should be a <use> shape ref
-    
-    // patternMaskDefinition.subDefinitions.push(patternAlphaRect);
-    // patternAlphaSVG.definitions.push(patternMaskDefinition);
-    
-
+    // add SVG to page 
     patternImage.addSVG(patternAlphaSVG);
 
-    // let bw = svgHTMLAsset.BasicGradientRect(svgGradient.templates.bw);
-    // bw.gradient.opacity = 0.5;
-    // bw.opacity = 0.5;
+    // TODO: replace multi references to an SVG shape with a use URL reference
+    // Issue URL: https://github.com/nickyonge/evto-web/issues/67
+    // this is a good example of using one shape multiple times that should be a <use> shape ref 
+    // eg, if a rect is already defined (let myRect = new svgRect) and it gets added to multiple
+    // assets (mySVGAsset1.shape = myRect; mySVGAsset2.shape = myRect), it should only be actually
+    // DEFINED once. Adding it should check if it's already defined and, if so, use the <use> shape
+    // type to reference it, instead of adding it repeatedly (effectively causing multiple shapes
+    // with the same ID to be added)
 
-    // patternImage.addSVG(bw);
-    // mapImg
 }
 
 function CreateColorsSection(section) {
