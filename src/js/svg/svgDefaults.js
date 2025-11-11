@@ -70,6 +70,8 @@ export const GRADIENT_STOP_OFFSET = 'auto';
 export const GRADIENT_STOP_COLOR = null;
 export const GRADIENT_STOP_OPACITY = null;
 
+export const MASK_MASKUNITS = 'objectBoundingBox';
+
 /**
  * Ensures that the given values either have content
  * @param  {spreadString} colors 
