@@ -44,10 +44,6 @@ export class svgShape extends svg.definition {
     #_parent = null;
     /** local flag for first shapes parent assignment @type {boolean} */
     #_firstParentAssigned = false;
-    /** Should changes to this asset bubble up to its {@link parent} asset? @type {boolean} */
-    get bubbleOnChange() { return this.#_bubbleOnChange; }
-    set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
-    #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
 
     get fill() { return this.#_fill; }
     set fill(v) { let prev = this.#_fill; this.#_fill = v; this.#changed('fill', v, prev); }
@@ -227,8 +223,7 @@ export class svgCircle extends svgShape {
             ['cy', this.cy]]);
         return [d, super.data].filter(Boolean).join(' ');
     }
-    /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
+
 } // circle 
 export class svgEllipse extends svgShape {
     get rx() { return this.#_rx; }

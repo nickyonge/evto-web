@@ -113,6 +113,7 @@ declare global {
          * the given array, and doesn't simply reference it (eg, `find()`) or that
          * itself returns an entirely new array or type (eg, `slice()` or `join()`). 
          * Also called when {@linkcode Array.prototype.name name} is changed.
+         * - See below for a list of all functions that invoke `onChange`.
          * @param {string} type The name of the method used on the array, as a string. Eg, `"push"` for {@linkcode Array.prototype.push array.push()}. See below for a comprehensive list. 
          * @param {T[]} source The array object itself that was modified 
          * @param {T} returnValue The value returned by the modified method. Eg, for `type = "pop"`, returns the array's now-removed last element, as per {@linkcode Array.prototype.pop array.pop()}.

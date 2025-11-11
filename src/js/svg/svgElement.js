@@ -292,7 +292,8 @@ export class svgElement {
      * @param {any} newValue The newly assigned value 
      * @param {any} previousValue The old value, for reference  
      * @param {svgElement} [changedElement = undefined] The {@link svgElement} that was changed. If `undefined` (the default value), sends `this` (the {@link svgElement} itself)
-     * @returns 
+     * @returns {void}
+     * @protected 
      */
     __invokeChange(valueChanged, newValue, previousValue, changedElement = undefined) {
         if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; return; }
@@ -306,7 +307,7 @@ export class svgElement {
      * ***Do not use.*** 
      * 
      * Used internally to prevent multiple {@linkcode onChange} calls 
-     * when modifying one property that itself modifies multiple.
+     * when modifying one property that itself modifies multiple times.
      * 
      * Eg, modifying {@link svg.gradient.angle svgGradient.angle} also 
      * modifies that gradient's {@link svg.gradient.x1 x1}, 
@@ -589,7 +590,40 @@ export class svgElement {
 
     /** Gets the name of this specific class constructor, eg `svgGradient` @returns {string} */
     get className() { return this.constructor?.name; }
+
+
+
+    /** 
+     * Should {@link svg.onChange onChange} events to this element 
+     * bubble up to its {@link svgElement.parent parent}, if it has one?
+     * @returns {boolean} */
+    get bubbleOnChange() { return this.#_bubbleOnChange; }
+    set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.changed('bubbleOnChange', v, prev); }
+    /** @type {boolean} */
+    #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
+    /** 
+     * Local changed callback that calls {@link onChange} on both this element 
+     * and, if defined, its {@link parent}.
+     * @type {svg.onChange} 
+     * @protected
+     */
+    changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
+    /** 
+     * Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. 
+     * @param {string} type type of method called, eg `splice` 
+     * @param {[]} source array object 
+     * @param {any} returnValue returned value from method
+     * @protected
+     */
+    arrayChanged(type, source, returnValue) {
+        if (source.hasOwnProperty('parent')) {
+            source['parent'].changed?.(`${source.name}#${type}`, source, returnValue);
+        }
+    };
+
 }
+
+/** unique symbol value for svgElementInstance referencing */
 const __svgElementInstance = Symbol('__svgElementInstance');
 
 // #endregion
