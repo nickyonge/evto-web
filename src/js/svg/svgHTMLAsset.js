@@ -379,6 +379,57 @@ export class svgHTMLAsset extends svg.element {
         return null;
     }
     /**
+     * Gets all {@linkcode svgGradient svgGradients} in this SVG asset
+     * @returns {svgGradient[]}
+     */
+    GetAllGradients() { 
+        let indices = this.GetAllGradientIndices();
+        let gradients = [];
+        for (let i = 0; i < indices.length; i++) {
+            let gradient = /** @type {svgGradient} */ (this.definitions[indices[i]]);
+            gradients.push(gradient);
+        }
+        return gradients;
+    }
+    /**
+     * Gets all {@linkcode svgGradient svgGradients} indices in {@linkcode definitions}
+     * @returns {number[]}
+     */
+    GetAllGradientIndices() { 
+        if (this.definitions == null || this.definitions.length == 0) { return []; }
+        let gradients = [];
+        for (let i = 0; i < this.definitions.length; i++) {
+            if (this.definitions[i] instanceof svgGradient) {
+                gradients.push(i);
+            }
+        }
+        return gradients;
+    }
+    /**
+     * Removes the given gradient from this asset's 
+     * {@linkcode definitions}, if it's found.
+     * @param {svgGradient} gradient 
+     */
+    RemoveGradient(gradient) {
+        let i = this.GetGradientIndex(gradient);
+        if (i >= 0) {
+            let prev = this.definitions.structuredClone();
+            if (this.definitions.removeAt(i) != null) {
+                this.#changed('definitions#setGradient', this.definitions, prev);
+            }
+        }
+    }
+    /**
+     * Removes all {@linkcode svgGradient svgGradients} 
+     * from this asset's {@linkcode definitions}. 
+     */
+    RemoveAllGradients() {
+        let gradients = this.GetAllGradients();
+        for (let i = 0; i < gradients.length; i++) {
+            this.RemoveGradient(gradients[i]);
+        }
+    }
+    /**
      * Gets the index of the first {@link svgGradient}
      * found in {@linkcode definitions}, or `-1` if none are found.
      * @returns {number}
@@ -408,6 +459,20 @@ export class svgHTMLAsset extends svg.element {
             }
         }
         return null;
+    }
+    /**
+     * Returns the index of the given gradient if it's found in this
+     * element's {@linkcode definitions}. Otherwise, returns `-1`
+     * @param {svgGradient} gradient 
+     * @returns {number}
+     */
+    GetGradientIndex(gradient) {
+        for (let i = 0; i < this.definitions.length; i++) {
+            if (this.definitions[i] === gradient) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -441,7 +506,7 @@ export class svgHTMLAsset extends svg.element {
      * @returns {gradient|null} 
     */
     get gradient() { return this.GetGradient(0); }
-    /** @param {gradient|string[]|null} v  */
+    /** @param {gradient|gradient[]|string[]|null} v  */
     set gradient(v) {
         if (v == null) {
             if (svg.config.GRADIENT_SET_NULL_SETS_FILL_NULL) {
@@ -467,21 +532,24 @@ export class svgHTMLAsset extends svg.element {
             }
         } else if (Array.isArray(v)) {
             // it's an array, check if it's empty, if so, treat as null 
+            v.removeNullValues();
             if (v.length == 0) { v = null; this.gradient = v; return; }
-            // check if it's all strings, if not, error 
-            // TODO: allow assigning an array of svgGradients via svgHTMLAsset.gradient setter 
-            // Issue URL: https://github.com/nickyonge/evto-web/issues/60
-            for (let i = 0; i < v.length; i++) {
-                if (typeof v[i] !== 'string') {
-                    console.warn("WARNING: if assigning an array to gradient, it MUST be all string values", v, this);
+            if (typeof (v[0]) === 'string') {
+                // assign string array 
+                if (this.GetFirstGradientDefinitionIndex() >= 0) {
+                    this.GetGradient().SetColors(v);
+                } else {
+                    this.NewGradient(null, false, /** @type {string[]} */ (v));
+                }
+            } else {
+                // assign gradient array 
+                if (v.length == 1) {
+                    // single asset, just pass in directly
+                    this.gradient = v[0];
                     return;
                 }
-            }
-            // assign 
-            if (this.GetFirstGradientDefinitionIndex() >= 0) {
-                this.GetGradient().SetColors(v);
-            } else {
-                this.NewGradient(null, false, v);
+                this.RemoveAllGradients();
+                
             }
         } else if (typeof v === 'string') {
             // it's a string 
@@ -602,6 +670,15 @@ export class svgHTMLAsset extends svg.element {
             this.#changed('definitions#push', this.definitions, prev);
         }
         return gradient;
+    }
+    /**
+     * Adds all the given svgGradients
+     * @param {svgGradient[]} gradients 
+     */
+    AddGradients(gradients) {
+        for (let i = 0; i < gradients.length; i++) {
+            this.AddGradient(gradients[i]);
+        }
     }
 
     /**
