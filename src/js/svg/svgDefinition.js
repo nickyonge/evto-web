@@ -21,7 +21,7 @@ export class svgDefinition extends svg.element {
         if (!this.#_firstTypeAssigned) {
             this.#_firstTypeAssigned = true;
         } else {
-            this.#changed('defType', v, prev);
+            this.changed('defType', v, prev);
         }
     }
     /** @type {string} */
@@ -44,7 +44,7 @@ export class svgDefinition extends svg.element {
                 v = [];
             } else {
                 this.#_subDefinitions = null;
-                this.#changed('definitions', v, prev);
+                this.changed('definitions', v, prev);
                 return;
             }
         }
@@ -54,8 +54,8 @@ export class svgDefinition extends svg.element {
         this.#_subDefinitions = v;
         this.#_subDefinitions.name = 'definitions';
         this.#_subDefinitions['parent'] = this;
-        this.#_subDefinitions.onChange = this.#arrayChanged;
-        this.#changed('definitions', v, prev);
+        this.#_subDefinitions.onChange = this.arrayChanged;
+        this.changed('definitions', v, prev);
     }
     /** @type {svg.definition[]} */
     #_subDefinitions;
@@ -74,15 +74,15 @@ export class svgDefinition extends svg.element {
                 v = [];
             } else {
                 this.#_extraAttributes = null;
-                this.#changed('extraAttributes', v, prev);
+                this.changed('extraAttributes', v, prev);
                 return;
             }
         }
         this.#_extraAttributes = v;
         this.#_extraAttributes.name = 'extraAttributes';
         this.#_extraAttributes['parent'] = this;
-        this.#_extraAttributes.onChange = this.#arrayChanged;
-        this.#changed('extraAttributes', v, prev);
+        this.#_extraAttributes.onChange = this.arrayChanged;
+        this.changed('extraAttributes', v, prev);
     }
     /** @type {Array<[string, any]>} */
     #_extraAttributes = [];
@@ -98,7 +98,7 @@ export class svgDefinition extends svg.element {
         if (!this.#_firstParentAssigned) {
             this.#_firstParentAssigned = true;
         } else {
-            this.#changed('parent', v, prev);
+            this.changed('parent', v, prev);
         }
     }
     /** @type {svg.element} */
@@ -123,7 +123,7 @@ export class svgDefinition extends svg.element {
         if (this.#_storeInDefsElement == v) { return; }
         let prev = this.#_storeInDefsElement;
         this.#_storeInDefsElement = v;
-        this.#changed('storeInDefsElement', v, prev);
+        this.changed('storeInDefsElement', v, prev);
         this.#_storeInDefsElement = v;
     }
     /** @type {boolean|null} */
@@ -438,19 +438,4 @@ export class svgDefinition extends svg.element {
      * @see {@linkcode svgConfig.HTML_INDENT}
      * @protected @type {number} */
     _subDefinitionIndent;
-
-    // Local change and bubble-on-change settings 
-    /** Should changes to this asset bubble up to its {@link svgGradient.parent parent} asset? @type {boolean} */
-    get bubbleOnChange() { return this.#_bubbleOnChange; }
-    set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
-    #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
-
-    /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {[]} source array object @param {any} returnValue returned value from method */
-    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('parent')) { source['parent'].#changed?.(`${source.name}#${type}`, source, returnValue); } };
-    /** Local changed callback that calls {@link onChange} on this element and (if {@linkcode bubbleOnChange} is `true`) its {@link svgDefinition.parent parent}. @type {svg.onChange} */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
-
-    // TODO: svg #changed method, and .parent and .bubbleOnChange properties should prolly be part of svgElement 
-    // Issue URL: https://github.com/nickyonge/evto-web/issues/63
-
 }

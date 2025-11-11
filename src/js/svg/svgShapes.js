@@ -37,7 +37,7 @@ export class svgShape extends svg.definition {
         if (!this.#_firstParentAssigned) {
             this.#_firstParentAssigned = true;
         } else {
-            this.#changed('parent', v, prev);
+            this.changed('parent', v, prev);
         }
     }
     /** @type {svg.htmlAsset} */
@@ -46,10 +46,10 @@ export class svgShape extends svg.definition {
     #_firstParentAssigned = false;
 
     get fill() { return this.#_fill; }
-    set fill(v) { let prev = this.#_fill; this.#_fill = v; this.#changed('fill', v, prev); }
+    set fill(v) { let prev = this.#_fill; this.#_fill = v; this.changed('fill', v, prev); }
     #_fill = svg.defaults.FILL;
     get stroke() { return this.#_stroke; }
-    set stroke(v) { let prev = this.#_stroke; this.#_stroke = v; this.#changed('stroke', v, prev); }
+    set stroke(v) { let prev = this.#_stroke; this.#_stroke = v; this.changed('stroke', v, prev); }
     #_stroke = svg.defaults.STROKE;
     /**
      * Base class for all SVG Shapes 
@@ -129,27 +129,25 @@ export class svgShape extends svg.definition {
     set gradient(gradient) {
         this.fillGradient = gradient;
     }
-    /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 } // shape 
 export class svgRect extends svgShape {
     get x() { return this.#_x; }
-    set x(v) { let prev = this.#_x; this.#_x = v; this.#changed('x', v, prev); }
+    set x(v) { let prev = this.#_x; this.#_x = v; this.changed('x', v, prev); }
     #_x = svg.defaults.X;
     get y() { return this.#_y; }
-    set y(v) { let prev = this.#_y; this.#_y = v; this.#changed('y', v, prev); }
+    set y(v) { let prev = this.#_y; this.#_y = v; this.changed('y', v, prev); }
     #_y = svg.defaults.Y;
     get width() { return this.#_width; }
-    set width(v) { let prev = this.#_width; this.#_width = v; this.#changed('width', v, prev); }
+    set width(v) { let prev = this.#_width; this.#_width = v; this.changed('width', v, prev); }
     #_width = svg.defaults.WIDTH;
     get height() { return this.#_height; }
-    set height(v) { let prev = this.#_height; this.#_height = v; this.#changed('height', v, prev); }
+    set height(v) { let prev = this.#_height; this.#_height = v; this.changed('height', v, prev); }
     #_height = svg.defaults.HEIGHT;
     get rx() { return this.#_rx; }
-    set rx(v) { let prev = this.#_rx; this.#_rx = v; this.#changed('rx', v, prev); }
+    set rx(v) { let prev = this.#_rx; this.#_rx = v; this.changed('rx', v, prev); }
     #_rx = svg.defaults.RECT_RX;
     get ry() { return this.#_ry; }
-    set ry(v) { let prev = this.#_ry; this.#_ry = v; this.#changed('ry', v, prev); }
+    set ry(v) { let prev = this.#_ry; this.#_ry = v; this.changed('ry', v, prev); }
     #_ry = svg.defaults.RECT_RY;
     /**
      * 
@@ -190,18 +188,16 @@ export class svgRect extends svgShape {
     }
     /** sets both {@linkcode rx} and {@linkcode ry} corner radii @param {number} radius */
     set r(radius) { this.rx = radius; this.ry = radius; }
-    /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 } // rect 
 export class svgCircle extends svgShape {
     get r() { return this.#_r; }
-    set r(v) { let prev = this.#_r; this.#_r = v; this.#changed('r', v, prev); }
+    set r(v) { let prev = this.#_r; this.#_r = v; this.changed('r', v, prev); }
     #_r = svg.defaults.R;
     get cx() { return this.#_cx; }
-    set cx(v) { let prev = this.#_cx; this.#_cx = v; this.#changed('cx', v, prev); }
+    set cx(v) { let prev = this.#_cx; this.#_cx = v; this.changed('cx', v, prev); }
     #_cx = svg.defaults.CX;
     get cy() { return this.#_cy; }
-    set cy(v) { let prev = this.#_cy; this.#_cy = v; this.#changed('cy', v, prev); }
+    set cy(v) { let prev = this.#_cy; this.#_cy = v; this.changed('cy', v, prev); }
     #_cy = svg.defaults.CY;
     /**
      * 
@@ -227,16 +223,16 @@ export class svgCircle extends svgShape {
 } // circle 
 export class svgEllipse extends svgShape {
     get rx() { return this.#_rx; }
-    set rx(v) { let prev = this.#_rx; this.#_rx = v; this.#changed('rx', v, prev); }
+    set rx(v) { let prev = this.#_rx; this.#_rx = v; this.changed('rx', v, prev); }
     #_rx = svg.defaults.ELLIPSE_RX;
     get ry() { return this.#_ry; }
-    set ry(v) { let prev = this.#_ry; this.#_ry = v; this.#changed('ry', v, prev); }
+    set ry(v) { let prev = this.#_ry; this.#_ry = v; this.changed('ry', v, prev); }
     #_ry = svg.defaults.ELLIPSE_RY;
     get cx() { return this.#_cx; }
-    set cx(v) { let prev = this.#_cx; this.#_cx = v; this.#changed('cx', v, prev); }
+    set cx(v) { let prev = this.#_cx; this.#_cx = v; this.changed('cx', v, prev); }
     #_cx = svg.defaults.CX;
     get cy() { return this.#_cy; }
-    set cy(v) { let prev = this.#_cy; this.#_cy = v; this.#changed('cy', v, prev); }
+    set cy(v) { let prev = this.#_cy; this.#_cy = v; this.changed('cy', v, prev); }
     #_cy = svg.defaults.CY;
     /**
      * 
@@ -260,21 +256,19 @@ export class svgEllipse extends svgShape {
             ['cy', this.cy]]);
         return [d, super.data].filter(Boolean).join(' ');
     }
-    /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 } // ellipse 
 export class svgLine extends svgShape {
     get x1() { return this.#_x1; }
-    set x1(v) { let prev = this.#_x1; this.#_x1 = v; this.#changed('x1', v, prev); }
+    set x1(v) { let prev = this.#_x1; this.#_x1 = v; this.changed('x1', v, prev); }
     #_x1 = svg.defaults.X1;
     get y1() { return this.#_y1; }
-    set y1(v) { let prev = this.#_y1; this.#_y1 = v; this.#changed('y1', v, prev); }
+    set y1(v) { let prev = this.#_y1; this.#_y1 = v; this.changed('y1', v, prev); }
     #_y1 = svg.defaults.Y1;
     get x2() { return this.#_x2; }
-    set x2(v) { let prev = this.#_x2; this.#_x2 = v; this.#changed('x2', v, prev); }
+    set x2(v) { let prev = this.#_x2; this.#_x2 = v; this.changed('x2', v, prev); }
     #_x2 = svg.defaults.X2;
     get y2() { return this.#_y2; }
-    set y2(v) { let prev = this.#_y2; this.#_y2 = v; this.#changed('y2', v, prev); }
+    set y2(v) { let prev = this.#_y2; this.#_y2 = v; this.changed('y2', v, prev); }
     #_y2 = svg.defaults.Y2;
     /**
      * 
@@ -298,13 +292,11 @@ export class svgLine extends svgShape {
             ['y2', this.y2]]);
         return [d, super.data].filter(Boolean).join(' ');
     }
-    /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 } // line 
 export class svgPolyline extends svgShape {
     /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {number[][]} */
     get points() { return this.#_points; }
-    set points(v) { let prev = this.#_points; this.#_points = v; this.#changed('points', v, prev); }
+    set points(v) { let prev = this.#_points; this.#_points = v; this.changed('points', v, prev); }
     #_points = svg.defaults.POINTS;
     /**
      * 
@@ -325,13 +317,11 @@ export class svgPolyline extends svgShape {
         let d = this.ParseData([['points', pts.length > 0 ? pts.join(' ') : null]]);
         return [d, super.data].filter(Boolean).join(' ');
     }
-    /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 } // polyline 
 export class svgPolygon extends svgShape {
     /** 2D array of numeric points, `[ [x, y], [x, y], ... ]` @type {number[][]} */
     get points() { return this.#_points; }
-    set points(v) { let prev = this.#_points; this.#_points = v; this.#changed('points', v, prev); }
+    set points(v) { let prev = this.#_points; this.#_points = v; this.changed('points', v, prev); }
     #_points = svg.defaults.POINTS;
     /**
      * 
@@ -352,15 +342,13 @@ export class svgPolygon extends svgShape {
         let d = this.ParseData([['points', pts.length > 0 ? pts.join(' ') : null]]);
         return [d, super.data].filter(Boolean).join(' ');
     }
-    /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 } // polygon 
 export class svgPath extends svgShape {
     get d() { return this.#_d; }
-    set d(v) { let prev = this.#_d; this.#_d = v; this.#changed('d', v, prev); }
+    set d(v) { let prev = this.#_d; this.#_d = v; this.changed('d', v, prev); }
     #_d = svg.defaults.D;
     get pathLength() { return this.#_pathLength; }
-    set pathLength(v) { let prev = this.#_pathLength; this.#_pathLength = v; this.#changed('pathLength', v, prev); }
+    set pathLength(v) { let prev = this.#_pathLength; this.#_pathLength = v; this.changed('pathLength', v, prev); }
     #_pathLength = svg.defaults.PATHLENGTH;
     /**
      * 
@@ -379,8 +367,6 @@ export class svgPath extends svgShape {
             ['pathLength', this.pathLength]]);
         return [d, super.data].filter(Boolean).join(' ');
     }
-    /** @type {svg.onChange} Local changed callback that calls {@link onChange} on both this element and its {@link parent}. */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 } // path
 
 /**

@@ -23,7 +23,7 @@ export class svgGradient extends svg.definition {
      * @see {@linkcode svgGradient.GetGradientTypeFrom} static bool-to-string conversion 
      * @return {boolean} */
     get isRadial() { return this.#_isRadial; }
-    set isRadial(v) { let prev = this.#_isRadial; this.#_isRadial = v; this.#changed('isRadial', v, prev); }
+    set isRadial(v) { let prev = this.#_isRadial; this.#_isRadial = v; this.changed('isRadial', v, prev); }
     /** @type {boolean} */
     #_isRadial = svg.defaults.GRADIENT_ISRADIAL;
 
@@ -44,24 +44,24 @@ export class svgGradient extends svg.definition {
      * {@linkcode svg.config.GRADIENT_SHARPNESS_CAPPED GRADIENT_SHARPNESS_CAPPED}.
      * @returns {number} */
     get sharpness() { return this.#_sharpness; }
-    set sharpness(v) { let prev = this.#_sharpness; this.#_sharpness = v; this.#changed('sharpness', v, prev); }
+    set sharpness(v) { let prev = this.#_sharpness; this.#_sharpness = v; this.changed('sharpness', v, prev); }
     /** @type {number} */
     #_sharpness = svg.defaults.GRADIENT_SHARPNESS;
     /** Are this gradient's {@link svgGradientStop stops} mirrored? Default `false`
      * @returns {boolean} */
     get mirror() { return this.#_mirror; }
-    set mirror(v) { let prev = this.#_mirror; this.#_mirror = v; this.#changed('mirror', v, prev); }
+    set mirror(v) { let prev = this.#_mirror; this.#_mirror = v; this.changed('mirror', v, prev); }
     /** @type {boolean} */
     #_mirror = svg.defaults.GRADIENT_MIRROR;
     get scale() { return this.#_scale; }
-    set scale(v) { let prev = this.#_scale; this.#_scale = v; this.#changed('scale', v, prev); }
+    set scale(v) { let prev = this.#_scale; this.#_scale = v; this.changed('scale', v, prev); }
     #_scale = svg.defaults.GRADIENT_SCALE;
     /** angle, in degrees, a linear gradient should be rotated by. Does not affect radial gradients. 
      * 
      * **NOTE:** also affects xy12 properties, but only invokes {@link svg.element.onChange onChange} once, for property `angle`. 
      * @returns {number} */
     get angle() { return this.#_angle; }
-    set angle(v) { let prev = this.#_angle; this.#_angle = v; this.#changed('angle', v, prev); }
+    set angle(v) { let prev = this.#_angle; this.#_angle = v; this.changed('angle', v, prev); }
     /** @type {number} */
     #_angle = svg.defaults.GRADIENT_ANGLE;
     /**
@@ -71,7 +71,7 @@ export class svgGradient extends svg.definition {
      * @returns {{x:number, y:number}}
      */
     get anglePivotPoint() { return this.#_anglePivotPoint; }
-    set anglePivotPoint(v) { let prev = this.#_anglePivotPoint; this.#_anglePivotPoint = v; this.#changed('anglePivotPoint', v, prev); }
+    set anglePivotPoint(v) { let prev = this.#_anglePivotPoint; this.#_anglePivotPoint = v; this.changed('anglePivotPoint', v, prev); }
     /** @type {{x:number, y:number}} */
     #_anglePivotPoint = svg.defaults.GRADIENT_ANGLEPIVOTPOINT;
 
@@ -82,7 +82,7 @@ export class svgGradient extends svg.definition {
      * **Note:** `number` only, don't use `string` percentages, eg `50%`
      * @returns {number} */
     get opacity() { return this.#_opacity; }
-    set opacity(v) { let prev = this.#_opacity; this.#_opacity = v; this.#changed('opacity', v, prev); }
+    set opacity(v) { let prev = this.#_opacity; this.#_opacity = v; this.changed('opacity', v, prev); }
     /** @type {number} */
     #_opacity = svg.defaults.GRADIENT_OPACITY;
 
@@ -90,21 +90,21 @@ export class svgGradient extends svg.definition {
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/x1
      * @returns {string|number} */
     get x1() { return this.#_x1; }
-    set x1(v) { let prev = this.#_x1; this.#_x1 = v; this.#changed('x1', v, prev); }
+    set x1(v) { let prev = this.#_x1; this.#_x1 = v; this.changed('x1', v, prev); }
     /** @type {string|number} */
     #_x1 = svg.defaults.GRADIENT_X1;
     /** First Y-coordinate for drawing an SVG element that requires more than one coordinate.
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/x1
      * @returns {string|number} */
     get y1() { return this.#_y1; }
-    set y1(v) { let prev = this.#_y1; this.#_y1 = v; this.#changed('y1', v, prev); }
+    set y1(v) { let prev = this.#_y1; this.#_y1 = v; this.changed('y1', v, prev); }
     /** @type {string|number} */
     #_y1 = svg.defaults.GRADIENT_Y1;
     /** Second X-coordinate for drawing an SVG element that requires more than one coordinate.
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/x1
      * @returns {string|number} */
     get x2() { return this.#_x2; }
-    set x2(v) { let prev = this.#_x2; this.#_x2 = v; this.#changed('x2', v, prev); }
+    set x2(v) { let prev = this.#_x2; this.#_x2 = v; this.changed('x2', v, prev); }
     /** @type {string|number} */
     #_x2 = svg.defaults.GRADIENT_X2;
     /** Second Y-coordinate for drawing an SVG element that requires more than one coordinate.
@@ -112,7 +112,7 @@ export class svgGradient extends svg.definition {
      * @returns {string|number} */
     get y2() { return this.#_y2; }
     /** @returns {string|number} */
-    set y2(v) { let prev = this.#_y2; this.#_y2 = v; this.#changed('y2', v, prev); }
+    set y2(v) { let prev = this.#_y2; this.#_y2 = v; this.changed('y2', v, prev); }
     /** @type {string|number} */
     #_y2 = svg.defaults.GRADIENT_Y2;
 
@@ -137,41 +137,41 @@ export class svgGradient extends svg.definition {
                 v = [];
             } else {
                 this.#_stops = null;
-                this.#changed('stops', v, prev);
+                this.changed('stops', v, prev);
                 return;
             }
         }
         this.#_stops = v;
         this.#_stops.name = 'stops';
         this.#_stops['parent'] = this;
-        this.#_stops.onChange = this.#arrayChanged;
+        this.#_stops.onChange = this.arrayChanged;
         v.forEach(stop => { stop.parent = this; });
-        this.#changed('stops', v, prev);
+        this.changed('stops', v, prev);
     }
     /** @type {svgGradientStop[]} */
     #_stops;
 
     /** `radialGradient` only, X coord at gradient start circle, convenience, simply gets/sets {@link x1} @returns {number|string} @see {@linkcode isRadial}*/
     get fx() { return this.x1; }
-    set fx(i) { let prev = this.#_x1; this.#_x1 = i; this.#changed('fx', i, prev); }
+    set fx(i) { let prev = this.#_x1; this.#_x1 = i; this.changed('fx', i, prev); }
     /** `radialGradient` only, Y coord at gradient start circle, convenience, simply gets/sets {@link y1} @returns {number|string} @see {@linkcode isRadial}*/
     get fy() { return this.y1; }
-    set fy(i) { let prev = this.#_y1; this.#_y1 = i; this.#changed('fy', i, prev); }
+    set fy(i) { let prev = this.#_y1; this.#_y1 = i; this.changed('fy', i, prev); }
     /** `radialGradient` only, X coord at gradient end circle, convenience, simply gets/sets {@link x2} @returns {number|string} @see {@linkcode isRadial}*/
     get cx() { return this.x2; }
-    set cx(i) { let prev = this.#_x2; this.#_x2 = i; this.#changed('cx', i, prev); }
+    set cx(i) { let prev = this.#_x2; this.#_x2 = i; this.changed('cx', i, prev); }
     /** `radialGradient` only, Y coord at gradient end circle, convenience, simply gets/sets {@link y2} @returns {number|string} @see {@linkcode isRadial}*/
     get cy() { return this.y2; }
-    set cy(i) { let prev = this.#_y2; this.#_y2 = i; this.#changed('cy', i, prev); }
+    set cy(i) { let prev = this.#_y2; this.#_y2 = i; this.changed('cy', i, prev); }
 
     /** radial-only, radius at end of the gradient @returns {number|string} */
     get fr() { return this.#_fr; }
-    set fr(v) { let prev = this.#_fr; this.#_fr = v; this.#changed('fr', v, prev); }
+    set fr(v) { let prev = this.#_fr; this.#_fr = v; this.changed('fr', v, prev); }
     /** @type {number|string} */
     #_fr = svg.defaults.GRADIENT_FR;
     /** radial-only, radius at end of the gradient @returns {number|string} */
     get r() { return this.#_r; }
-    set r(v) { let prev = this.#_r; this.#_r = v; this.#changed('r', v, prev); }
+    set r(v) { let prev = this.#_r; this.#_r = v; this.changed('r', v, prev); }
     /** @type {number|string} */
     #_r = svg.defaults.GRADIENT_R;
 
@@ -180,7 +180,7 @@ export class svgGradient extends svg.definition {
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/gradientUnits
      * @returns {string} */
     get gradientUnits() { return this.#_gradientUnits; }
-    set gradientUnits(v) { let prev = this.#_gradientUnits; this.#_gradientUnits = v; this.#changed('gradientUnits', v, prev); }
+    set gradientUnits(v) { let prev = this.#_gradientUnits; this.#_gradientUnits = v; this.changed('gradientUnits', v, prev); }
     /** @type {string} */
     #_gradientUnits = svg.defaults.GRADIENT_UNITS;
     /** The `gradientTransform` attribute contains the definition 
@@ -191,14 +191,14 @@ export class svgGradient extends svg.definition {
      * @returns {string}
      * */
     get gradientTransform() { return this.#_gradientTransform; }
-    set gradientTransform(v) { let prev = this.#_gradientTransform; this.#_gradientTransform = v; this.#changed('gradientTransform', v, prev); }
+    set gradientTransform(v) { let prev = this.#_gradientTransform; this.#_gradientTransform = v; this.changed('gradientTransform', v, prev); }
     /** @type {string} */
     #_gradientTransform = svg.defaults.GRADIENT_TRANSFORM;
     get spreadMethod() { return this.#_spreadMethod; }
-    set spreadMethod(v) { let prev = this.#_spreadMethod; this.#_spreadMethod = v; this.#changed('spreadMethod', v, prev); }
+    set spreadMethod(v) { let prev = this.#_spreadMethod; this.#_spreadMethod = v; this.changed('spreadMethod', v, prev); }
     #_spreadMethod = svg.defaults.GRADIENT_SPREADMETHOD;
     get href() { return this.#_href; }
-    set href(v) { let prev = this.#_href; this.#_href = v; this.#changed('href', v, prev); }
+    set href(v) { let prev = this.#_href; this.#_href = v; this.changed('href', v, prev); }
     #_href = svg.defaults.GRADIENT_HREF;
 
     /** 
@@ -212,7 +212,7 @@ export class svgGradient extends svg.definition {
         if (!this.#_firstParentAssigned) {
             this.#_firstParentAssigned = true;
         } else {
-            this.#changed('parent', v, prev);
+            this.changed('parent', v, prev);
         }
     }
     /** @type {svg.htmlAsset} */
@@ -614,7 +614,7 @@ export class svgGradient extends svg.definition {
         this.stops.push(stop);
         stop.parent = this;
         if (!this.stops.hasOwnProperty('onChange')) {
-            this.#changed('stops#push', this.stops, prev);
+            this.changed('stops#push', this.stops, prev);
         }
         return stop;
     }
@@ -624,7 +624,7 @@ export class svgGradient extends svg.definition {
         this.stops.push(stop);
         stop.parent = this;
         if (!this.stops.hasOwnProperty('onChange')) {
-            this.#changed('stops#push', this.stops, prev);
+            this.changed('stops#push', this.stops, prev);
         }
         return stop;
     }
@@ -659,7 +659,7 @@ export class svgGradient extends svg.definition {
         if (this.stops.length < index + 1) { this.stops.length = index + 1; }
         this.stops[index] = stop;
         stop.parent = this;
-        this.#changed('stops#index', this.stops, prev);
+        this.changed('stops#index', this.stops, prev);
         return stop;
     }
 
@@ -689,12 +689,12 @@ export class svgGradient extends svg.definition {
             this.stops.length = index + 1;
             this.stops[index] = stop;
             stop.parent = this;
-            this.#changed('stops#index', this.stops, prev);
+            this.changed('stops#index', this.stops, prev);
         } else {
             this.stops.splice(index, 0, stop);
             stop.parent = this;
             if (!this.stops.hasOwnProperty('onChange')) {
-                this.#changed('stops#splice', this.stops, prev);
+                this.changed('stops#splice', this.stops, prev);
             }
         }
         return stop;
@@ -709,24 +709,12 @@ export class svgGradient extends svg.definition {
     GetColor(index) { return this.GetStop(index); }
     InsertColor(index, stop) { return this.InsertStop(index, stop); }
     InsertNewColor(index, color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) { return this.InsertNewStop(index, color, opacity, offset); }
-
-    // Local change and bubble-on-change settings 
-    /** Should changes to this asset bubble up to its {@link svgGradient.parent parent} asset? @returns {boolean} */
-    get bubbleOnChange() { return this.#_bubbleOnChange; }
-    set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
-    /** @type {boolean} */
-    #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
-
-    /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {[]} source array object @param {any} returnValue returned value from method */
-    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('parent')) { source['parent'].#changed?.(`${source.name}#${type}`, source, returnValue); } };
-    /** Local changed callback that calls {@link onChange} on this element and (if {@linkcode bubbleOnChange} is `true`) its  {@link svgGradient.parent parent}. @type {svg.onChange} */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 }
 
 class svgGradientStop extends svg.element {
     /** @returns {string} */
     get color() { return this.#_color; }
-    set color(v) { let prev = this.#_color; this.#_color = v; this.#changed('color', v, prev); }
+    set color(v) { let prev = this.#_color; this.#_color = v; this.changed('color', v, prev); }
     /** @type {string} */
     #_color = svg.defaults.GRADIENT_STOP_COLOR;
     /** 
@@ -737,12 +725,12 @@ class svgGradientStop extends svg.element {
      * @see {@linkcode opacityInherited this.opacityInherited} for opacity value that also accounts for parent opacity.
      * @returns {number} */
     get opacity() { return this.#_opacity; }
-    set opacity(v) { let prev = this.#_opacity; this.#_opacity = v; this.#changed('opacity', v, prev); }
+    set opacity(v) { let prev = this.#_opacity; this.#_opacity = v; this.changed('opacity', v, prev); }
     /** @type {number} */
     #_opacity = svg.defaults.GRADIENT_STOP_OPACITY;
     /** @returns {number|string} */
     get offset() { return this.#_offset; }
-    set offset(v) { let prev = this.#_offset; this.#_offset = v; this.#changed('offset', v, prev); }
+    set offset(v) { let prev = this.#_offset; this.#_offset = v; this.changed('offset', v, prev); }
     /** @type {number|string} */
     #_offset = svg.defaults.GRADIENT_STOP_OFFSET;
 
@@ -757,7 +745,7 @@ class svgGradientStop extends svg.element {
         if (!this.#_firstParentAssigned) {
             this.#_firstParentAssigned = true;
         } else {
-            this.#changed('parent', v, prev);
+            this.changed('parent', v, prev);
         }
     }
     /** @type {svg.gradient} */
@@ -890,13 +878,4 @@ class svgGradientStop extends svg.element {
         return newStop;
     }
 
-    // Local change and bubble-on-change settings 
-    /** Should changes to this asset bubble up to its {@link svgGradientStop.parent parent} asset? @returns {boolean} */
-    get bubbleOnChange() { return this.#_bubbleOnChange; }
-    set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
-    /** @type {boolean} */
-    #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
-
-    /** Local changed callback that calls {@link onChange} on both this element and its {@link svgGradientStop.parent parent}. @type {svg.onChange} */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
 }

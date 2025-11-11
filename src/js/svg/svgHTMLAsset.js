@@ -49,13 +49,13 @@ export class svgHTMLAsset extends svg.element {
      * {@linkcode svgGradient.opacity svgGradient.opacity} instead.
      * @returns {number} */
     get opacity() { return this.#_opacity; }
-    set opacity(v) { let prev = this.#_opacity; this.#_opacity = v; this.#changed('opacity', v, prev); }
+    set opacity(v) { let prev = this.#_opacity; this.#_opacity = v; this.changed('opacity', v, prev); }
     /** @type {number} */
     #_opacity = svg.defaults.OPACITY;
 
     /** CSS class to apply to this SVG asset @returns {string} */
     get class() { return this.#_class; }
-    set class(v) { let prev = this.#_class; this.#_class = v; this.#changed('class', v, prev); }
+    set class(v) { let prev = this.#_class; this.#_class = v; this.changed('class', v, prev); }
     /** @type {string} */
     #_class;
     /** Used to define viewbox properties in the SVG HTML element @returns {svgViewBox} */
@@ -67,7 +67,7 @@ export class svgHTMLAsset extends svg.element {
         if (!this.#_firstViewboxAssigned) {
             this.#_firstViewboxAssigned = true;
         } else {
-            this.#changed('viewbox', v, prev);
+            this.changed('viewbox', v, prev);
         }
     }
     /** @type {svgViewBox} */
@@ -89,7 +89,7 @@ export class svgHTMLAsset extends svg.element {
                 v = [];
             } else {
                 this.#_shapes = null;
-                this.#changed('shapes', v, prev);
+                this.changed('shapes', v, prev);
                 return;
             }
         }
@@ -100,8 +100,8 @@ export class svgHTMLAsset extends svg.element {
         this.#_shapes = v;
         this.#_shapes.name = 'shapes';
         this.#_shapes['parent'] = this;
-        this.#_shapes.onChange = this.#arrayChanged;
-        this.#changed('shapes', v, prev);
+        this.#_shapes.onChange = this.arrayChanged;
+        this.changed('shapes', v, prev);
     }
     /** @type {svg.shape[]} */
     #_shapes; // don't assign default value to svg element arrays 
@@ -121,7 +121,7 @@ export class svgHTMLAsset extends svg.element {
                 v = [];
             } else {
                 this.#_definitions = null;
-                this.#changed('definitions', v, prev);
+                this.changed('definitions', v, prev);
                 return;
             }
         }
@@ -131,20 +131,20 @@ export class svgHTMLAsset extends svg.element {
         this.#_definitions = v;
         this.#_definitions.name = 'definitions';
         this.#_definitions['parent'] = this;
-        this.#_definitions.onChange = this.#arrayChanged;
-        this.#changed('definitions', v, prev);
+        this.#_definitions.onChange = this.arrayChanged;
+        this.changed('definitions', v, prev);
     }
     /** @type {svg.definition[]} */
     #_definitions; // don't assign default value to svg element arrays 
 
     /** @returns {boolean} */
     get preserveAspectRatio() { return this.#_preserveAspectRatio; }
-    set preserveAspectRatio(v) { let prev = this.#_preserveAspectRatio; this.#_preserveAspectRatio = v; this.#changed('preserveAspectRatio', v, prev); }
+    set preserveAspectRatio(v) { let prev = this.#_preserveAspectRatio; this.#_preserveAspectRatio = v; this.changed('preserveAspectRatio', v, prev); }
     /** @type {boolean} */
     #_preserveAspectRatio = svg.defaults.PRESERVEASPECTRATIO;;
     /** @returns {([string, any?])[]} */
     get metadata() { return this.#_metadata; }
-    set metadata(v) { let prev = this.#_metadata; this.#_metadata = v; this.#changed('metadata', v, prev); }
+    set metadata(v) { let prev = this.#_metadata; this.#_metadata = v; this.changed('metadata', v, prev); }
     /** @type {([string, any?])[]} */
     #_metadata = svg.defaults.METADATA;
 
@@ -415,7 +415,7 @@ export class svgHTMLAsset extends svg.element {
         if (i >= 0) {
             let prev = this.definitions.structuredClone();
             if (this.definitions.removeAt(i) != null) {
-                this.#changed('definitions#setGradient', this.definitions, prev);
+                this.changed('definitions#setGradient', this.definitions, prev);
             }
         }
     }
@@ -526,7 +526,7 @@ export class svgHTMLAsset extends svg.element {
                 if (g == v) { return; } // reassigning the same gradient, do nothing 
                 let prev = this.definitions.structuredClone();
                 this.definitions[gdIndex] = v;
-                this.#changed('definitions#setGradient', this.definitions, prev);
+                this.changed('definitions#setGradient', this.definitions, prev);
             } else {
                 this.AddGradient(v);
             }
@@ -652,7 +652,7 @@ export class svgHTMLAsset extends svg.element {
         this.definitions.push(gradient);
         this.gradient.parent = this;
         if (!this.definitions.hasOwnProperty('onChange')) {
-            this.#changed('definitions#push', this.definitions, prev);
+            this.changed('definitions#push', this.definitions, prev);
         }
         return gradient;
     }
@@ -667,7 +667,7 @@ export class svgHTMLAsset extends svg.element {
         this.definitions.push(gradient);
         gradient.parent = this;
         if (!this.definitions.hasOwnProperty('onChange')) {
-            this.#changed('definitions#push', this.definitions, prev);
+            this.changed('definitions#push', this.definitions, prev);
         }
         return gradient;
     }
@@ -695,7 +695,7 @@ export class svgHTMLAsset extends svg.element {
             this.definitions.push(shapeDef);
             if (shapeDef.hasOwnProperty('parent')) { shapeDef.parent = this; }
             if (!this.definitions.hasOwnProperty('onChange')) {
-                this.#changed('definitions#push', this.definitions, prev);
+                this.changed('definitions#push', this.definitions, prev);
             }
         }
         else {
@@ -703,7 +703,7 @@ export class svgHTMLAsset extends svg.element {
             this.shapes.push(shapeDef);
             if (shapeDef.hasOwnProperty('parent')) { shapeDef.parent = this; }
             if (!this.shapes.hasOwnProperty('onChange')) {
-                this.#changed('shapes#push', this.shapes, prev);
+                this.changed('shapes#push', this.shapes, prev);
             }
         }
     }
@@ -715,26 +715,21 @@ export class svgHTMLAsset extends svg.element {
     static BasicGradientRect(...colors) {
         return svg.generator.BasicGradientRect(...colors);
     }
-
-    /** Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. @param {string} type type of method called @param {[]} source array object @param {any} returnValue returned value from method */
-    #arrayChanged(type, source, returnValue) { if (source.hasOwnProperty('parent')) { source['parent'].#changed(`${source.name}#${type}`, source, returnValue); } };
-    /** Local changed callback that calls {@link onChange} on this element (separated for easy modification) @type {svg.onChange} */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); };
 }
 
 /** Used to define viewbox properties in the SVG HTML element */
 export class svgViewBox extends svg.element {
     get x() { return this.#_x; }
-    set x(v) { let prev = this.#_x; this.#_x = v; this.#changed('x', v, prev); }
+    set x(v) { let prev = this.#_x; this.#_x = v; this.changed('x', v, prev); }
     #_x = svg.defaults.X;
     get y() { return this.#_y; }
-    set y(v) { let prev = this.#_y; this.#_y = v; this.#changed('y', v, prev); }
+    set y(v) { let prev = this.#_y; this.#_y = v; this.changed('y', v, prev); }
     #_y = svg.defaults.Y;
     get width() { return this.#_width; }
-    set width(v) { let prev = this.#_width; this.#_width = v; this.#changed('width', v, prev); }
+    set width(v) { let prev = this.#_width; this.#_width = v; this.changed('width', v, prev); }
     #_width = svg.defaults.WIDTH;
     get height() { return this.#_height; }
-    set height(v) { let prev = this.#_height; this.#_height = v; this.#changed('height', v, prev); }
+    set height(v) { let prev = this.#_height; this.#_height = v; this.changed('height', v, prev); }
     #_height = svg.defaults.HEIGHT;
     constructor(x = svg.defaults.X, y = svg.defaults.Y, width = svg.defaults.WIDTH, height = svg.defaults.HEIGHT) {
         super(); this.x = x; this.y = y; this.width = width; this.height = height;
@@ -752,7 +747,7 @@ export class svgViewBox extends svg.element {
         if (!this.#_firstParentAssigned) {
             this.#_firstParentAssigned = true;
         } else {
-            this.#changed('parent', v, prev);
+            this.changed('parent', v, prev);
         }
     }
     /** @type {svg.htmlAsset} */
@@ -760,9 +755,4 @@ export class svgViewBox extends svg.element {
     /** local flag for first viewbox parent assignment @type {boolean} */
     #_firstParentAssigned = false;
     /** Should changes to this asset bubble up to its {@link svgViewBox.parent parent} asset? @type {boolean} */
-    get bubbleOnChange() { return this.#_bubbleOnChange; }
-    set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.#changed('bubbleOnChange', v, prev); }
-    #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
-    /** Local changed callback that calls {@link onChange} on both this element and its {@link svgViewBox.parent parent}. @type {svg.onChange} */
-    #changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, this); } };
 }
