@@ -148,8 +148,9 @@ export class svgDefinition extends svg.element {
      * @param {any?} [value] Optional value of the attribute. Will override a value set in `attribute` if `value` is non-null and `attribute` is a `[string, any?]` array.
      * @param {boolean?} [returnIfAlreadyAdded=true] Value to return if the attribute has already been added to this def. Default `true` 
      * @returns {boolean} `true` if attribute was successfully added, `false` if failed to add, `returnIfAlreadyAdded` if attribute already exists
-     */
-    AddAttribute(attribute, value = null, returnIfAlreadyAdded = true) {
+     * @see {@linkcode AddAttributes} to add multiple attributes at once 
+    */
+   AddAttribute(attribute, value = null, returnIfAlreadyAdded = true) {
         if (attribute == null) { return false; }
         // pass array to string/any attribute/value
         if (!Array.isArray(attribute)) {
@@ -171,10 +172,30 @@ export class svgDefinition extends svg.element {
         return true;
     }
     /**
+     * Adds multiple attributes at once. Returns `true` if ANY attributes were 
+     * successfully added (or existing ones modified); otherwise returns `false`.
+     * @param {[string, any?][]} attributes Array of all attributes to add.
+     * @returns {boolean} `true` if any attributes were successfully added OR modified, `false` if no attributes were added 
+     * @see {@linkcode AddAttribute} to add a single attribute  
+     */
+    AddAttributes(attributes) {
+        if (attributes == null || attributes.length == 0) { return false; }
+        let addedAny = false;
+        for (let i = 0; i < attributes.length; i++) {
+            if (this.AddAttribute(attributes[i], null, true)) { addedAny = true; }
+        }
+        return addedAny;
+    }
+    /**
      * Removes the given attribute from this def's {@linkcode extraAttributes}.
      * 
      * If the function fails (eg attribute param is `null`), returns `false`.
      * If the attribute isn't found, returns the value of `returnIfNotFound` (default `true`).
+     * 
+     * **Note:** While most functions relating to attributes allow `(name:string, value:any)`
+     * as supplied parameters (including if the value parameter is unused, eg 
+     * {@linkcode GetDefinitionAttributeName}), this one does NOT. The second parameter is 
+     * NOT for a value, but always the local boolean {@linkcode returnIfNotFound}.
      * @param {string|[string,any?]} attribute Attribute to remove, either by name or by `[name:string,value:any?]` array
      * @param {boolean|null|'error'} [returnIfNotFound=true] 
      * Value to return if attribute isn't found. Used for 
@@ -184,6 +205,7 @@ export class svgDefinition extends svg.element {
      * Setting to the string `"error"` will throw an error. Default `true` 
      * @returns {boolean|null} **Note:** If `returnIfNotFound` is `error`, an Error gets thrown. 
      * This function can only return `true`, `false`, or `null`.
+     * @see {@linkcode RemoveAttributes} to remove multiple attributes at once 
      */
     RemoveAttribute(attribute, returnIfNotFound = true) {
         if (attribute == null) { return false; }
@@ -195,6 +217,26 @@ export class svgDefinition extends svg.element {
             return returnIfNotFound;
         }
         return this.extraAttributes[index][1];
+    }
+    /**
+     * Removes multiple attributes at once. Returns `true` if ANY attributes were 
+     * successfully removed; otherwise returns `false`.
+     * 
+     * **Note:** While by default {@linkcode RemoveAttribute} (singular) returns
+     * `true` if the attribute to remove wasn't found, this method will return `false`
+     * if none of the attributes are found. It will ONLY return `true` if at least
+     * one of the given attributes WAS successfully removed.
+     * @param {[string, any?][]} attributes Array of all attributes to remove.
+     * @returns {boolean} `true` if any attributes were successfully removed, `false` if no attributes were removed 
+     * @see {@linkcode RemoveAttribute} to remove a single attribute 
+     */
+    RemoveAttributes(attributes) {
+        if (attributes == null || attributes.length == 0) { return false; }
+        let removedAny = false;
+        for (let i = 0; i < attributes.length; i++) {
+            if (this.RemoveAttribute(attributes[i], false)) { removedAny = true; }
+        }
+        return removedAny;
     }
     /**
      * Gets the value of the given attribute, if it's in {@linkcode extraAttributes}.
@@ -242,7 +284,7 @@ export class svgDefinition extends svg.element {
      * @returns {number}
      */
     #attributeIndex(attribute) {
-        attribute = this.#attributeName(attribute);
+        attribute = svgDefinition.GetDefinitionAttributeName(attribute);
         if (attribute == null) { return -1; }
         let e = this.extraAttributes;
         for (let i = 0; i < e.length; i++) {
@@ -258,9 +300,10 @@ export class svgDefinition extends svg.element {
      * ambiguity between `string` names and `[string,any?]` attributes. 
      * If name can't be found, returns `null`
      * @param {string|[string,any?]} attribute Either `string` name of the attribute, or `[string, any]` array where `any` is the (optional) value.
+     * @param {any} [_value] Value of this attribute. Unused, only present to allow passing identical format params as other attr methods.
      * @returns {string}
      */
-    #attributeName(attribute) {
+    static GetDefinitionAttributeName(attribute, _value = null) {
         if (attribute = null) { return null; }
         if (Array.isArray(attribute)) {
             if (attribute[0] == null) { return null; }
@@ -272,12 +315,12 @@ export class svgDefinition extends svg.element {
      * Gets the value property of a given attribute. Typically you'd just reference it by name, 
      * but you can pass the same params as you would to {@linkcode AddAttribute}.
      * 
-     * **Note:** Does not check existing {@linkcode extraAttributes}. For that, use {@linkcode GetAttributeValue}.
+     * **Note:** Does not check existing {@linkcode extraAttributes}. For that, use {@linkcode GetDefinitionAttributeValue}.
      * @param {string|[string,any?]} attribute Either `string` name of the attribute, or `[string, any]` array where `any` is the (optional) value.
      * @param {any?} [value] Optional value of the attribute. If non-null, will always return this
      * @returns {any}
      */
-    #attributeValue(attribute, value) {
+    static GetDefinitionAttributeValue(attribute, value) {
         if (value != null) { return value; }
         if (attribute == null) { return null; }
         if (Array.isArray(attribute)) {
