@@ -27,7 +27,7 @@ export class svgXYWHDefinition extends svgDefinition {
 
     get x() { return this.#_x; }
     set x(v) {
-        if (this.matchViewboxXYWH && this.parentHTMLAsset != null) {
+        if (this.matchViewboxXYWH && this.rootHTMLAsset != null) {
             if (WARNING_SET_XYWH_ON_XYWH_MATCHED_DEF) { console.warn(`WARNING: Can't set X to ${v} on svgXYWHDefinition with matchViewboxXYWH enabled.`, this); }
             return;
         }
@@ -36,7 +36,7 @@ export class svgXYWHDefinition extends svgDefinition {
     #_x = svgDefaults.X;
     get y() { return this.#_y; }
     set y(v) {
-        if (this.matchViewboxXYWH && this.parentHTMLAsset != null) {
+        if (this.matchViewboxXYWH && this.rootHTMLAsset != null) {
             if (WARNING_SET_XYWH_ON_XYWH_MATCHED_DEF) { console.warn(`WARNING: Can't set Y to ${v} on svgXYWHDefinition with matchViewboxXYWH enabled.`, this); }
             return;
         }
@@ -45,7 +45,7 @@ export class svgXYWHDefinition extends svgDefinition {
     #_y = svgDefaults.Y;
     get width() { return this.#_width; }
     set width(v) {
-        if (this.matchViewboxXYWH && this.parentHTMLAsset != null) {
+        if (this.matchViewboxXYWH && this.rootHTMLAsset != null) {
             if (WARNING_SET_XYWH_ON_XYWH_MATCHED_DEF) { console.warn(`WARNING: Can't set WIDTH to ${v} on svgXYWHDefinition with matchViewboxXYWH enabled.`, this); }
             return;
         }
@@ -54,7 +54,7 @@ export class svgXYWHDefinition extends svgDefinition {
     #_width = svgDefaults.WIDTH;
     get height() { return this.#_height; }
     set height(v) {
-        if (this.matchViewboxXYWH && this.parentHTMLAsset != null) {
+        if (this.matchViewboxXYWH && this.rootHTMLAsset != null) {
             if (WARNING_SET_XYWH_ON_XYWH_MATCHED_DEF) { console.warn(`WARNING: Can't set HEIGHT to ${v} on svgXYWHDefinition with matchViewboxXYWH enabled.`, this); }
             return;
         }
@@ -90,7 +90,7 @@ export class svgXYWHDefinition extends svgDefinition {
                 // add onChange callback to new parent's HTML asset 
                 if (newValue != null) {
                     if (newValue instanceof svgElement) {
-                        let htmlAsset = newValue.parentHTMLAsset;
+                        let htmlAsset = newValue.rootHTMLAsset;
                     } else {
                         console.warn("New parent assigned to svgXYWHDefinition is somehow NOT an svgElement? Investigate", newValue, this);
                     }

@@ -669,7 +669,7 @@ export class svgElement {
         }
     }
     /** 
-     * Local reference to {@linkcode parent} 
+     * Local reference to {@linkcode svgElement.parent parent} 
      * @type {svgElement} 
      * @private */
     _parent = null;
@@ -686,12 +686,47 @@ export class svgElement {
      * Returns itself if `this` is an `svgHTMLAsset`, or `null` if it doesn't have one.
      * @returns {svgHTMLAsset|null}
      */
-    parentHTMLAsset() {
+    get rootHTMLAsset() {
         if (this instanceof svgHTMLAsset) { return this; }
-        if (this.parent != null) { return this.parent.parentHTMLAsset(); }
+        if (this.parent != null) { return this.parent.rootHTMLAsset; }
         return null;
     }
 
+    /**
+     * Get the {@linkcode svgHTMLAsset} that is the root parent of this element, 
+     * including any {@linkcode svgHTMLAsset} that it ITSELF is parented to.
+     * 
+     * Typically, you'll just want to use {@linkcode rootHTMLAsset}, 
+     * unless you're doing very fancy SVG nesting stuff. In which case, cool! 
+     * 
+     * Returns itself if `this` is an `svgHTMLAsset` that does not have 
+     * another `svgHTMLAsset` higher up its parentage, or `null` if there
+     * is no `svgHTMLAsset` anywhere above this element's hierarchy.
+     * @returns {svgHTMLAsset|null}
+     */
+    get rootHTMLAssetDeep() {
+        if (this instanceof svgHTMLAsset) {
+            if (this.parent != null) {
+                let deep = this.parent.rootHTMLAssetDeep;
+                return deep != null ? deep : this;
+            }
+            return this;
+        }
+        if (this.parent != null) { return this.parent.rootHTMLAsset; }
+        return null;
+    }
+
+    /**
+     * Returns the root {@linkcode svgElement} at the top of this 
+     * element's {@linkcode svgElement.parent parent} hierarchy.
+     * 
+     * If this element has no parent, returns itself.
+     * @returns {svgElement}
+     */
+    get rootParent() {
+        if (this.parent != null) { return this.parent.rootParent; }
+        return this;
+    }
 
     /** 
      * Should {@link svg.onChange onChange} events to this element 
