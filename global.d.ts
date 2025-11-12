@@ -132,10 +132,11 @@ declare global {
          * - ≠: Method modifies the values of, but not the overall length of, the array 
          * - {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array 📄}: Clickable link to the relevant online documentation
          * 
-         * @param {string} type The name of the method used on the array, as a string. Eg, `"push"` for {@linkcode Array.prototype.push array.push()}. See below for a comprehensive list. 
-         * @param {T[]} source The array object itself that was modified 
+         * @param {string} type The name of the method used on the array, as a string. Eg, `"push"` for {@linkcode Array.prototype.push array.push()}. See {@linkcode onChange} description for a comprehensive list. 
+         * @param {T[]} updatedArray The array object itself that was modified 
+         * @param {T[]} previousArray A {@linkcode Array.clone clone} of the original array, before modification. **NOT** a deep clone - it's a new array, with intact original references.
          * @param {T} returnValue The value returned by the modified method. Eg, for `type = "pop"`, returns the array's now-removed last element, as per {@linkcode Array.prototype.pop array.pop()}.
-         * @param {...T} [parameters=undefined] All parameter values supplied to the array in the invoked method. See below for a comprehensive list. 
+         * @param {...T} [parameters=undefined] All parameter values supplied to the array in the invoked method. See {@linkcode onChange} description for a comprehensive list. 
          * @returns {void}
          * 
          * Callback is also invoked for changes of the following properties: 
@@ -147,7 +148,7 @@ declare global {
          * @type {(type:string, source:T[], returnValue:T, ...parameters:T[]): T}
          * @template T 
          */
-        onChange?: (type: string, source: T[], returnValue: T, ...parameters: T[]) => T;
+        onChange?: (type: string, updatedArray: T[], previousArray: T[], returnValue: T, ...parameters: T[]) => T;
 
         /**
          * Returns this array after copying a section of the array identified by start and end
@@ -295,7 +296,7 @@ declare global {
          * @type {<T>(deepClone:boolean): T[]}
          * @template T 
          */
-        clone<T>(deepClone: boolean): T[];
+        clone<T>(deepClone?: boolean): T[];
 
         /**
          * Returns a `structuredClone` copy of this array, for deep cloning. 

@@ -43,5 +43,6 @@ import { svgElement } from './svgElement';
  * @param {any} newValue The newly assigned value 
  * @param {any} previousValue The old value, for reference  
  * @param {svgElement} [changedElement=undefined] The {@link svgElement} that was changed 
+ * @param {...any} [extraParameters] Any additional parameters passed into the onChange callback 
  * @returns {void}
  */

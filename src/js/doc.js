@@ -61,9 +61,10 @@ import { BasicComponent } from "./components/base";
             }
             if (this[_arrayName] === name) { return; } // don't change if new name is identical 
             if (this.hasOwnProperty('onChange')) {
-                let prev = this[_arrayName];
-                const a = /** @type {Array} */ (this);
-                a.onChange('name', a, name, prev);
+                let prevName = this[_arrayName];
+                let prevArray = this.clone();
+                const array = /** @type {Array} */ (this);
+                array.onChange('name', array, prevArray, name, prevName);
             }
             this[_arrayName] = name;
         },
@@ -200,7 +201,7 @@ import { BasicComponent } from "./components/base";
     Array.prototype.copyWithin = function (target, start, end = this.length) {
         if (this.hasOwnProperty('onChange')) {
             let v = _copyWithin.call(this, target, start, end);
-            this.onChange('copyWithin', this, v);
+            this.onChange('copyWithin', this, v, target, start, end);
             return v;
         }
         return _copyWithin.call(this, target, start, end);
@@ -222,8 +223,9 @@ import { BasicComponent } from "./components/base";
      */
     Array.prototype.fill = function (value, start = 0, end = this.length) {
         if (this.hasOwnProperty('onChange')) {
+            let prev = this.clone();
             let v = _fill.call(this, value, start, end);
-            this.onChange('fill', this, v);
+            this.onChange('fill', this, prev, v, value, start, end);
             return v;
         }
         return _fill.call(this, value, start, end);
@@ -240,8 +242,9 @@ import { BasicComponent } from "./components/base";
      */
     Array.prototype.pop = function () {
         if (this.hasOwnProperty('onChange')) {
+            let prev = this.clone();
             let v = _pop.call(this);
-            this.onChange('pop', this, v);
+            this.onChange('pop', this, prev, v);
             return v;
         }
         return _pop.call(this);
@@ -258,15 +261,16 @@ import { BasicComponent } from "./components/base";
      */
     Array.prototype.push = function (...items) {
         if (this.hasOwnProperty('onChange')) {
+            let prev = this.clone();
             let v = _push.call(this, ...items);
-            this.onChange('push', this, v);
+            this.onChange('push', this, prev, v, ...items);
             return v;
         }
         return _push.call(this, ...items);
     };
 
     /**
-     * Removes the given value from the array, via {@linkcode splice}.
+     * Removes the given value from the array, via {@linkcode Array.splice}.
      * @param {T} value Value to remove from the array
      * @type {<T>(value: T) => T}
      * @returns {T|null} Returns removed value, or `null` if the value wasn't found or couldn't be removed 
@@ -279,7 +283,7 @@ import { BasicComponent } from "./components/base";
     }
 
     /**
-     * Removes the value at the given index from the array, via {@linkcode splice}.
+     * Removes the value at the given index from the array, via {@linkcode Array.splice}.
      * 
      * Largely a convenience method, basically just `splice(index)`
      * @param {number} index Index to remove the value of from the array
@@ -305,8 +309,9 @@ import { BasicComponent } from "./components/base";
      */
     Array.prototype.reverse = function () {
         if (this.hasOwnProperty('onChange')) {
+            let prev = this.clone();
             let v = _reverse.call(this);
-            this.onChange('reverse', this, v);
+            this.onChange('reverse', this, prev, v);
             return v;
         }
         return _reverse.call(this);
@@ -323,8 +328,9 @@ import { BasicComponent } from "./components/base";
      */
     Array.prototype.shift = function () {
         if (this.hasOwnProperty('onChange')) {
+            let prev = this.clone();
             let v = _shift.call(this);
-            this.onChange('shift', this, v);
+            this.onChange('shift', this, prev, v);
             return v;
         }
         return _shift.call(this);
@@ -347,8 +353,9 @@ import { BasicComponent } from "./components/base";
      */
     Array.prototype.sort = function (compareFn) {
         if (this.hasOwnProperty('onChange')) {
+            let prev = this.clone();
             let v = _sort.call(this, compareFn);
-            this.onChange('sort', this, v);
+            this.onChange('sort', this, prev, v, compareFn);
             return v;
         }
         return _sort.call(this, compareFn);
@@ -369,8 +376,9 @@ import { BasicComponent } from "./components/base";
      */
     Array.prototype.splice = function (start, deleteCount = 0, ...items) {
         if (this.hasOwnProperty('onChange')) {
+            let prev = this.clone();
             let v = _splice.call(this, start, deleteCount, ...items);
-            this.onChange('splice', this, v);
+            this.onChange('splice', this, prev, v, start, deleteCount, ...items);
             return v;
         }
         return _splice.call(this, start, deleteCount, ...items);
@@ -387,8 +395,9 @@ import { BasicComponent } from "./components/base";
      */
     Array.prototype.unshift = function (...items) {
         if (this.hasOwnProperty('onChange')) {
+            let prev = this.clone();
             let v = _unshift.call(this, ...items);
-            this.onChange('unshift', this, v);
+            this.onChange('unshift', this, prev, v, ...items);
             return v;
         }
         return _unshift.call(this, ...items);
@@ -436,7 +445,8 @@ import { BasicComponent } from "./components/base";
     const FLATTEN_CONTAINS = true;
 
     /**
-     * Removes all `null` and `undefined` values from this array.
+     * Removes all `null` and `undefined` values from this array, 
+     * via calling {@linkcode Array.splice}.
      * @returns {number}
      * @type {() => number}
      * */

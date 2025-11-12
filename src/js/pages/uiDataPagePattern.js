@@ -103,6 +103,21 @@ function CreatePatternSection(section) {
     // add SVG to page 
     patternImage.addSVG(patternAlphaSVG);
 
+    let svg1 = new svgHTMLAsset();
+    let svg2 = new svgHTMLAsset();
+    svg1.id = 'svg1';
+    svg2.id = 'svg2';
+    let svg1b = svg1;
+    console.log("match: " + (svg1 === svg1b));
+    let a = [svg1, svg2, svg1b];
+    // let b = [svg1, svg2, svg1b];
+    // let b = a;
+    // let b = a.clone();
+    let b = a.deepClone();
+
+    console.log('array match: ' + (a === b));
+    console.log('array values match: ' + (a[0] === b[0]));
+
     // TODO: replace multi references to an SVG shape with a use URL reference
     // Issue URL: https://github.com/nickyonge/evto-web/issues/67
     // this is a good example of using one shape multiple times that should be a <use> shape ref 

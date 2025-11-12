@@ -350,14 +350,16 @@ export class svgElement {
      * @param {any} newValue The newly assigned value 
      * @param {any} previousValue The old value, for reference  
      * @param {svgElement} [changedElement = undefined] The {@link svgElement} that was changed. If `undefined` (the default value), sends `this` (the {@link svgElement} itself)
+     * @param {...any} [extraParameters] Any additional parameters passed into the onChange callback 
      * @returns {void}
+     * @type {svg.onChange}
      * @private 
      */
-    _invokeChange(valueChanged, newValue, previousValue, changedElement = undefined) {
+    _invokeChange(valueChanged, newValue, previousValue, changedElement = undefined, ...extraParameters) {
         if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; return; }
         for (let i = 0; i < this.onChangeCallbacks.length; i++) {
             if (typeof this.onChangeCallbacks[i] !== 'function') { continue; }
-            this.onChangeCallbacks[i]?.(valueChanged, newValue, previousValue, changedElement == null ? this : changedElement);
+            this.onChangeCallbacks[i]?.(valueChanged, newValue, previousValue, changedElement == null ? this : changedElement, ...extraParameters);
         }
     }
 
@@ -743,16 +745,19 @@ export class svgElement {
      * @protected
      */
     changed(valueChanged, newValue, previousValue) { if (this._suppressOnChange) { return; } this._invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?._invokeChange(valueChanged, newValue, previousValue, this); } }
-    /** 
-     * Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. 
-     * @param {string} type type of method called, eg `splice` 
-     * @param {[]} source array object 
-     * @param {any} returnValue returned value from method
-     * @protected
+    
+    /**
+     * Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. 
+     * @param {string} type The name of the method used on the array, as a string. Eg, `"push"` for {@linkcode Array.prototype.push array.push()}. See {@linkcode onChange} description for a comprehensive list. 
+     * @param {T[]} updatedArray The array object itself that was modified 
+     * @param {T[]} previousArray A {@linkcode Array.prototype.clone clone} of the original array, before modification. **NOT** a deep clone - it's a new array, with intact original references.
+     * @param {T} returnValue The value returned by the modified method. Eg, for `type = "pop"`, returns the array's now-removed last element, as per {@linkcode Array.prototype.pop array.pop()}.
+     * @param {...T} [parameters=undefined] All parameter values supplied to the array in the invoked method. See {@linkcode onChange} description for a comprehensive list. 
+     * @template T
      */
-    arrayChanged(type, source, returnValue) {
-        if (source.hasOwnProperty('parent')) {
-            source['parent'].changed?.(`${source.name}#${type}`, source, returnValue);
+    arrayChanged(type, updatedArray, previousArray, returnValue, ...parameters) {
+        if (updatedArray.hasOwnProperty('parent') && updatedArray['parent'] instanceof svgElement) {
+            updatedArray['parent'].changed?.(`${updatedArray.name}#${type}`, updatedArray, previousArray, updatedArray['parent'], ...parameters);
         }
     };
 }

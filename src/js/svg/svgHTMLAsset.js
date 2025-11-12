@@ -169,6 +169,7 @@ export class svgHTMLAsset extends svg.element {
      */
     constructor(shapes = [], definitions = [], viewBoxOrVBWidth = new svgViewBox(), vbHeight = undefined) {
         super();
+        this.onChange = this._htmlAssetOnChange;
         this.shapes = Array.isArray(shapes) ? shapes : [shapes];
         this.definitions = definitions;
         if (viewBoxOrVBWidth != null) {
@@ -280,6 +281,56 @@ export class svgHTMLAsset extends svg.element {
     /** Get/set the {@linkcode svgViewBox.height height} value of this asset's {@linkcode svgViewBox}. @returns {number} */
     get height() { return this.viewBox.height; }
     set height(v) { this.viewBox.height = v; }
+
+    /**
+     * Local onChange callback 
+     * @type {svg.onChange}
+     * @see {Array.prototype.onChange}
+     * @private
+     */
+    _htmlAssetOnChange(valueChanged, newValue, previousValue, _changedElement, ..._extraParameters) {
+        // determine if an array was changed 
+        let hashIndex = valueChanged.indexOf('#');
+        let arrayChanged = hashIndex >= 0;
+        let arrayName = arrayChanged ? valueChanged.substring(0, hashIndex) : null;
+        let arrayMethod = arrayChanged ? valueChanged.substring(hashIndex + 1) : null;
+        if (arrayChanged) {
+            console.log(arrayName + ', ' + arrayMethod);
+            console.log('previousValue');
+            console.log(typeof previousValue);
+            console.log('newValue');
+            console.log(newValue);
+            console.log('_changedElement');
+            console.log(_changedElement);
+            switch (arrayMethod) {
+                case 'push':
+                case 'unshift':
+                    // value added 
+                    break;
+                case 'pop':
+                case 'shift':
+                    // value removed
+                    break;
+                case 'copyWithin':
+                case 'fill':
+                    // value(s) may be added or removed (technically copyWithin can only remove, but idc let's be safe)
+                    break;
+            }
+        }
+    }
+
+    /**
+     * 
+     * @param {string} arrayName 
+     * @returns {svgElement[]|null}
+     */
+    _getArrayByName(arrayName) {
+        switch (arrayName) {
+            case 'definitions': return this.definitions;
+            case 'shapes': return this.shapes;
+        }
+        return null;
+    }
 
     /**
      * Gets the {@link svg.shape shape} found in {@linkcode shapes} 
