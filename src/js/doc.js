@@ -450,7 +450,8 @@ import { BasicComponent } from "./components/base";
 
 
     /**
-     * Returns a clone of this array, either using `Array.from()` or `structuredClone`.
+     * Returns a clone of this array, either using `Array.from()` or (if {@link Array.structuredClone deep cloning}) 
+     * `structuredClone` (or `JSON.stringify`/`JSON.parse` if array values aren't serializable).
      * @param {boolean} [deepClone=false] Use `structuredClone` copy? If false, uses `Array.from()`. Deep cloning creates new value instances for property editing. Default `false`
      * @returns {T[]} The newly cloned version of the given array 
      * @type {<T>(deepClone:boolean) => T[]}
@@ -460,18 +461,40 @@ import { BasicComponent } from "./components/base";
         return deepClone ? this.structuredClone() : Array.from(this);
     }
     /**
-     * Returns a `structuredClone` copy of this array, for deep cloning. Deep cloning creates new value instances for property editing.
+     * Returns a `structuredClone` copy of this array, for deep cloning. 
+     * Deep cloning creates new value instances for property editing.
+     * 
+     * **Note:** All values in the array must be serializable to use 
+     * {@linkcode https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone structuredClone}.
+     * If array contains any non-serializable values such as an `Object`,
+     * a try-catch statement will instead use `JSON.parse(JSON.stringify(myArray))`, 
+     * which is more expensive, but will successfully create a deep clone
+     * of non-serializable values.
      * @returns {T[]} The newly cloned version of the given array 
      * @type {<T>() => T[]}
      * @template T 
      */
     Array.prototype.structuredClone = function () {
-        return structuredClone(this);
+        try {
+            // attempt structuredClone
+            return structuredClone(this);
+        } catch {
+            // fallback in case of non-serializable values error 
+            return JSON.parse(JSON.stringify(this));
+        }
     }
     /**
-     * Returns a `structuredClone` copy of this array, for deep cloning. Deep cloning creates new value instances for property editing.
+     * Returns a `structuredClone` copy of this array, for deep cloning. 
+     * Deep cloning creates new value instances for property editing.
      * 
-     * Convenience, alternate name of {@linkcode Array.prototype.structuredClone}.
+     * Convenience, alternate name of {@linkcode Array.structuredClone}.
+     * 
+     * **Note:** All values in the array must be serializable to use 
+     * {@linkcode https://developer.mozilla.org/en-US/docs/Web/API/Window/structuredClone structuredClone}.
+     * If array contains any non-serializable values such as an `Object`,
+     * a try-catch statement will instead use `JSON.parse(JSON.stringify(myArray))`, 
+     * which is more expensive, but will successfully create a deep clone
+     * of non-serializable values.
      * @returns {T[]} The newly cloned version of the given array 
      * @type {<T>() => T[]}
      * @template T 
