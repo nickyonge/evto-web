@@ -736,23 +736,4 @@ export class svgViewBox extends svg.element {
     }
     get html() { return `viewBox="${this.data}"`; }
     get data() { return `${this.x} ${this.y} ${this.width} ${this.height}`; }
-    /** 
-     * SVG parent {@link svg.htmlAsset asset}, assigned by the parent 
-     * @returns {svg.htmlAsset} */
-    get parent() { return this.#_parent; }
-    set parent(v) {
-        if (this.parent == v) { return; }
-        let prev = this.#_parent;
-        this.#_parent = v;
-        if (!this.#_firstParentAssigned) {
-            this.#_firstParentAssigned = true;
-        } else {
-            this.changed('parent', v, prev);
-        }
-    }
-    /** @type {svg.htmlAsset} */
-    #_parent = null;
-    /** local flag for first viewbox parent assignment @type {boolean} */
-    #_firstParentAssigned = false;
-    /** Should changes to this asset bubble up to its {@link svgViewBox.parent parent} asset? @type {boolean} */
 }

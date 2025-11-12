@@ -88,25 +88,6 @@ export class svgDefinition extends svg.element {
     #_extraAttributes = [];
 
     /** 
-     * SVG parent {@link svg.element svgElement}, assigned by the parent 
-     * @returns {svg.element} */
-    get parent() { return this.#_parent; }
-    set parent(v) {
-        if (this.parent == v) { return; }
-        let prev = this.#_parent;
-        this.#_parent = v;
-        if (!this.#_firstParentAssigned) {
-            this.#_firstParentAssigned = true;
-        } else {
-            this.changed('parent', v, prev);
-        }
-    }
-    /** @type {svg.element} */
-    #_parent = null;
-    /** local flag for first definition parent assignment @type {boolean} */
-    #_firstParentAssigned = false;
-
-    /** 
      * Should this definition be stored in its {@linkcode svgDefinition.parent parent} 
      * element's `<defs>` in the DOM (`true`), or as a direct child (`false`)? 
      * 

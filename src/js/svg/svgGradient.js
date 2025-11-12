@@ -1,6 +1,6 @@
 import { arePoints, EnsureToNumber, isBlank, isPoint, Lerp, RotatePointsAroundPivot, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
 import * as svg from './index';
-import { svgDefaults } from './index';
+import { svgDefaults, svgElement } from './index';
 
 /** Class representing an SVG defined linear or radial gradient */
 export class svgGradient extends svg.definition {
@@ -200,25 +200,6 @@ export class svgGradient extends svg.definition {
     get href() { return this.#_href; }
     set href(v) { let prev = this.#_href; this.#_href = v; this.changed('href', v, prev); }
     #_href = svg.defaults.GRADIENT_HREF;
-
-    /** 
-     * SVG parent {@link svg.htmlAsset asset}, assigned by the parent 
-     * @returns {svg.htmlAsset} */
-    get parent() { return this.#_parent; }
-    set parent(v) {
-        if (this.parent == v) { return; }
-        let prev = this.#_parent;
-        this.#_parent = v;
-        if (!this.#_firstParentAssigned) {
-            this.#_firstParentAssigned = true;
-        } else {
-            this.changed('parent', v, prev);
-        }
-    }
-    /** @type {svg.htmlAsset} */
-    #_parent = null;
-    /** local flag for first gradient parent assignment @type {boolean} */
-    #_firstParentAssigned = false;
 
     /**
      * 
@@ -489,10 +470,10 @@ export class svgGradient extends svg.definition {
             return true;
         };
 
-        this.__suppressOnChange = true;
+        this._suppressOnChange = true;
         let xyOrig = this.xy12;
         let useAngle = ProcessAngle();
-        this.__suppressOnChange = false;
+        this._suppressOnChange = false;
 
         // collect data 
         let d = this.isRadial ? this.ParseData([
@@ -521,9 +502,9 @@ export class svgGradient extends svg.definition {
 
         // undo angle 
         if (useAngle) {
-            this.__suppressOnChange = true;
+            this._suppressOnChange = true;
             this.xy12 = xyOrig;
-            this.__suppressOnChange = false;
+            this._suppressOnChange = false;
         }
 
         // done, return data 
@@ -734,25 +715,6 @@ class svgGradientStop extends svg.element {
     /** @type {number|string} */
     #_offset = svg.defaults.GRADIENT_STOP_OFFSET;
 
-    /** 
-     * SVG parent {@link svgGradient gradient}, assigned by the gradient 
-     * @returns {svgGradient} */
-    get parent() { return this.#_parent; }
-    set parent(v) {
-        if (this.parent == v) { return; }
-        let prev = this.#_parent;
-        this.#_parent = v;
-        if (!this.#_firstParentAssigned) {
-            this.#_firstParentAssigned = true;
-        } else {
-            this.changed('parent', v, prev);
-        }
-    }
-    /** @type {svg.gradient} */
-    #_parent = null;
-    /** local flag for first gradient stop parent assignment @type {boolean} */
-    #_firstParentAssigned = false;
-
     /**
      * Defines a color and its position to use on a gradient.
      * @param {string} color 
@@ -794,7 +756,8 @@ class svgGradientStop extends svg.element {
             if (opacity == null && (typeof parentOpacity)?.toLowerCase() === 'number') { return parentOpacity; }
             return opacity * parentOpacity;
         }
-        let opacity = calculateInheritedOpacity(this.opacity, this.parent?.opacity);
+        let parent = (this.parent != null && this.parent instanceof svgGradient) ? null : /** @type {svgGradient} */ (this.parent);
+        let opacity = parent == null ? this.opacity : calculateInheritedOpacity(this.opacity, parent.opacity);
         return opacity === 1 ? null : opacity;
     }
 

@@ -24,13 +24,13 @@ export class svgElement {
      * automatically generated if not manually assigned in the constructor.
      * @type {string} 
      **/
-    get id() { return this.#_id; };
+    get id() { return this._id; };
     set id(v) {
         // check if we reset null values to default uniqueID 
         if (v == null && svgConfig.SETTING_ELEMENT_ID_NULL_SETS_TO_UNIQUE) {
             v = this.uniqueID;
         }
-        if (this.#_id == v) { return; }
+        if (this._id == v) { return; }
         // ensure ID is unique 
         if (v != null) {
             svgElement.#__filterElementsArray();
@@ -49,15 +49,15 @@ export class svgElement {
                 }
             }
         }
-        let prev = this.#_id;
-        this.#_id = v;
-        if (!this.#_firstIDAssigned) {
-            this.#_firstIDAssigned = true;
+        let prev = this._id;
+        this._id = v;
+        if (!this._firstIDAssigned) {
+            this._firstIDAssigned = true;
         } else {
-            if (!this.__suppressOnChange) {
-                this.__invokeChange('id', v, prev, this);
+            if (!this._suppressOnChange) {
+                this._invokeChange('id', v, prev, this);
                 if (this.hasOwnProperty('parent')) {
-                    this.parent?.__invokeChange('id', v, prev, this);
+                    this.parent?._invokeChange('id', v, prev, this);
                 }
             }
         }
@@ -152,10 +152,10 @@ export class svgElement {
             return [getters, properties];
         }
     }
-    /** @type {string} */
-    #_id;
-    /** local flag for first ID assignment @type {boolean} */
-    #_firstIDAssigned = false;
+    /** local reference for ID @type {string} @private */
+    _id;
+    /** local flag for first ID assignment @type {boolean} @private */
+    _firstIDAssigned = false;
 
     /** The guaranteed-unique ID value for this svgElement, combining
      * {@linkcode svgInstanceNumber} and {@linkcode svgConstructor} @type {string} */
@@ -293,9 +293,9 @@ export class svgElement {
      * @param {any} previousValue The old value, for reference  
      * @param {svgElement} [changedElement = undefined] The {@link svgElement} that was changed. If `undefined` (the default value), sends `this` (the {@link svgElement} itself)
      * @returns {void}
-     * @protected 
+     * @private 
      */
-    __invokeChange(valueChanged, newValue, previousValue, changedElement = undefined) {
+    _invokeChange(valueChanged, newValue, previousValue, changedElement = undefined) {
         if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; return; }
         for (let i = 0; i < this.onChangeCallbacks.length; i++) {
             if (typeof this.onChangeCallbacks[i] !== 'function') { continue; }
@@ -316,8 +316,9 @@ export class svgElement {
      * should only be invoked once, as only {@link svg.gradient.angle angle}
      * was modified.
      * @type {boolean}
+     * @protected
      */
-    __suppressOnChange = false;
+    _suppressOnChange = false;
 
     /** 
      * get the HTML output of this element. 
@@ -592,6 +593,32 @@ export class svgElement {
     get className() { return this.constructor?.name; }
 
 
+    /** 
+     * This svgElement's parent svgElement. Can be `null`.
+     * @returns {svgElement} */
+    get parent() { return this._parent; }
+    set parent(v) {
+        if (this.parent == v) { return; }
+        let prev = this._parent;
+        this._parent = v;
+        if (!this._firstParentAssigned) {
+            this._firstParentAssigned = true;
+        } else {
+            this.changed('parent', v, prev);
+        }
+    }
+    /** 
+     * Local reference to {@linkcode parent} 
+     * @type {svgElement} 
+     * @private */
+    _parent = null;
+    /** 
+     * local flag for first parent assignment, 
+     * preventing unnecessary onChange calls 
+     * @type {boolean}
+     * @private */
+    _firstParentAssigned = false;
+
 
     /** 
      * Should {@link svg.onChange onChange} events to this element 
@@ -607,7 +634,7 @@ export class svgElement {
      * @type {svg.onChange} 
      * @protected
      */
-    changed(valueChanged, newValue, previousValue) { if (this.__suppressOnChange) { return; } this.__invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?.__invokeChange(valueChanged, newValue, previousValue, this); } }
+    changed(valueChanged, newValue, previousValue) { if (this._suppressOnChange) { return; } this._invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?._invokeChange(valueChanged, newValue, previousValue, this); } }
     /** 
      * Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. Omitted `parameters` param. 
      * @param {string} type type of method called, eg `splice` 
@@ -620,7 +647,6 @@ export class svgElement {
             source['parent'].changed?.(`${source.name}#${type}`, source, returnValue);
         }
     };
-
 }
 
 /** unique symbol value for svgElementInstance referencing */

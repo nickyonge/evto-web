@@ -26,25 +26,6 @@ export class svgShape extends svg.definition {
     }
     #_shapeType = null;
 
-    /** 
-     * SVG parent {@link svg.htmlAsset asset}, assigned by the parent 
-     * @returns {svg.htmlAsset} */
-    get parent() { return this.#_parent; }
-    set parent(v) {
-        if (this.parent == v) { return; }
-        let prev = this.#_parent;
-        this.#_parent = v;
-        if (!this.#_firstParentAssigned) {
-            this.#_firstParentAssigned = true;
-        } else {
-            this.changed('parent', v, prev);
-        }
-    }
-    /** @type {svg.htmlAsset} */
-    #_parent = null;
-    /** local flag for first shapes parent assignment @type {boolean} */
-    #_firstParentAssigned = false;
-
     get fill() { return this.#_fill; }
     set fill(v) { let prev = this.#_fill; this.#_fill = v; this.changed('fill', v, prev); }
     #_fill = svg.defaults.FILL;
