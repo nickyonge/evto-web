@@ -292,13 +292,39 @@ export class svgElement {
     RemoveOnChangeCallback(onChangeCallback, returnIfNotFound = false) {
         if (onChangeCallback == null) { return false; }
         if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; return returnIfNotFound; }
+        let i = this.GetOnChangeCallbackIndex(onChangeCallback);
+        if (i == -1) { return returnIfNotFound; }
+        this.onChangeCallbacks.removeAt(i);
+        return true;
+    }
+
+    /**
+     * Checks if the given onChange callback is present on this element. 
+     * @param {svg.onChange} onChangeCallback 
+     * @returns {boolean}
+     */
+    HasOnChangeCallback(onChangeCallback) {
+        if (onChangeCallback == null) { return false; }
+        if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; return false; }
+        return this.GetOnChangeCallbackIndex(onChangeCallback) >= 0;
+    }
+
+    /**
+     * Checks if the given {@linkcode svg.onChange onChange} callback is 
+     * present on this element, and if so, returns its index in the 
+     * {@linkcode onChangeCallbacks} array. If not, returns `-1`.
+     * @param {svg.onChange} onChangeCallback 
+     * @returns {number}
+     */
+    GetOnChangeCallbackIndex(onChangeCallback) {
+        if (onChangeCallback == null) { return -1; }
+        if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; return -1; }
         for (let i = 0; i < this.onChangeCallbacks.length; i++) {
             if (this.onChangeCallbacks[i] === onChangeCallback) {
-                this.onChangeCallbacks.removeAt(i);
-                return true;
+                return i;
             }
         }
-        return returnIfNotFound;
+        return -1;
     }
 
     /**
