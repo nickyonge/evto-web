@@ -113,22 +113,30 @@ declare global {
          * the given array, and doesn't simply reference it (eg, `find()`) or that
          * itself returns an entirely new array or type (eg, `slice()` or `join()`). 
          * Also called when {@linkcode Array.prototype.name name} is changed.
-         * - See below for a list of all functions that invoke `onChange`.
+         * 
+         * All {@link Array.prototype} mutating methods, and thus possible values for `type`, include (with parameters): 
+         * - ≠ {@linkcode Array.prototype.copyWithin copyWithin}{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/copyWithin 📄}: 3 params: `[ target:number, start:number, end?:number=undefined ]` 
+         * - ≠ {@linkcode Array.prototype.fill fill}{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/fill 📄}: 3 params: `[ value:T, start?:number, end?:number ]` 
+         * - − {@linkcode Array.prototype.pop pop}{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/pop 📄}: 0 params: `[]` 
+         * - \+ {@linkcode Array.prototype.push push}{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/push 📄}: 0 + [... spread] params: `[...items:any[] ]` 
+         * - ≈ {@linkcode Array.prototype.reverse reverse}{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/reverse 📄}: 0 params: `[]` 
+         * - − {@linkcode Array.prototype.shift shift}{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/shift 📄}: 0 params: `[]` 
+         * - ≈ {@linkcode Array.prototype.sort sort}{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort 📄}: 1 param: `[ compareFn?:(a:any, b:any):number ]` 
+         * - − {@linkcode Array.prototype.splice splice}{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/splice 📄}: 2 + [... spread] params: `[ start:number, deleteCount?:number=0, ...items:any[] ]`
+         * - \+ {@linkcode Array.prototype.unshift unshift}{@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/unshift 📄}: 0 + [... spread] params: `[...items:any[] ]` 
+         * 
+         * Key:
+         * - \+: Method adds a new value to the array 
+         * - −: Method removes a value from the array 
+         * - ≈: Method modifies the order of, but does not change, the values of the array 
+         * - ≠: Method modifies the values of, but not the overall length of, the array 
+         * - {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array 📄}: Clickable link to the relevant online documentation
+         * 
          * @param {string} type The name of the method used on the array, as a string. Eg, `"push"` for {@linkcode Array.prototype.push array.push()}. See below for a comprehensive list. 
          * @param {T[]} source The array object itself that was modified 
          * @param {T} returnValue The value returned by the modified method. Eg, for `type = "pop"`, returns the array's now-removed last element, as per {@linkcode Array.prototype.pop array.pop()}.
          * @param {...T} [parameters=undefined] All parameter values supplied to the array in the invoked method. See below for a comprehensive list. 
          * @returns {void}
-         * @see {@link Array.prototype} — All mutating methods, and thus possible values for `type`, include (with parameters): 
-         * - {@linkcode Array.prototype.copyWithin copyWithin}, 3 params: `[ target:number, start:number, end?:number=undefined ]` 
-         * - {@linkcode Array.prototype.fill fill}, 3 params: `[ value:T, start?:number, end?:number ]` 
-         * - {@linkcode Array.prototype.pop pop}, 0 params: `[]` 
-         * - {@linkcode Array.prototype.push push}, 0 + [... spread] params: `[...items:any[] ]` 
-         * - {@linkcode Array.prototype.reverse reverse}, 0 params: `[]` 
-         * - {@linkcode Array.prototype.shift shift}, 0 params: `[]` 
-         * - {@linkcode Array.prototype.sort sort}, 1 param: `[ compareFn?:(a:any, b:any):number ]` 
-         * - {@linkcode Array.prototype.splice splice}, 2 + [... spread] params: `[ start:number, deleteCount?:number=0, ...items:any[] ]` 
-         * - {@linkcode Array.prototype.unshift unshift}, 0 + [... spread] params: `[...items:any[] ]` 
          * 
          * Callback is also invoked for changes of the following properties: 
          * - {@linkcode Array.prototype.name}, 1 param: `[ previousName:string ]`, and a `returnValue` of the newly-assigned `name` value
