@@ -1,5 +1,5 @@
 import * as svg from './index';
-import { svgElement, svgShape, svgDefinition, svgGradient } from './index';
+import { svgElement, svgConfig, svgDefaults, svgShape, svgDefinition, svgGradient } from './index';
 import { shape, rect, circle, ellipse, line, polyline, polygon, path, gradient } from "./index";
 import { isBlank } from "../lilutils";
 
@@ -59,11 +59,22 @@ export class svgHTMLAsset extends svg.element {
     /** @type {string} */
     #_class;
     /** Used to define viewbox properties in the SVG HTML element @returns {svgViewBox} */
-    get viewBox() { return this.#_viewBox; }
+    get viewBox() {
+        if (!svgConfig.ALLOW_NULL_VIEWBOX) {
+            if (this.#_viewBox == null) {
+                this.viewBox = new svgViewBox();
+            }
+        }
+        return this.#_viewBox;
+    }
     set viewBox(v) {
         if (this.viewBox == v) { return; }
         let prev = this.#_viewBox;
-        this.#_viewBox = v; if (v != null) { v.parent = this; }
+        if (!svgConfig.ALLOW_NULL_VIEWBOX) {
+            if (v == null) { v = new svgViewBox(); }
+        }
+        this.#_viewBox = v;
+        if (v != null) { v.parent = this; }
         if (!this.#_firstViewboxAssigned) {
             this.#_firstViewboxAssigned = true;
         } else {
@@ -153,13 +164,26 @@ export class svgHTMLAsset extends svg.element {
      * supplied shapes, definitions, and viewbox.
      * @param {svg.shape|svg.shape[]} shapes Optional array of {@link svgShape svgShapes} 
      * @param {svg.definition[]} definitions Optional array of {@link svgDefinition svgDefinitions} for `<defs>` 
-     * @param {svgViewBox} viewBox Optional {@link svgViewBox viewbox}. If omitted, creates a new viewbox with default values.
+     * @param {svgViewBox|number|null} viewBoxOrVBWidth Optional {@link svgViewBox viewbox}, or a width value for a new ViewBox (if height is also defined). If omitted, creates a new viewbox with default values.
+     * @param {number|null} [vbHeight=undefined] Optional height for a new Viewbox. Only used if `viewBoxWidth` is type `number`.
      */
-    constructor(shapes = [], definitions = [], viewBox = new svgViewBox()) {
+    constructor(shapes = [], definitions = [], viewBoxOrVBWidth = new svgViewBox(), vbHeight = undefined) {
         super();
         this.shapes = Array.isArray(shapes) ? shapes : [shapes];
         this.definitions = definitions;
-        this.viewBox = viewBox;
+        if (viewBoxOrVBWidth != null) {
+            if (viewBoxOrVBWidth instanceof svgViewBox) {
+                this.viewBox = viewBoxOrVBWidth;
+            } else if (typeof viewBoxOrVBWidth === 'number' && vbHeight != null && typeof vbHeight === 'number') {
+                this.viewBox = new svgViewBox(null, null, viewBoxOrVBWidth, vbHeight);
+            } else {
+                this.viewBox = new svgViewBox();
+            }
+        } else {
+            if (!svgConfig.ALLOW_NULL_VIEWBOX) {
+                this.viewBox = new svgViewBox();
+            }
+        }
         svgHTMLAsset.#__filterAssetsArray();
         svgHTMLAsset.allSVGHTMLAssets.push(this);
     }
@@ -243,6 +267,19 @@ export class svgHTMLAsset extends svg.element {
         ]);
         return [this.ParseData(this.metadata), d, this.viewBox.html].filter(Boolean).join(' ');
     }
+
+    /** Get/set the {@linkcode svgViewBox.x x} value of this asset's {@linkcode svgViewBox}. @returns {number} */
+    get x() { return this.viewBox.x; }
+    set x(v) { this.viewBox.x = v; }
+    /** Get/set the {@linkcode svgViewBox.y y} value of this asset's {@linkcode svgViewBox}. @returns {number} */
+    get y() { return this.viewBox.y; }
+    set y(v) { this.viewBox.y = v; }
+    /** Get/set the {@linkcode svgViewBox.width width} value of this asset's {@linkcode svgViewBox}. @returns {number} */
+    get width() { return this.viewBox.width; }
+    set width(v) { this.viewBox.width = v; }
+    /** Get/set the {@linkcode svgViewBox.height height} value of this asset's {@linkcode svgViewBox}. @returns {number} */
+    get height() { return this.viewBox.height; }
+    set height(v) { this.viewBox.height = v; }
 
     /**
      * Gets the {@link svg.shape shape} found in {@linkcode shapes} 
@@ -356,7 +393,7 @@ export class svgHTMLAsset extends svg.element {
      * Gets all {@linkcode svgGradient svgGradients} in this SVG asset
      * @returns {svgGradient[]}
      */
-    GetAllGradients() { 
+    GetAllGradients() {
         let indices = this.GetAllGradientIndices();
         let gradients = [];
         for (let i = 0; i < indices.length; i++) {
@@ -369,7 +406,7 @@ export class svgHTMLAsset extends svg.element {
      * Gets all {@linkcode svgGradient svgGradients} indices in {@linkcode definitions}
      * @returns {number[]}
      */
-    GetAllGradientIndices() { 
+    GetAllGradientIndices() {
         if (this.definitions == null || this.definitions.length == 0) { return []; }
         let gradients = [];
         for (let i = 0; i < this.definitions.length; i++) {
@@ -513,7 +550,7 @@ export class svgHTMLAsset extends svg.element {
                 if (this.GetFirstGradientDefinitionIndex() >= 0) {
                     this.GetGradient().SetColors(v);
                 } else {
-                    this.NewGradient(null, false, /** @type {string[]} */ (v));
+                    this.NewGradient(null, false, /** @type {string[]} */(v));
                 }
             } else {
                 // assign gradient array 
@@ -523,7 +560,7 @@ export class svgHTMLAsset extends svg.element {
                     return;
                 }
                 this.RemoveAllGradients();
-                
+
             }
         } else if (typeof v === 'string') {
             // it's a string 
@@ -706,6 +743,10 @@ export class svgViewBox extends svg.element {
     set height(v) { let prev = this.#_height; this.#_height = v; this.changed('height', v, prev); }
     #_height = svg.defaults.HEIGHT;
     constructor(x = svg.defaults.X, y = svg.defaults.Y, width = svg.defaults.WIDTH, height = svg.defaults.HEIGHT) {
+        if (x == null) { x = svgDefaults.X; }
+        if (y == null) { y = svgDefaults.Y; }
+        if (width == null) { width = svgDefaults.WIDTH; }
+        if (height == null) { height = svgDefaults.HEIGHT; }
         super(); this.x = x; this.y = y; this.width = width; this.height = height;
     }
     get html() { return `viewBox="${this.data}"`; }

@@ -1,9 +1,12 @@
-import { EnsureGradientDefaultColors } from "./svgDefaults";
-import { svgElement } from "./svgElement";
-import { svgHTMLAsset } from "./svgHTMLAsset";
-import { svgDefinition } from "./svgDefinition";
-import { svgShape } from "./svgShapes";
-import { svgGradient } from "./svgGradient";
+import {
+    svgElement,
+    svgHTMLAsset,
+    svgDefinition,
+    svgShape,
+    svgGradient,
+    svgDefaults,
+    svgViewBox
+} from "./index";
 
 /**
  * Does setting an {@linkcode svgElement.id svgElement's ID} to `null`
@@ -62,6 +65,12 @@ export const HTML_WARN_DEFS_NO_ID = true;
 export const HTML_WARN_DEFS_NO_DEFTYPE = true;
 
 /**
+ * Should a `null` value for {@linkcode svgViewBox}
+ * in {@linkcode svgHTMLAsset} be allowed?
+ */
+export const ALLOW_NULL_VIEWBOX = false;
+
+/**
  * Should {@linkcode svgGradient.sharpness} be capped at `0.992`?
  * If `false`, allows gradient sharpness to fully clamp between `0`
  * and `1`.
@@ -84,7 +93,7 @@ export const GRADIENT_SHARPNESS_CAPPED = true;
 export const GRADIENT_SET_NULL_SETS_FILL_NULL = true;
 
 /**
- * Should {@linkcode EnsureGradientDefaultColors}
+ * Should {@linkcode svgDefaults.EnsureGradientDefaultColors}
  * force a single color array to add a second value?
  * @type {boolean}
  */
