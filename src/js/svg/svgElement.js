@@ -216,9 +216,11 @@ export class svgElement {
     /**
      * Set a callback for when a value in this {@link svgElement} has changed. 
      * 
-     * Returns the full {@linkcode onChangeCallbacks} array. Passing a `null` value
-     * will reset {@linkcode onChangeCallbacks} to `[]`, clearing all callbacks. 
-     * (Specifically passing `undefined` will output a console warning.)
+     * Passing a `null` value will reset {@linkcode onChangeCallbacks} to `[]`, 
+     * clearing all callbacks. Passing `undefined` will output a console warning.
+     * 
+     * Returns `true` if the callback was successfully added, including passing
+     * a `null` callback to reset the onChange callbacks.
      * 
      * Can handle single {@link svg.onChange onChange} method assignments, or
      * {@link svg.onChange onChange[]} arrays (including nested arrays).
@@ -228,6 +230,7 @@ export class svgElement {
      * - `newValue:any` — The newly assigned value 
      * - `previousValue:any` — The old value, for reference  
      * - `changedElement?:changedElement` — The {@link svgElement} that was changed (default `undefined`)
+     * @returns {boolean}
      */
     AddOnChangeCallback(onChangeCallback) {
         // if setting null, reset methods 
@@ -238,35 +241,64 @@ export class svgElement {
                     "but set null - not undefined - to avoid this warning, " +
                     "in case of unintentional callback clearing.", this);
             }
-            this.onChangeCallbacks = []; return;
+            this.onChangeCallbacks = [];
+            return true;
         }
         // ensure onChangeCallbacks array exsts 
         if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; }
         // check if adding array or individual methods 
         if (Array.isArray(onChangeCallback)) {
+            let anyOnChangeAdded = false;
             for (let i = 0; i < onChangeCallback.length; i++) {
                 if (onChangeCallback[i] == null) { continue; }
                 if (Array.isArray(onChangeCallback[i])) {
                     // handle nested arrays 
-                    this.onChange = onChangeCallback[i];
+                    if (this.AddOnChangeCallback(onChangeCallback[i])) {
+                        anyOnChangeAdded = true;
+                    }
                     continue;
                 }
                 // check if function - if so, add 
                 if (typeof onChangeCallback[i] === 'function') {
+                    // ensure not duplicate 
                     if (!this.onChangeCallbacks.contains(onChangeCallback)) {
                         this.onChangeCallbacks.push(onChangeCallback);
+                        anyOnChangeAdded = true;
                     }
                 } else {
                     console.warn(`WARNING: can't add value ${onChangeCallback[i]} of invalid type ${typeof onChangeCallback[i]} to onChange callback array (via array), must be function`, onChangeCallback, this);
                 }
             }
+            return anyOnChangeAdded;
         } else if (typeof onChangeCallback === 'function') {
+            // single onChangeCallback 
             if (!this.onChangeCallbacks.contains(onChangeCallback)) {
                 this.onChangeCallbacks.push(onChangeCallback);
             }
+            return true;
         } else {
             console.warn(`WARNING: can't add value ${onChangeCallback} of invalid type ${typeof onChangeCallback} to onChange callback array, must be function`, this);
         }
+        return false;
+    }
+    /**
+     * Remove this callback from when a value in this {@link svgElement} has changed, if it's been added.
+     * 
+     * Returns `true` if the callback was successfully removed, `false` if it failed
+     * to be removed. If callback wasn't found, returns {@linkcode returnIfNotFound}. 
+     * @param {svg.onChange} onChangeCallback Callback function to remove 
+     * @param {boolean} [returnIfNotFound=false] Value to return if the callback wasn't found. Default `false`
+     */
+    RemoveOnChangeCallback(onChangeCallback, returnIfNotFound = false) {
+        if (onChangeCallback == null) { return false; }
+        if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; return returnIfNotFound; }
+        for (let i = 0; i < this.onChangeCallbacks.length; i++) {
+            if (this.onChangeCallbacks[i] === onChangeCallback) {
+                this.onChangeCallbacks.removeAt(i);
+                return true;
+            }
+        }
+        return returnIfNotFound;
     }
 
     /**
@@ -603,6 +635,9 @@ export class svgElement {
         this._parent = v;
         if (!this._firstParentAssigned) {
             this._firstParentAssigned = true;
+            if (svgConfig.ONCHANGE_ON_FIRST_PARENT_ASSIGNED) {
+                this.changed('parent', v, prev);
+            }
         } else {
             this.changed('parent', v, prev);
         }
@@ -625,7 +660,7 @@ export class svgElement {
      * Returns itself if `this` is an `svgHTMLAsset`, or `null` if it doesn't have one.
      * @returns {svgHTMLAsset|null}
      */
-    GetParentHTMLAsset() { 
+    GetParentHTMLAsset() {
         if (this instanceof svgHTMLAsset) { return this; }
         if (this.parent != null) { return this.parent.GetParentHTMLAsset(); }
         return null;

@@ -65,6 +65,14 @@ export const HTML_WARN_DEFS_NO_ID = true;
 export const HTML_WARN_DEFS_NO_DEFTYPE = true;
 
 /**
+ * Should {@linkcode svgElement.onChange onChange} be called 
+ * the first time an {@linkcode svgElement} has its 
+ * {@linkcode svgElement.parent parent} value set?
+ * @type {boolean}
+ */
+export const ONCHANGE_ON_FIRST_PARENT_ASSIGNED = true;
+
+/**
  * Should a `null` value for {@linkcode svgViewBox}
  * in {@linkcode svgHTMLAsset} be allowed?
  */
