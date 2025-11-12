@@ -619,6 +619,18 @@ export class svgElement {
      * @private */
     _firstParentAssigned = false;
 
+    /**
+     * Get the {@linkcode svgHTMLAsset} that is the root parent of this element.
+     * 
+     * Returns itself if `this` is an `svgHTMLAsset`, or `null` if it doesn't have one.
+     * @returns {svgHTMLAsset|null}
+     */
+    GetParentHTMLAsset() { 
+        if (this instanceof svgHTMLAsset) { return this; }
+        if (this.parent != null) { return this.parent.GetParentHTMLAsset(); }
+        return null;
+    }
+
 
     /** 
      * Should {@link svg.onChange onChange} events to this element 
