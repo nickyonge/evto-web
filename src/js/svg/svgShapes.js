@@ -1,6 +1,6 @@
 import { isBlank } from '../lilutils';
 import * as svg from './index';
-import { svgGradient, svgDefaults } from './index';
+import { svgGradient, svgDefaults, svgHTMLAsset } from './index';
 
 const _RECT = 'rect';
 const _CIRCLE = 'circle';
@@ -50,7 +50,7 @@ export class svgShape extends svg.definition {
         if (fill != null) {
             if (typeof fill === 'string') { this.fill = fill; }
             else if (fill instanceof svg.gradient) { this.fillGradient = fill; }
-            else { 
+            else {
                 // must be array, treat as linear gradient 
                 this.fillGradient = new svgGradient(fill);
             }
@@ -96,7 +96,9 @@ export class svgShape extends svg.definition {
         }
         this.fillURL = gradient.id;
         // if gradient does not exist on parent, add it there too 
-        if (this.parent != null && this.parent.GetGradientWithID(gradient.id) == null) {
+        if (this.parent != null && this.parent instanceof svgHTMLAsset &&
+            this.parent.GetGradientWithID(gradient.id) == null) {
+            // add gradient to svgHTMLAsset parent 
             this.parent.AddGradient(gradient);
         }
     }
