@@ -68,7 +68,7 @@ export class svgHTMLAsset extends svg.element {
         return this.#_viewBox;
     }
     set viewBox(v) {
-        if (this.viewBox == v) { return; }
+        if (this.#_viewBox == v) { return; } // call local ref, not getter 
         let prev = this.#_viewBox;
         if (!svgConfig.ALLOW_NULL_VIEWBOX) {
             if (v == null) { v = new svgViewBox(); }
@@ -747,7 +747,8 @@ export class svgViewBox extends svg.element {
         if (y == null) { y = svgDefaults.Y; }
         if (width == null) { width = svgDefaults.WIDTH; }
         if (height == null) { height = svgDefaults.HEIGHT; }
-        super(); this.x = x; this.y = y; this.width = width; this.height = height;
+        super();
+        this.x = x; this.y = y; this.width = width; this.height = height;
     }
     get html() { return `viewBox="${this.data}"`; }
     get data() { return `${this.x} ${this.y} ${this.width} ${this.height}`; }
