@@ -686,9 +686,9 @@ export class svgElement {
      * Returns itself if `this` is an `svgHTMLAsset`, or `null` if it doesn't have one.
      * @returns {svgHTMLAsset|null}
      */
-    GetParentHTMLAsset() {
+    parentHTMLAsset() {
         if (this instanceof svgHTMLAsset) { return this; }
-        if (this.parent != null) { return this.parent.GetParentHTMLAsset(); }
+        if (this.parent != null) { return this.parent.parentHTMLAsset(); }
         return null;
     }
 
