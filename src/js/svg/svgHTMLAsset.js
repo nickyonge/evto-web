@@ -163,32 +163,6 @@ export class svgHTMLAsset extends svg.element {
         svgHTMLAsset.#__filterAssetsArray();
         svgHTMLAsset.allSVGHTMLAssets.push(this);
     }
-    /**
-     * Creates and outputs the final HTML string that can be
-     * added directly as the `innerHTML` of an `HTMLElement`.
-     * @returns {string} HTML output string, including {@linkcode data}
-     * @example
-    // import the relevant classes from their scripts
-    // (or, use "import * as svg from './index';" and "svg.htmlAsset" / "svg.gradient") 
-    import { svgHTMLAsset } from "./svg/svgHTMLAsset";
-    import { svgGradient } from "./svg/svgGradient";
-
-    // create the div to hold the SVG's HTML
-    const myDiv = document.createElement("div");
-
-    // create a new SVG asset, or use something like BasicGradientRect for a template 
-    const mySVG = svgHTMLAsset.BasicGradientRect(svgGradient.templates.softrainbow);
-
-    // customize the appearance of the gradient 
-    mySVG.gradient.sharpness = 0.69;
-    mySVG.gradient.angle = 15;
-
-    // assign the HTML to the div. Use mySVG.onChange to auto-update any changes!
-    myDiv.innerHTML = mySVG.html;
-
-    // done! add the div to the page body, and behold a beautiful rainbow
-    document.body.appendChild(myDiv);
-    */
     get html() {
         let d = this.data;
         let newSVG = isBlank(d) ? '<svg' : `<svg ${d}`;
