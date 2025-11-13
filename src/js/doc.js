@@ -40,6 +40,7 @@ import { BasicComponent } from "./components/base";
 
     // #region Array
 
+
     /** unique symbol for arrayName internal property */
     const _arrayName = Symbol('arrayName');
     Object.defineProperty(Array.prototype, 'name', {
@@ -59,6 +60,7 @@ import { BasicComponent } from "./components/base";
                     throw new TypeError('Array name must be string, null, or undefined')
                 }
             }
+            
             if (this[_arrayName] === name) { return; } // don't change if new name is identical 
             if (this.hasOwnProperty('onChange')) {
                 let prevName = this[_arrayName];
@@ -200,8 +202,9 @@ import { BasicComponent } from "./components/base";
      */
     Array.prototype.copyWithin = function (target, start, end = this.length) {
         if (this.hasOwnProperty('onChange')) {
+            let prev = this.clone();
             let v = _copyWithin.call(this, target, start, end);
-            this.onChange('copyWithin', this, v, target, start, end);
+            this.onChange('copyWithin', this, prev, v, target, start, end);
             return v;
         }
         return _copyWithin.call(this, target, start, end);
