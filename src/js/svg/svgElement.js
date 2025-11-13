@@ -341,6 +341,75 @@ export class svgElement {
      * */
     onChangeCallbacks = [];
 
+    /** 
+     * Should {@link svg.onChange onChange} events to this element 
+     * bubble up to its {@link svgElement.parent parent}, if it has one?
+     * @returns {boolean} */
+    get bubbleOnChange() { return this.#_bubbleOnChange; }
+    set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.changed('bubbleOnChange', v, prev); }
+    /** @type {boolean} */
+    #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
+    /**
+     * 
+     * Local changed callback that calls {@linkcode svg.onChange onChange} 
+     * on both this element and, if it's defined and {@linkcode bubbleOnChange}
+     * is `true`, its {@link parent}.
+     * 
+     * **Note:** This version of the method does *not* take 
+     * {@linkcode svg.onChange changedElement} as a parameter, but rather 
+     * automatically fills it in. All other parameters remain otherwise the same.
+     * 
+     * @param {string} valueChanged 
+     * @param {any} newValue 
+     * @param {any} previousValue 
+     * @param  {...any} extraParameters 
+     * @returns {void}
+     * @protected
+     */
+    changed(valueChanged, newValue, previousValue, ...extraParameters) {
+        if (this._suppressOnChange) { return; }
+        this._invokeChange(valueChanged, newValue, previousValue, this, ...extraParameters);
+        if (this.bubbleOnChange) {
+            this.parent?._invokeChange(valueChanged, newValue, previousValue, this, ...extraParameters);
+        }
+    }
+    
+    /**
+     * Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. The change 
+     * is propogated to this element's {@linkcode svgElement.onChangeCallbacks onChange} callbacks.
+     * 
+     * ---
+     * **Note:** For resulting `svg.onChange` calls, the `type` 
+     * is prefixed with the {@linkcode Array.prototype.name name} 
+     * of the array, if assigned, or `"array"`, followed by `#`.
+     * - Eg, `let myArray = []; myArray.push(1,2,3);` would 
+     *   trigger an `svg.onChange` with a `type` of `"array#push"`.
+     * - However, `let myNamedArray = []; myNamedArray.name = 
+     *   "wow"; myNamedArray.push(1,2,3);` would trigger an 
+     *   `svg.onChange` with a `type` of `"wow#push"`.
+     * ---
+     * **Note:** The `returnValue` is unshifted to the front of the `parameters` array, 
+     * which is then supplied to `...extraParameters` in `svg.onChange`. So an `svg.onChange` 
+     * triggered by modifying an array's `onChange` will always have an `extraParameters[0]` 
+     * value corresponding to what was returned by the function called on the array.
+     * - Eg, `push` returns the new length of the array, so `myArray = []; myArray.push(1,2,3);`
+     * will provide an `extraParameters[0]` value of `3`.
+     * ---
+     * @param {string} type The name of the method used on the array, as a string. Eg, `"push"` for {@linkcode Array.prototype.push array.push()}. See {@linkcode onChange} description for a comprehensive list. 
+     * @param {T[]} updatedArray The array object itself that was modified 
+     * @param {T[]} previousArray A {@linkcode Array.prototype.clone clone} of the original array, before modification. **NOT** a deep clone - it's a new array, with intact original references.
+     * @param {T} returnValue The value returned by the modified method. Eg, for `type = "pop"`, returns the array's now-removed last element, as per {@linkcode Array.prototype.pop array.pop()}.
+     * @param {...T} [parameters=undefined] All parameter values supplied to the array in the invoked method. See {@linkcode onChange} description for a comprehensive list. 
+     * @template T
+     */
+    arrayChanged(type, updatedArray, previousArray, returnValue, ...parameters) {
+        if (updatedArray.hasOwnProperty('parent') && updatedArray['parent'] instanceof svgElement) {
+            parameters.unshift(returnValue);
+            let name = updatedArray.name == null ? `array#${type}` : `${updatedArray.name}#${type}`;
+            updatedArray['parent'].changed?.(name, updatedArray, previousArray, ...parameters);
+        }
+    };
+
     /**
      * ***Do not use.*** 
      * 
@@ -729,37 +798,6 @@ export class svgElement {
         if (this.parent != null) { return this.parent.rootParent; }
         return this;
     }
-
-    /** 
-     * Should {@link svg.onChange onChange} events to this element 
-     * bubble up to its {@link svgElement.parent parent}, if it has one?
-     * @returns {boolean} */
-    get bubbleOnChange() { return this.#_bubbleOnChange; }
-    set bubbleOnChange(v) { let prev = this.#_bubbleOnChange; this.#_bubbleOnChange = v; this.changed('bubbleOnChange', v, prev); }
-    /** @type {boolean} */
-    #_bubbleOnChange = svg.defaults.BUBBLE_ONCHANGE;
-    /** 
-     * Local changed callback that calls {@link onChange} on both this element 
-     * and, if defined, its {@link parent}.
-     * @type {svg.onChange} 
-     * @protected
-     */
-    changed(valueChanged, newValue, previousValue) { if (this._suppressOnChange) { return; } this._invokeChange(valueChanged, newValue, previousValue, this); if (this.bubbleOnChange) { this.parent?._invokeChange(valueChanged, newValue, previousValue, this); } }
-    
-    /**
-     * Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. 
-     * @param {string} type The name of the method used on the array, as a string. Eg, `"push"` for {@linkcode Array.prototype.push array.push()}. See {@linkcode onChange} description for a comprehensive list. 
-     * @param {T[]} updatedArray The array object itself that was modified 
-     * @param {T[]} previousArray A {@linkcode Array.prototype.clone clone} of the original array, before modification. **NOT** a deep clone - it's a new array, with intact original references.
-     * @param {T} returnValue The value returned by the modified method. Eg, for `type = "pop"`, returns the array's now-removed last element, as per {@linkcode Array.prototype.pop array.pop()}.
-     * @param {...T} [parameters=undefined] All parameter values supplied to the array in the invoked method. See {@linkcode onChange} description for a comprehensive list. 
-     * @template T
-     */
-    arrayChanged(type, updatedArray, previousArray, returnValue, ...parameters) {
-        if (updatedArray.hasOwnProperty('parent') && updatedArray['parent'] instanceof svgElement) {
-            updatedArray['parent'].changed?.(`${updatedArray.name}#${type}`, updatedArray, previousArray, updatedArray['parent'], ...parameters);
-        }
-    };
 }
 
 /** unique symbol value for svgElementInstance referencing */

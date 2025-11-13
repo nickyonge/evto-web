@@ -283,25 +283,20 @@ export class svgHTMLAsset extends svg.element {
     set height(v) { this.viewBox.height = v; }
 
     /**
-     * Local onChange callback 
-     * @type {svg.onChange}
-     * @see {Array.prototype.onChange}
-     * @private
+     * 
+     * @param {string} valueChanged 
+     * @param {any} newValue 
+     * @param {any} previousValue 
+     * @param {svgElement} changedElement 
+     * @param  {...any} extraParameters 
      */
-    _htmlAssetOnChange(valueChanged, newValue, previousValue, _changedElement, ..._extraParameters) {
+    _htmlAssetOnChange(valueChanged, newValue, previousValue, changedElement, ...extraParameters) {
         // determine if an array was changed 
         let hashIndex = valueChanged.indexOf('#');
         let arrayChanged = hashIndex >= 0;
         let arrayName = arrayChanged ? valueChanged.substring(0, hashIndex) : null;
         let arrayMethod = arrayChanged ? valueChanged.substring(hashIndex + 1) : null;
         if (arrayChanged) {
-            console.log(arrayName + ', ' + arrayMethod);
-            console.log('previousValue');
-            console.log(typeof previousValue);
-            console.log('newValue');
-            console.log(newValue);
-            console.log('_changedElement');
-            console.log(_changedElement);
             switch (arrayMethod) {
                 case 'push':
                 case 'unshift':
