@@ -373,7 +373,7 @@ export class svgElement {
             this.parent?._invokeChange(valueChanged, newValue, previousValue, this, ...extraParameters);
         }
     }
-    
+
     /**
      * Callback for {@linkplain Array.prototype.onChange onChange} for local arrays. The change 
      * is propogated to this element's {@linkcode svgElement.onChangeCallbacks onChange} callbacks.
@@ -428,7 +428,13 @@ export class svgElement {
         if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; return; }
         for (let i = 0; i < this.onChangeCallbacks.length; i++) {
             if (typeof this.onChangeCallbacks[i] !== 'function') { continue; }
-            this.onChangeCallbacks[i]?.(valueChanged, newValue, previousValue, changedElement == null ? this : changedElement, ...extraParameters);
+            // using call instead of just invoking to preserve `this` 
+            this.onChangeCallbacks[i]?.call(this,
+                valueChanged,
+                newValue,
+                previousValue,
+                changedElement == null ? this : changedElement,
+                ...extraParameters);
         }
     }
 
