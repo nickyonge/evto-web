@@ -66,9 +66,43 @@ export function InsertString(base, insert, index = -1) {
     return base.replace(regex, `$1${insert}`);
 }
 
+/**
+ * Is the string name-safe? Specifically, it must only contain alphanumeric
+ * characters or `_` underscores. No other special characters nor whitespace.
+ * 
+ * If {@linkcode varConvention} is `true` (default), the string may also 
+ * include `$` dollar signs, and must NOT begin with a number.
+ * 
+ * Returns `true` if those conditions are met, `false` otherwise. Also returns
+ * `false` if the string is `null` or blank.
+ * @param {string} str Input string to check 
+ * @param {boolean} [varConvention = true] 
+ * Should variable naming convention be used? Default `true`. Has two effects, 
+ * - The start of the string CANNOT be a number, 
+ * - The character `$` is valid
+ * @param {boolean} [allowSingleUnderscore=true] Should `_` be allowed? Default `true`
+ * @param  {spreadString} excludeChars Any additional characters or strings to explicitly exclude
+ * @returns {boolean}
+ */
+export function IsStringNameSafe(str, varConvention = true, allowSingleUnderscore = true, ...excludeChars) {
+    if (isBlank(str)) { return false; }
+    if (str.indexOf(' ') >= 0) { return false; }
+    if (!allowSingleUnderscore && str === '_') { return false; }
+    if (excludeChars != null && excludeChars.length > 0) {
+        excludeChars = excludeChars.flattenSpread();
+        for (let i = 0; i < excludeChars.length; i++) {
+            if (excludeChars[i] == null) { continue; }
+            if (str.indexOf(excludeChars[i]) >= 0) {
+                return false;
+            }
+        }
+    }
+    return /^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(str);
+}
+
 // #endregion Strings
 
-// #region Numeric Strings
+// #region String Num
 
 /**
  * Removes {@link StringNumericOnly non-numeric} chars from a string and returns the resulting number. 
@@ -199,9 +233,9 @@ export const StringNumericDivider = str => {
     // map to array and convert numeric-only values to number 
     return strReg.map(s => /^\d+(?:\.\d+)?$/.test(s) ? Number(s) : s);
 };
-// #endregion Numeric Strings
+// #endregion Str Num
 
-// #region Color Strings 
+// #region Str Color 
 
 /**
  * Adds an alpha value to a hex code via 0-1 numeric value
@@ -214,7 +248,7 @@ export function AddAlphaToHex(color, opacity) {
     let _opacity = Math.round(Math.min(Math.max(opacity ?? 1, 0), 1) * 255);
     return color + _opacity.toString(16).toUpperCase();
 }
-// #endregion Color Strings
+// #endregion Str Color
 
 // #region Numbers
 
