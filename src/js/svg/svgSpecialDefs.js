@@ -98,17 +98,16 @@ export class svgXYWHDefinition extends svgDefinition {
                 if (newValue != null) {
                     if (newValue instanceof svgElement) {
                         let htmlAsset = newValue.rootHTMLAsset;
-                        if (htmlAsset == null) {
-                            // property does not have a parent HTML asset 
-                            return;
+                        if (htmlAsset != null) {
+                            htmlAsset.AddOnChangeCallback(this.XYWHUpdateCallback);
+                            htmlAsset.viewBox?.AddOnChangeCallback(this.XYWHUpdateCallback);
                         }
-                        htmlAsset.AddOnChangeCallback(this.XYWHUpdateCallback);
-                        htmlAsset.viewBox?.AddOnChangeCallback(this.XYWHUpdateCallback);
                     } else {
                         console.warn("New parent assigned to svgXYWHDefinition is somehow NOT an svgElement? Investigate", newValue, this);
                         return;
                     }
                 }
+                this._updateXYWH();
                 break;
         }
     }
