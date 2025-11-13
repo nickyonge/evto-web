@@ -100,7 +100,7 @@ export class svgHTMLAsset extends svg.element {
                 v = [];
             } else {
                 this.#_shapes = null;
-                this.changed('shapes', v, prev);
+                this.changed(_arrayNameShapes, v, prev);
                 return;
             }
         }
@@ -109,10 +109,10 @@ export class svgHTMLAsset extends svg.element {
             shape.parent = this;
         });
         this.#_shapes = v;
-        this.#_shapes.name = 'shapes';
+        this.#_shapes.name = _arrayNameShapes;
         this.#_shapes['parent'] = this;
         this.#_shapes.onChange = this.arrayChanged;
-        this.changed('shapes', v, prev);
+        this.changed(_arrayNameShapes, v, prev);
     }
     /** @type {svg.shape[]} */
     #_shapes; // don't assign default value to svg element arrays 
@@ -132,7 +132,7 @@ export class svgHTMLAsset extends svg.element {
                 v = [];
             } else {
                 this.#_definitions = null;
-                this.changed('definitions', v, prev);
+                this.changed(_arrayNameDefinitions, v, prev);
                 return;
             }
         }
@@ -140,10 +140,10 @@ export class svgHTMLAsset extends svg.element {
             def.parent = this;
         });
         this.#_definitions = v;
-        this.#_definitions.name = 'definitions';
+        this.#_definitions.name = _arrayNameDefinitions;
         this.#_definitions['parent'] = this;
         this.#_definitions.onChange = this.arrayChanged;
-        this.changed('definitions', v, prev);
+        this.changed(_arrayNameDefinitions, v, prev);
     }
     /** @type {svg.definition[]} */
     #_definitions; // don't assign default value to svg element arrays 
@@ -283,46 +283,119 @@ export class svgHTMLAsset extends svg.element {
     set height(v) { this.viewBox.height = v; }
 
     /**
-     * 
-     * @param {string} valueChanged 
-     * @param {any} newValue 
-     * @param {any} previousValue 
-     * @param {svgElement} changedElement 
-     * @param  {...any} extraParameters 
+     * Internal {@linkcode svg.onChange onChange} callback for this HTML asset  
+     * @param {string} valueChanged Name of the value that was changed 
+     * @param {any} newValue Newly assigned value 
+     * @param {any} previousValue Previous value (for reference)
+     * @param {svgElement} _changedElement Element that was changed (typically `this`)
+     * @param  {...any} _extraParameters Any extra parameters provided 
+     * @private @returns {void}
      */
-    _htmlAssetOnChange(valueChanged, newValue, previousValue, changedElement, ...extraParameters) {
-        // determine if an array was changed 
+    _htmlAssetOnChange(valueChanged, newValue, previousValue, _changedElement, ..._extraParameters) {
+        // -- determine if an array was changed, parenting updates 
         let hashIndex = valueChanged.indexOf('#');
         let arrayChanged = hashIndex >= 0;
         let arrayName = arrayChanged ? valueChanged.substring(0, hashIndex) : null;
         let arrayMethod = arrayChanged ? valueChanged.substring(hashIndex + 1) : null;
+        arrayChanged = this._isValidArrayName(arrayName);
         if (arrayChanged) {
+            let newArray = /** @type {svgElement[]} */ (newValue);
+            let prevArray = /** @type {svgElement[]} */ (previousValue);
+            let newValues = [];
+            let removedValues = [];
+            let oppositeArray = [];
             switch (arrayMethod) {
                 case 'push':
                 case 'unshift':
-                    // value added 
+                    // value added, get new values and ensure they're properly parented 
+                    for (let i = 0; i < newArray.length; i++) {
+                        if (!prevArray.contains(newArray[i])) {
+                            // newly added value 
+                            newValues.push(newArray[i]);
+                        }
+                    }
+                    newValues.forEach(element => {
+                        element.parent = this;
+                    });
                     break;
                 case 'pop':
                 case 'shift':
-                    // value removed
+                    // value removed, ensure parent is removed, UNLESS it's still in the other array 
+                    oppositeArray = this._getArrayByName(this._getOppositeArrayName(arrayName));
+                    for (let i = 0; i < prevArray.length; i++) {
+                        if (!newArray.contains(prevArray[i]) && !oppositeArray.contains(prevArray[i])) {
+                            if (prevArray[i].parent == this) {
+                                removedValues.push(prevArray[i]);
+                            }
+                        }
+                    }
+                    removedValues.forEach(element => {
+                        element.parent = null;
+                    });
                     break;
                 case 'copyWithin':
                 case 'fill':
                     // value(s) may be added or removed (technically copyWithin can only remove, but idc let's be safe)
+                    // get new values 
+                    for (let i = 0; i < newArray.length; i++) {
+                        if (!prevArray.contains(newArray[i])) {
+                            // newly added value 
+                            newValues.push(newArray[i]);
+                        }
+                    }
+                    // get removed values 
+                    oppositeArray = this._getArrayByName(this._getOppositeArrayName(arrayName));
+                    for (let i = 0; i < prevArray.length; i++) {
+                        if (!newArray.contains(prevArray[i]) && !oppositeArray.contains(prevArray[i])) {
+                            if (prevArray[i].parent == this) {
+                                removedValues.push(prevArray[i]);
+                            }
+                        }
+                    }
+                    // assign parenting as needed 
+                    newValues.forEach(element => {
+                        element.parent = this;
+                    });
+                    removedValues.forEach(element => {
+                        element.parent = null;
+                    });
                     break;
             }
-        }
+        } // - end determining array changes, parenting updates 
     }
 
     /**
-     * 
+     * Gets the relevant svgElement array of this asset by name 
      * @param {string} arrayName 
      * @returns {svgElement[]|null}
+     * @private
      */
     _getArrayByName(arrayName) {
         switch (arrayName) {
-            case 'definitions': return this.definitions;
-            case 'shapes': return this.shapes;
+            case _arrayNameDefinitions: return this.definitions;
+            case _arrayNameShapes: return this.shapes;
+        }
+        return null;
+    }
+    /**
+     * Returns true if arrayName is a valid array on this asset 
+     * @param {string} arrayName 
+     * @returns {boolean}
+     * @private
+     */
+    _isValidArrayName(arrayName) {
+        return (arrayName == _arrayNameDefinitions || arrayName == _arrayNameShapes);
+    }
+    /**
+     * Gets the opposite array name from the given name (eg, `"shapes"` returns `"definitions"`)
+     * @param {string} fromArrayName 
+     * @returns {string}
+     * @private
+     */
+    _getOppositeArrayName(fromArrayName) {
+        switch (fromArrayName) {
+            case _arrayNameDefinitions: return _arrayNameShapes;
+            case _arrayNameShapes: return _arrayNameDefinitions;
         }
         return null;
     }
@@ -773,6 +846,8 @@ export class svgHTMLAsset extends svg.element {
         return svg.generator.BasicGradientRect(...colors);
     }
 }
+const _arrayNameDefinitions = 'definitions';
+const _arrayNameShapes = 'shapes';
 
 /** Used to define viewbox properties in the SVG HTML element */
 export class svgViewBox extends svg.element {
