@@ -2,6 +2,7 @@
 // script for document-level architecture
 
 import { BasicComponent } from "./components/base";
+import { IsStringNameSafe } from "./lilutils";
 
 // DOCUMENT-LEVEL - imported to index LAST, after all other imports are completed
 (() => {
@@ -60,7 +61,13 @@ import { BasicComponent } from "./components/base";
                     throw new TypeError('Array name must be string, null, or undefined')
                 }
             }
-            
+            if (name != null) {
+                if (!IsStringNameSafe(name, true, false)) {
+                    throw new SyntaxError(('Array name must only contain alphanumeric characters, ' +
+                        'underscores, or dollar signs (no whitespace), and cannot be a single underscore, ' +
+                        `and cannot begin with a number. Invalid name: ${name}`));
+                }
+            }
             if (this[_arrayName] === name) { return; } // don't change if new name is identical 
             if (this.hasOwnProperty('onChange')) {
                 let prevName = this[_arrayName];
