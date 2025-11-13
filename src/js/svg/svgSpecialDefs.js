@@ -30,6 +30,7 @@ export class svgXYWHDefinition extends svgDefinition {
     /** @type {boolean} */
     #_matchViewboxXYWH = svgDefaults.XYWHDEFINITION_MATCH_VIEWBOX;
 
+    /** Get the `x` value of this definition. If {@linkcode matchViewboxXYWH} is `true`, this has no affect, as the value wll be read from a parent {@linkcode svgViewBox} (if one exists). @returns {number} */
     get x() { return this.#_x; }
     set x(v) {
         if (this.matchViewboxXYWH && this.rootHTMLAsset != null) {
@@ -38,7 +39,9 @@ export class svgXYWHDefinition extends svgDefinition {
         }
         let prev = this.#_x; this.#_x = v; this.changed('x', v, prev);
     }
+    /** @type {number} */
     #_x = svgDefaults.X;
+    /** Get the `y` value of this definition. If {@linkcode matchViewboxXYWH} is `true`, this has no affect, as the value wll be read from a parent {@linkcode svgViewBox} (if one exists). @returns {number} */
     get y() { return this.#_y; }
     set y(v) {
         if (this.matchViewboxXYWH && this.rootHTMLAsset != null) {
@@ -47,7 +50,9 @@ export class svgXYWHDefinition extends svgDefinition {
         }
         let prev = this.#_y; this.#_y = v; this.changed('y', v, prev);
     }
+    /** @type {number} */
     #_y = svgDefaults.Y;
+    /** Get the `width` value of this definition. If {@linkcode matchViewboxXYWH} is `true`, this has no affect, as the value wll be read from a parent {@linkcode svgViewBox} (if one exists). @returns {number} */
     get width() { return this.#_width; }
     set width(v) {
         if (this.matchViewboxXYWH && this.rootHTMLAsset != null) {
@@ -56,7 +61,9 @@ export class svgXYWHDefinition extends svgDefinition {
         }
         let prev = this.#_width; this.#_width = v; this.changed('width', v, prev);
     }
+    /** @type {number} */
     #_width = svgDefaults.WIDTH;
+    /** Get the `height` value of this definition. If {@linkcode matchViewboxXYWH} is `true`, this has no affect, as the value wll be read from a parent {@linkcode svgViewBox} (if one exists). @returns {number} */
     get height() { return this.#_height; }
     set height(v) {
         if (this.matchViewboxXYWH && this.rootHTMLAsset != null) {
@@ -65,6 +72,7 @@ export class svgXYWHDefinition extends svgDefinition {
         }
         let prev = this.#_height; this.#_height = v; this.changed('height', v, prev);
     }
+    /** @type {number} */
     #_height = svgDefaults.HEIGHT;
 
     /** 
@@ -206,6 +214,28 @@ export class svgMaskDef extends svgXYWHDefinition {
     set maskUnits(v) { this.#_maskUnits = v; }
     /** @type {'userSpaceOnUse'|'objectBoundingBox'|null} */
     #_maskUnits = svgDefaults.MASK_MASKUNITS;
+    
+    /**
+     * The `maskContentUnits` attribute indicates which coordinate 
+     * system to use for the contents of the `<mask>` element.
+     * @returns {'userSpaceOnUse'|'objectBoundingBox'|null}
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/maskContentUnits
+     */
+    get maskContentUnits() { return this.#_maskContentUnits; }
+    set maskContentUnits(v) { this.#_maskContentUnits = v; }
+    /** @type {'userSpaceOnUse'|'objectBoundingBox'|null} */
+    #_maskContentUnits = svgDefaults.MASK_MASKCONTENTUNITS;
+    
+    /**
+     * The `maskContentUnits` attribute indicates which coordinate 
+     * system to use for the contents of the `<mask>` element.
+     * @returns {'alpha'|'luminance'|null}
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/maskType
+     */
+    get maskType() { return this.#_maskType; }
+    set maskType(v) { this.#_maskType = v; }
+    /** @type {'alpha'|'luminance'|null} */
+    #_maskType = svgDefaults.MASK_MASKTYPE;
 
     /**
      * 
