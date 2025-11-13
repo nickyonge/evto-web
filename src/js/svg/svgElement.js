@@ -261,8 +261,8 @@ export class svgElement {
                 // check if function - if so, add 
                 if (typeof onChangeCallback[i] === 'function') {
                     // ensure not duplicate 
-                    if (!this.onChangeCallbacks.contains(onChangeCallback)) {
-                        this.onChangeCallbacks.push(onChangeCallback);
+                    if (!this.onChangeCallbacks.contains(onChangeCallback[i])) {
+                        this.onChangeCallbacks.push(onChangeCallback[i].bind(this));
                         anyOnChangeAdded = true;
                     }
                 } else {
@@ -273,7 +273,7 @@ export class svgElement {
         } else if (typeof onChangeCallback === 'function') {
             // single onChangeCallback 
             if (!this.onChangeCallbacks.contains(onChangeCallback)) {
-                this.onChangeCallbacks.push(onChangeCallback);
+                this.onChangeCallbacks.push(onChangeCallback.bind(this));
             }
             return true;
         } else {
