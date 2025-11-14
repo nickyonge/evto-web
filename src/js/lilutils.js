@@ -248,6 +248,24 @@ export function AddAlphaToHex(color, opacity) {
     let _opacity = Math.round(Math.min(Math.max(opacity ?? 1, 0), 1) * 255);
     return color + _opacity.toString(16).toUpperCase();
 }
+
+/**
+ * Checks if the string is a valid color. Can either check purely for
+ * hex codes (`#FF0000`), or any CSS-safe color string (default).
+ * @param {string} str String to check 
+ * @param {boolean} [hexOnly=false] Are only hex colors consdered? 
+ * Eg, `#FF0000`. If `false`, any CSS-safe color string can be used, 
+ * such as `red` or `rgb(255,0,0)`. Faster but limited. Default `false`
+ * @returns {boolean}
+ */
+export function IsStringColor(str, hexOnly = false) {
+    if (isBlank(str)) { return false; }
+    if (hexOnly) { return /^#([0-9A-F]{3}|[0-9A-F]{6})$/i.test(str); }
+    const _style = new Option().style;
+    _style.color = str;
+    return _style.color === str && _style.color !== '';
+}
+
 // #endregion Str Color
 
 // #region Numbers
@@ -1069,9 +1087,9 @@ export function TimeBetweenTwoTimestamps(timestampA, timestampB) {
 
 // #region Environment
 
-/** If process.env.NODE_EVN is 'testing', should {@linkcode _env_isDevelopment} return `true`? */ 
+/** If process.env.NODE_EVN is 'testing', should {@linkcode _env_isDevelopment} return `true`? */
 const __TESTING_IS_DEVELOPMENT = true;
-/** If process.env.NODE_EVN is 'staging', should {@linkcode _env_isProduction} return `true`? */ 
+/** If process.env.NODE_EVN is 'staging', should {@linkcode _env_isProduction} return `true`? */
 const __STAGING_IS_PRODUCTION = true;
 
 /** 
@@ -1081,28 +1099,28 @@ const __STAGING_IS_PRODUCTION = true;
  * 
  * @see {@linkcode _env_isDevelopment} 
  * @see {@linkcode _env_isProduction} 
- * @see https://www.geeksforgeeks.org/node-js/what-is-node_env-in-node-js/ */ 
+ * @see https://www.geeksforgeeks.org/node-js/what-is-node_env-in-node-js/ */
 export const _env_currentEnv = process.env.NODE_ENV;
 /**
  * Is the {@link _env_currentEnv current} environment `staging`?
  * 
  * Also see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) 
  * 
- * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, {@linkcode _env_isProduction} will also return `true`. */ 
+ * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, {@linkcode _env_isProduction} will also return `true`. */
 export const _env_isStaging = _env_currentEnv === 'staging';
 /** 
  * Is the {@link _env_currentEnv current} environment `testing`/`test`?
  * 
  * Also see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) 
  * 
- * **Note:** if {@linkcode __TESTING_IS_DEVELOPMENT} is `true`, {@linkcode _env_isDevelopment} will also return `true`. */ 
+ * **Note:** if {@linkcode __TESTING_IS_DEVELOPMENT} is `true`, {@linkcode _env_isDevelopment} will also return `true`. */
 export const _env_isTest = _env_currentEnv === 'testing' || _env_currentEnv === 'test';
 /**
  * Is the {@link _env_currentEnv current} environment `production`/`prod`?
  * 
  * Also see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) 
  * 
- * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, the environment `staging` will also return `true`. */ 
+ * **Note:** if {@linkcode __STAGING_IS_PRODUCTION} is `true`, the environment `staging` will also return `true`. */
 export const _env_isProduction =
     _env_currentEnv === 'production' || _env_currentEnv === 'prod' ||
     (_env_isStaging && __STAGING_IS_PRODUCTION);
@@ -1113,7 +1131,7 @@ export const _env_isProduction =
  * 
  * Also see `PRODUCTION_BUILD` in `webpack.config.js` (allows only `development` and `production`) 
  * 
- * **Note:** if {@linkcode __TESTING_IS_DEVELOPMENT} is `true`, the environment `testing`/`test` will also return `true`. */ 
+ * **Note:** if {@linkcode __TESTING_IS_DEVELOPMENT} is `true`, the environment `testing`/`test` will also return `true`. */
 export const _env_isDevelopment =
     _env_currentEnv === null || _env_currentEnv === undefined || _env_currentEnv === '' ||
     _env_currentEnv === 'development' || _env_currentEnv === 'dev' ||
