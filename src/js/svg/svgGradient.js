@@ -756,8 +756,10 @@ class svgGradientStop extends svg.element {
             if (opacity == null && (typeof parentOpacity)?.toLowerCase() === 'number') { return parentOpacity; }
             return opacity * parentOpacity;
         }
-        let parent = (this.parent != null && this.parent instanceof svgGradient) ? null : /** @type {svgGradient} */ (this.parent);
-        let opacity = parent == null ? this.opacity : calculateInheritedOpacity(this.opacity, parent.opacity);
+        let opacity = this.opacity;
+        if (this.parent != null && this.parent instanceof svgGradient) {
+            opacity = calculateInheritedOpacity(opacity, this.parent.opacity);
+        }
         return opacity === 1 ? null : opacity;
     }
 

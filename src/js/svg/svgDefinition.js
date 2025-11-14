@@ -378,6 +378,7 @@ export class svgDefinition extends svg.element {
                 this._subDefinitionIndent = this.#_minSubDefIncrement;
             }
             for (let i = 0; i < subs.length; i++) {
+                if (subs[i] == null) { continue; }
                 subs[i]._subDefinitionIndent = this._subDefinitionIndent + 1;
                 let subHTML = subs[i].html;
                 if (!isBlank(subHTML)) {
