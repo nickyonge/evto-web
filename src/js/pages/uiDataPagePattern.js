@@ -69,7 +69,7 @@ function CreatePatternSection(section) {
     // basic param definitions     
     let x = 0;
     let y = 0;
-    let width = 500;
+    let width = 1000;
     let height = width / 2;
 
     // viewbox and html asset

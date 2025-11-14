@@ -1,8 +1,7 @@
 .imageField {
-
     --imageField-min-size: 20px;
-    --imageField-max-size: 213px;
-
+    /** maximum POSSBILE size of an imageField */
+    --imageField-max-size: 69vw;
 }
 
 .imageField.container {

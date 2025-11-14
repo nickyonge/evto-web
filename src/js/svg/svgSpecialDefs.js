@@ -397,6 +397,7 @@ export class svgMaskDefinition extends svgXYWHDefinition {
      */
     constructor(id = undefined) {
         super(id, 'mask');
+        this.includeXYWHInData = false;
     }
 
     get html() {
