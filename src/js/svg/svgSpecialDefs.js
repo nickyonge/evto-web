@@ -329,6 +329,7 @@ export class svgMaskDefinition extends svgXYWHDefinition {
         // create fill and gradient
 
         // TODO: svgMaskDef to handle its own html generation 
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/69
         // interrupt + manually do html generation, 
         // create <lineargradient> BESIDE <mask>
         // don't push them into subDefinitions (might mean u dont have to skip ID update)
