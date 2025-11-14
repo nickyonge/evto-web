@@ -22,7 +22,12 @@ export class svgElement {
      * 
      * Every svgElement *must* have a unique ID, but they will be 
      * automatically generated if not manually assigned in the constructor.
-     * @type {string} 
+     * 
+     * **Note:** if you find Maximum Call Stack Overflow errors occurring 
+     * while creating new SVG elements, specifically when setting the 
+     * {@linkcode id} outside of the constructor, consider settinig 
+     * {@linkcode skipNextIDUpdate} to `true` before setting the ID.
+     * @returns {string} 
      **/
     get id() { return this._id; };
     set id(v) {
@@ -61,8 +66,9 @@ export class svgElement {
                 }
             }
         }
-        if (this.__SKIP_ID_UPDATE == true) {
+        if (this.#_shouldSkipIDUpdate == true) {
             // do NOT perform ID update 
+            this.skipNextOnChangeForID = false; // always ensure this is reset after update 
         } else {
             // update ID change on all SVG Elements 
             let newURL = this.stringToURL(v);
@@ -157,6 +163,25 @@ export class svgElement {
     /** local flag for first ID assignment @type {boolean} @private */
     _firstIDAssigned = false;
 
+    /** 
+     * Should {@linkcode onChange} callbacks be skipped 
+     * when changing this element's {@linkcode id}? 
+     * 
+     * **Note**: this remains `true` until changed. For
+     * a one-off skip, see {@linkcode skipNextOnChangeForID}. 
+     * @type {boolean} */
+    skipAllOnChangeForID = false;
+    /** 
+     * Should {@linkcode onChange} callbacks be skipped 
+     * the next time element's {@linkcode id} changes? 
+     * 
+     * **Note**: this gets reset to `false` after the next ID 
+     * change. For persistent skipping, see {@linkcode skipAllOnChangeForID}. 
+     * @type {boolean} */
+    skipNextOnChangeForID = false;
+    /** Returns `true` if either {@linkcode skipAllOnChangeForID} or {@linkcode skipNextIDUpdate} is `true` @returns {boolean} */
+    get #_shouldSkipIDUpdate() { return this.skipAllOnChangeForID || this.skipNextOnChangeForID; } 
+
     /** The guaranteed-unique ID value for this svgElement, combining
      * {@linkcode svgInstanceNumber} and {@linkcode svgConstructor} @type {string} */
     get uniqueID() { return `__svgE[${this.svgInstanceNumber}]:${this.svgConstructor}`; }
@@ -179,11 +204,11 @@ export class svgElement {
                 id = this.uniqueID;
             }
         }
-        let skip = this.hasOwnProperty('__SKIP_ID_UPDATE');
-        let prev = skip ? this.__SKIP_ID_UPDATE : undefined;
-        this.__SKIP_ID_UPDATE = true;
+        // preserve prevous skipNextIDUpdate, because this one's set interally 
+        let prev = this.skipNextOnChangeForID;
+        this.skipNextOnChangeForID = true;
         this.id = id;
-        if (skip) { this.__SKIP_ID_UPDATE = prev; } else { delete (this.__SKIP_ID_UPDATE); }
+        this.skipNextOnChangeForID = prev;
         // update SVG Element arrays 
         svgElement.#__filterElementsArray();
         svgElement.allSVGElements.push(this);

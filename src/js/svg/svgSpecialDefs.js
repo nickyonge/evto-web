@@ -342,12 +342,16 @@ export class svgMaskDefinition extends svgXYWHDefinition {
      * If `null`, generates a new gradient using the 
      * gradient template {@linkcode svgGradient.templates.bw}
      * 
+     * **Note:** this *getter* will auto-generate the 
+     * {@linkcode #_autoGradient} reference if it's needed, which 
+     * then gets cleared during the {@linkcode html} generation. 
+     * 
      * Will always return `string`
      * @returns {string} */
     get autoGenerateRectFill() {
         if (this.#_autoGenerateRectFill == null) {
             this.#_autoGradient = new svgGradient(svgGradient.templates.bw);
-            this.#_autoGradient.__SKIP_ID_UPDATE = true;
+            this.#_autoGradient.skipNextOnChangeForID = true;
             this.#_autoGradient.id = this.#_getAutoID(true);
             return this.#_autoGradient.idURL;
         }
@@ -356,14 +360,14 @@ export class svgMaskDefinition extends svgXYWHDefinition {
                 // if the autogenrectfill gradient doesn't have a parent, 
                 // clone instance so it can be generated + deleted w/o messing with original 
                 this.#_autoGradient = Object.assign({}, this.#_autoGenerateRectFill);
-                this.#_autoGradient.__SKIP_ID_UPDATE = true;
+                this.#_autoGradient.skipNextOnChangeForID = true;
                 this.#_autoGradient.id = this.#_getAutoID(true);
             }
             return this.#_autoGenerateRectFill.idURL;
         }
         if (Array.isArray(this.#_autoGenerateRectFill)) {
             this.#_autoGradient = new svgGradient(this.#_autoGenerateRectFill);
-            this.#_autoGradient.__SKIP_ID_UPDATE = true;
+            this.#_autoGradient.skipNextOnChangeForID = true;
             this.#_autoGradient.id = this.#_getAutoID(true);
             return this.#_autoGradient.idURL;
         }
@@ -402,35 +406,19 @@ export class svgMaskDefinition extends svgXYWHDefinition {
 
     get html() {
         if (!this.autoGenerateRect) { return super.html; }
-        // create fill and gradient
+
+        // ensure we bypass external html generation
         let prevSubHandlesHTML = this.subclassHandlesHTML;
         this.subclassHandlesHTML = true;
+        super.html; // for error checking 
 
-        // TODO: svgMaskDef to handle its own html generation 
-        // Issue URL: https://github.com/nickyonge/evto-web/issues/69
-        // interrupt + manually do html generation, 
-        // create <lineargradient> BESIDE <mask>
-        // don't push them into subDefinitions (might mean u dont have to skip ID update)
-
-        // return `<${this.shapeType} ${this.data}>${this.subDefinitionsHTML}</${this.shapeType}>`;
-
-        super.html;
-
-
+        // get fill value (this also generates #_autoGradient)
         let fill = this.autoGenerateRectFill;
+
+        // create 
         this.#_autoRect = new svgRect(this.x, this.y, this.width, this.height, fill);
-        this.#_autoRect.storeInDefsElement = false;
-        this.#_autoRect.__SKIP_ID_UPDATE = true;
+        this.#_autoRect.skipNextOnChangeForID = true;
         this.#_autoRect.id = this.#_getAutoID(false);
-        // if (this.#_autoGradient != null) {
-        //     this.subDefinitions.push(this.#_autoGradient);
-        // }
-        // this.subDefinitions.push(this.#_autoRect);
-        // let h = super.html;
-        // if (this.#_autoGradient != null) {
-        //     this.subDefinitions.remove(this.#_autoGradient);
-        // }
-        // this.subDefinitions.remove(this.#_autoRect);
 
         let gradientHTML = '';
         if (this.#_autoGradient != null) {
@@ -461,14 +449,10 @@ export class svgMaskDefinition extends svgXYWHDefinition {
 
     /** get ID for an autogen element @param {boolean} forGradient for gradient (`t`) or rect (`f`)? @returns {string} */
     #_getAutoID(forGradient) {
-        console.log("Getting auto ID, for gradent: " + forGradient);
-        if (!forGradient) { console.log("istnace: " + `${typeof this.#_autoRect.svgInstanceNumber}`) }
         if (forGradient) {
             return `__AUTOGEN_ID_DEF${this.svgInstanceNumber}_GRD${this.#_autoGradient.svgInstanceNumber}`;
         }
-        console.log("hmmm");
         return `__AUTOGEN_ID_DEF${this.svgInstanceNumber}_RCT${this.#_autoRect.svgInstanceNumber}`;
-        // return `__AUTOGEN_ID_DEF${this.svgInstanceNumber}_${forGradient ? `GRD${this.#_autoGradient.svgInstanceNumber}` : `RCT${this.#_autoRect.svgInstanceNumber}`}`;
     }
 
 }

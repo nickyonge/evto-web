@@ -66,33 +66,16 @@ function CreatePatternSection(section) {
     let patternImage = new cmp.ImageField();
     section.appendChild(patternImage);
 
-    // basic param definitions     
-    let x = 0;
-    let y = 0;
+    // basic param definitions 
     let width = 1000;
     let height = width / 2;
 
     // html asset
     patternAlphaSVG = new svgHTMLAsset(null, null, width, height);
-
     // svg gradient 
     patternAlphaGradient = new svgGradient(svgGradient.templates.bw);
-
-    let maskDef;
-
-    const useNew = true;
-
-    if (useNew) {
-        maskDef = new svgMaskDefinition(pMaskID);
-    }
-
-    // svg mask 
-    if (!useNew) {
-        patternMaskDefinition = new svgDefinition(pMaskID, 'mask');
-        patternMaskDefinition.AddAttribute('maskUnits', 'userSpaceOnUse');
-        patternMaskRect = new svgRect(x, y, width, height, patternAlphaGradient);
-        patternMaskRect.storeInDefsElement = false;
-    }
+    // mask definition 
+    patternMaskDefinition = new svgMaskDefinition(pMaskID);
 
     // alpha image and attributes
     patternAlphaImage = new svgDefinition(pImageID, 'image');
@@ -104,17 +87,7 @@ function CreatePatternSection(section) {
         ['mask', `url(#${pMaskID})`],
     ]);
 
-    // push definitions
-    if (!useNew) {
-        patternMaskDefinition.subDefinitions.push(patternMaskRect);
-        patternAlphaSVG.definitions.push(patternAlphaGradient, patternMaskDefinition, patternAlphaImage);
-    }
-    
-    if (useNew) {
-        console.log("maskDEf: "); console.log(maskDef);
-        console.log('patternAlpha:  '); console.log(patternAlphaImage);
-        patternAlphaSVG.definitions.push(maskDef, patternAlphaImage);
-    }
+    patternAlphaSVG.definitions.push(patternMaskDefinition, patternAlphaImage);
 
     // add SVG to page 
     patternImage.addSVG(patternAlphaSVG);
