@@ -1,4 +1,5 @@
 import { svgDefinition, svgDefaults, svgElement, svgHTMLAsset, svgViewBox, svgRect, svgGradient } from "./index";
+import { IsStringColor } from "../lilutils";
 
 // other SVG definitions (elements)
 // see: https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element
@@ -214,7 +215,7 @@ export class svgMaskDefinition extends svgXYWHDefinition {
     set maskUnits(v) { let prev = this.#_maskUnits; this.#_maskUnits = v; this.changed('maskUnits', v, prev); }
     /** @type {'userSpaceOnUse'|'objectBoundingBox'|null} */
     #_maskUnits = svgDefaults.MASK_MASKUNITS;
-    
+
     /**
      * The `maskContentUnits` attribute indicates which coordinate 
      * system to use for the contents of the `<mask>` element.
@@ -225,7 +226,7 @@ export class svgMaskDefinition extends svgXYWHDefinition {
     set maskContentUnits(v) { let prev = this.#_maskContentUnits; this.#_maskContentUnits = v; this.changed('maskContentUnits', v, prev); }
     /** @type {'userSpaceOnUse'|'objectBoundingBox'|null} */
     #_maskContentUnits = svgDefaults.MASK_MASKCONTENTUNITS;
-    
+
     /**
      * The `maskContentUnits` attribute indicates which coordinate 
      * system to use for the contents of the `<mask>` element.
@@ -270,12 +271,33 @@ export class svgMaskDefinition extends svgXYWHDefinition {
      * @returns {string} */
     get autoGenerateRectFill() {
         if (this.#_autoGenerateRectFill == null) {
-            return new svgGradient(svgGradient.templates.bw);
+            this.#_autoGradient = new svgGradient(svgGradient.templates.bw);
+            this.#_autoGradient.id = this.#_getAutoID(true);
+            return this.#_autoGradient.idURL;
         }
         if (this.#_autoGenerateRectFill instanceof svgGradient) {
-
+            if (this.#_autoGenerateRectFill.parent == null) {
+                // if the autogenrectfill gradient doesn't have a parent, 
+                // clone instance so it can be generated + deleted w/o messing with original 
+                this.#_autoGradient = Object.assign({}, this.#_autoGenerateRectFill);
+                this.#_autoGradient.id = this.#_getAutoID(true);
+            }
+            return this.#_autoGenerateRectFill.idURL;
         }
-        return this.#_autoGenerateRectFill;
+        if (Array.isArray(this.#_autoGenerateRectFill)) {
+            this.#_autoGradient = new svgGradient(this.#_autoGenerateRectFill);
+            this.#_autoGradient.id = this.#_getAutoID(true);
+            return this.#_autoGradient.idURL;
+        }
+        if (this.isURL(this.#_autoGenerateRectFill) || IsStringColor(this.#_autoGenerateRectFill)) {
+            return this.#_autoGenerateRectFill;
+        }
+        let url = this.stringToURL(this.#_autoGenerateRectFill);
+        if (url === this.#_autoGenerateRectFill) { // not a URL and identical return - stringToURL failed 
+            console.warn(`WARNING: could not parse augoGenRectFill ${this.#_autoGenerateRectFill} to URL, or otherwise determine auto rect fill getter, getter returning null`, this);
+            return null;
+        }
+        return url;
     }
     /**
      * @param {svgGradient|string[]|string|null} v 
@@ -285,7 +307,7 @@ export class svgMaskDefinition extends svgXYWHDefinition {
      * gradient, or `null`. If `null`, generates a new gradient using 
      * the gradient template {@linkcode svgGradient.templates.bw} 
      * */
-    set autoGenerateRectFill(v) { 
+    set autoGenerateRectFill(v) {
         let prev = this.#_autoGenerateRectFill; this.#_autoGenerateRectFill = v; this.changed('autoGenerateRectFill', v, prev);
     }
     /** @type {svgGradient|string|string[]|null} */
@@ -301,9 +323,22 @@ export class svgMaskDefinition extends svgXYWHDefinition {
 
     get html() {
         if (!this.autoGenerateRect) { return super.html; }
-        let rect = new svgRect(this.x, this.y, this.width, this.height);
+        // create fill and gradient 
+        let fill = this.autoGenerateRectFill;
+        this.#_autoRect = new svgRect(this.x, this.y, this.width, this.height, fill);
+        this.#_autoRect.storeInDefsElement = false;
+        this.#_autoRect.id = this.#_getAutoID(false);
+        if (this.#_autoGradient != null) {
+            this.subDefinitions.push(this.#_autoGradient);
+        }
+        this.subDefinitions.push(this.#_autoRect);
         let h = super.html;
-
+        if (this.#_autoGradient != null) {
+            this.subDefinitions.remove(this.#_autoGradient);
+        }
+        this.subDefinitions.remove(this.#_autoRect);
+        this.#_autoGradient = null;
+        this.#_autoRect = null;
         return h;
     }
 
@@ -314,6 +349,15 @@ export class svgMaskDefinition extends svgXYWHDefinition {
             ['maskContentUnits', this.maskContentUnits],
         ])].join(' ');
     }
+
+    /** @type {svgRect} */
+    #_autoRect = null;
+    /** @type {svgGradient} */
+    #_autoGradient = null;
+
+    /** get ID for an autogen element @param {boolean} forGradient for gradient (`t`) or rect (`f`)? @returns {string} */
+    #_getAutoID(forGradient) { return `__AUTOGEN_ID_DEF${this.svgInstanceNumber}_${forGradient ? 'GRD' : 'RCT'}${this.#_autoGradient.svgInstanceNumber}`; }
+
 }
 
 // #endregion Img/Mask 
