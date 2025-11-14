@@ -70,7 +70,8 @@ export const GRADIENT_STOP_OFFSET = 'auto';
 export const GRADIENT_STOP_COLOR = null;
 export const GRADIENT_STOP_OPACITY = null;
 
-export const XYWHDEFINITION_MATCH_VIEWBOX = true;
+export const XYWHDEF_MATCHVIEWBOX = true;
+export const XYWHDEF_INCLUDEXYWHNDATA = true;
 
 // export const MASK_MASKTYPE = 'luminance';
 // export const MASK_MASKCONTENTUNITS = 'userSpaceOnUse';

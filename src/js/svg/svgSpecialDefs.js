@@ -29,7 +29,30 @@ export class svgXYWHDefinition extends svgDefinition {
         if (v) { this._updateXYWH(); }
     }
     /** @type {boolean} */
-    #_matchViewboxXYWH = svgDefaults.XYWHDEFINITION_MATCH_VIEWBOX;
+    #_matchViewboxXYWH = svgDefaults.XYWHDEF_MATCHVIEWBOX;
+
+    /**
+     * Should this definition's {@linkcode x}, {@linkcode y}, 
+     * {@linkcode width}, and {@linkcode height} values be 
+     * included while exporting this def's {@linkcode html}?
+     * 
+     * If value is a boolean, it's straightfoward. 
+     * 
+     * If value is `null`, same as `false`.
+     * 
+     * If value is a string (case sensitive), corresponding `data` output is:
+     * - `xyOnly`: only `x` and `y`
+     * - `whOnly` / `widthHeightOnly`: only `width` and `height`
+     * - `xywh` / `all`: `x`, `y`, `width`, and `height` (same as `true`)
+     *   - Any subset of these characters will use only the 
+     *     assocaited values. Eg, `yh` will use `y` and `height`.
+     * - `x`, `y`, `w` / `width`, or `h`/`height`: only that value 
+     * - `none`: no values, same as `false`
+     * @returns {boolean | 'all' | 'xyOnly' | 'whOnly' | 'widthHeightOnly' | 'xywh' | 'xyw' | 'xyh' | 'xwh' | 'xy' | 'xw' | 'xh' | 'wh' | 'ywh' | 'yw' | 'yh' | 'wh' | 'x' | 'y' | 'w' | 'h' | 'width' | 'height' | `none` } */
+    get includeXYWHInData() { return this.#_includeXYWHInData; }
+    set includeXYWHInData(v) { let prev = this.#_includeXYWHInData; this.#_includeXYWHInData = v; this.changed('includeXYWHInData', v, prev); }
+    /** @type {boolean | 'all' | 'xyOnly' | 'whOnly' | 'widthHeightOnly' | 'xywh' | 'xyw' | 'xyh' | 'xwh' | 'xy' | 'xw' | 'xh' | 'wh' | 'ywh' | 'yw' | 'yh' | 'wh' | 'x' | 'y' | 'w' | 'h' | 'width' | 'height' | `none` } */
+    #_includeXYWHInData = svgDefaults.XYWHDEF_INCLUDEXYWHNDATA;
 
     /** Get the `x` value of this definition. If {@linkcode matchViewboxXYWH} is `true`, this has no affect, as the value wll be read from a parent {@linkcode svgViewBox} (if one exists). @returns {number} */
     get x() { return this.#_x; }
@@ -92,6 +115,55 @@ export class svgXYWHDefinition extends svgDefinition {
         this.AddOnChangeCallback(this.onAssetChanged);
         // initial attempt to match to viewbox 
         if (this.parent != null) { this._updateXYWH(); }
+    }
+
+    get data() {
+        if (this.includeXYWHInData == null || this.includeXYWHInData == false || this.includeXYWHInData == 'none') { return super.data; }
+        let xywh = { x: false, y: false, w: false, h: false };
+        if (typeof this.includeXYWHInData === 'boolean') {
+            // must be true
+            xywh.x = true; xywh.y = true; xywh.w = true; xywh.h = true;
+        } else {
+            // must be string 
+            switch (this.includeXYWHInData) {
+                case 'all':
+                case 'xywh':
+                    xywh.x = true; xywh.y = true; xywh.w = true; xywh.h = true;
+                    break;
+                case 'xy':
+                case 'xyOnly':
+                    xywh.x = true; xywh.y = true;
+                    break;
+                case 'wh':
+                case 'whOnly':
+                case 'widthHeightOnly':
+                    xywh.w = true; xywh.h = true;
+                    break;
+                case 'w':
+                case 'width':
+                    xywh.w = true;
+                    break;
+                case 'h':
+                case 'height':
+                    xywh.h = true;
+                    break;
+                default:
+                    xywh.x = this.includeXYWHInData.indexOf('x') >= 0;
+                    xywh.y = this.includeXYWHInData.indexOf('y') >= 0;
+                    xywh.w = this.includeXYWHInData.indexOf('w') >= 0;
+                    xywh.h = this.includeXYWHInData.indexOf('h') >= 0;
+                    break;
+            }
+        }
+        if (xywh.x == false && xywh.y == false && xywh.w == false && xywh.h == false) { return super.data; }
+        /** @type {[string, any?][]} */
+        let dataToParse = [];
+        if (xywh.x) { dataToParse.push(['x', this.x]); }
+        if (xywh.y) { dataToParse.push(['y', this.y]); }
+        if (xywh.w) { dataToParse.push(['width', this.width]); }
+        if (xywh.h) { dataToParse.push(['height', this.height]); }
+        if (dataToParse.length == 0) { return super.data; }
+        return [super.data, this.ParseData(dataToParse)].join(' ');
     }
 
     onAssetChanged(valueChanged, newValue, previousValue, _changedElement) {
