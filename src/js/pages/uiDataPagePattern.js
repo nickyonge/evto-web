@@ -72,10 +72,8 @@ function CreatePatternSection(section) {
     let width = 1000;
     let height = width / 2;
 
-    // viewbox and html asset
-    let viewBox = new svgViewBox(x, y, width, height);
-    patternAlphaSVG = new svgHTMLAsset();
-    patternAlphaSVG.viewBox = viewBox;
+    // html asset
+    patternAlphaSVG = new svgHTMLAsset(null, null, width, height);
 
     // svg gradient 
     patternAlphaGradient = new svgGradient(svgGradient.templates.bw);
@@ -113,6 +111,8 @@ function CreatePatternSection(section) {
     }
     
     if (useNew) {
+        console.log("maskDEf: "); console.log(maskDef);
+        console.log('patternAlpha:  '); console.log(patternAlphaImage);
         patternAlphaSVG.definitions.push(maskDef, patternAlphaImage);
     }
 

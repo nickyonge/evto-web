@@ -103,7 +103,7 @@ export class svgHTMLAsset extends svg.element {
                 this.changed(_arrayNameShapes, v, prev);
                 return;
             }
-        }
+        } else { v.removeNullValues(); }
         v.forEach(shape => {
             shape.storeInDefsElement = false;
             shape.parent = this;
@@ -135,7 +135,7 @@ export class svgHTMLAsset extends svg.element {
                 this.changed(_arrayNameDefinitions, v, prev);
                 return;
             }
-        }
+        } else { v.removeNullValues(); }
         v.forEach(def => {
             def.parent = this;
         });
@@ -163,15 +163,15 @@ export class svgHTMLAsset extends svg.element {
      * Create a new SVG HTML asset, with optionally 
      * supplied shapes, definitions, and viewbox.
      * @param {svg.shape|svg.shape[]} shapes Optional array of {@link svgShape svgShapes} 
-     * @param {svg.definition[]} definitions Optional array of {@link svgDefinition svgDefinitions} for `<defs>` 
+     * @param {svg.definition|svg.definition[]} definitions Optional array of {@link svgDefinition svgDefinitions} for `<defs>` 
      * @param {svgViewBox|number|null} viewBoxOrVBWidth Optional {@link svgViewBox viewbox}, or a width value for a new ViewBox (if height is also defined). If omitted, creates a new viewbox with default values.
      * @param {number|null} [vbHeight=undefined] Optional height for a new Viewbox. Only used if `viewBoxWidth` is type `number`.
      */
     constructor(shapes = [], definitions = [], viewBoxOrVBWidth = new svgViewBox(), vbHeight = undefined) {
         super();
         this.onChange = this._htmlAssetOnChange;
-        this.shapes = Array.isArray(shapes) ? shapes : [shapes];
-        this.definitions = definitions;
+        this.shapes = Array.isArray(shapes) ? shapes : shapes == null ? [] : [shapes];
+        this.definitions = Array.isArray(definitions) ? definitions : definitions == null ? [] : [definitions];
         if (viewBoxOrVBWidth != null) {
             if (viewBoxOrVBWidth instanceof svgViewBox) {
                 this.viewBox = viewBoxOrVBWidth;
