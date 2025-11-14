@@ -190,7 +190,7 @@ export class svgXYWHDefinition extends svgDefinition {
 
 // #region Img/Mask 
 
-export class svgImageDef extends svgXYWHDefinition {
+export class svgImageDefinition extends svgXYWHDefinition {
 
     /**
      * 
@@ -202,7 +202,7 @@ export class svgImageDef extends svgXYWHDefinition {
 
 }
 
-export class svgMaskDef extends svgXYWHDefinition {
+export class svgMaskDefinition extends svgXYWHDefinition {
 
     /**
      * The `maskUnits` attribute indicates which coordinate system 
@@ -211,7 +211,7 @@ export class svgMaskDef extends svgXYWHDefinition {
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/maskUnits
      */
     get maskUnits() { return this.#_maskUnits; }
-    set maskUnits(v) { this.#_maskUnits = v; }
+    set maskUnits(v) { let prev = this.#_maskUnits; this.#_maskUnits = v; this.changed('maskUnits', v, prev); }
     /** @type {'userSpaceOnUse'|'objectBoundingBox'|null} */
     #_maskUnits = svgDefaults.MASK_MASKUNITS;
     
@@ -222,7 +222,7 @@ export class svgMaskDef extends svgXYWHDefinition {
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/maskContentUnits
      */
     get maskContentUnits() { return this.#_maskContentUnits; }
-    set maskContentUnits(v) { this.#_maskContentUnits = v; }
+    set maskContentUnits(v) { let prev = this.#_maskContentUnits; this.#_maskContentUnits = v; this.changed('maskContentUnits', v, prev); }
     /** @type {'userSpaceOnUse'|'objectBoundingBox'|null} */
     #_maskContentUnits = svgDefaults.MASK_MASKCONTENTUNITS;
     
@@ -233,9 +233,21 @@ export class svgMaskDef extends svgXYWHDefinition {
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/maskType
      */
     get maskType() { return this.#_maskType; }
-    set maskType(v) { this.#_maskType = v; }
+    set maskType(v) { let prev = this.#_maskType; this.#_maskType = v; this.changed('maskType', v, prev); }
     /** @type {'alpha'|'luminance'|null} */
     #_maskType = svgDefaults.MASK_MASKTYPE;
+
+    /** 
+     * Should this mask auto-generate a `<rect>` based on its XYWH values,
+     * or (if {@linkcode matchViewboxXYWH} is `true`, its parent 
+     * {@linkcode svgViewBox}? Default {@linkcode svgDefaults.MASK_AUTOGENERATERECT}
+     * @returns {boolean} */
+    get autoGenerateRect() { return this.#_autoGenerateRect; }
+    set autoGenerateRect(v) {
+        let prev = this.#_autoGenerateRect; this.#_autoGenerateRect = v; this.changed('autoGenerateRect', v, prev);
+    }
+    /** @type {boolean} */
+    #_autoGenerateRect = svgDefaults.MASK_AUTOGENERATERECT;
 
     /**
      * 
@@ -243,6 +255,14 @@ export class svgMaskDef extends svgXYWHDefinition {
      */
     constructor(id = undefined) {
         super(id, 'mask');
+    }
+
+    get data() {
+        return [super.data, this.ParseData([
+            ['mask-type', this.maskType],
+            ['maskContentUnits', this.maskUnits],
+            ['maskContentUnits', this.maskContentUnits],
+        ])].join(' ');
     }
 }
 

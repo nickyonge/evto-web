@@ -75,6 +75,7 @@ export const XYWHDEFINITION_MATCH_VIEWBOX = true;
 export const MASK_MASKTYPE = 'luminance';
 export const MASK_MASKCONTENTUNITS = 'userSpaceOnUse';
 export const MASK_MASKUNITS = 'objectBoundingBox';
+export const MASK_AUTOGENERATERECT = true;
 
 /**
  * Ensures that the given values either have content

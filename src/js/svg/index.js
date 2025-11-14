@@ -12,6 +12,12 @@ export {
 } from './svgDefinition';
 
 export {
+    svgXYWHDefinition, svgXYWHDefinition as xywhDefinition,
+    svgMaskDefinition, svgMaskDefinition as maskDefinition,
+    svgImageDefinition, svgImageDefinition as imageDefinition,
+} from './svgSpecialDefs'
+
+export {
     svgShape, svgShape as shape,
     svgRect, svgRect as rect,
     svgCircle, svgCircle as circle,
@@ -23,7 +29,7 @@ export {
     IsValidShapeType
 } from './svgShapes';
 
-export { svgGradient,svgGradient as gradient } from './svgGradient';
+export { svgGradient, svgGradient as gradient } from './svgGradient';
 
 export * as config from './svgConfig';
 export * as svgConfig from './svgConfig';
@@ -34,7 +40,7 @@ export * as svgDefaults from './svgDefaults';
 export * as generator from './svgGenerator';
 export * as svgGenerator from './svgGenerator';
 
-import { svgElement } from './svgElement'; 
+import { svgElement } from './svgElement';
 
 /**
  * Callback for when a value in an {@link svgElement} has changed
