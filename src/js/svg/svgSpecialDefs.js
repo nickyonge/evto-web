@@ -265,7 +265,9 @@ export class svgMaskDefinition extends svgXYWHDefinition {
      * string color array to generate a new gradient, or `null`. 
      * If `null`, generates a new gradient using the 
      * gradient template {@linkcode svgGradient.templates.bw}
-     * @returns {string|string[]|null} */
+     * 
+     * Will always return `string`
+     * @returns {string} */
     get autoGenerateRectFill() {
         if (this.#_autoGenerateRectFill == null) {
             return new svgGradient(svgGradient.templates.bw);
@@ -275,6 +277,14 @@ export class svgMaskDefinition extends svgXYWHDefinition {
         }
         return this.#_autoGenerateRectFill;
     }
+    /**
+     * @param {svgGradient|string[]|string|null} v 
+     * Value to set the fill to. It can be a color (`"#ff0000"`), 
+     * {@linkcode svgGradient}, string URL referencing a gradient 
+     * (see {@linkcode isURL}), string color array to generate a new 
+     * gradient, or `null`. If `null`, generates a new gradient using 
+     * the gradient template {@linkcode svgGradient.templates.bw} 
+     * */
     set autoGenerateRectFill(v) { 
         let prev = this.#_autoGenerateRectFill; this.#_autoGenerateRectFill = v; this.changed('autoGenerateRectFill', v, prev);
     }
