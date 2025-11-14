@@ -131,7 +131,7 @@ export class svgDefinition extends svg.element {
      * @returns {boolean} `true` if attribute was successfully added, `false` if failed to add, `returnIfAlreadyAdded` if attribute already exists
      * @see {@linkcode AddAttributes} to add multiple attributes at once 
     */
-   AddAttribute(attribute, value = null, returnIfAlreadyAdded = true) {
+    AddAttribute(attribute, value = null, returnIfAlreadyAdded = true) {
         if (attribute == null) { return false; }
         // pass array to string/any attribute/value
         if (!Array.isArray(attribute)) {
@@ -344,13 +344,14 @@ export class svgDefinition extends svg.element {
      * generally to be used in {@linkcode html} to for the final output.
      */
     get data() {
-        let d = '';
+        let superData = super.data;
+        let newData = '';
         // check for and include extraAttributes
         if (this.extraAttributes != null && this.extraAttributes.length > 0) {
             let ea = this.ParseData(this.extraAttributes);
-            if (!isBlank(ea)) { d += ea; }
+            if (!isBlank(ea)) { newData += ea; }
         }
-        return d;
+        return isBlank(superData) ? newData : [superData, newData].join(' ');
     }
 
     /** Gets the {@linkcode html} of all this definition's {@linkcode subDefinitions} */
