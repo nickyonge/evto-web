@@ -190,9 +190,6 @@ export class svgElement {
         svgElement.#svgElementsCount++;
     }
 
-    /** Unique instance of this svgElement @returns {number} */
-    get svgInstance() { return this[__svgElementInstance]; }
-
     /**
      * Set a callback for when a value in this {@link svgElement} has changed.
      * 
