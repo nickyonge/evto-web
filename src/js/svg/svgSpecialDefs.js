@@ -1,4 +1,4 @@
-import { svgDefinition, svgDefaults, svgElement, svgHTMLAsset, svgViewBox, svgRect, svgGradient } from "./index";
+import { svgDefinition, svgDefaults, svgElement, svgHTMLAsset, svgViewBox, svgRect, svgGradient, svgConfig } from "./index";
 import { IsStringColor } from "../lilutils";
 
 // other SVG definitions (elements)
@@ -248,6 +248,9 @@ export class svgMaskDefinition extends svgXYWHDefinition {
      * {@linkcode svgGradient}, string color array to generate a new 
      * gradient, or `null`. If `null`, generates a new gradient using 
      * the gradient template {@linkcode svgGradient.templates.bw}
+     * - **Note:** If `true`, during `html` generation, the property 
+     * {@linkcode subclassHandlesHTML} is forced to `true`, with its 
+     * previous value being reassigned afterward. 
      * @returns {boolean} */
     get autoGenerateRect() { return this.#_autoGenerateRect; }
     set autoGenerateRect(v) {
@@ -327,6 +330,8 @@ export class svgMaskDefinition extends svgXYWHDefinition {
     get html() {
         if (!this.autoGenerateRect) { return super.html; }
         // create fill and gradient
+        let prevSubHandlesHTML = this.subclassHandlesHTML;
+        this.subclassHandlesHTML = true;
 
         // TODO: svgMaskDef to handle its own html generation 
         // Issue URL: https://github.com/nickyonge/evto-web/issues/69
@@ -334,31 +339,44 @@ export class svgMaskDefinition extends svgXYWHDefinition {
         // create <lineargradient> BESIDE <mask>
         // don't push them into subDefinitions (might mean u dont have to skip ID update)
 
-        console.log(this.parent.svgConstructor);
+        // return `<${this.shapeType} ${this.data}>${this.subDefinitionsHTML}</${this.shapeType}>`;
+
+        super.html;
+
+
         let fill = this.autoGenerateRectFill;
         this.#_autoRect = new svgRect(this.x, this.y, this.width, this.height, fill);
         this.#_autoRect.storeInDefsElement = false;
         this.#_autoRect.__SKIP_ID_UPDATE = true;
         this.#_autoRect.id = this.#_getAutoID(false);
+        // if (this.#_autoGradient != null) {
+        //     this.subDefinitions.push(this.#_autoGradient);
+        // }
+        // this.subDefinitions.push(this.#_autoRect);
+        // let h = super.html;
+        // if (this.#_autoGradient != null) {
+        //     this.subDefinitions.remove(this.#_autoGradient);
+        // }
+        // this.subDefinitions.remove(this.#_autoRect);
+
+        let gradientHTML = '';
         if (this.#_autoGradient != null) {
-            this.subDefinitions.push(this.#_autoGradient);
+            gradientHTML = this.#_autoGradient.html;
         }
-        this.subDefinitions.push(this.#_autoRect);
-        let h = super.html;
-        if (this.#_autoGradient != null) {
-            this.subDefinitions.remove(this.#_autoGradient);
-        }
-        this.subDefinitions.remove(this.#_autoRect);
+        let maskHTML = `<${this.defType}${this.data}>`;
+        let rectHTML = `${svgConfig.HTML_INDENT ? '\t' : ''}${this.#_autoRect.html}`;
+        maskHTML = [maskHTML, rectHTML, `</${this.defType}>`].join(`${svgConfig.HTML_NEWLINE ? '\n' : ''}`);
+        let h = [gradientHTML, maskHTML].join(`${svgConfig.HTML_NEWLINE ? '\n' : ''}`);
         this.#_autoGradient = null;
         this.#_autoRect = null;
-        console.log(h);
+        this.subclassHandlesHTML = prevSubHandlesHTML;
         return h;
     }
 
     get data() {
         return [super.data, this.ParseData([
             ['mask-type', this.maskType],
-            ['maskContentUnits', this.maskUnits],
+            ['maskUnits', this.maskUnits],
             ['maskContentUnits', this.maskContentUnits],
         ])].join(' ');
     }
