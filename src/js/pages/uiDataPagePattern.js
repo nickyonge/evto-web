@@ -1,7 +1,7 @@
 import * as cmp from "../components";
 import * as ui from '../ui';
 import * as txt from '../text';
-import { svgHTMLAsset, svgShape, svgGradient, svgRect, svgDefinition, svgViewBox, svgMaskDefinition } from "../svg/index";
+import { svgHTMLAsset, svgShape, svgGradient, svgRect, svgDefinition, svgViewBox, svgMaskDefinition, svgImageDefinition } from "../svg/index";
 import { SetElementEnabled } from "../lilutils";
 import { DemoGradient } from "./uiDataPageBase";
 import { mapImg } from "../assetExporter";
@@ -55,6 +55,7 @@ export function CreatePagePattern(page) {
 let patternAlphaSVG;
 let patternAlphaGradient;
 let patternMaskDefinition;
+let patternImageDefinition;
 let patternMaskRect;
 let patternAlphaImage;
 
@@ -75,19 +76,29 @@ function CreatePatternSection(section) {
     // svg gradient 
     patternAlphaGradient = new svgGradient(svgGradient.templates.bw);
     // mask definition 
-    patternMaskDefinition = new svgMaskDefinition(pMaskID);
+    patternMaskDefinition = new svgMaskDefinition();
+    patternMaskDefinition.id = pMaskID;
 
-    // alpha image and attributes
-    patternAlphaImage = new svgDefinition(pImageID, 'image');
-    patternAlphaImage.storeInDefsElement = false;
-    patternAlphaImage.AddAttributes([
-        ['xlink:href', imageURL],
-        ['width', width.toString()],
-        ['height', height.toString()],
-        ['mask', `url(#${pMaskID})`],
-    ]);
+    const useNew = true;
 
-    patternAlphaSVG.definitions.push(patternMaskDefinition, patternAlphaImage);
+    // alpha image and attributes 
+    // patternAlphaImage = new svgDefinition(pImageID, 'image');
+    // patternAlphaImage.storeInDefsElement = false;
+    // patternAlphaImage.AddAttributes([
+    //     ['xlink:href', imageURL],
+    //     ['width', width.toString()],
+    //     ['height', height.toString()],
+    //     ['mask', `url(#${pMaskID})`],
+    // ]);
+
+    let patternImageDefinition = new svgImageDefinition(imageURL, pImageID);
+    patternImageDefinition.mask = patternMaskDefinition;
+
+    if (useNew) {
+        patternAlphaSVG.definitions.push(patternMaskDefinition, patternImageDefinition);
+    } else {
+        patternAlphaSVG.definitions.push(patternMaskDefinition, patternAlphaImage);
+    }
 
     // add SVG to page 
     patternImage.addSVG(patternAlphaSVG);

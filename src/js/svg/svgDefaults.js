@@ -73,9 +73,11 @@ export const GRADIENT_STOP_OPACITY = null;
 export const XYWHDEF_MATCHVIEWBOX = true;
 export const XYWHDEF_INCLUDEXYWHNDATA = true;
 
-// export const MASK_MASKTYPE = 'luminance';
-// export const MASK_MASKCONTENTUNITS = 'userSpaceOnUse';
-// export const MASK_MASKUNITS = 'objectBoundingBox';
+export const IMAGE_HREF = null;
+export const IMAGE_PRESERVEASPECTRATIO = null;
+export const IMAGE_CROSSORIGIN = null;
+export const IMAGE_DECODING = null;
+
 export const MASK_MASKTYPE = null;
 export const MASK_MASKCONTENTUNITS = null;
 export const MASK_MASKUNITS = null;

@@ -263,14 +263,129 @@ export class svgXYWHDefinition extends svgDefinition {
 
 // #region Img/Mask 
 
+/**
+ * Container for an {@linkcode svgDefinition} that's 
+ * used as a `<image>` element in HTML, used for including
+ * images inside an SVG asset.
+ * - **Note:** supports `JPEG` / `JPG`, `PNG`, and other `SVG` files.
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/image
+ */
 export class svgImageDefinition extends svgXYWHDefinition {
 
     /**
+     * The URL of the image file to display.
+     * @returns {string|null}
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/maskUnits
+     */
+    get href() { return this.#_href; }
+    set href(v) { let prev = this.#_href; this.#_href = v; this.changed('href', v, prev); }
+    /** @type {string|null} */
+    #_href = svgDefaults.IMAGE_HREF;
+
+    /**
+     * Indicates how an element with a viewBox providing 
+     * a given aspect ratio must fit into a viewport with 
+     * a different aspect ratio. 
      * 
+     * - **Note:** If using a boolean, `false` exports to `"none"`,
+     * and `true` exports to the default value `"xMidYMid meet"` 
+     * during {@linkcode html} output. As with all other SVG 
+     * attribute properties, `null` / `undefined` simply disables export. 
+     * - **Note:** {@linkcode svgDefaults.IMAGE_PRESERVEASPECTRATIO}
+     * is this property's default value. This value is distinct from 
+     * {@linkcode svgDefaults.PRESERVEASPECTRATIO}.
+     * @returns {boolean|'none'|`x${'Min'|'Mid'|'Max'}Y${'Min'|'Mid'|'Max'} ${'meet'|'slice'}`|null}
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/maskUnits
+    */
+    get preserveAspectRatio() { return this.#_preserveAspectRatio; }
+    set preserveAspectRatio(v) { let prev = this.#_preserveAspectRatio; this.#_preserveAspectRatio = v; this.changed('preserveAspectRatio', v, prev); }
+    /** @type {boolean|'none'|`x${'Min'|'Mid'|'Max'}Y${'Min'|'Mid'|'Max'} ${'meet'|'slice'}`|null} */
+    #_preserveAspectRatio = svgDefaults.IMAGE_PRESERVEASPECTRATIO;
+
+    /**
+     * Provides support for configuration of the Cross-Origin 
+     * Resource Sharing (CORS) requests for the element's fetched data.
+     * @returns {'anonymous'|'use-credentials'|''|null}
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/crossorigin 
+     */
+    get crossorigin() { return this.#_crossorigin; }
+    set crossorigin(v) { let prev = this.#_crossorigin; this.#_crossorigin = v; this.changed('crossorigin', v, prev); }
+    /** @type {'anonymous'|'use-credentials'|''|null} */
+    #_crossorigin = svgDefaults.IMAGE_CROSSORIGIN;
+
+    /**
+     * Provides a hint to the browser as to whether it should 
+     * perform image decoding synchronously or asynchronously.
+     * @returns {'async '|'sync'|'auto'|null}
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/decoding 
+     */
+    get decoding() { return this.#_decoding; }
+    set decoding(v) { let prev = this.#_decoding; this.#_decoding = v; this.changed('decoding', v, prev); }
+    /** @type {'async '|'sync'|'auto'|null} */
+    #_decoding = svgDefaults.IMAGE_DECODING;
+
+    // not including fetchpriority - at time of coding this, it's labeled as experimental / non-standard
+    // https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/fetchpriority 
+
+    // not including xlink:href - at time of coding this, it's deprecated 
+    // https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/xlink:href 
+
+    /** 
+     * Optional `mask` attribute for this image, typically used
+     * in conjunction with {@linkcode svgMaskDefinition}.
+     * 
+     * Can be set to either a `string` that should reference the
+     * {@link svgMaskDefinition.id ID} or 
+     * {@link svgMaskDefinition.idURL URL} of a mask, or you can 
+     * directly set to an {@linkcode svgMaskDefinition}. In that 
+     * case, it'll return {@linkcode svgMaskDefinition.idURL}.
+     * @returns {string} 
+     */
+    get mask() {
+        if (this.#_mask instanceof svgMaskDefinition) {
+            return this.#_mask.idURL;
+        }
+        return this.#_mask;
+    }
+    /** 
+     * @param {string|svgMaskDefinition} v 
+     * Either a `string` that should reference the 
+     * {@link svgMaskDefinition.id ID} or 
+     * {@link svgMaskDefinition.idURL URL} of a mask, or an 
+     * {@linkcode svgMaskDefinition} to read the 
+     * {@linkcode svgMaskDefinition.idURL} value of. */
+    set mask(v) { let prev = this.#_mask; this.#_mask = v; this.changed('mask', v, prev); }
+    /** @type {string|svgMaskDefinition} */
+    #_mask;
+
+    /**
+     * Container for an {@linkcode svgDefinition} that's 
+     * used as a `<image>` element in HTML, used for including
+     * images inside an SVG asset.
+     * - **Note:** supports `JPEG` / `JPG`, `PNG`, and other `SVG` files.
+     * @param {string} urlToImage URL path to the image to display  
      * @param {string} [id] Unique identifier for this element (see {@linkcode svgElement.id}). If blank/omitted, sets to {@linkcode svgElement.uniqueID}. 
      */
-    constructor(id = undefined) {
+    constructor(urlToImage, id = undefined) {
         super(id, 'image');
+        this.storeInDefsElement = false;
+        this.href = urlToImage;
+    }
+
+    get data() {
+        console.log("mask: ");
+        console.log(this.mask);
+        console.log("#mask: ");
+        console.log(this.#_mask);
+        let d = [super.data, this.ParseData([
+            ['href', this.href],
+            ['preserveAspectRatio', this.preserveAspectRatio],
+            ['crossorigin', this.crossorigin],
+            ['decoding', this.decoding],
+            ['mask', this.mask],
+        ])].join(' ');
+        console.log(d);
+        return d;
     }
 
 }
