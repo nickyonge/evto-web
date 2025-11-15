@@ -88,7 +88,7 @@ function CreatePatternSection(section) {
 
 
     patternAlphaGradient.sharpness = 0.75;
-    patternAlphaGradient.angle = 15;
+    patternAlphaGradient.angle = 80;
     patternAlphaGradient.mirror = true;
 
     // TODO: replace multi references to an SVG shape with a use URL reference
