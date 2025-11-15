@@ -76,7 +76,7 @@ function CreatePatternSection(section) {
     // mask definition 
     patternMaskDefinition = new svgMaskDefinition();
     patternMaskDefinition.id = pMaskID;
-    patternMaskDefinition.autoGenerateRectFill = patternAlphaGradient;
+    patternMaskDefinition.gradient = patternAlphaGradient;
     // image definition 
     patternImageDefinition = new svgImageDefinition(imageURL, pImageID);
     patternImageDefinition.mask = patternMaskDefinition;

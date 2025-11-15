@@ -504,7 +504,19 @@ export class svgMaskDefinition extends svgXYWHDefinition {
     /** @type {svgGradient|string|string[]|null} */
     #_autoGenerateRectFill = null;
 
-    /**
+    /** 
+     * Convenience. Passed an {@linkcode svgGradient} value into
+     * {@linkcode autoGenerateRectFill}. Has no counterpart getter
+     * as the returned value may not be an `svgGradient`.
+     * - **Note:** The {@linkcode onChange} callback type for this
+     * will still be `"autoGenerateRectFill"`. 
+     * @param {svgGradient} v */
+    set gradient(v) { this.autoGenerateRectFill = v; }
+    /** Convenience. Get/set {@linkcode autoGenerateRectFill} easily. @returns {svgGradient|string|string[]|null} */
+    get fill() { return this.autoGenerateRectFill; }
+    set fill(v) { this.autoGenerateRectFill = v; }
+
+    /** 
      * Container for an {@linkcode svgDefinition} that's 
      * used as a `<mask>` element in HTML, generally used  
      * for alpha-masking an image (such as by using 
