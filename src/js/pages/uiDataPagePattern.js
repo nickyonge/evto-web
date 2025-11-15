@@ -62,7 +62,8 @@ let patternImageDefinition;
 
 const pMaskID = 'patternMask';
 const pImageID = 'patternMaskedImage';
-const imageURL = mapImg.full.monochrome.light.URL;
+const imageURLLight = mapImg.full.monochrome.light.URL;
+const imageURLDark = mapImg.full.monochrome.dark.URL;
 
 class AlphaLayer {
 
@@ -139,7 +140,9 @@ function CreatePatternSection(section) {
     let patternImage = new cmp.ImageField();
     section.appendChild(patternImage);
 
-    let alphaLayer1 = new AlphaLayer(1, imageURL, patternImage);
+    patternImage.addImage(imageURLDark);
+    let alphaLayer1 = new AlphaLayer(1, imageURLLight, patternImage);
+    alphaLayer1.gradient.sharpness = 0.9;
 
     return;
 
@@ -156,7 +159,7 @@ function CreatePatternSection(section) {
     patternMaskDefinition.id = pMaskID;
     patternMaskDefinition.gradient = patternAlphaGradient;
     // image definition 
-    patternImageDefinition = new svgImageDefinition(imageURL, pImageID);
+    patternImageDefinition = new svgImageDefinition(imageURLLight, pImageID);
     patternImageDefinition.mask = patternMaskDefinition;
     // add mask and image to the SVG
     patternAlphaSVG.definitions.push(patternMaskDefinition, patternImageDefinition);
