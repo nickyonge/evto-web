@@ -59,7 +59,7 @@ export class svgElement {
         if (!this._firstIDAssigned) {
             this._firstIDAssigned = true;
         } else {
-            if (!this._suppressOnChange) {
+            if (!this.suppressOnChange) {
                 this._invokeChange('id', v, prev, this);
                 if (this.hasOwnProperty('parent')) {
                     this.parent?._invokeChange('id', v, prev, this);
@@ -403,7 +403,7 @@ export class svgElement {
      * @protected
      */
     changed(valueChanged, newValue, previousValue, ...extraParameters) {
-        if (this._suppressOnChange) { return; }
+        if (this.suppressOnChange) { return; }
         this._invokeChange(valueChanged, newValue, previousValue, this, ...extraParameters);
     }
 
@@ -441,7 +441,7 @@ export class svgElement {
     arrayChanged(type, updatedArray, previousArray, returnValue, ...parameters) {
         if (updatedArray.suppressOnChange == true) { return; }
         if (updatedArray.hasOwnProperty('parent') && updatedArray['parent'] instanceof svgElement) {
-            if (updatedArray['parent']._suppressOnChange) { return; }
+            if (updatedArray['parent'].suppressOnChange) { return; }
             parameters.unshift(returnValue);
             let name = updatedArray.name == null ? `array#${type}` : `${updatedArray.name}#${type}`;
             updatedArray['parent'].changed?.(name, updatedArray, previousArray, ...parameters);
@@ -500,7 +500,7 @@ export class svgElement {
      * - **Note:** Modifying this does NOT trigger `onChange` callback.
      * @type {boolean}
      */
-    _suppressOnChange = false;
+    suppressOnChange = false;
 
     /** 
      * Used internally to prefix the `valueChanged` param

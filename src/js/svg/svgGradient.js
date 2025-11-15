@@ -348,8 +348,8 @@ export class svgGradient extends svg.definition {
         let newGradient = `<${this.gradientType}${isBlank(d) ? '' : ` ${d}`}>`;
         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
         // preserve all suppressOnChange states 
-        let prevThisSuppress = this._suppressOnChange;
-        this._suppressOnChange = true;
+        let prevThisSuppress = this.suppressOnChange;
+        this.suppressOnChange = true;
         // iterate through stops 
         if (this.stops != null && this.stops.length > 0) {
             let prevArraySuppress = this.stops.suppressOnChange;
@@ -363,8 +363,8 @@ export class svgGradient extends svg.definition {
             let sharpness = EnsureToNumber(this.sharpness).clamp(0, svg.config.GRADIENT_SHARPNESS_CAPPED ? 0.992 : 1);
             for (let i = 0; i < this.stops.length; i++) {
                 if (this.stops[i] == null) { continue; }
-                let prevStopSuppress = this.stops[i]._suppressOnChange;
-                this.stops[i]._suppressOnChange = true;
+                let prevStopSuppress = this.stops[i].suppressOnChange;
+                this.stops[i].suppressOnChange = true;
                 // check for auto offset calculation, changing 'auto' to a linearly-assigned % based on array size 
                 if (sharpness > 0) {
                     let initialOffset = this.stops[i].offset;
@@ -417,7 +417,7 @@ export class svgGradient extends svg.definition {
                         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
                     }
                 }
-                this.stops[i]._suppressOnChange = prevStopSuppress;
+                this.stops[i].suppressOnChange = prevStopSuppress;
             }
             // undo mirroring 
             if (this.mirror) {
@@ -425,7 +425,7 @@ export class svgGradient extends svg.definition {
             }
             this.stops.suppressOnChange = prevArraySuppress;
         }
-        this._suppressOnChange = prevThisSuppress;
+        this.suppressOnChange = prevThisSuppress;
         // done! return new gradient html 
         return `${newGradient}</${this.gradientType}>`;
     }
@@ -487,10 +487,10 @@ export class svgGradient extends svg.definition {
             return true;
         };
 
-        this._suppressOnChange = true;
+        this.suppressOnChange = true;
         let xyOrig = this.xy12;
         let useAngle = ProcessAngle();
-        this._suppressOnChange = false;
+        this.suppressOnChange = false;
 
         // collect data 
         let d = this.isRadial ? this.ParseData([
@@ -519,9 +519,9 @@ export class svgGradient extends svg.definition {
 
         // undo angle 
         if (useAngle) {
-            this._suppressOnChange = true;
+            this.suppressOnChange = true;
             this.xy12 = xyOrig;
-            this._suppressOnChange = false;
+            this.suppressOnChange = false;
         }
 
         // done, return data 
