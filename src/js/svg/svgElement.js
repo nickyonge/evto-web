@@ -439,9 +439,8 @@ export class svgElement {
      * @template T
      */
     arrayChanged(type, updatedArray, previousArray, returnValue, ...parameters) {
-        if (updatedArray.suppressOnChange == true || previousArray.suppressOnChange == true) { return; }
+        if (updatedArray.suppressOnChange == true) { return; }
         if (updatedArray.hasOwnProperty('parent') && updatedArray['parent'] instanceof svgElement) {
-            console.log("array, type: " + type + ", this: " + (Array.isArray(this)) + ", parent: " + updatedArray['parent']?.svgConstructor + ', parent supp: ' + updatedArray['parent']?._suppressOnChange);
             if (updatedArray['parent']._suppressOnChange) { return; }
             parameters.unshift(returnValue);
             let name = updatedArray.name == null ? `array#${type}` : `${updatedArray.name}#${type}`;

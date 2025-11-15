@@ -314,7 +314,6 @@ export class svgHTMLAsset extends svg.element {
                         }
                     }
                     newValues.forEach(element => {
-                        console.log("pushiing " + element.svgConstructor);
                         element.parent = this;
                     });
                     break;

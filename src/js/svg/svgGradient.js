@@ -347,9 +347,10 @@ export class svgGradient extends svg.definition {
         let d = this.data;
         let newGradient = `<${this.gradientType}${isBlank(d) ? '' : ` ${d}`}>`;
         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
-        // iterate through stops 
+        // preserve all suppressOnChange states 
         let prevThisSuppress = this._suppressOnChange;
         this._suppressOnChange = true;
+        // iterate through stops 
         if (this.stops != null && this.stops.length > 0) {
             let prevArraySuppress = this.stops.suppressOnChange;
             this.stops.suppressOnChange = true;

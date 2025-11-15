@@ -261,7 +261,7 @@ export class svgXYWHDefinition extends svgDefinition {
 
 // #endregion XYWH Def 
 
-// #region Img/Mask 
+// #region Image 
 
 /**
  * Container for an {@linkcode svgDefinition} that's 
@@ -382,6 +382,10 @@ export class svgImageDefinition extends svgXYWHDefinition {
         ])].join(' ');
     }
 }
+
+// #endregion Image 
+
+// #region Mask 
 
 /**
  * Container for an {@linkcode svgDefinition} that's 
@@ -554,49 +558,31 @@ export class svgMaskDefinition extends svgXYWHDefinition {
      */
     _maskOnChange(valueChanged, newValue, previousValue, _changedElement, ..._extraParameters) {
         if (isBlank(valueChanged)) { return; }
-        console.log("value changed: " + valueChanged);
         let hashIndex = valueChanged.indexOf('#');
         let valueDetail;
         if (hashIndex >= 0) {
             valueDetail = valueChanged.substring(hashIndex + 1);
             valueChanged = valueChanged.substring(0, hashIndex);
         }
-        console.log("this: " + this.svgConstructor);
-        console.log("this.parent: " + this.parent?.svgConstructor);
         switch (valueChanged) {
-            case 'parent':
-                // if (this.autoGenerateRectFill instanceof svgGradient) {
-                //     console.log("HECK");
-                //     this.autoGenerateRectFill.onChange = this.parent.changed;
-                // }
-                break;
             case 'autoGenerateRectFill':
                 // rect fill, check if value is inexplicably the same 
                 if (newValue === previousValue) { return; }
-                // if new value is an svgElement,
-                // check if it has a different rootParent than this def (or if its null).
+                // if new value is an svgElement, check if it has a 
+                // different rootParent than this def (or if its null).
                 // if so, ensure its onchange is passed along here 
                 if (newValue instanceof svgElement) {
                     let listenForChange = newValue.parent == null || newValue.rootParent != this.rootParent;
                     if (listenForChange) {
-                        newValue._suppressOnChange = true;
                         newValue.parent = this;
-                        newValue._suppressOnChange = false;
-                        // console.log(" oh myyyyy ");
-                        // newValue._prefixOnChange = 'autoGradient';
-                        // newValue.parent = this;
-                        // newValue.onChange = (c2) => { console.log("C2: " + c2); }
-
                     }
                 }
-                break;
-            case 'autoGradient':
-                // TODO: need to retain "this" thru extra callback to bubble onChange up to svgHTMLAsset 
-                // Issue URL: https://github.com/nickyonge/evto-web/issues/70
-                console.log("Autogradient changed: " + valueDetail);
-                console.log("Changed element: " + _changedElement.svgConstructor);
-                console.log("this: " + this.svgConstructor);
-                console.log("parent: " + this.parent);
+                if (previousValue instanceof svgElement) {
+                    // clear this as parent from previous svgGradient 
+                    if (previousValue.parent === this) {
+                        previousValue.parent = null;
+                    }
+                }
                 break;
         }
     }
@@ -655,4 +641,4 @@ export class svgMaskDefinition extends svgXYWHDefinition {
 
 }
 
-// #endregion Img/Mask 
+// #endregion Mask 
