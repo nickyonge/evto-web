@@ -387,18 +387,27 @@ export class svgGradient extends svg.definition {
                 } else {
                     // non-sharp gradient
                     let autoOffset = false;
+                    // ^ to hold the previous value of suppressOnChange,
+                    // since we don't want to call onChange a bunch simply 
+                    // by converting stop offsets during HTML export 
+                    let prevSuppress;
                     if (typeof this.stops[i].offset == 'string') {
                         let offset = /** @type {string} */ (this.stops[i].offset);
                         autoOffset = offset.toLowerCase().trim() == 'auto';
                     }
                     if (autoOffset) {
                         // smooth gradient 
+                        prevSuppress = this.stops[i]._suppressOnChange;
+                        this.stops[i]._suppressOnChange = true;
                         let offset = (i / (this.stops.length - 1)) * 100;
                         this.stops[i].offset = `${offset.toMax()}%`;
                     }
                     let h = this.stops[i].html;
                     // ensure offset value is reset 
-                    if (autoOffset) { this.stops[i].offset = 'auto'; }
+                    if (autoOffset) {
+                        this.stops[i].offset = 'auto';
+                        this.stops[i]._suppressOnChange = prevSuppress;
+                    }
                     if (!isBlank(h)) {
                         if (svg.config.HTML_INDENT) { newGradient += '\t'; }
                         newGradient += h;

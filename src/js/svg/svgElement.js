@@ -461,8 +461,6 @@ export class svgElement {
     }
 
     /**
-     * ***Do not use.*** 
-     * 
      * Used internally to prevent multiple {@linkcode onChange} calls 
      * when modifying one property that itself modifies multiple times.
      * 
@@ -473,7 +471,6 @@ export class svgElement {
      * should only be invoked once, as only {@link svg.gradient.angle angle}
      * was modified.
      * @type {boolean}
-     * @protected
      */
     _suppressOnChange = false;
 
