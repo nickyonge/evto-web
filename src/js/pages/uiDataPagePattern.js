@@ -76,6 +76,7 @@ function CreatePatternSection(section) {
     // mask definition 
     patternMaskDefinition = new svgMaskDefinition();
     patternMaskDefinition.id = pMaskID;
+    patternMaskDefinition.autoGenerateRectFill = patternAlphaGradient;
     // image definition 
     patternImageDefinition = new svgImageDefinition(imageURL, pImageID);
     patternImageDefinition.mask = patternMaskDefinition;
@@ -83,6 +84,9 @@ function CreatePatternSection(section) {
     patternAlphaSVG.definitions.push(patternMaskDefinition, patternImageDefinition);
     // add SVG to page 
     patternImage.addSVG(patternAlphaSVG);
+
+    
+    patternAlphaGradient.sharpness = 1;
 
     // TODO: replace multi references to an SVG shape with a use URL reference
     // Issue URL: https://github.com/nickyonge/evto-web/issues/67
