@@ -85,6 +85,8 @@ function CreatePatternSection(section) {
     // add SVG to page 
     patternImage.addSVG(patternAlphaSVG);
 
+    patternAlphaSVG.onChange = (changedValue) => { console.log(changedValue); }
+
     
     patternAlphaGradient.sharpness = 1;
 

@@ -391,9 +391,6 @@ export class svgElement {
     changed(valueChanged, newValue, previousValue, ...extraParameters) {
         if (this._suppressOnChange) { return; }
         this._invokeChange(valueChanged, newValue, previousValue, this, ...extraParameters);
-        if (this.bubbleOnChange) {
-            this.parent?._invokeChange(valueChanged, newValue, previousValue, this, ...extraParameters);
-        }
     }
 
     /**
@@ -450,6 +447,10 @@ export class svgElement {
      * @private 
      */
     _invokeChange(valueChanged, newValue, previousValue, changedElement = undefined, ...extraParameters) {
+        if (changedElement == null) { changedElement = this; }
+        if (this.bubbleOnChange) {
+            this.parent?._invokeChange(valueChanged, newValue, previousValue, changedElement, ...extraParameters);
+        }
         if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; return; }
         for (let i = 0; i < this.onChangeCallbacks.length; i++) {
             if (typeof this.onChangeCallbacks[i] !== 'function') { continue; }
@@ -465,7 +466,7 @@ export class svgElement {
                 valueChanged,
                 newValue,
                 previousValue,
-                changedElement == null ? this : changedElement,
+                changedElement,
                 ...extraParameters);
         }
     }
