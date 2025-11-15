@@ -471,43 +471,8 @@ export class svgMaskDefinition extends svgXYWHDefinition {
             return this.#_autoGradient.idURL;
         }
         if (this.#_autoGenerateRectFill instanceof svgGradient) {
-            // autogenerate gradient if the gradient's parent is null,
-            // or if its parent is this definition, or if it doesn't 
-            // have a rootHTMLAsset, or if it does have a rootHTMLAsset 
-            // BUT it's not listed as one of all the gradients in it 
             this.#_autoGradient = this.#_autoGenerateRectFill;
             return this.#_autoGradient.idURL;
-            let autoGenerate = this.#_autoGenerateRectFill.parent == null;
-            console.log('autogen1 ' + autoGenerate);
-            if (!autoGenerate) { autoGenerate = this.#_autoGenerateRectFill.parent === this; }
-            console.log('autogen2 ' + autoGenerate);
-            if (!autoGenerate) { autoGenerate = this.#_autoGenerateRectFill.rootHTMLAsset == null; }
-            console.log('autogen3 ' + autoGenerate);
-            if (!autoGenerate) { 
-                let root = this.#_autoGenerateRectFill.rootHTMLAsset;
-                let allRootGradients = root.GetAllGradients();
-                autoGenerate = allRootGradients.contains(this.#_autoGenerateRectFill);
-            }
-            console.log('autogen4 ' + autoGenerate);
-            if (autoGenerate) {
-                // if the autogenrectfill gradient doesn't have a parent, 
-                // clone instance so it can be generated + deleted w/o messing with original 
-                // this.#_autoGradient = Object.assign({}, this.#_autoGenerateRectFill);
-                // this.#_autoGradient = JSON.parse(JSON.stringify(this.#_autoGenerateRectFill));
-                this.#_autoGradient = structuredClone(this.#_autoGenerateRectFill);
-                this.#_autoGradient.skipNextOnChangeForID = true;
-                this.#_autoGradient.id = this.#_getAutoID(true);
-                console.log("OKKKK");
-                console.log(this.#_autoGenerateRectFill.html);
-                console.log(this.#_autoGradient.html);
-                console.log(this.#_autoGenerateRectFill);
-                console.log(this.#_autoGradient);
-                console.log(this.#_autoGenerateRectFill.svgConstructor);
-                console.log(this.#_autoGradient.svgConstructor);
-                console.log("DONENNEE");
-            }
-            console.log(this.#_autoGenerateRectFill.idURL);
-            return this.#_autoGenerateRectFill.idURL;
         }
         if (Array.isArray(this.#_autoGenerateRectFill)) {
             this.#_autoGradient = new svgGradient(this.#_autoGenerateRectFill);
@@ -568,13 +533,10 @@ export class svgMaskDefinition extends svgXYWHDefinition {
         this.#_autoRect.skipNextOnChangeForID = true;
         this.#_autoRect.id = this.#_getAutoID(false);
 
-        console.log("gradent is: " + this.#_autoGradient);
         let gradientHTML = '';
         if (this.#_autoGradient != null) {
-            console.log(this.#_autoGradient.html);
             gradientHTML = this.#_autoGradient.html;
         }
-        console.log("gradent html: " + gradientHTML);
         let maskHTML = `<${this.defType}${this.data}>`;
         let rectHTML = `${svgConfig.HTML_INDENT ? '\t' : ''}${this.#_autoRect.html}`;
         maskHTML = [maskHTML, rectHTML, `</${this.defType}>`].join(`${svgConfig.HTML_NEWLINE ? '\n' : ''}`);

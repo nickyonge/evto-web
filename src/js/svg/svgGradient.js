@@ -344,7 +344,6 @@ export class svgGradient extends svg.definition {
 
     get html() {
         // collect data, generate base gradient element 
-        console.log("COLLECTNG HTML");
         let d = this.data;
         let newGradient = `<${this.gradientType}${isBlank(d) ? '' : ` ${d}`}>`;
         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }

@@ -244,7 +244,6 @@ export class svgHTMLAsset extends svg.element {
             directChildren.forEach(definition => {
                 if (definition == null) { return; }
                 let h = definition.html;
-                console.log(h);
                 if (!isBlank(h)) {
                     if (svg.config.HTML_INDENT) { newSVG += '\t'; }
                     newSVG += h;
