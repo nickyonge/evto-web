@@ -579,6 +579,7 @@ export class svgMaskDefinition extends svgXYWHDefinition {
                 break;
             case 'autoGradient':
                 // TODO: need to retain "this" thru extra callback to bubble onChange up to svgHTMLAsset 
+                // Issue URL: https://github.com/nickyonge/evto-web/issues/70
                 console.log("Autogradient changed: " + valueDetail);
                 console.log("Changed element: " + _changedElement.svgConstructor);
                 console.log("this: " + this.svgConstructor);
