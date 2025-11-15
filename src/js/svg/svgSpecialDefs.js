@@ -104,7 +104,7 @@ export class svgXYWHDefinition extends svgDefinition {
      * - Includes {@linkcode x}, {@linkcode y}, {@linkcode width}, and {@linkcode height}
      *   (XYWH) values, and syncs those values to the {@linkcode svgViewBox viewbox} 
      *   on the parent {@linkcode svgHTMLAsset} if {@linkcode matchViewboxXYWH} is `true`.
-     * @param {string} [id] unique identifier for this element  
+     * @param {string} [id] Unique identifier for this element (see {@linkcode svgElement.id}). If blank/omitted, sets to {@linkcode svgElement.uniqueID}. 
      * @param {string?} [defType] Definition type. Must be set, but can be set at any time. 
      * Usually set by the constructor of a subclass inheriting from {@link svgDefinition}.
      * If unassigned, and can't auto-detect, won't be generated in {@linkcode html}
@@ -267,7 +267,7 @@ export class svgImageDefinition extends svgXYWHDefinition {
 
     /**
      * 
-     * @param {string} id 
+     * @param {string} [id] Unique identifier for this element (see {@linkcode svgElement.id}). If blank/omitted, sets to {@linkcode svgElement.uniqueID}. 
      */
     constructor(id = undefined) {
         super(id, 'image');
@@ -275,6 +275,13 @@ export class svgImageDefinition extends svgXYWHDefinition {
 
 }
 
+/**
+ * Container for an {@linkcode svgDefinition} that's 
+ * used as a `<mask>` element in HTML, generally used  
+ * for alpha-masking an image (such as by using 
+ * {@linkcode svgImageDefinition}) or another SVG. 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/mask
+ */
 export class svgMaskDefinition extends svgXYWHDefinition {
 
     /**
@@ -396,8 +403,12 @@ export class svgMaskDefinition extends svgXYWHDefinition {
     #_autoGenerateRectFill = null;
 
     /**
-     * 
-     * @param {string} id 
+     * Container for an {@linkcode svgDefinition} that's 
+     * used as a `<mask>` element in HTML, generally used  
+     * for alpha-masking an image (such as by using 
+     * {@linkcode svgImageDefinition}) or another SVG. 
+     * @param {string} [id] Unique identifier for this element (see {@linkcode svgElement.id}). If blank/omitted, sets to {@linkcode svgElement.uniqueID}. 
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/mask
      */
     constructor(id = undefined) {
         super(id, 'mask');

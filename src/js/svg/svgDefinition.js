@@ -112,13 +112,13 @@ export class svgDefinition extends svg.element {
 
     /** 
      * Class representing an SVG definition, typically found in an SVG's `<defs>`
-     * @param {string} [id] unique identifier for this element  
+     * @param {string} [id] Unique identifier for this element (see {@linkcode svgElement.id}). If blank/omitted, sets to {@linkcode svgElement.uniqueID}. 
      * @param {string?} [defType] Definition type. Must be set, but can be set at any time. 
      * Usually set by the constructor of a subclass inheriting from {@link svgDefinition}.
      * If unassigned, and can't auto-detect, won't be generated in {@linkcode html}
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/defs
      */
-    constructor(id, defType) {
+    constructor(id = undefined, defType = undefined) {
         super(id);
         this.defType = defType;
     }

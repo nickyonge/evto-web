@@ -238,7 +238,7 @@ export class svgGradient extends svg.definition {
     /**
      * Original {@linkcode svgGradient.constructor} that also assigns the ID, 
      * and has isRadial as a fully separate parameter
-     * @param {string} [id = undefined] 
+     * @param {string} [id = undefined] Unique identifier for this element (see {@linkcode svgElement.id}). If blank/omitted, sets to {@linkcode svgElement.uniqueID}. 
      * @param {boolean} [isRadial] Is this a radial or linear gradient? Can be changed later.  
      * @param  {spreadString} [colors] Spread params string array of colors used for this gradient.
      * 

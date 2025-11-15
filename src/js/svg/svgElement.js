@@ -192,9 +192,9 @@ export class svgElement {
 
     /**
      * Base class for all component elements of an SVG asset
-     * @param {string} [id] 
+     * @param {string} [id] Value for {@linkcode svgElement.id}. If omitted or blank, {@linkcode svgElement.id ID} will be set to {@linkcode svgElement.uniqueID}.
      */
-    constructor(id = null) {
+    constructor(id = undefined) {
         // record this element's unique instance number
         Object.defineProperty(this, __svgElementInstance, { value: svgElement.#svgElementsCount, configurable: false, enumerable: true, writable: false });
         // set id 

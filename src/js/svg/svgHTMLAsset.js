@@ -457,7 +457,7 @@ export class svgHTMLAsset extends svg.element {
      * Gets the first {@link svg.shape shape} with the given
      * {@linkcode svg.element.id ID} found in {@linkcode shapes}
      * (or, optionally, in {@linkcode definitions})
-     * @param {string} id ID string to check
+     * @param {string} id {@linkcode svgElement.id ID} string to check for 
      * @param {boolean} [searchDefinitions=false] 
      * search `definitions` array instead of `shapes`?
      * @returns {svg.shape|null}
@@ -578,7 +578,7 @@ export class svgHTMLAsset extends svg.element {
      * {@linkcode svg.element.id ID} found in {@linkcode definitions}.
      * 
      * If not found, returns `null`
-     * @param {string} id ID string to check
+     * @param {string} id {@linkcode svgElement.id ID} string to check for 
      * @returns {svg.gradient|null}
      */
     GetGradientWithID(id) {
@@ -771,7 +771,7 @@ export class svgHTMLAsset extends svg.element {
      * Create and add a new {@link svg.gradient gradient} 
      * to the {@linkcode definitions} array
      * 
-     * @param {string} [id=undefined] {@link svg.element.id ID} to assign to this gradient, default `undefined` (auto-set)
+     * @param {string} [id=undefined] Unique identifier for this element (see {@linkcode svgElement.id}). If blank/omitted, sets to {@linkcode svgElement.uniqueID}. 
      * @param {boolean} isRadial is this a radial gradient, or linear? Default `GRADIENT_ISRADIAL`
      * @param {spreadString} colors Array/values of colors used to create this array 
      * @returns {svg.gradient} The newly-created, newly-added gradient
