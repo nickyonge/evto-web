@@ -373,21 +373,14 @@ export class svgImageDefinition extends svgXYWHDefinition {
     }
 
     get data() {
-        console.log("mask: ");
-        console.log(this.mask);
-        console.log("#mask: ");
-        console.log(this.#_mask);
-        let d = [super.data, this.ParseData([
+        return [super.data, this.ParseData([
             ['href', this.href],
             ['preserveAspectRatio', this.preserveAspectRatio],
             ['crossorigin', this.crossorigin],
             ['decoding', this.decoding],
             ['mask', this.mask],
         ])].join(' ');
-        console.log(d);
-        return d;
     }
-
 }
 
 /**

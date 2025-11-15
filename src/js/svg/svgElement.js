@@ -180,7 +180,7 @@ export class svgElement {
      * @type {boolean} */
     skipNextOnChangeForID = false;
     /** Returns `true` if either {@linkcode skipAllOnChangeForID} or {@linkcode skipNextIDUpdate} is `true` @returns {boolean} */
-    get #_shouldSkipIDUpdate() { return this.skipAllOnChangeForID || this.skipNextOnChangeForID; } 
+    get #_shouldSkipIDUpdate() { return this.skipAllOnChangeForID || this.skipNextOnChangeForID; }
 
     /** The guaranteed-unique ID value for this svgElement, combining
      * {@linkcode svgInstanceNumber} and {@linkcode svgConstructor} @type {string} */

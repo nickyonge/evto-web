@@ -56,8 +56,6 @@ let patternAlphaSVG;
 let patternAlphaGradient;
 let patternMaskDefinition;
 let patternImageDefinition;
-let patternMaskRect;
-let patternAlphaImage;
 
 const pMaskID = 'patternMask';
 const pImageID = 'patternMaskedImage';
@@ -78,28 +76,11 @@ function CreatePatternSection(section) {
     // mask definition 
     patternMaskDefinition = new svgMaskDefinition();
     patternMaskDefinition.id = pMaskID;
-
-    const useNew = true;
-
-    // alpha image and attributes 
-    // patternAlphaImage = new svgDefinition(pImageID, 'image');
-    // patternAlphaImage.storeInDefsElement = false;
-    // patternAlphaImage.AddAttributes([
-    //     ['xlink:href', imageURL],
-    //     ['width', width.toString()],
-    //     ['height', height.toString()],
-    //     ['mask', `url(#${pMaskID})`],
-    // ]);
-
-    let patternImageDefinition = new svgImageDefinition(imageURL, pImageID);
+    // image definition 
+    patternImageDefinition = new svgImageDefinition(imageURL, pImageID);
     patternImageDefinition.mask = patternMaskDefinition;
-
-    if (useNew) {
-        patternAlphaSVG.definitions.push(patternMaskDefinition, patternImageDefinition);
-    } else {
-        patternAlphaSVG.definitions.push(patternMaskDefinition, patternAlphaImage);
-    }
-
+    // add mask and image to the SVG
+    patternAlphaSVG.definitions.push(patternMaskDefinition, patternImageDefinition);
     // add SVG to page 
     patternImage.addSVG(patternAlphaSVG);
 
