@@ -1,6 +1,6 @@
 import * as svg from './index';
 import { svgHTMLAsset, svgConfig } from './index';
-import { isBlank, isStringNotBlank, StringContainsNumeric, StringNumericDivider, StringNumericOnly, StringOnlyNumeric, StringToNumber } from "../lilutils";
+import { isBlank, IsStringNameSafe, isStringNotBlank, StringContainsNumeric, StringNumericDivider, StringNumericOnly, StringOnlyNumeric, StringToNumber } from "../lilutils";
 
 /** 
  * Basic element used to create all assets in this lil SVG system (which prolly needs a name)
@@ -408,7 +408,10 @@ export class svgElement {
      *   trigger an `svg.onChange` with a `type` of `"array#push"`.
      * - However, `let myNamedArray = []; myNamedArray.name = 
      *   "wow"; myNamedArray.push(1,2,3);` would trigger an 
-     *   `svg.onChange` with a `type` of `"wow#push"`.
+     *   `svg.onChange` with a `type` of `"wow#push"`. 
+     * - Functionally, this behaves identically to using
+     *     {@linkcode _prefixOnChange}.
+     * 
      * ---
      * **Note:** The `returnValue` is unshifted to the front of the `parameters` array, 
      * which is then supplied to `...extraParameters` in `svg.onChange`. So an `svg.onChange` 
@@ -451,6 +454,13 @@ export class svgElement {
         for (let i = 0; i < this.onChangeCallbacks.length; i++) {
             if (typeof this.onChangeCallbacks[i] !== 'function') { continue; }
             // using call instead of just invoking to preserve `this` 
+            if (!isBlank(this._prefixOnChange)) {
+                if (!IsStringNameSafe(this._prefixOnChange, false, false)) {
+                    console.warn(`WARNING: can't assign non-name-safe prefix ${this._prefixOnChange} to onChange valueChanged ${valueChanged}`, this);
+                } else {
+                    valueChanged = `${this._prefixOnChange}#${valueChanged}`;
+                }
+            }
             this.onChangeCallbacks[i]?.call(this,
                 valueChanged,
                 newValue,
@@ -470,9 +480,22 @@ export class svgElement {
      * {@link svg.gradient.y2 y2} properties. However, {@link onChange}
      * should only be invoked once, as only {@link svg.gradient.angle angle}
      * was modified.
+     * - **Note:** Modifying this does NOT trigger `onChange` callback.
      * @type {boolean}
      */
     _suppressOnChange = false;
+
+    /** 
+     * Used internally to prefix the `valueChanged` param
+     * on any {@linkcode onChange} calls, followed by a `#`.
+     * 
+     * Eg, if `valueChanged` is `"color"` and `_prefixOnChange`
+     * is `"myCoolPrefix"`, the `valueChanged` string passed
+     * thru `onChange` will be `"myCoolPrefix#color"`. 
+     * - **Note:** Must be name-safe, alphanumeric or underscore only.
+     * - **Note:** Modifying this does NOT trigger `onChange` callback.
+     * @type {string} */
+    _prefixOnChange = null;
 
     /** 
      * get the HTML output of this element. 
