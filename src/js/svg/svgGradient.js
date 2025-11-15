@@ -127,7 +127,7 @@ export class svgGradient extends svg.definition {
 
     /** array for gradient stops @type {svgGradientStop[]} */
     get stops() {
-        if (this.#_stops == null) { this.#_stops = []; }
+        if (this.#_stops == null) { this.stops = []; }
         return this.#_stops;
     }
     set stops(v) {
@@ -348,19 +348,28 @@ export class svgGradient extends svg.definition {
         let newGradient = `<${this.gradientType}${isBlank(d) ? '' : ` ${d}`}>`;
         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
         // iterate through stops 
+        let prevThisSuppress = this._suppressOnChange;
+        this._suppressOnChange = true;
         if (this.stops != null && this.stops.length > 0) {
+            let prevArraySuppress = this.stops.suppressOnChange;
+            this.stops.suppressOnChange = true;
             let sharpIncrement = 0;
             // apply mirroring, reverse stops array 
-            if (this.mirror) { this.stops = this.stops.reverse(); }
+            if (this.mirror) {
+                this.stops = this.stops.reverse();
+            }
             // apply iterated stops 
             let sharpness = EnsureToNumber(this.sharpness).clamp(0, svg.config.GRADIENT_SHARPNESS_CAPPED ? 0.992 : 1);
             for (let i = 0; i < this.stops.length; i++) {
                 if (this.stops[i] == null) { continue; }
+                let prevStopSuppress = this.stops[i]._suppressOnChange;
+                this.stops[i]._suppressOnChange = true;
                 // check for auto offset calculation, changing 'auto' to a linearly-assigned % based on array size 
                 if (sharpness > 0) {
                     let initialOffset = this.stops[i].offset;
                     // sharp gradient - add 1 to entire length, duplicate non-edge gradients, offset the offsets 
                     let newStop = svgGradientStop.Clone(this.stops[i]);
+
                     let currentOffset = (sharpIncrement / this.stops.length) * 100;
                     sharpIncrement++;
                     let newOffset = (sharpIncrement / this.stops.length) * 100;
@@ -387,18 +396,12 @@ export class svgGradient extends svg.definition {
                 } else {
                     // non-sharp gradient
                     let autoOffset = false;
-                    // ^ to hold the previous value of suppressOnChange,
-                    // since we don't want to call onChange a bunch simply 
-                    // by converting stop offsets during HTML export 
-                    let prevSuppress;
                     if (typeof this.stops[i].offset == 'string') {
                         let offset = /** @type {string} */ (this.stops[i].offset);
                         autoOffset = offset.toLowerCase().trim() == 'auto';
                     }
                     if (autoOffset) {
                         // smooth gradient 
-                        prevSuppress = this.stops[i]._suppressOnChange;
-                        this.stops[i]._suppressOnChange = true;
                         let offset = (i / (this.stops.length - 1)) * 100;
                         this.stops[i].offset = `${offset.toMax()}%`;
                     }
@@ -406,7 +409,6 @@ export class svgGradient extends svg.definition {
                     // ensure offset value is reset 
                     if (autoOffset) {
                         this.stops[i].offset = 'auto';
-                        this.stops[i]._suppressOnChange = prevSuppress;
                     }
                     if (!isBlank(h)) {
                         if (svg.config.HTML_INDENT) { newGradient += '\t'; }
@@ -414,10 +416,15 @@ export class svgGradient extends svg.definition {
                         if (svg.config.HTML_NEWLINE) { newGradient += '\n'; }
                     }
                 }
+                this.stops[i]._suppressOnChange = prevStopSuppress;
             }
             // undo mirroring 
-            if (this.mirror) { this.stops = this.stops.reverse(); }
+            if (this.mirror) {
+                this.stops = this.stops.reverse();
+            }
+            this.stops.suppressOnChange = prevArraySuppress;
         }
+        this._suppressOnChange = prevThisSuppress;
         // done! return new gradient html 
         return `${newGradient}</${this.gradientType}>`;
     }
@@ -840,15 +847,21 @@ class svgGradientStop extends svg.element {
     }
 
     /**
-     * Creates a clone (duplicate) of the given svgGradientStop
+     * Creates a shallow clone of the given svgGradientStop.
+     * 
+     * **Note:** Only clones {@linkcode color}, {@linkcode opacity},
+     * and {@linkcode offset}, and optionally {@linkcode svgGradientStop.parent parent}. 
+     * Does not clone any other properties such as ID or `onChange` callbacks. 
      * @param {svgGradientStop} stop gradient stop to clone 
-     * @param {boolean} [cloneParentage=true] also clone initial stop's {@linkcode parent} value? Default true 
+     * @param {boolean} [cloneParentage=false] also clone initial stop's {@linkcode parent} value? Default `false` 
      * @returns {svgGradientStop|null} cloned stop, or null if given stop is null
      */
-    static Clone(stop, cloneParentage = true) {
+    static Clone(stop, cloneParentage = false) {
         if (stop == null) { return null; }
         let newStop = new svgGradientStop(stop.color, stop.opacity, stop.offset);
-        if (cloneParentage) { newStop.parent = stop.parent; }
+        if (cloneParentage) {
+            newStop.parent = stop.parent;
+        }
         return newStop;
     }
 

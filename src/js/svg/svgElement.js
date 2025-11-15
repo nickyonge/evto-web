@@ -321,6 +321,20 @@ export class svgElement {
     }
 
     /**
+     * Removes all {@linkcode onChangeCallbacks} from this element.
+     * 
+     * Returns the number of callbacks that were removed.
+     * @returns {number}
+     */
+    RemoveAllOnChangeCallbacks() {
+        if (this.onChangeCallbacks == null) { this.onChangeCallbacks = []; return 0; }
+        if (this.onChangeCallbacks.length == 0) { return 0; }
+        let n = this.onChangeCallbacks.length;
+        this.onChangeCallbacks = [];
+        return n;
+    }
+
+    /**
      * Checks if the given onChange callback is present on this element. 
      * @param {svg.onChange} onChangeCallback 
      * @returns {boolean}
@@ -425,7 +439,10 @@ export class svgElement {
      * @template T
      */
     arrayChanged(type, updatedArray, previousArray, returnValue, ...parameters) {
+        if (updatedArray.suppressOnChange == true || previousArray.suppressOnChange == true) { return; }
         if (updatedArray.hasOwnProperty('parent') && updatedArray['parent'] instanceof svgElement) {
+            console.log("array, type: " + type + ", this: " + (Array.isArray(this)) + ", parent: " + updatedArray['parent']?.svgConstructor + ', parent supp: ' + updatedArray['parent']?._suppressOnChange);
+            if (updatedArray['parent']._suppressOnChange) { return; }
             parameters.unshift(returnValue);
             let name = updatedArray.name == null ? `array#${type}` : `${updatedArray.name}#${type}`;
             updatedArray['parent'].changed?.(name, updatedArray, previousArray, ...parameters);

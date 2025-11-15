@@ -561,7 +561,15 @@ export class svgMaskDefinition extends svgXYWHDefinition {
             valueDetail = valueChanged.substring(hashIndex + 1);
             valueChanged = valueChanged.substring(0, hashIndex);
         }
+        console.log("this: " + this.svgConstructor);
+        console.log("this.parent: " + this.parent?.svgConstructor);
         switch (valueChanged) {
+            case 'parent':
+                // if (this.autoGenerateRectFill instanceof svgGradient) {
+                //     console.log("HECK");
+                //     this.autoGenerateRectFill.onChange = this.parent.changed;
+                // }
+                break;
             case 'autoGenerateRectFill':
                 // rect fill, check if value is inexplicably the same 
                 if (newValue === previousValue) { return; }
@@ -571,9 +579,14 @@ export class svgMaskDefinition extends svgXYWHDefinition {
                 if (newValue instanceof svgElement) {
                     let listenForChange = newValue.parent == null || newValue.rootParent != this.rootParent;
                     if (listenForChange) {
-                        newValue._prefixOnChange = 'autoGradient';
+                        newValue._suppressOnChange = true;
+                        newValue.parent = this;
+                        newValue._suppressOnChange = false;
+                        // console.log(" oh myyyyy ");
+                        // newValue._prefixOnChange = 'autoGradient';
                         // newValue.parent = this;
-                        newValue.onChange = this._maskOnChange;
+                        // newValue.onChange = (c2) => { console.log("C2: " + c2); }
+
                     }
                 }
                 break;
@@ -587,6 +600,7 @@ export class svgMaskDefinition extends svgXYWHDefinition {
                 break;
         }
     }
+
 
     get html() {
         if (!this.autoGenerateRect) { return super.html; }

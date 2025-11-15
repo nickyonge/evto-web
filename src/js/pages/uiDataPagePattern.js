@@ -85,10 +85,11 @@ function CreatePatternSection(section) {
     // add SVG to page 
     patternImage.addSVG(patternAlphaSVG);
 
-    patternAlphaSVG.onChange = (changedValue) => { console.log(changedValue); }
 
-    
-    patternAlphaGradient.sharpness = 1;
+
+    patternAlphaGradient.sharpness = 0.75;
+    patternAlphaGradient.angle = 15;
+    patternAlphaGradient.mirror = true;
 
     // TODO: replace multi references to an SVG shape with a use URL reference
     // Issue URL: https://github.com/nickyonge/evto-web/issues/67
