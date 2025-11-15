@@ -75,6 +75,12 @@ declare global {
         name?: string;
 
         /**
+         * Optionally-defined flag that prevents {@linkcode onChange} 
+         * callbacks from invoking, even if they're defined.
+         */
+        suppressOnChange?: boolean;
+
+        /**
          * Checks if the given value is contained anywhere in this array
          * @param {T} value Value to check for 
          * @returns {boolean}

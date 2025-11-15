@@ -73,7 +73,9 @@ import { IsStringNameSafe } from "./lilutils";
                 let prevName = this[_arrayName];
                 let prevArray = this.clone();
                 const array = /** @type {Array} */ (this);
-                array.onChange('name', array, prevArray, name, prevName);
+                if (array.suppressOnChange != true) {
+                    array.onChange('name', array, prevArray, name, prevName);
+                }
             }
             this[_arrayName] = name;
         },
@@ -211,7 +213,9 @@ import { IsStringNameSafe } from "./lilutils";
         if (this.hasOwnProperty('onChange')) {
             let prev = this.clone();
             let v = _copyWithin.call(this, target, start, end);
-            this.onChange('copyWithin', this, prev, v, target, start, end);
+            if (this.suppressOnChange != true) {
+                this.onChange('copyWithin', this, prev, v, target, start, end);
+            }
             return v;
         }
         return _copyWithin.call(this, target, start, end);
@@ -235,7 +239,9 @@ import { IsStringNameSafe } from "./lilutils";
         if (this.hasOwnProperty('onChange')) {
             let prev = this.clone();
             let v = _fill.call(this, value, start, end);
-            this.onChange('fill', this, prev, v, value, start, end);
+            if (this.suppressOnChange != true) {
+                this.onChange('fill', this, prev, v, value, start, end);
+            }
             return v;
         }
         return _fill.call(this, value, start, end);
@@ -254,7 +260,9 @@ import { IsStringNameSafe } from "./lilutils";
         if (this.hasOwnProperty('onChange')) {
             let prev = this.clone();
             let v = _pop.call(this);
-            this.onChange('pop', this, prev, v);
+            if (this.suppressOnChange != true) {
+                this.onChange('pop', this, prev, v);
+            }
             return v;
         }
         return _pop.call(this);
@@ -273,7 +281,9 @@ import { IsStringNameSafe } from "./lilutils";
         if (this.hasOwnProperty('onChange')) {
             let prev = this.clone();
             let v = _push.call(this, ...items);
-            this.onChange('push', this, prev, v, ...items);
+            if (this.suppressOnChange != true) {
+                this.onChange('push', this, prev, v, ...items);
+            }
             return v;
         }
         return _push.call(this, ...items);
@@ -321,7 +331,9 @@ import { IsStringNameSafe } from "./lilutils";
         if (this.hasOwnProperty('onChange')) {
             let prev = this.clone();
             let v = _reverse.call(this);
-            this.onChange('reverse', this, prev, v);
+            if (this.suppressOnChange != true) {
+                this.onChange('reverse', this, prev, v);
+            }
             return v;
         }
         return _reverse.call(this);
@@ -340,7 +352,9 @@ import { IsStringNameSafe } from "./lilutils";
         if (this.hasOwnProperty('onChange')) {
             let prev = this.clone();
             let v = _shift.call(this);
-            this.onChange('shift', this, prev, v);
+            if (this.suppressOnChange != true) {
+                this.onChange('shift', this, prev, v);
+            }
             return v;
         }
         return _shift.call(this);
@@ -365,7 +379,9 @@ import { IsStringNameSafe } from "./lilutils";
         if (this.hasOwnProperty('onChange')) {
             let prev = this.clone();
             let v = _sort.call(this, compareFn);
-            this.onChange('sort', this, prev, v, compareFn);
+            if (this.suppressOnChange != true) {
+                this.onChange('sort', this, prev, v, compareFn);
+            }
             return v;
         }
         return _sort.call(this, compareFn);
@@ -388,7 +404,9 @@ import { IsStringNameSafe } from "./lilutils";
         if (this.hasOwnProperty('onChange')) {
             let prev = this.clone();
             let v = _splice.call(this, start, deleteCount, ...items);
-            this.onChange('splice', this, prev, v, start, deleteCount, ...items);
+            if (this.suppressOnChange != true) {
+                this.onChange('splice', this, prev, v, start, deleteCount, ...items);
+            }
             return v;
         }
         return _splice.call(this, start, deleteCount, ...items);
@@ -407,7 +425,9 @@ import { IsStringNameSafe } from "./lilutils";
         if (this.hasOwnProperty('onChange')) {
             let prev = this.clone();
             let v = _unshift.call(this, ...items);
-            this.onChange('unshift', this, prev, v, ...items);
+            if (this.suppressOnChange != true) {
+                this.onChange('unshift', this, prev, v, ...items);
+            }
             return v;
         }
         return _unshift.call(this, ...items);
