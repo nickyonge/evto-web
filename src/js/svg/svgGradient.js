@@ -47,14 +47,23 @@ export class svgGradient extends svg.definition {
     set sharpness(v) { let prev = this.#_sharpness; this.#_sharpness = v; this.changed('sharpness', v, prev); }
     /** @type {number} */
     #_sharpness = svg.defaults.GRADIENT_SHARPNESS;
-    /** Are this gradient's {@link svgGradientStop stops} mirrored? Default `false`
-     * @returns {boolean} */
+    /** If `true, mirrors the gradient's {@link svgGradientStop stops}. Default `false` @returns {boolean} */
     get mirror() { return this.#_mirror; }
     set mirror(v) { let prev = this.#_mirror; this.#_mirror = v; this.changed('mirror', v, prev); }
     /** @type {boolean} */
     #_mirror = svg.defaults.GRADIENT_MIRROR;
+    /** Get/set the scale, a multiplier for the gradient offsets. 
+     * Must be greater than or equal to `0`. Can't be `null` or 
+     * negative, those values will be set to the default value 
+     * {@linkcode svgDefaults.GRADIENT_SCALE}.
+     * @returns {number} */
     get scale() { return this.#_scale; }
-    set scale(v) { let prev = this.#_scale; this.#_scale = v; this.changed('scale', v, prev); }
+    set scale(v) {
+        if (v == null) { v = svgDefaults.GRADIENT_SCALE; }
+        if (v < 0) { console.warn(`WARNING: scale can't be negative, can't set scale to ${v}, assigning to default scale value ${svgDefaults.GRADIENT_SCALE}`, this); v = 0; }
+        let prev = this.#_scale; this.#_scale = v; this.changed('scale', v, prev);
+    }
+    /** @type {number} */
     #_scale = svg.defaults.GRADIENT_SCALE;
     /** angle, in degrees, a linear gradient should be rotated by. Does not affect radial gradients. 
      * 
