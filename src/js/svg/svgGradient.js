@@ -936,16 +936,18 @@ class svgGradientStop extends svg.element {
     /**
      * Creates a shallow clone of the given svgGradientStop.
      * 
-     * **Note:** Only clones {@linkcode color}, {@linkcode opacity},
+     * - **Note:** Only clones {@linkcode color}, {@linkcode opacity},
      * and {@linkcode offset}, and optionally {@linkcode svgGradientStop.parent parent}. 
      * Does not clone any other properties such as ID or `onChange` callbacks. 
      * @param {svgGradientStop} stop gradient stop to clone 
-     * @param {boolean} [cloneParentage=false] also clone initial stop's {@linkcode parent} value? Default `false` 
+     * @param {boolean} [cloneParentage=true] also clone initial stop's {@linkcode parent} value? Default `true` 
+     * @param {boolean} [bubbleOnChange=false] value to set the {@linkcode bubbleOnChange} property to. Can prevent overflow errors. Default `false` 
      * @returns {svgGradientStop|null} cloned stop, or null if given stop is null
      */
-    static Clone(stop, cloneParentage = false) {
+    static Clone(stop, cloneParentage = true, bubbleOnChange = false) {
         if (stop == null) { return null; }
         let newStop = new svgGradientStop(stop.color, stop.opacity, stop.offset);
+        newStop.bubbleOnChange = bubbleOnChange;
         if (cloneParentage) {
             newStop.parent = stop.parent;
         }
