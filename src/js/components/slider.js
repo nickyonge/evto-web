@@ -75,54 +75,163 @@ export class Slider extends TitledComponent {
     set valueSuffix(v) { this.#_valueSuffix = v; this.#updateText(); }
     #_valueSuffix = SUFFIX;
 
-    #_uniqueValueOverrides = [];
     /** 
-     * Array of [number,string] pairs. 
+     * Array of `[number,string]` pairs to slider display output. 
+     * 
      * If slider's current {@link value} is found as the first element in 
      * this array, use the second element as the display text.
      * 
-     * Read-only - to add, use {@linkcode AddUniqueValueOverride}.
+     * **Note:** setter replaces all existing overrides. 
+     * Consider using {@linkcode AddUniqueValueOverride} 
+     * or {@linkcode AddUniqueValueOverrides}.
      * 
-     * Use value `NaN` for disabled override.
-     * @type {Array<Array<number,string>>}
+     * Use the `number` value `NaN` for disabled override. Eg
+     * `[NaN,"Slider Off"]` will cause `"Slider Off"` to appear
+     * if {@linkcode disabled} is `true`.
+     * 
+     * No values can be `null`. The `number` (value) number can
+     * be `NaN`, and the `string` (override) value can be blank. 
+     * @returns {Array<[number,string]>}
      */
-    get uniqueValueOverrides() { if (this.#_uniqueValueOverrides == null) { this.#_uniqueValueOverrides = []; } return this.#_uniqueValueOverrides; }
+    get uniqueValueOverrides() {
+        if (this.#_uniqueValueOverrides == null) {
+            this.#_uniqueValueOverrides = [];
+        }
+        return this.#_uniqueValueOverrides;
+    }
+    /** @param {Array<[number,string]>} newValues New values to assign. If `null` / empty array, {@link ClearUniqueValueOverrides clears} the {@linkcode uniqueValueOverrides} array. */
+    set uniqueValueOverrides(newValues) {
+        if (newValues == null || newValues.length == 0) { this.ClearUniqueValueOverrides(); return; }
+        switch (newValues.length) {
+            case 1:
+                this.AddUniqueValueOverride(newValues[0]);
+                break;
+            default:
+                this.AddUniqueValueOverrides(newValues);
+                break;
+        }
+    }
+    /** local property for {@linkcode uniqueValueOverrides} @type {Array<[number,string]>} */
+    #_uniqueValueOverrides = [];
+    /**
+     * Add a `[number,string]` override to {@linkcode uniqueValueOverrides}.
+     *  
+     * If slider's current {@link value} is found as the first element in 
+     * this array, use the second element as the display text.
+     * 
+     * Use the `number` value `NaN` for disabled override. Eg
+     * `[NaN,"Slider Off"]` will cause `"Slider Off"` to appear
+     * if {@linkcode disabled} is `true`.
+     * 
+     * If the value is already present in the array, its override
+     * will be reassigned to whatever's given here. 
+     * @param {number|[number,string]} value Either the `[number,string]` array containing the whole override, or just the `number`, with the `string` supplied in {@linkcode override}.
+     * @param {string} [override] If `value` is a `number`, this will be used as the `string` text in the `[number,string]` override. If `value` is an array, this will be assigned to `value[1]`, taking priority **IF** it's non-null. Can't be `null`, can be blank.
+     * @param {boolean} [autoUpdateText=true] Automatically call {@linkcode #updateText}? Default `true`
+     * @returns {boolean} `true` if successfully added (or existing and successfully modified), `false` if failed
+     */
     AddUniqueValueOverride(value, override, autoUpdateText = true) {
+        if (value == null) { console.warn("WARNING: can't assign a UniqueValueOverride for null value (NaN is valid)", this); return false; }
+        let isArray = Array.isArray(value);
+        if (isArray) {
+            // value is array 
+            if (value[0] == null) {
+                console.warn("WARNING: can't assign a UniqueValueOverride array with null [0] number value (NaN is valid)", this);
+                return false;
+            }
+            if (override != null) {
+                // override is not null, override the override in value (it makes sense i swear)
+                value[1] = override;
+            } else {
+                // override is null, assign to unique value override value (see, totally understandable)
+                override = value[1];
+            }
+            if (override == null) {
+                // both array[1] and override param null 
+                console.warn("WARNING: both the supplied array value[1] string AND override property are null, override text can't be null (blank is valid)", this);
+                return false;
+            }
+        }
+        else {
+            // value is number 
+            if (override == null) {
+                console.warn(`WARNING: can't have a null override string (blank is valid) for uniqueValueOverride, value: ${value}`, this);
+                return false;
+            }
+        }
         let i = this.GetUniqueValueOverrideIndex(value);
         if (i >= 0) {
-            this.uniqueValueOverrides[i] = override;
-            return;
+            this.uniqueValueOverrides[i][1] = override;
+            return true;
         }
-        this.uniqueValueOverrides.push([value, override]);
-        if (autoUpdateText) {this.#updateText();}
+        this.uniqueValueOverrides.push(isArray ? value : [value, override]);
+        if (autoUpdateText) { this.#updateText(); }
+        return true;
     }
+    /**
+     * Adds an array of unique value overrides
+     * @param {Array<[number,string]>} valueOverrides 
+     * @returns {boolean}
+     */
     AddUniqueValueOverrides(valueOverrides) {
-        if (valueOverrides == null) { return; }
+        if (valueOverrides == null) { return false; }
+        let anyAdded = false;
         for (let i = 0; i < valueOverrides.length; i++) {
             if (valueOverrides[i] == null || !Array.isArray(valueOverrides[i]) || valueOverrides[i].length < 2) { continue; }
-            this.AddUniqueValueOverride(valueOverrides[i][0], valueOverrides[i][1], false);
+            if (this.AddUniqueValueOverride(valueOverrides[i][0], valueOverrides[i][1], false)) {
+                anyAdded = true;
+            }
         }
         this.#updateText();
+        return anyAdded;
     }
+    /**
+     * Removes the given unique value override 
+     * @param {number|[number,string?]} value Either the override itself, or the number it's linked to  
+     * @returns {boolean} `true` if value was removed, `false` if not found / wasn't removed 
+     */
     RemoveUniqueValueOverride(value) {
         let i = this.GetUniqueValueOverrideIndex(value);
         if (i >= 0) {
-            this.#_uniqueValueOverrides = this.#_uniqueValueOverrides.splice(i, 1);
+            return this.#_uniqueValueOverrides.splice(i, 1).length > 0;
         }
+        return false;
     }
+    /** Resets the {@linkcode uniqueValueOverrides} array to `[]`. @returns {void} */
     ClearUniqueValueOverrides() { this.#_uniqueValueOverrides = []; }
-    GetCurrentUniqueValueOverride() {
+    /**
+     * Gets the text of the unique value override 
+     * associated with the current slider value. 
+     * If none is assigned, returns `null`
+     * @returns {string|null}
+     */
+    GetCurrentUniqueValueOverrideText() {
         if (this.#input == null) { return null; }
-        return this.GetUniqueValueOverride(this.disabled ? NaN : this.#input.value);
+        return this.GetUniqueValueOverrideText(this.disabled ? NaN : this.#input.value);
     }
+    /**
+     * Gets the index within the {@linkcode uniqueValueOverrides} 
+     * array of the override for the current slider value. 
+     * If none is found, returns `-1`
+     * @returns {number}
+     */
     GetCurrentUniqueValueOverrideIndex() {
-        if (this.#input == null) { return null; }
-        return this.GetUniqueValueOverrideIndex(this.disabled ? NaN : this.#input.value);
+        if (this.#input == null) { return -1; }
+        return this.GetUniqueValueOverrideIndex(this.disabled ? NaN : EnsureToNumber(this.#input.value));
     }
+    /**
+     * Gets the index within the {@linkcode uniqueValueOverrides} 
+     * for the given override or its associated slider value number. 
+     * Returns `-1` if the override isn't found.
+     * @param {number|[number,string?]} value Either the override itself, or the number it's linked to 
+     * @returns {number}
+     */
     GetUniqueValueOverrideIndex(value) {
+        if (value == null) return -1;
+        if (Array.isArray(value)) { value = value[0]; }
         let checkNaN = Number.isNaN(value);
         for (let i = 0; i < this.uniqueValueOverrides.length; i++) {
-            if (this.uniqueValueOverrides[i] == null || !Array.isArray(this.uniqueValueOverrides[i]) || this.uniqueValueOverrides[i].length == 0) { continue; }
+            if (this.uniqueValueOverrides[i] == null || !Array.isArray(this.uniqueValueOverrides[i]) || this.uniqueValueOverrides[i][0] == null) { continue; }
             if (this.uniqueValueOverrides[i][0] == value) {
                 return i;
             }
@@ -134,7 +243,14 @@ export class Slider extends TitledComponent {
         }
         return -1;
     }
-    GetUniqueValueOverride(value) {
+    /**
+     * Gets the text of the the {@linkcode uniqueValueOverrides} 
+     * for the given override or its associated slider value number. 
+     * If none is assigned, returns `null`
+     * @param {*} value 
+     * @returns {string|null}
+     */
+    GetUniqueValueOverrideText(value) {
         let i = this.GetUniqueValueOverrideIndex(value);
         return i >= 0 ? this.uniqueValueOverrides[i][1] : null;
     }
@@ -293,7 +409,7 @@ export class Slider extends TitledComponent {
      */
     valueAsString(formatted = true) {
         if (!this.#input) { return null; }
-        let override = this.GetCurrentUniqueValueOverride();
+        let override = this.GetCurrentUniqueValueOverrideText();
         if (override != null) { return String(override); }
         if (!formatted) {
             if (this.disabled) {
