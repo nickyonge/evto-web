@@ -612,9 +612,7 @@ export class svgGradient extends svg.definition {
                 ['spreadMethod', this.spreadMethod],
                 ['href', this.href]]);
         }
-
-        console.log("DAta: " + d);
-
+        
         // undo angle 
         if (useAngle) {
             this.suppressOnChange = true;
@@ -845,6 +843,7 @@ class svgGradientStop extends svg.element {
     }
     get html() { return `<stop ${this.data} />`; }
     get data() {
+        // calculate offset, if necessary 
         let offset = this.offset;
         if (offset != null && this.parent != null && this.parent instanceof svgGradient && this.parent.offset != null) {
             // offset is non-zero, add to this offset 
@@ -852,20 +851,16 @@ class svgGradientStop extends svg.element {
             let params = this.DeconstructNumericParam(this.offset);
             for (let i = 0; i < params.length; i++) {
                 if (params[i] == null) { continue; }
-                console.log((typeof params[i]) + ', params i: ' + params[i])
                 if (typeof params[i] === 'number') {
                     // TODO: upscale entire svgGradient to allow offsets beyond 0/100, for corners of rotated gradients 
                     // Issue URL: https://github.com/nickyonge/evto-web/issues/73
                     let value = EnsureToNumber(params[i]);
-                    console.log('value: ' + value + ', parentOffset: ' + parentOffset);
                     value = value + parentOffset;
-                    console.log('newValue: ' + value + ', ' + (typeof params[i]) + ', params i: ' + params[i])
-                    params[i] = value.clamp(0, 100);
+                    params[i] = value;
                 }
             }
             offset = this.ReconstructNumericParam(params);
         }
-        console.log('offset: ' + offset + " (orig: " + this.offset + ") parent: " + this.parent?.['offset']);
         return this.ParseData([
             ['stop-color', this.color],
             ['stop-opacity', this.opacityInherited],
