@@ -167,6 +167,8 @@ function CreatePatternSection(section) {
         alphaLayer1.gradient.mirror
     );
 
+    alphaLayer1.gradient.anglePivotPoint = { x: 50, y: 0 };
+
     // alphaLayer1.gradient.isRadial = true;
 
     section.appendChild(sharpness);

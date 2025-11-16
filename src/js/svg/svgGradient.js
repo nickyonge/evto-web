@@ -47,22 +47,25 @@ export class svgGradient extends svg.definition {
     set sharpness(v) { let prev = this.#_sharpness; this.#_sharpness = v; this.changed('sharpness', v, prev); }
     /** @type {number} */
     #_sharpness = svg.defaults.GRADIENT_SHARPNESS;
+
     /** If `true, mirrors the gradient's {@link svgGradientStop stops}. Default `false` @returns {boolean} */
     get mirror() { return this.#_mirror; }
     set mirror(v) { let prev = this.#_mirror; this.#_mirror = v; this.changed('mirror', v, prev); }
     /** @type {boolean} */
     #_mirror = svg.defaults.GRADIENT_MIRROR;
+
     /** Get/set the scale, a multiplier for the gradient offsets. 
      * Must be greater than or equal to `0`. Can't be `null` or 
-     * negative, those values will be set to the default value 
-     * {@linkcode svgDefaults.GRADIENT_SCALE}.
+     * negative. If `null`, value will be set to 
+     * {@linkcode svgDefaults.GRADIENT_SCALE}. If negative, value 
+     * will be clamped to `0`.
      * @returns {number} */
     get scale() { return this.#_scale; }
     set scale(v) {
         if (v == null) { v = svgDefaults.GRADIENT_SCALE; }
         if (v < 0 && !svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE) {
-            console.warn(`WARNING: scale can't be negative while svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE is false, can't set scale to ${v}, assigning to default scale value ${svgDefaults.GRADIENT_SCALE}`, this);
-            v = svgDefaults.GRADIENT_SCALE;
+            console.warn(`WARNING: scale can't be negative while svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE is false, can't set scale to ${v}, clamping to 0`, this);
+            v = 0;
         }
         let prev = this.#_scale; this.#_scale = v; this.changed('scale', v, prev);
     }
@@ -85,7 +88,6 @@ export class svgGradient extends svg.definition {
      * If {@linkcode svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE} is `false`, this will always return `false`. 
      * @private @returns {boolean} */
     get isScaleNegative() { return svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE && this.scale != null && this.scale < 0; }
-
     /** 
      * What is the virtual "pivot" point of this gradient scaling? 
      * Typically `0` to `100`, relative to the overall width of the 
@@ -117,7 +119,9 @@ export class svgGradient extends svg.definition {
     /** @type {number} */
     #_angle = svg.defaults.GRADIENT_ANGLE;
     /**
-     * Pivot XY {@link isPoint point} around which angle values will be rotated  
+     * Pivot XY {@link isPoint point} around which angle values will be rotated. 
+     * 
+     * Point is normalized `0` to `100`, so a value of `x:50,y:50` will 
      * @see {@link isPoint} XY point object reference
      * @see {@linkcode svg.defaults.GRADIENT_ANGLEPIVOTPOINT GRADIENT_ANGLEPIVOTPOINT}
      * @returns {{x:number, y:number}}
@@ -168,14 +172,14 @@ export class svgGradient extends svg.definition {
     /** @type {string|number} */
     #_y2 = svg.defaults.GRADIENT_Y2;
 
-    /** convenience getter. returns {@linkcode x1} if non-null; otherwise returns {@linkcode svg.defaults.GRADIENT_X1_SCALEDEFAULT svgDefaults.GRADIENT_X1_SCALEDEFAULT}  */
-    get #x1Default() { return this.x1 == null ? svg.defaults.GRADIENT_X1_SCALEDEFAULT : this.x1; }
-    /** convenience getter. returns {@linkcode y1} if non-null; otherwise returns {@linkcode svg.defaults.GRADIENT_Y1_SCALEDEFAULT svgDefaults.GRADIENT_Y1_SCALEDEFAULT}  */
-    get #y1Default() { return this.y1 == null ? svg.defaults.GRADIENT_Y1_SCALEDEFAULT : this.y1; }
-    /** convenience getter. returns {@linkcode x2} if non-null; otherwise returns {@linkcode svg.defaults.GRADIENT_X2_SCALEDEFAULT svgDefaults.GRADIENT_X2_SCALEDEFAULT}  */
-    get #x2Default() { return this.x2 == null ? svg.defaults.GRADIENT_X2_SCALEDEFAULT : this.x2; }
-    /** convenience getter. returns {@linkcode y2} if non-null; otherwise returns {@linkcode svg.defaults.GRADIENT_Y2_SCALEDEFAULT svgDefaults.GRADIENT_Y2_SCALEDEFAULT}  */
-    get #y2Default() { return this.y2 == null ? svg.defaults.GRADIENT_Y2_SCALEDEFAULT : this.y2; }
+    /** convenience getter. returns {@linkcode x1} if non-null; otherwise returns {@linkcode svgDefaults.GRADIENT_X1_SCALEDEFAULT}  */
+    get #x1Default() { return this.x1 == null ? svgDefaults.GRADIENT_X1_SCALEDEFAULT : this.x1; }
+    /** convenience getter. returns {@linkcode y1} if non-null; otherwise returns {@linkcode svgDefaults.GRADIENT_Y1_SCALEDEFAULT}  */
+    get #y1Default() { return this.y1 == null ? svgDefaults.GRADIENT_Y1_SCALEDEFAULT : this.y1; }
+    /** convenience getter. returns {@linkcode x2} if non-null; otherwise returns {@linkcode svgDefaults.GRADIENT_X2_SCALEDEFAULT}  */
+    get #x2Default() { return this.x2 == null ? svgDefaults.GRADIENT_X2_SCALEDEFAULT : this.x2; }
+    /** convenience getter. returns {@linkcode y2} if non-null; otherwise returns {@linkcode svgDefaults.GRADIENT_Y2_SCALEDEFAULT}  */
+    get #y2Default() { return this.y2 == null ? svgDefaults.GRADIENT_Y2_SCALEDEFAULT : this.y2; }
 
     /** array for gradient stops @type {svgGradientStop[]} */
     get stops() {
@@ -386,7 +390,7 @@ export class svgGradient extends svg.definition {
      * @param {number} value 
      */
     #CalculateScale(value) {
-        if (this.scale == 0) { return 0; }
+        // if (this.scale == 0) { return 0; }
         let pivot = this.scalePivot;
         if (this.isScaleNegative) {
             // scale value is negative, invert pivot over 50 (middle of gradient)
@@ -430,8 +434,6 @@ export class svgGradient extends svg.definition {
             let mirror = this.mirror;
             // check for negative scale, if so, mirror again 
             if (this.scale !== 1 && svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE && this.isScaleNegative) {
-                // TODO: flipping mirror doesn't work for svgGradient scaling, must inverse scale affected offset instead (test for radial too)
-                // Issue URL: https://github.com/nickyonge/evto-web/issues/71
                 mirror = !mirror;
             }
             if (mirror) {
@@ -546,6 +548,7 @@ export class svgGradient extends svg.definition {
                 let ny2 = /** @type {number} */ (deY2[n]);
                 let xy1 = toPoint(nx1, ny1);
                 let xy2 = toPoint(nx2, ny2);
+                // TODO:  svgGradient non-x50y50 anglePivotPoint + negative scale + rotation = buggy 
                 // rotate around pivot
                 let rotated = RotatePointsAroundPivot([xy1, xy2], this.anglePivotPoint, this.angle);
                 // reassign points

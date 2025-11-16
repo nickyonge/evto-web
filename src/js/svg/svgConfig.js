@@ -95,6 +95,9 @@ export const GRADIENT_SHARPNESS_CAPPED = true;
 /**
  * Should {@linkcode svgGradient.scale} 
  * be allowed to have negatives values? 
+ * 
+ * If `false, values below `0` will be 
+ * clamped to `0`.
  */
 export const GRADIENT_ALLOW_NEGATIVE_SCALE = true;
 
