@@ -99,7 +99,14 @@ export const GRADIENT_SHARPNESS_CAPPED = true;
  * If `false, values below `0` will be 
  * clamped to `0`.
  */
-export const GRADIENT_ALLOW_NEGATIVE_SCALE = true;
+export const GRADIENT_SCALE_ALLOW_NEGATIVE = true;
+
+/**
+ * Should {@linkcode svgGradient.scale} values 
+ * of exactly `0` be offset by a tiny amount 
+ * during gradient HTML generation? 
+ */
+export const GRADIENT_SCALE_PREVENT_ZERO = true;
 
 /**
  * Does setting {@linkcode svgHTMLAsset.gradient} to `null`

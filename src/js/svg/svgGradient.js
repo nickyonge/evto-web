@@ -63,7 +63,7 @@ export class svgGradient extends svg.definition {
     get scale() { return this.#_scale; }
     set scale(v) {
         if (v == null) { v = svgDefaults.GRADIENT_SCALE; }
-        if (v < 0 && !svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE) {
+        if (v < 0 && !svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE) {
             console.warn(`WARNING: scale can't be negative while svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE is false, can't set scale to ${v}, clamping to 0`, this);
             v = 0;
         }
@@ -85,9 +85,9 @@ export class svgGradient extends svg.definition {
     }
     /** 
      * Is {@linkcode scale} negative? Used for temporary mirroring for negative scale values. 
-     * If {@linkcode svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE} is `false`, this will always return `false`. 
+     * If {@linkcode svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE} is `false`, this will always return `false`. 
      * @private @returns {boolean} */
-    get isScaleNegative() { return svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE && this.scale != null && this.scale < 0; }
+    get isScaleNegative() { return svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE && this.scale != null && this.scale < 0; }
     /** 
      * What is the virtual "pivot" point of this gradient scaling? 
      * Typically `0` to `100`, relative to the overall width of the 
@@ -103,7 +103,7 @@ export class svgGradient extends svg.definition {
      * make both red and blue edges retreat away from the middle, 
      * causing the gradient to become overall more purple. 
      * 
-     * **Note:** Even if {@linkcode svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE}
+     * **Note:** Even if {@linkcode svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE}
      * is `false`, this value can still be negative. 
      * @returns {number} */
     get scalePivot() { return this.#_scalePivot; }
@@ -327,7 +327,7 @@ export class svgGradient extends svg.definition {
         // Issue URL: https://github.com/nickyonge/evto-web/issues/50
         // no need to scale if scale is 1
         if (this.scale == 1) { return value; }
-        else if (this.scale < 0 && !svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE) {
+        else if (this.scale < 0 && !svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE) {
             // negative values are invalid, error 
             console.error(`ERROR: scale cannot be negative, current value is ${this.scale}, can't scale value ${value}, returning null`, this);
             return null;
@@ -390,14 +390,13 @@ export class svgGradient extends svg.definition {
      * @param {number} value 
      */
     #CalculateScale(value) {
-        // if (this.scale == 0) { return 0; }
         let pivot = this.scalePivot;
-        if (this.isScaleNegative) {
-            // scale value is negative, invert pivot over 50 (middle of gradient)
-            pivot = 50 + (50 - pivot);
-        }
         let diff = value - pivot;
-        diff *= (this.scaleAbsolute - 1);
+        let scale = this.scale;
+        if (scale == 0 && svgConfig.GRADIENT_SCALE_PREVENT_ZERO) {
+            scale = 0.002;
+        }
+        diff *= (scale - 1);
         return value + diff;
     }
 
@@ -433,7 +432,7 @@ export class svgGradient extends svg.definition {
             // apply mirroring, reverse stops array 
             let mirror = this.mirror;
             // check for negative scale, if so, mirror again 
-            if (this.scale !== 1 && svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE && this.isScaleNegative) {
+            if (this.scale !== 1 && svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE && this.isScaleNegative) {
                 mirror = !mirror;
             }
             if (mirror) {
