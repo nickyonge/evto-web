@@ -187,6 +187,10 @@ export const StringRemoveAlpha = str => (isBlank(str) ? str : str.replace(/[a-zA
  * @param {string} str string to check @returns {boolean} */
 export const StringContainsAlphanumeric = str => (isStringNotBlank(str) && /[a-zA-Z0-9]/.test(str));
 /** Checks if string contains ANY numerical characters 
+ * - **Note:** while it makes sense to make optional the 
+ * inclusion of negative/decimal symbols if checking if 
+ * the string is ONLY numeric, it's moot while checking if
+ * a string contains ANY numeric. It's `true` regardless.
  * @param {string} str string to check @returns {boolean} */
 export const StringContainsNumeric = str => (isStringNotBlank(str) && /[0-9]/.test(str));
 /** Checks if string contains ANY alphabetical characters 
@@ -198,7 +202,26 @@ export const StringContainsAlpha = str => (isStringNotBlank(str) && /[a-zA-Z]/.t
 export const StringOnlyAlphanumeric = str => (isStringNotBlank(str) && /^[a-zA-Z0-9]+$/.test(str));
 /** Checks if string contains ONLY numerical characters 
  * @param {string} str string to check @returns {boolean} */
-export const StringOnlyNumeric = str => (isStringNotBlank(str) && /^[0-9]+$/.test(str));
+export function StringOnlyNumeric(str, allowNegativeSign = true, allowDecimalPoint = true) {
+    if (!isStringNotBlank(str)) { return false; }
+    if (allowNegativeSign) { 
+        if (allowDecimalPoint) {
+            // allow negative, allow decimal 
+            return /^-?[1-9]\d*(\.\d+)?$/.test(str);
+        } else { 
+            // allow negative, refuse decimal 
+            return /^-?[1-9]\d*$/.test(str);
+        }
+    } else {
+        if (allowDecimalPoint) {
+            // refuse negative, allow decimal 
+            return /^[1-9]\d*(\.\d+)?$/.test(str);
+        } else { 
+            // refuse negative, refuse decimal 
+            return /^[1-9]\d*$/.test(str);
+        }
+    }
+}
 /** Checks if string contains ONLY alphabetical characters 
  * @param {string} str string to check @returns {boolean} */
 export const StringOnlyAlpha = str => (isStringNotBlank(str) && /^[a-zA-Z]+$/.test(str));
