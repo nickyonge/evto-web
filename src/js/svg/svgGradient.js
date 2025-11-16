@@ -549,6 +549,7 @@ export class svgGradient extends svg.definition {
                 let xy1 = toPoint(nx1, ny1);
                 let xy2 = toPoint(nx2, ny2);
                 // TODO:  svgGradient non-x50y50 anglePivotPoint + negative scale + rotation = buggy 
+                // Issue URL: https://github.com/nickyonge/evto-web/issues/72
                 // rotate around pivot
                 let rotated = RotatePointsAroundPivot([xy1, xy2], this.anglePivotPoint, this.angle);
                 // reassign points
