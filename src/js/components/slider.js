@@ -536,10 +536,3 @@ export function GenerateCSS() {
     style.textContent = content;
     document.head.appendChild(style);
 }
-
-/* Example HTML
-    <div class="slider container">
-        <input class="sinput" type="range" min="0" max="100" step="5" value="50" />
-        <span class="sbg" value="50"> </span>
-    </div>
-*/

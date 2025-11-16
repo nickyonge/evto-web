@@ -98,16 +98,5 @@ export class Toggle extends TitledComponent {
         }
         return this.#input.checked;
     }
-
-    /* Example HTML
-
-<div class="switchContainer">
-<input type="checkbox" id="checkboxInput" />
-<label for="checkboxInput" class="toggleLabel">
-<span class="switchtitle">Toggle Me</span>
-<span class="toggleSwitch"></span>
-</label>
-</div>
-
-*/
+    
 }

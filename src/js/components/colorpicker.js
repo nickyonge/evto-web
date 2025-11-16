@@ -81,18 +81,3 @@ export class ColorPicker extends TitledComponent {
         this.#input.dispatchEvent(new Event('input', { bubbles: true }));
     }
 }
-
-/* Example HTML
-<div class="clr-field">
-  <button type="button" aria-labelledby="clr-open-label"></button>
-  <input type="text" data-coloris="">
-</div>
-*/
-
-/* Example Coloris implementation
-let _col = ui.CreateInput('text');
-ui.AddElementAttribute(_col, 'data-coloris', '');
-page.appendChild(_col);
-Coloris.init();
-Coloris({ el: "#coloris" });
-*/
