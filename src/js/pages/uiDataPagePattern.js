@@ -158,6 +158,8 @@ function CreatePatternSection(section) {
         (value) => { alphaLayer1.gradient.scale = value; },
         alphaLayer1.gradient.scale, 0, 2, true, 0.01);
     scale.AddUniqueValueOverride(0.69, 'Nice');
+    scale.percentageMin = 50;
+    scale.percentageMax = -75;
     
     let mirror = new cmp.Toggle('Mirror',
         (value) => { alphaLayer1.gradient.mirror = value; },

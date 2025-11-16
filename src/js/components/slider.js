@@ -8,6 +8,8 @@ const MAX_VALUE = 100;
 const INCREMENT = 5;
 const STEPS = 20;
 const AS_PERCENTAGE = true;
+const PERCENTAGE_MIN = 0;
+const PERCENTAGE_MAX = 100;
 const PREFIX = '';
 const SUFFIX = '';
 const INCREMENT_AS_STEPS = false;
@@ -67,6 +69,33 @@ export class Slider extends TitledComponent {
     get asPercentage() { return this.#_asPercentage; }
     set asPercentage(v) { this.#_asPercentage = v; this.#updateText(); }
     #_asPercentage = AS_PERCENTAGE;
+
+    /** 
+     * Minimum value of percentage text if {@linkcode asPercentage} is `true`. Default `0`.
+     * - If {@linkcode percentageMin} is `0` and {@linkcode percentageMax} is `100`,
+     * the slider value output will go from `0%` at a {@link valueNormalized normalized} 
+     * value of `0`, to `100%` at a {@link valueNormalized normalized} value of `1`.
+     * - If {@linkcode percentageMin} is `-50` and {@linkcode percentageMax} is `250`,
+     * the slider value output will go from `-50%` at a {@link valueNormalized normalized} 
+     * value of `0`, to `250%` at a {@link valueNormalized normalized} value of `1`.
+     * @returns {number} */
+    get percentageMin() { return this.#_percentageMin; }
+    set percentageMin(v) { if (v == null || v === this.#_percentageMin) { return; } this.#_percentageMin = v; this.#updateText(); }
+    /** @type {number} */
+    #_percentageMin = PERCENTAGE_MIN;
+    /** 
+     * Maximum value of the percent output if {@linkcode asPercentage} is `true`. 
+     * - If {@linkcode percentageMin} is `0` and {@linkcode percentageMax} is `100`,
+     * the slider value output will go from `0%` at a {@link valueNormalized normalized} 
+     * value of `0`, to `100%` at a {@link valueNormalized normalized} value of `1`.
+     * - If {@linkcode percentageMin} is `-50` and {@linkcode percentageMax} is `250`,
+     * the slider value output will go from `-50%` at a {@link valueNormalized normalized} 
+     * value of `0`, to `250%` at a {@link valueNormalized normalized} value of `1`.
+     * @returns {number} */
+    get percentageMax() { return this.#_percentageMax; }
+    set percentageMax(v) { if (v == null || v === this.#_percentageMax) { return; } this.#_percentageMax = v; this.#updateText(); }
+    /** @type {number} */
+    #_percentageMax = PERCENTAGE_MAX;
 
     get valuePrefix() { return this.#_valuePrefix; }
     set valuePrefix(v) { this.#_valuePrefix = v; this.#updateText(); }
@@ -355,7 +384,7 @@ export class Slider extends TitledComponent {
         this.value = this.initialValue; // ensure we set initial value before bg or slider-value 
         this.#bg = ui.CreateElementWithClass('span', 'sbg');
         ui.AddElementAttribute(this.#bg, 'value', this.initialValue);
-        this.#bg.style.setProperty('--slider-value', this.valueAsPercent);
+        this.#bg.style.setProperty('--slider-value', this.valueAsPercentNormalized);
 
         // generate text indicator
         this.#textIndicator = ui.CreateDivWithClass('stext');
@@ -367,7 +396,7 @@ export class Slider extends TitledComponent {
 
         // add callback event 
         this.#input.addEventListener('input', (event) => {
-            this.#bg.style.setProperty('--slider-value', this.valueAsPercent);
+            this.#bg.style.setProperty('--slider-value', this.valueAsPercentNormalized);
             this.#updateText();
             if (onChangeCallback) {
                 let target = /** @type {Element} */ (event.target);
@@ -384,7 +413,7 @@ export class Slider extends TitledComponent {
         // Issue URL: https://github.com/nickyonge/evto-web/issues/43
     }
 
-    /** gets the current slider value, normalized between 0-1 @returns {Number} */
+    /** Gets the current slider value, normalized between `0` and `1` @returns {Number} */
     get valueNormalized() {
         if (this.#input == null) { return NaN; }
         let value = this.#input.value;
@@ -398,8 +427,12 @@ export class Slider extends TitledComponent {
         let max = StringToNumber(this.maxValue);
         return InverseLerp(n, min, max);
     }
+    /** Get the value as a percentage fixed between `0%` and `100%`. @returns {string} */
+    get valueAsPercentNormalized() { return `${Math.round(this.valueNormalized * 100)}%`; }
+    /** Get the value as a percentage between {@linkcode percentageMin} and {@linkcode percentageMax}. @returns {string} */
     get valueAsPercent() {
-        return `${Math.round(this.valueNormalized * 100)}%`;
+        let value = this.valueNormalized * (this.percentageMax - this.percentageMin);
+        return `${Math.round(value + this.percentageMin)}%`;
     }
 
     /**
