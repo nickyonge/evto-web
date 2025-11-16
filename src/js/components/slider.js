@@ -91,6 +91,10 @@ export class Slider extends TitledComponent {
      * - If {@linkcode percentageMin} is `-50` and {@linkcode percentageMax} is `250`,
      * the slider value output will go from `-50%` at a {@link valueNormalized normalized} 
      * value of `0`, to `250%` at a {@link valueNormalized normalized} value of `1`.
+     * - Output value is rounded to the nearest integer.
+     * ---
+     * - **Note:** If using any {@linkcode uniqueValueOverrides}, those will still 
+     * refer to the actual value in data, not the percentage value output. 
      * @returns {number} */
     get percentageMax() { return this.#_percentageMax; }
     set percentageMax(v) { if (v == null || v === this.#_percentageMax) { return; } this.#_percentageMax = v; this.#updateText(); }
