@@ -45,6 +45,7 @@ export const GRADIENT_SCALE = 1;
 export const GRADIENT_SCALEPIVOT = 50;
 export const GRADIENT_ANGLE = 0;
 export const GRADIENT_ANGLEPIVOTPOINT = { x: 50, y: 50 };
+export const GRADIENT_OFFSET = 0;
 export const GRADIENT_OPACITY = null;
 export const GRADIENT_X1 = '0%';
 export const GRADIENT_Y1 = '50%';

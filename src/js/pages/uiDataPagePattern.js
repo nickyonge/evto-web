@@ -164,7 +164,12 @@ function CreatePatternSection(section) {
     let pivot = new cmp.Slider('Scale Pivot',
         (value) => { alphaLayer1.gradient.scalePivot = value; },
         alphaLayer1.gradient.scalePivot, 0, 100, false, 1);
-    pivot.AddUniqueValueOverride(0.69, 'Nice');
+    pivot.AddUniqueValueOverride(69, 'Nice');
+    
+    let offset = new cmp.Slider('Offset',
+        (value) => { alphaLayer1.gradient.offset = value; },
+        alphaLayer1.gradient.offset, -100, 100, false, 1);
+    offset.AddUniqueValueOverride(69, 'Nice');
 
     let mirror = new cmp.Toggle('Mirror',
         (value) => { alphaLayer1.gradient.mirror = value; },
@@ -180,6 +185,7 @@ function CreatePatternSection(section) {
     section.appendChild(angle);
     section.appendChild(scale);
     section.appendChild(pivot);
+    section.appendChild(offset);
     section.appendChild(mirror);
 
     return;

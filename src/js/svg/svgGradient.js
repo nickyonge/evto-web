@@ -131,6 +131,18 @@ export class svgGradient extends svg.definition {
     /** @type {{x:number, y:number}} */
     #_anglePivotPoint = svg.defaults.GRADIENT_ANGLEPIVOTPOINT;
 
+    /**
+     * Gradient offset. Shifts the {@link svgGradientStop.offset offsets} 
+     * of all the {@linkcode svgGradientStop} values in {@linkcode stops}.
+     * 
+     * Default `0`. Typically between `-100` and `100`.
+     * @returns {number} */
+    get offset() { return this.#_offset; }
+    set offset(v) { let prev = this.#_offset; this.#_offset = v; this.changed('offset', v, prev); }
+    /** @type {number} */
+    #_offset = svg.defaults.GRADIENT_OFFSET;
+
+
     /** Overall opacity for this gradient. 
      * Multiplied to the opacity of each {@link svgGradientStop} in {@link stops}.
      * Should typically be between values 0-1, `null` is considered 1. 
@@ -833,10 +845,30 @@ class svgGradientStop extends svg.element {
     }
     get html() { return `<stop ${this.data} />`; }
     get data() {
+        let offset = this.offset;
+        if (offset != null && this.parent != null && this.parent instanceof svgGradient && this.parent.offset != null) {
+            // offset is non-zero, add to this offset 
+            let parentOffset = EnsureToNumber(this.parent.offset);
+            let params = this.DeconstructNumericParam(this.offset);
+            for (let i = 0; i < params.length; i++) {
+                if (params[i] == null) { continue; }
+                console.log((typeof params[i]) + ', params i: ' + params[i])
+                if (typeof params[i] === 'number') {
+                    // TODO: upscale entire svgGradient to allow offsets beyond 0/100, for corners of rotated gradients 
+                    let value = EnsureToNumber(params[i]);
+                    console.log('value: ' + value + ', parentOffset: ' + parentOffset);
+                    value = value + parentOffset;
+                    console.log('newValue: ' + value + ', ' + (typeof params[i]) + ', params i: ' + params[i])
+                    params[i] = value.clamp(0, 100);
+                }
+            }
+            offset = this.ReconstructNumericParam(params);
+        }
+        console.log('offset: ' + offset + " (orig: " + this.offset + ") parent: " + this.parent?.['offset']);
         return this.ParseData([
             ['stop-color', this.color],
             ['stop-opacity', this.opacityInherited],
-            ['offset', this.offset]
+            ['offset', offset]
         ]);
     }
 
