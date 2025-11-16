@@ -855,6 +855,7 @@ class svgGradientStop extends svg.element {
                 console.log((typeof params[i]) + ', params i: ' + params[i])
                 if (typeof params[i] === 'number') {
                     // TODO: upscale entire svgGradient to allow offsets beyond 0/100, for corners of rotated gradients 
+                    // Issue URL: https://github.com/nickyonge/evto-web/issues/73
                     let value = EnsureToNumber(params[i]);
                     console.log('value: ' + value + ', parentOffset: ' + parentOffset);
                     value = value + parentOffset;
