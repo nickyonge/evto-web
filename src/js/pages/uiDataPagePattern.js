@@ -18,7 +18,6 @@ export function CreatePagePattern(page) {
     // ----------------------------- CREATE COLOUR & PATTERN PAGE -----
     // DemoPageContent(page);
 
-
     // create div selection bar
     let sectionSelection = new cmp.MutliOptionList('', SelectPatternPage, txt.PG_PATTERN_SECTIONS, null, null, currentSectionNum, true);
 
@@ -155,10 +154,16 @@ function CreatePatternSection(section) {
     rotation.valueSuffix = '°';
     rotation.uniqueValueOverrides = [[0,'None'], [69, 'Nice'], [90, 'Quarter'], [180,'Half'], [270, 'Three-Quarter'], [360, 'Full']];
     
+    let mirror = new cmp.Toggle('Mirror',
+        (value) => { alphaLayer1.gradient.mirror = value; },
+        null,
+        alphaLayer1.gradient.mirror
+    );
     
     
     section.appendChild(sharpness);
     section.appendChild(rotation);
+    section.appendChild(mirror);
 
     return;
 

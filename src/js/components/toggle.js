@@ -13,6 +13,13 @@ export class Toggle extends TitledComponent {
     #costArray;
     #currentCost;
 
+    /**
+     * Create a new Toggle component, toggle switch that can be clicked on/off 
+     * @param {string} [componentTitle = undefined] 
+     * @param {function(boolean?):*} [onChangeCallback = undefined]
+     * @param {number[]|null} [cost = undefined] 
+     * @param {boolean} [initialState = false] 
+     */
     constructor(componentTitle, onChangeCallback, cost, initialState = false) {
         super(componentTitle, false);
 
