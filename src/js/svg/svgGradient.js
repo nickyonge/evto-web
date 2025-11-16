@@ -85,6 +85,29 @@ export class svgGradient extends svg.definition {
      * If {@linkcode svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE} is `false`, this will always return `false`. 
      * @private @returns {boolean} */
     get isScaleNegative() { return svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE && this.scale != null && this.scale < 0; }
+
+    /** 
+     * What is the virtual "pivot" point of this gradient scaling? 
+     * Typically `0` to `100`, relative to the overall width of the 
+     * gradient, but can be any non-null value.
+     * 
+     * This determines "where" on the gradient scaling will scale 
+     * relative to. Eg, on a smooth red-left-to-blue-right gradient, 
+     * if pivot is `0`, increasing scale beyond `1` will make the 
+     * red section appear to grow rightwards. If the pivot were 
+     * `100`, increasing the scale would make the blue section grow
+     * leftwards, as it is scaling up relative to 100% the width of 
+     * the gradient - the rightmost edge. A pivot of `50` would 
+     * make both red and blue edges retreat away from the middle, 
+     * causing the gradient to become overall more purple. 
+     * 
+     * **Note:** Even if {@linkcode svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE}
+     * is `false`, this value can still be negative. 
+     * @returns {number} */
+    get scalePivot() { return this.#_scalePivot; }
+    set scalePivot(v) { let prev = this.#_scalePivot; this.#_scalePivot = v; this.changed('scalePivot', v, prev); }
+    #_scalePivot = svgDefaults.GRADIENT_SCALEPIVOT;
+
     /** angle, in degrees, a linear gradient should be rotated by. Does not affect radial gradients. 
      * 
      * **NOTE:** also affects xy12 properties, but only invokes {@link svg.element.onChange onChange} once, for property `angle`. 
@@ -292,18 +315,17 @@ export class svgGradient extends svg.definition {
      * For a radial gradient, multiplies the {@linkcode r}
      * and {@linkcode fr} values.
      * @param {number|string} value value to scale
-     * @param {number|string} [defaultValue = 0] default value if scaling is unsuccessful (will also attempt to scale this value)
+     * @param {number|string} [defaultValue = null] default value if scaling is unsuccessful (will also attempt to scale this value) 
      * @returns {number|string|null}
      */
-    ScaleValue(value, defaultValue = null, absoluteScale = true) {
+    ScaleValue(value, defaultValue = null) {
         // TODO: replace duplicate code in ScaleValue with DeconstructNumericParam and process there
         // Issue URL: https://github.com/nickyonge/evto-web/issues/50
         // no need to scale if scale is 1
-        let scale = absoluteScale ? this.scaleAbsolute : this.scale;
-        if (scale == 1) { return value; }
-        else if (scale < 0 && !svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE) {
+        if (this.scale == 1) { return value; }
+        else if (this.scale < 0 && !svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE) {
             // negative values are invalid, error 
-            console.error(`ERROR: scale cannot be negative, current value is ${scale}, can't scale value ${value}, returning null`, this);
+            console.error(`ERROR: scale cannot be negative, current value is ${this.scale}, can't scale value ${value}, returning null`, this);
             return null;
         }
         if (value == null) {
@@ -314,7 +336,7 @@ export class svgGradient extends svg.definition {
         switch (typeof value) {
             case 'number':
                 // number - simply multiply and return 
-                return (value * scale).toMax();
+                return this.#CalculateScale(value).toMax();
             case 'string':
                 // string - remove non-numeric chars 
                 if (isBlank(value)) { return value; } // return value '' as-is
@@ -322,7 +344,8 @@ export class svgGradient extends svg.definition {
                     // yup, string contains numbers alright 
                     if (StringOnlyNumeric(value)) {
                         // ONLY numbers, convert to number, multiply, return
-                        return (StringToNumber(value) * scale).toMax();
+                        let sNumber = StringToNumber(value);
+                        return this.#CalculateScale(sNumber).toMax();
                     }
                     // split into alternating array 
                     let a = StringNumericDivider(value);
@@ -334,8 +357,8 @@ export class svgGradient extends svg.definition {
                                 value += a[i];
                                 break;
                             case 'number':
-                                let aScale = scale * /** @type {number} */ (a[i]);
-                                value += aScale.toMax();
+                                let aNumber = /** @type {number} */ (a[i]);
+                                value += this.#CalculateScale(aNumber).toMax();
                                 break;
                         }
                     }
@@ -351,9 +374,27 @@ export class svgGradient extends svg.definition {
                 if (v == null || typeof v != 'number' || !Number.isFinite(v)) {
                     return value; // invalid number output 
                 }
-                return (v * scale).toMax();
+                return this.#CalculateScale(v).toMax();
         }
+        console.log("returning value: " + value);
         return value;
+    }
+
+    /**
+     * Calculate the scale value, using both 
+     * {@linkcode scale} and {@linkcode scalePivot}
+     * @param {number} value 
+     */
+    #CalculateScale(value) {
+        if (this.scale == 0) { return 0; }
+        let pivot = this.scalePivot;
+        if (this.isScaleNegative) {
+            // scale value is negative, invert pivot over 50 (middle of gradient)
+            pivot = 50 + (50 - pivot);
+        }
+        let diff = value - pivot;
+        diff *= (this.scaleAbsolute - 1);
+        return value + diff;
     }
 
     /**

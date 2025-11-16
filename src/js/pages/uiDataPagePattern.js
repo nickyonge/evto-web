@@ -156,7 +156,7 @@ function CreatePatternSection(section) {
 
     let scale = new cmp.Slider('Scale',
         (value) => { alphaLayer1.gradient.scale = value; },
-        alphaLayer1.gradient.scale, -2, 2, true, 0.01);
+        alphaLayer1.gradient.scale, -2, 2, true, 0.05);
     scale.AddUniqueValueOverride(0.69, 'Nice');
     scale.percentageMin = -200;
     scale.percentageMax = 200;
