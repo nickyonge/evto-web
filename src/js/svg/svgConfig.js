@@ -79,7 +79,16 @@ export const ONCHANGE_ON_FIRST_PARENT_ASSIGNED = true;
 export const ALLOW_NULL_VIEWBOX = false;
 
 /**
- * Should {@linkcode svgGradient.sharpness} be capped at `0.992`?
+ * A minimal amount to offset a value by where the 
+ * value in its direct form - typically `0` or `1` - 
+ * would cause issues.
+ */
+export const MINVALUE_OFFSET = 0.002;
+
+/**
+ * Should {@linkcode svgGradient.sharpness} be capped at at 
+ * 1 - {@linkcode MINVALUE_OFFSET}?
+ * 
  * If `false`, allows gradient sharpness to fully clamp between `0`
  * and `1`.
  * 
@@ -102,9 +111,9 @@ export const GRADIENT_SHARPNESS_CAPPED = true;
 export const GRADIENT_SCALE_ALLOW_NEGATIVE = true;
 
 /**
- * Should {@linkcode svgGradient.scale} values 
- * of exactly `0` be offset by a tiny amount 
- * during gradient HTML generation? 
+ * Should {@linkcode svgGradient.scale} values of exactly 
+ * `0` be offset by a tiny amount ({@linkcode MINVALUE_OFFSET}) 
+ * during the gradient's HTML generation? 
  */
 export const GRADIENT_SCALE_PREVENT_ZERO = true;
 
