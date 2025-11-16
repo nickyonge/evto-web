@@ -142,7 +142,23 @@ function CreatePatternSection(section) {
 
     patternImage.addImage(imageURLDark);
     let alphaLayer1 = new AlphaLayer(1, imageURLLight, patternImage);
-    alphaLayer1.gradient.sharpness = 0.9;
+    alphaLayer1.gradient.sharpness = 0.5;
+
+    let sharpness = new cmp.Slider('Sharpness',
+        (value) => { alphaLayer1.gradient.sharpness = value; },
+        alphaLayer1.gradient.sharpness, 0, 1, true, 0.01);
+    sharpness.AddUniqueValueOverride(0.69, 'Nice');
+    
+    let rotation = new cmp.Slider('Rotation',
+        (value) => { alphaLayer1.gradient.angle = value; },
+        alphaLayer1.gradient.angle, 0, 360, false, 1);
+    rotation.valueSuffix = '°';
+    rotation.uniqueValueOverrides = [[0,'None'], [69, 'Nice'], [90, 'Quarter'], [180,'Half'], [270, 'Three-Quarter'], [360, 'Full']];
+    
+    
+    
+    section.appendChild(sharpness);
+    section.appendChild(rotation);
 
     return;
 
