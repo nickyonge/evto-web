@@ -93,6 +93,12 @@ export const ALLOW_NULL_VIEWBOX = false;
 export const GRADIENT_SHARPNESS_CAPPED = true;
 
 /**
+ * Should {@linkcode svgGradient.scale} 
+ * be allowed to have negatives values? 
+ */
+export const GRADIENT_ALLOW_NEGATIVE_SCALE = true;
+
+/**
  * Does setting {@linkcode svgHTMLAsset.gradient} to `null`
  * also set {@linkcode svgShape.fill} to `null` for any
  * {@link svgHTMLAsset.shapes shapes} on that

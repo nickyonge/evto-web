@@ -147,26 +147,28 @@ function CreatePatternSection(section) {
         (value) => { alphaLayer1.gradient.sharpness = value; },
         alphaLayer1.gradient.sharpness, 0, 1, true, 0.01);
     sharpness.AddUniqueValueOverride(0.69, 'Nice');
-    
+
     let angle = new cmp.Slider('Rotation',
         (value) => { alphaLayer1.gradient.angle = value; },
         alphaLayer1.gradient.angle, 0, 360, false, 1);
     angle.valueSuffix = '°';
     angle.uniqueValueOverrides = [[0, 'None'], [69, 'Nice'], [90, 'Quarter'], [180, 'Half'], [270, 'Three-Quarter'], [360, 'Full']];
-    
+
     let scale = new cmp.Slider('Scale',
         (value) => { alphaLayer1.gradient.scale = value; },
-        alphaLayer1.gradient.scale, 0, 2, true, 0.01);
+        alphaLayer1.gradient.scale, -2, 2, true, 0.01);
     scale.AddUniqueValueOverride(0.69, 'Nice');
-    scale.percentageMin = 50;
-    scale.percentageMax = -75;
-    
+    scale.percentageMin = -200;
+    scale.percentageMax = 200;
+
     let mirror = new cmp.Toggle('Mirror',
         (value) => { alphaLayer1.gradient.mirror = value; },
         null,
         alphaLayer1.gradient.mirror
     );
-    
+
+    // alphaLayer1.gradient.isRadial = true;
+
     section.appendChild(sharpness);
     section.appendChild(angle);
     section.appendChild(scale);

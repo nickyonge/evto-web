@@ -1,6 +1,6 @@
 import { arePoints, EnsureToNumber, isBlank, isPoint, Lerp, RotatePointsAroundPivot, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
 import * as svg from './index';
-import { svgDefaults, svgElement } from './index';
+import { svgDefaults, svgElement, svgConfig } from './index';
 
 /** Class representing an SVG defined linear or radial gradient */
 export class svgGradient extends svg.definition {
@@ -60,11 +60,31 @@ export class svgGradient extends svg.definition {
     get scale() { return this.#_scale; }
     set scale(v) {
         if (v == null) { v = svgDefaults.GRADIENT_SCALE; }
-        if (v < 0) { console.warn(`WARNING: scale can't be negative, can't set scale to ${v}, assigning to default scale value ${svgDefaults.GRADIENT_SCALE}`, this); v = 0; }
+        if (v < 0 && !svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE) {
+            console.warn(`WARNING: scale can't be negative while svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE is false, can't set scale to ${v}, assigning to default scale value ${svgDefaults.GRADIENT_SCALE}`, this);
+            v = svgDefaults.GRADIENT_SCALE;
+        }
         let prev = this.#_scale; this.#_scale = v; this.changed('scale', v, prev);
     }
     /** @type {number} */
     #_scale = svg.defaults.GRADIENT_SCALE;
+    /** 
+     * Gets the absolute value of {@linkcode scale}. 
+     * Used for ensuring scale values are positive 
+     * for applying to offset values.
+     * @private @returns {number} */
+    get scaleAbsolute() {
+        if (this.scale == null) {
+            console.warn(`WARNING: scale is null, can't get absolute scale, returning default scale value ${svgDefaults.GRADIENT_SCALE}`, this);
+            return svgDefaults.GRADIENT_SCALE;
+        }
+        return Math.abs(this.scale);
+    }
+    /** 
+     * Is {@linkcode scale} negative? Used for temporary mirroring for negative scale values. 
+     * If {@linkcode svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE} is `false`, this will always return `false`. 
+     * @private @returns {boolean} */
+    get isScaleNegative() { return svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE && this.scale != null && this.scale < 0; }
     /** angle, in degrees, a linear gradient should be rotated by. Does not affect radial gradients. 
      * 
      * **NOTE:** also affects xy12 properties, but only invokes {@link svg.element.onChange onChange} once, for property `angle`. 
@@ -273,16 +293,17 @@ export class svgGradient extends svg.definition {
      * and {@linkcode fr} values.
      * @param {number|string} value value to scale
      * @param {number|string} [defaultValue = 0] default value if scaling is unsuccessful (will also attempt to scale this value)
-     * @returns {number|string}
+     * @returns {number|string|null}
      */
-    ScaleValue(value, defaultValue = null) {
-        // TODO: replace duplicate code in ScaleValue with DeconstructNumericParam and process there 
+    ScaleValue(value, defaultValue = null, absoluteScale = true) {
+        // TODO: replace duplicate code in ScaleValue with DeconstructNumericParam and process there
         // Issue URL: https://github.com/nickyonge/evto-web/issues/50
         // no need to scale if scale is 1
-        if (this.scale == 1) { return value; }
-        else if (this.scale < 0) {
+        let scale = absoluteScale ? this.scaleAbsolute : this.scale;
+        if (scale == 1) { return value; }
+        else if (scale < 0 && !svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE) {
             // negative values are invalid, error 
-            console.error(`ERROR: scale cannot be negative, current value is ${this.scale}, can't scale value ${value}, returning null`, this);
+            console.error(`ERROR: scale cannot be negative, current value is ${scale}, can't scale value ${value}, returning null`, this);
             return null;
         }
         if (value == null) {
@@ -293,7 +314,7 @@ export class svgGradient extends svg.definition {
         switch (typeof value) {
             case 'number':
                 // number - simply multiply and return 
-                return (value * this.scale).toMax();
+                return (value * scale).toMax();
             case 'string':
                 // string - remove non-numeric chars 
                 if (isBlank(value)) { return value; } // return value '' as-is
@@ -301,7 +322,7 @@ export class svgGradient extends svg.definition {
                     // yup, string contains numbers alright 
                     if (StringOnlyNumeric(value)) {
                         // ONLY numbers, convert to number, multiply, return
-                        return (StringToNumber(value) * this.scale).toMax();
+                        return (StringToNumber(value) * scale).toMax();
                     }
                     // split into alternating array 
                     let a = StringNumericDivider(value);
@@ -313,7 +334,7 @@ export class svgGradient extends svg.definition {
                                 value += a[i];
                                 break;
                             case 'number':
-                                let aScale = this.scale * /** @type {number} */ (a[i]);
+                                let aScale = scale * /** @type {number} */ (a[i]);
                                 value += aScale.toMax();
                                 break;
                         }
@@ -330,7 +351,7 @@ export class svgGradient extends svg.definition {
                 if (v == null || typeof v != 'number' || !Number.isFinite(v)) {
                     return value; // invalid number output 
                 }
-                return (v * this.scale).toMax();
+                return (v * scale).toMax();
         }
         return value;
     }
@@ -365,7 +386,13 @@ export class svgGradient extends svg.definition {
             this.stops.suppressOnChange = true;
             let sharpIncrement = 0;
             // apply mirroring, reverse stops array 
-            if (this.mirror) {
+            let mirror = this.mirror;
+            // check for negative scale, if so, mirror again 
+            if (this.scale !== 1 && svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE && this.isScaleNegative) {
+                // TODO: flipping mirror doesn't work for svgGradient scaling, must inverse scale affected offset instead (test for radial too)
+                mirror = !mirror;
+            }
+            if (mirror) {
                 this.stops = this.stops.reverse();
             }
             // apply iterated stops 
@@ -429,7 +456,7 @@ export class svgGradient extends svg.definition {
                 this.stops[i].suppressOnChange = prevStopSuppress;
             }
             // undo mirroring 
-            if (this.mirror) {
+            if (mirror) {
                 this.stops = this.stops.reverse();
             }
             this.stops.suppressOnChange = prevArraySuppress;
@@ -502,29 +529,34 @@ export class svgGradient extends svg.definition {
         this.suppressOnChange = false;
 
         // collect data 
-        let d = this.isRadial ? this.ParseData([
-            // radial gradient 
-            ['fx', this.fx],
-            ['fy', this.fy],
-            ['cx', this.cx],
-            ['cy', this.cy],
-            ['fr', this.ScaleValue(this.fr, svg.defaults.GRADIENT_FR_SCALEDEFAULT)],
-            ['r', this.ScaleValue(this.r, svg.defaults.GRADIENT_R_SCALEDEFAULT)],
-            ['gradientUnits', this.gradientUnits],
-            ['gradientTransform', this.gradientTransform],
-            ['spreadMethod', this.spreadMethod],
-            ['href', this.href]
-        ]) : this.ParseData([
-            // linear gradient 
-            ['x1', this.ScaleValue(this.x1, svg.defaults.GRADIENT_X1_SCALEDEFAULT)],
-            ['y1', this.ScaleValue(this.y1, svg.defaults.GRADIENT_Y1_SCALEDEFAULT)],
-            ['x2', this.ScaleValue(this.x2, svg.defaults.GRADIENT_X2_SCALEDEFAULT)],
-            ['y2', this.ScaleValue(this.y2, svg.defaults.GRADIENT_Y2_SCALEDEFAULT)],
-            ['gradientUnits', this.gradientUnits],
-            ['gradientTransform', this.gradientTransform],
-            ['spreadMethod', this.spreadMethod],
-            ['href', this.href]
-        ]);
+        let d;
+        if (this.isRadial) {
+            d = this.ParseData([
+                // radial gradient 
+                ['fx', this.fx],
+                ['fy', this.fy],
+                ['cx', this.cx],
+                ['cy', this.cy],
+                ['fr', this.ScaleValue(this.fr, svg.defaults.GRADIENT_FR_SCALEDEFAULT)],
+                ['r', this.ScaleValue(this.r, svg.defaults.GRADIENT_R_SCALEDEFAULT)],
+                ['gradientUnits', this.gradientUnits],
+                ['gradientTransform', this.gradientTransform],
+                ['spreadMethod', this.spreadMethod],
+                ['href', this.href]]);
+        } else {
+            d = this.ParseData([
+                // linear gradient 
+                ['x1', this.ScaleValue(this.x1, svg.defaults.GRADIENT_X1_SCALEDEFAULT)],
+                ['y1', this.ScaleValue(this.y1, svg.defaults.GRADIENT_Y1_SCALEDEFAULT)],
+                ['x2', this.ScaleValue(this.x2, svg.defaults.GRADIENT_X2_SCALEDEFAULT)],
+                ['y2', this.ScaleValue(this.y2, svg.defaults.GRADIENT_Y2_SCALEDEFAULT)],
+                ['gradientUnits', this.gradientUnits],
+                ['gradientTransform', this.gradientTransform],
+                ['spreadMethod', this.spreadMethod],
+                ['href', this.href]]);
+        }
+
+        console.log("DAta: " + d);
 
         // undo angle 
         if (useAngle) {
