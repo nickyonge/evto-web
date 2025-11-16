@@ -390,6 +390,7 @@ export class svgGradient extends svg.definition {
             // check for negative scale, if so, mirror again 
             if (this.scale !== 1 && svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE && this.isScaleNegative) {
                 // TODO: flipping mirror doesn't work for svgGradient scaling, must inverse scale affected offset instead (test for radial too)
+                // Issue URL: https://github.com/nickyonge/evto-web/issues/71
                 mirror = !mirror;
             }
             if (mirror) {
