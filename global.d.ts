@@ -374,7 +374,7 @@ declare global {
          * console.log(toMax(33));           // "33"
          * console.log(toMax(33, true));     // "33.0"
          */
-        toMax(maxDecimals?: number, ensurOneDecimal?: boolean): string;
+        toMax(maxDecimals?: number|boolean, ensurOneDecimal?: boolean): string;
 
         /** 
          * Clamps a number between the given minimum and maximum values.
