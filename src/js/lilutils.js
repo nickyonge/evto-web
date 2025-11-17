@@ -204,11 +204,11 @@ export const StringOnlyAlphanumeric = str => (isStringNotBlank(str) && /^[a-zA-Z
  * @param {string} str string to check @returns {boolean} */
 export function StringOnlyNumeric(str, allowNegativeSign = true, allowDecimalPoint = true) {
     if (!isStringNotBlank(str)) { return false; }
-    if (allowNegativeSign) { 
+    if (allowNegativeSign) {
         if (allowDecimalPoint) {
             // allow negative, allow decimal 
             return /^-?[1-9]\d*(\.\d+)?$/.test(str);
-        } else { 
+        } else {
             // allow negative, refuse decimal 
             return /^-?[1-9]\d*$/.test(str);
         }
@@ -216,7 +216,7 @@ export function StringOnlyNumeric(str, allowNegativeSign = true, allowDecimalPoi
         if (allowDecimalPoint) {
             // refuse negative, allow decimal 
             return /^[1-9]\d*(\.\d+)?$/.test(str);
-        } else { 
+        } else {
             // refuse negative, refuse decimal 
             return /^[1-9]\d*$/.test(str);
         }
@@ -842,6 +842,12 @@ export function GetAllParentsWithClass(childElement, cssClass) {
 export function ElementHasClass(element, cssClass) {
     return element != null && element.classList.contains(cssClass);
 }
+
+/**
+ * Creates a new {@link HTMLSpanElement}, typically for CSS/JS type interactions. 
+ * @returns {HTMLSpanElement}
+ */
+export const DummySpan = () => document.createElement('span');
 
 // #endregion HTML Elements
 
