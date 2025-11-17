@@ -350,12 +350,19 @@ declare global {
 
         /** 
          * Converts the given number to string to the given max number of decimals, 
-         * while (unlike `toFixed`) also removing any trailing zeros.
-         * @param {number} [maxDecimals=3] 
-         * Maximum, not mandatory, decimal places. Default `3`.
-         * 
-         * If -1, simply returns the number as string with no limiting. 
-         * Otherwise must be between 0-20, per `toFixed` docs. 
+         * while (unlike `toFixed`) also removing any trailing zeros. 
+         * @param {number|boolean} [maxDecimals=3] 
+         * Either max decimals, or (if bool) ensure-one-decimal flag. Default `3`
+         * - **If Number:**  
+         * Maximum, not mandatory, decimal places.  
+         * If `-1`, returns as string with no limiting. 
+         * Otherwise, must be between `0` and `20`, per 
+         * {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toFixed toFixed() docs}.
+         * - **If Boolean:**  
+         * Convenience, serves the place of {@linkcode ensurOneDecimal}.  
+         * If `true`, enforces a `".0"` at the end of integers, so `33` becomes `"33.0"`. 
+         * If `false`, integers like `33` can return without decimals. The default 
+         * value of {@linkcode ensurOneDecimal} is `false`.
          * @param {boolean} [ensurOneDecimal = false]
          * If the value has no decimal values, should one be inserted? 
          * Eg, `33` becomes `33.0`. Default `false`
@@ -364,6 +371,8 @@ declare global {
          * console.log(toMax(33.333333, 3)); // "33.333"
          * console.log(toMax(33.3, 3));      // "33.3"
          * console.log(toFixed(33.3, 3));    // "33.300"
+         * console.log(toMax(33));           // "33"
+         * console.log(toMax(33, true));     // "33.0"
          */
         toMax(maxDecimals?: number, ensurOneDecimal?: boolean): string;
 
