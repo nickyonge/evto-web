@@ -189,8 +189,15 @@ function CreatePatternSection(section) {
     section.appendChild(mirror);
 
 
-
-    console.log("RGBA red: " + ColorToRGBA('red'));
+    // testing ColorToRGBA 
+    console.log("RGBA 1: " + ColorToRGBA('rgba(27,72,27,0.72)'));
+    console.log("RGBA 2: " + ColorToRGBA('rgb(213,213,213)'));
+    console.log("RGBA 3: " + ColorToRGBA('#69696969'));
+    console.log("RGBA 4: " + ColorToRGBA('#f2a1b3'));
+    console.log("RGBA 5: " + ColorToRGBA('hwb(200 10% 5% / 0.69)'));
+    console.log("RGBA 6: " + ColorToRGBA('cornflowerblue'));
+    console.log("RGBA 7: " + ColorToRGBA('hsla(69, 100%, 69%, 69%)'));
+    console.log("RGBA 8: " + ColorToRGBA('i should be null!'));
 
     return;
 
