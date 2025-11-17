@@ -474,7 +474,16 @@ export class svgGradient extends svg.definition {
                     }
                     this.stops[i].offset = `${currentOffset.toMax()}%`;
                     newStop.offset = `${newOffset.toMax()}%`;
+                    // collect HTML, account for subsequent stops 
+                    if (i > 0) {
+                        this.stops[i].checkPrevStop(this.stops[i - 1]);
+                    }
+                    this.stops[i].checkNextStop(newStop);
                     let h1 = this.stops[i].html;
+                    newStop.checkPrevStop(this.stops[i]);
+                    if (i < this.stops.length - 1) {
+                        newStop.checkNextStop(this.stops[i + 1]);
+                    }
                     let h2 = newStop.html;
                     if (!isBlank(h1)) {
                         if (svg.config.HTML_INDENT) { newGradient += '\t'; }
@@ -498,6 +507,13 @@ export class svgGradient extends svg.definition {
                         // smooth gradient 
                         let offset = (i / (this.stops.length - 1)) * 100;
                         this.stops[i].offset = `${offset.toMax()}%`;
+                    }
+                    // collect HTML 
+                    if (i > 0) {
+                        this.stops[i].checkPrevStop(this.stops[i - 1]);
+                    }
+                    if (i < this.stops.length - 1) {
+                        this.stops[i].checkNextStop(this.stops[i + 1]);
                     }
                     let h = this.stops[i].html;
                     // ensure offset value is reset 
@@ -614,7 +630,7 @@ export class svgGradient extends svg.definition {
                 ['spreadMethod', this.spreadMethod],
                 ['href', this.href]]);
         }
-        
+
         // undo angle 
         if (useAngle) {
             this.suppressOnChange = true;
@@ -868,6 +884,51 @@ class svgGradientStop extends svg.element {
             ['stop-opacity', this.opacityInherited],
             ['offset', offset]
         ]);
+    }
+
+    /**
+     * Accommodates the previous stop in the array, given the 0 - 100 
+     * SVG-enforced clamping of gradient stop {@linkcode offset}. 
+     * 
+     * Should be called immediately before calling {@linkcode html} 
+     * or {@linkcode data}, because color the modification will be 
+     * applied and then reset in {@linkcode data}. 
+     * 
+     * If this stop's {@linkcode offset} is > `100` and the next stop's
+     * is < `100`, lerp this offset's color by the delta between this
+     * offset, the previous offset, and where `0` lies between. This 
+     * "simulates" the gradient stop being further out than it is. 
+     * 
+     * **Note:** If the gradient uses non-rectangular borders or 
+     * is rotated at all, the gradient color beyond the edge of 
+     * the gradient will also be affected, causing the far corners 
+     * of the gradient to appear closer in color to the center. 
+     * @param {svgGradientStop} prevStop The previous stop in the array 
+     */
+    checkPrevStop(prevStop) {
+        if (prevStop == null) { return; }
+    }
+    /**
+     * Accommodates the next stop in the array, given the 0 - 100 
+     * SVG-enforced clamping of gradient stop {@linkcode offset}. 
+     * 
+     * Should be called immediately before calling {@linkcode html} 
+     * or {@linkcode data}, because color the modification will be 
+     * applied and then reset in {@linkcode data}. 
+     * 
+     * If this stop's {@linkcode offset} is < `0` and the next stop's
+     * is > `0`, lerp this offset's color by the delta between this
+     * offset, the next offset, and where `0` lies between. This 
+     * "simulates" the gradient stop being further out than it is.
+     * 
+     * **Note:** If the gradient uses non-rectangular borders or 
+     * is rotated at all, the gradient color beyond the edge of 
+     * the gradient will also be affected, causing the far corners 
+     * of the gradient to appear closer in color to the center.
+     * @param {svgGradientStop} nextStop The next stop in the array 
+     */
+    checkNextStop(nextStop) {
+        if (nextStop == null) return;
     }
 
     /**
