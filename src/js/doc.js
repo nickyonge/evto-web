@@ -2,7 +2,7 @@
 // script for document-level architecture
 
 import { BasicComponent } from "./components/base";
-import { IsStringNameSafe } from "./lilutils";
+import { isBlank, IsStringNameSafe } from "./lilutils";
 
 // DOCUMENT-LEVEL - imported to index LAST, after all other imports are completed
 (() => {
@@ -611,5 +611,67 @@ import { IsStringNameSafe } from "./lilutils";
     Number.prototype.isOdd = function () { return !this.valueOf().isEven; };
 
     // #endregion Number
+
+    // #region String 
+
+    /**
+     * Counts the number of times the given character or string is found 
+     * within this string. 
+     * @param {string} countString String/char to count the instances of 
+     * @param {boolean?} [allowOverlap = false] 
+     * Should overlapping values be included individually? Has no impact if 
+     * searching for a single character. Default `false` 
+     * 
+     * If overlapping is disabled, after finding a match, the search index 
+     * will skip past the match's length.
+     * 
+     * ---
+     * Eg, if searching `"AAAAA"` for `"AAA"`, that value overlaps multiple 
+     * times. 
+     * 
+     * If `allowOverlap` is `true`, it will return `3`
+     * - `"[AAA]AA"` 1, `"A[AAA]A"` 2, and `"AA[AAA]"` 3 
+     * 
+     * However, if `allowOverlap` is `false`, it will return `1` 
+     * - `"[AAA]AA"` 1, then skip to: `"AAA↓AA"`  
+     * - The remaining string, `"AA"`, cannot contain `"AAA"`; return `1`  
+     * @returns {number}
+     */
+    String.prototype.count = function (countString, allowOverlap = false) {
+        if (isBlank(countString)) { return 0; }
+        // a string cannot contain another string longer than itself
+        if (countString.length > this.length) { return 0; }
+        if (countString.length === this.length) { return this === countString ? 1 : 0; }
+        let count = 0;
+        switch (countString.length) {
+            case 0:
+                // theoretically this should already be caught, but, failsafe 
+                return 0;
+            case 1:
+                // one character, simply iterate through the whole string 
+                for (let i = 0; i < this.length; i++) {
+                    if (this.charAt[i] === countString) { count++; }
+                }
+                return count;
+            default:
+                // more than one character 
+                // optimization, don't substring unless first char matches 
+                let firstChar = countString.charAt(0);
+                // optimization, only search to this length minus one less target length 
+                for (let i = 0; i < this.length - (countString.length - 1); i++) {
+                    if (this.charAt[i] === firstChar) {
+                        let sub = this.substring(i, i + countString.length);
+                        if (sub === countString) { count++; }
+                        // if overlapping values aren't allowed, skip ahead 
+                        if (!allowOverlap) {
+                            i += countString.length - 1;
+                        }
+                    }
+                }
+                return count;
+        }
+    };
+
+    // #endregion String 
 
 })();

@@ -396,6 +396,7 @@ declare global {
 
     // #region String 
     interface String {
+
         /**
          * Flatten string into a 1D array (incl recursive arrays), optionally 
          * skipping null values, and optionally ignoring duplicate values, and
@@ -408,6 +409,32 @@ declare global {
          * @returns {string[]} 
          */
         flattenSpread(skipNullValues?: boolean, allowDuplicateValues?: boolean): string[];
+
+        /**
+         * Counts the number of times the given character or string is found 
+         * within this string. 
+         * @param {string} countString String/char to count the instances of 
+         * @param {boolean?} [allowOverlap = false] 
+         * Should overlapping values be included individually? Has no impact if 
+         * searching for a single character. Default `false` 
+         * 
+         * If overlapping is disabled, after finding a match, the search index 
+         * will skip past the match's length.
+         * 
+         * ---
+         * Eg, if searching `"AAAAA"` for `"AAA"`, that value overlaps multiple 
+         * times. 
+         * 
+         * If `allowOverlap` is `true`, it will return `3`
+         * - `"[AAA]AA"` 1, `"A[AAA]A"` 2, and `"AA[AAA]"` 3 
+         * 
+         * However, if `allowOverlap` is `false`, it will return `1` 
+         * - `"[AAA]AA"` 1, then skip to: `"AAA↓AA"`  
+         * - The remaining string, `"AA"`, cannot contain `"AAA"`; return `1`  
+         * @returns {number}
+         */
+        count(countString: string, allowOverlap?: boolean): number;
+
     }
     // #endregion String 
 
