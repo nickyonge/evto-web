@@ -657,20 +657,27 @@ import { isBlank, IsStringNameSafe } from "./lilutils";
      * @returns {number}
      */
     String.prototype.count = function (countString, allowOverlap = false) {
+        console.log("counting for " + countString + " in " + this + " and allowOverlap: " + allowOverlap);
         if (isBlank(countString)) { return 0; }
         // a string cannot contain another string longer than itself
+        console.log(this.charAt(3));
         if (countString.length > this.length) { return 0; }
-        if (countString.length === this.length) { return this === countString ? 1 : 0; }
+        if (countString.length == this.length) { return this == countString ? 1 : 0; }
         let count = 0;
+        console.log("This 1: " + this + ', type: ' + typeof this);
         switch (countString.length) {
             case 0:
                 // theoretically this should already be caught, but, failsafe 
                 return 0;
             case 1:
                 // one character, simply iterate through the whole string 
+                console.log('yup, checking for: ' + countString);
                 for (let i = 0; i < this.length; i++) {
-                    if (this.charAt[i] === countString) { count++; }
+                    console.log("This 2: " + this + ', type: ' + typeof this);
+                    console.log("char at " + i + ": " + this.charAt(i));
+                    if (this.charAt(i) == countString) { count++; }
                 }
+                console.log('done, count: ' + count);
                 return count;
             default:
                 // more than one character 
@@ -678,9 +685,9 @@ import { isBlank, IsStringNameSafe } from "./lilutils";
                 let firstChar = countString.charAt(0);
                 // optimization, only search to this length minus one less target length 
                 for (let i = 0; i < this.length - (countString.length - 1); i++) {
-                    if (this.charAt[i] === firstChar) {
+                    if (this.charAt(i) == firstChar) {
                         let sub = this.substring(i, i + countString.length);
-                        if (sub === countString) { count++; }
+                        if (sub == countString) { count++; }
                         // if overlapping values aren't allowed, skip ahead 
                         if (!allowOverlap) {
                             i += countString.length - 1;
