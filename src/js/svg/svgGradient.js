@@ -65,7 +65,7 @@ export class svgGradient extends svg.definition {
     set scale(v) {
         if (v == null) { v = svgDefaults.GRADIENT_SCALE; }
         if (v < 0 && !svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE) {
-            console.warn(`WARNING: scale can't be negative while svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE is false, can't set scale to ${v}, clamping to 0`, this);
+            console.warn(`WARNING: scale can't be negative while svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE is false, can't set scale to ${v}, clamping to 0`, this);
             v = 0;
         }
         let prev = this.#_scale; this.#_scale = v; this.changed('scale', v, prev);
@@ -333,27 +333,45 @@ export class svgGradient extends svg.definition {
      * and {@linkcode fr} values.
      * @param {number|string} value value to scale
      * @param {number|string} [defaultValue = null] default value if scaling is unsuccessful (will also attempt to scale this value) 
+     * @param {string} [handleNegative=HandleNegative.Auto] How should negative scaling be handled? If {@linkcode HandleNegative.Auto Auto} (default), defers to {@linkcode svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE}.
      * @returns {number|string|null}
      */
-    ScaleValue(value, defaultValue = null) {
+    ScaleValue(value, defaultValue = null, handleNegative = HandleNegative.Auto) {
         // TODO: replace duplicate code in ScaleValue with DeconstructNumericParam and process there
         // Issue URL: https://github.com/nickyonge/evto-web/issues/50
         // no need to scale if scale is 1
         if (this.scale == 1) { return value; }
-        else if (this.scale < 0 && !svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE) {
+        else if (this.scale < 0 && (handleNegative == HandleNegative.ForcePrevent || (handleNegative != HandleNegative.ForceAllow && !svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE))) {
             // negative values are invalid, error 
-            console.error(`ERROR: scale cannot be negative, current value is ${this.scale}, can't scale value ${value}, returning null`, this);
-            return null;
+            console.error(`ERROR: scale cannot be negative, current value is ${this.scale}, can't scale value ${value}, config flag: ${svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE}, handleNegative: ${handleNegative}, returning defaultValue: ${defaultValue}`, this);
+            return defaultValue;
         }
         if (value == null) {
             // value is null, return the scaled defaultValue or just null 
             if (defaultValue == null) { return null; }
-            return this.ScaleValue(defaultValue, null);
+            return this.ScaleValue(defaultValue, null, handleNegative);
         }
+        let _initialValue = value;
+        let scale = this.scale;
+
+        if (scale < 0) {
+            // handle negative values 
+            switch (handleNegative) {
+                case HandleNegative.Absolute:
+                case HandleNegative.AbsoluteScale:
+                    scale = Math.abs(scale);
+                    break;
+                case HandleNegative.Floor:
+                case HandleNegative.FloorScale:
+                    scale = 0;
+                    break;
+            }
+        }
+
         switch (typeof value) {
             case 'number':
                 // number - simply multiply and return 
-                return this.#CalculateScale(value).toMax();
+                return this.#CalculateScale(value, scale).toMax();
             case 'string':
                 // string - remove non-numeric chars 
                 if (isBlank(value)) { return value; } // return value '' as-is
@@ -362,7 +380,7 @@ export class svgGradient extends svg.definition {
                     if (StringOnlyNumeric(value)) {
                         // ONLY numbers, convert to number, multiply, return
                         let sNumber = StringToNumber(value);
-                        return this.#CalculateScale(sNumber).toMax();
+                        return this.#CalculateScale(sNumber, scale).toMax();
                     }
                     // split into alternating array 
                     let a = StringNumericDivider(value);
@@ -375,7 +393,7 @@ export class svgGradient extends svg.definition {
                                 break;
                             case 'number':
                                 let aNumber = /** @type {number} */ (a[i]);
-                                value += this.#CalculateScale(aNumber).toMax();
+                                value += this.#CalculateScale(aNumber, scale).toMax();
                                 break;
                         }
                     }
@@ -391,9 +409,62 @@ export class svgGradient extends svg.definition {
                 if (v == null || typeof v != 'number' || !Number.isFinite(v)) {
                     return value; // invalid number output 
                 }
-                return this.#CalculateScale(v).toMax();
+                return this.#CalculateScale(v, scale).toMax();
         }
-        console.log("returning value: " + value);
+        // final check to handle post-calculation negative values 
+        if (typeof value === 'number' && value < 0) {
+            if (handleNegative == HandleNegative.ForcePrevent || (handleNegative != HandleNegative.ForceAllow && !svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE)) {
+                if (HandleNegative.ForcePrevent) {
+                    // force prevented 
+                    console.error(`ERROR: scale cannot be negative, post-calculation value is ${value}, orig value: ${_initialValue}, local scale: ${scale}, this.scale: ${this.scale}, config flag: ${svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE}, handleNegative: ${handleNegative}, negPostCalcProtocol: ${NegativeScalePostCalculationProtocol}, returning defaultValue: ${defaultValue}`, this);
+                    return defaultValue;
+                } else {
+                    // svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE is false, defer to NegativeScalePostCalculationProtocol 
+                    switch (NegativeScalePostCalculationProtocol) {
+                        case 'allow':
+                            // allowed! do nothing, move onto HandleNegative calc 
+                            break;
+                        case 'absolute':
+                            return Math.abs(value);
+                        case 'defaultValue':
+                            return defaultValue;
+                        case 'error':
+                            console.error(`ERROR: scale cannot be negative, post-calculation value is ${value}, orig value: ${_initialValue}, local scale: ${scale}, this.scale: ${this.scale}, config flag: ${svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE}, handleNegative: ${handleNegative}, negPostCalcProtocol: ${NegativeScalePostCalculationProtocol}, returning defaultValue: ${defaultValue}`, this);
+                            return defaultValue;
+                        case 'null':
+                            return null;
+                        case 'warning':
+                            console.warn(`WARNING: scale cannot be negative, post-calculation value is ${value}, orig value: ${_initialValue}, local scale: ${scale}, this.scale: ${this.scale}, config flag: ${svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE}, handleNegative: ${handleNegative}, negPostCalcProtocol: ${NegativeScalePostCalculationProtocol}, returning defaultValue: ${defaultValue}`, this);
+                            return defaultValue;
+                        case 'zero':
+                            return 0;
+                        case undefined:
+                        case null:
+                        default:
+                            let errorLine1 = `invalid NegativeScalePostCalculationProtocol value ${NegativeScalePostCalculationProtocol}, error handling negative scale calc result, see next error`;
+                            let errorLine2 = `scale cannot be negative, post-calculation value is ${value}, orig value: ${_initialValue}, local scale: ${scale}, this.scale: ${this.scale}, config flag: ${svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE}, handleNegative: ${handleNegative}, negPostCalcProtocol: ${NegativeScalePostCalculationProtocol}, returning defaultValue: ${defaultValue}`;
+                            throw new Error(`ERROR: ${errorLine1}\n${errorLine2}\nthis: ${this}`);
+                    }
+                }
+            }
+            switch (handleNegative) {
+                case HandleNegative.Auto:
+                case HandleNegative.ForceAllow:
+                    // allow, all good (if Auto, it would've been caught in the if statement above)
+                    break;
+                case HandleNegative.ForcePrevent:
+                    console.error(`ERROR: scale cannot be negative, post-calculation value is ${value}, orig value: ${_initialValue}, local scale: ${scale}, this.scale: ${this.scale}, config flag: ${svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE}, handleNegative: ${handleNegative}, returning defaultValue: ${defaultValue}`, this);
+                    return defaultValue;
+                case HandleNegative.Floor:
+                case HandleNegative.FloorResult:
+                    value = 0;
+                    break;
+                case HandleNegative.Absolute:
+                case HandleNegative.AbsoluteResult:
+                    value = Math.abs(value);
+                    break;
+            }
+        }
         return value;
     }
 
@@ -401,11 +472,11 @@ export class svgGradient extends svg.definition {
      * Calculate the scale value, using both 
      * {@linkcode scale} and {@linkcode scalePivot}
      * @param {number} value 
+     * @param {number} scale 
      */
-    #CalculateScale(value) {
+    #CalculateScale(value, scale) {
         let pivot = this.scalePivot;
         let diff = value - pivot;
-        let scale = this.scale;
         if (scale == 0 && svgConfig.GRADIENT_SCALE_PREVENT_ZERO) {
             scale = svgConfig.MINVALUE_OFFSET;
         }
@@ -822,6 +893,50 @@ export class svgGradient extends svg.definition {
     InsertColor(index, stop) { return this.InsertStop(index, stop); }
     InsertNewColor(index, color = svg.defaults.GRADIENT_STOP_COLOR, opacity = svg.defaults.GRADIENT_STOP_OPACITY, offset = svg.defaults.GRADIENT_STOP_OFFSET) { return this.InsertNewStop(index, color, opacity, offset); }
 }
+
+/** 
+ * If {@linkcode svgConfig.GRADIENT_ALLOW_NEGATIVE_SCALE} is `false` 
+ * but the value calculated in {@linkcode svgGradient.ScaleValue} 
+ * returns a negative output, how should that be handled? 
+ * - **Note:** If using `"allow"`, the result will still be subject 
+ * to the following {@linkcode HandleNegative} calculation. 
+ * - **Note:** If you want to return `null`, use the string `"null"`. 
+ * If this property is `null` or `undefined`, those are invalid and 
+ * will throw their own error. 
+ * @type {'error'|'warning'|'allow'|'defaultValue'|'zero'|'absolute'|'null'} */
+const NegativeScalePostCalculationProtocol = 'zero';
+
+/** How should negative scale be handled in {@linkcode ScaleValue}? */
+const HandleNegative = Object.freeze({
+    /** Auto, defer to {@linkcode svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE} (default) */
+    Auto: 'auto',
+    /** Force allow, even if {@linkcode svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE} is `false` */
+    ForceAllow: 'forceAllow',
+    /** 
+     * Force prevent, even if {@linkcode svgConfig.GRADIENT_SCALE_ALLOW_NEGATIVE} is `true`.  
+     * Note that this will output an error and return `null` in {@linkcode ScaleValue} if 
+     * {@linkcode svgGradient.scale} is negative. However, if a value calculated by scale 
+     * results in a negative output, this will STILL output an error. If you want to avoid 
+     * an error output altogether, use {@linkcode HandleNegative.Floor} or 
+     * {@linkcode HandleNegative.Absolute}. */
+    ForcePrevent: 'forcePrevent',
+    /** 
+     * Prevent, instead of disallowing, clamps both negative {@linkcode svgGradient.scale} 
+     * and to {@linkcode ScaleValue} calculated result to `0` */
+    Floor: 'floor',
+    /** Prevent, instead of disallowing, clamps negative {@linkcode svgGradient.scale} to `0` */
+    FloorScale: 'floor',
+    /** Prevent, instead of disallowing, clamps negative {@linkcode ScaleValue} calculated result to `0` */
+    FloorResult: 'floor',
+    /** 
+     * Prevent, instead of disallowing, uses both absolute {@linkcode svgGradient.scale} value 
+     * and returns absolute {@linkcode ScaleValue} calculated result */
+    Absolute: 'absolute',
+    /** Prevent, instead of disallowing, uses absolute {@linkcode svgGradient.scale} value */
+    AbsoluteScale: 'absolute',
+    /** Prevent, instead of disallowing, returns absolute {@linkcode ScaleValue} calculated result */
+    AbsoluteResult: 'absolute',
+});
 
 class svgGradientStop extends svg.element {
     /** @returns {string} */
