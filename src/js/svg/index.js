@@ -1,3 +1,5 @@
+// svg file / class exports 
+
 export {
     svgElement, svgElement as element,
 } from './svgElement';
@@ -15,7 +17,7 @@ export {
     svgXYWHDefinition, svgXYWHDefinition as xywhDefinition,
     svgMaskDefinition, svgMaskDefinition as maskDefinition,
     svgImageDefinition, svgImageDefinition as imageDefinition,
-} from './svgSpecialDefs'
+} from './svgSpecialDefs';
 
 export {
     svgShape, svgShape as shape,
@@ -26,19 +28,21 @@ export {
     svgPolyline, svgPolyline as polyline,
     svgPolygon, svgPolygon as polygon,
     svgPath, svgPath as path,
-    IsValidShapeType
+    IsValidShapeType,
 } from './svgShapes';
 
 export { svgGradient, svgGradient as gradient } from './svgGradient';
 
-export * as config from './svgConfig';
 export * as svgConfig from './svgConfig';
+export * as config from './svgConfig';
 
-export * as defaults from './svgDefaults';
 export * as svgDefaults from './svgDefaults';
+export * as defaults from './svgDefaults';
 
-export * as generator from './svgGenerator';
 export * as svgGenerator from './svgGenerator';
+export * as generator from './svgGenerator';
+
+// imports 
 
 import { svgElement } from './svgElement';
 
