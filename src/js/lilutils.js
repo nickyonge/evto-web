@@ -287,9 +287,13 @@ export function IsStringColor(str, hexOnly = false) {
     return EnsureColorValid(str) != null;
 }
 
+/** Enum for specifying how to handle alpha values when formatting RGBA */
 const RGBAlpha = Object.freeze({
+    /** Alpha should be *excluded*, returning `rgb(r, g, b)` */
     Exclude: -1,
+    /** Alpha should be *ignored*, making no changes to the `rgb/a( ... )` value */
     Ignore: 0,
+    /** Alpha should be *included*, returning `rgba(r, g, b, a)` */
     Include: 1,
 })
 
@@ -318,26 +322,47 @@ export function EnsureColorValid(str) {
 }
 
 /**
- * 
- * @param {string} str 
+ * Takes any CSS-safe color string (hex, RGB/A, HSL/A, HWB, or name 
+ * strings like `"LavenderBlush"`) and returns it as an RGB/A formatted
+ * string. 
+ * @param {string} colorString Color string to convert to RGBA  
  * @param {-1|0|1|'exclude'|'ignore'|'include'|`set${number}`} [alpha] 
- * @returns 
+ * Optional value determining what to do with the alpha value. Default 
+ * {@linkcode RGBAlpha.Include}.  
+ * - `-1`, `"exclude"`, and {@linkcode RGBAlpha.Exclude} will omit any 
+ * alpha values and return `"rgb(r, g, b)"` 
+ * - `1`, `"includue"`, and {@linkcode RGBAlpha.Include} will ensure  
+ * an alpha value is included, returning `"rgba(r, g, b, a)"`. If one 
+ * isn't present, adds alpha value of `1.0`
+ * - `0`, `"ignore"`, and {@linkcode RGBAlpha.Ignore} will return the 
+ * value however the CSS computed style formats it. This is typically 
+ * `rgba` but can vary. If it matters, you should specify to be sure.
+ * - `"set0"` through `"set100"` will directly assign the given alpha 
+ * value. Must be between `0` and `100`, will get normalized to 
+ * between `0` and `1`, rounded to max three decimals.  
+ * Eg, `"set50"` returns `"rgba(r, g, b, 0.5)"`
+ * @returns {string} 
  */
-export function ColorToRGBA(str, alpha = RGBAlpha.Include) {
-    if (isBlank(str)) { return null; }
+export function ColorToRGBA(colorString, alpha = RGBAlpha.Include) {
+    if (isBlank(colorString)) { return null; }
     // create a dummy, determine basic string validity 
     let span = DummySpan();
-    span.style.color = str;
+    span.style.color = colorString;
     if (isBlank(span.style.color)) { return null; }
     // use getComputedStyle to convert to rgb/a 
+    document.body.appendChild(span);
+    // let style = getComputedStyle(span);
     let color = getComputedStyle(span).color?.trim().toLowerCase();
+    // let color = style.color.trim().toLowerCase();
+    // let color = style.color;
+    document.body.removeChild(span);
     if (isBlank(color)) { return null; }
     // check alpha inclusion 
     if (alpha == null) { return color; }
     let alphaValue = null;
     /** @param {string} numStr @returns {number} */
     const getAlphaNumber = (numStr) => {
-        return EnsureToNumber(numStr.substring(numStr.search(/\d/))).clamp(0, 100) * 0.01;
+        return EnsureToNumber(numStr.substring(numStr.search(/-?.?\d/))).clamp(0, 100) * 0.01;
     }
     if (typeof alpha === 'string' && alpha.startsWith('set')) {
         alphaValue = getAlphaNumber(alpha);
@@ -363,7 +388,7 @@ export function ColorToRGBA(str, alpha = RGBAlpha.Include) {
                     let commaIndex = color.lastIndexOf(',');
                     let parenIndex = color.lastIndexOf(')');
                     if (commaIndex == -1 || parenIndex == -1) {
-                        console.error(`ERROR: improperly formatted getComputedStyle color output ${color}, returning null, investigate`, this);
+                        console.error(`ERROR: improperly formatted getComputedStyle color output "${color}", returning null, investigate`, this);
                         return null;
                     }
                     let before = color.substring(0, commaIndex);
@@ -371,7 +396,7 @@ export function ColorToRGBA(str, alpha = RGBAlpha.Include) {
                     color = before + after;
                     break;
                 default:
-                    console.warn(`WARNING: irregular number of comma-delimited values in rgb/a: ${color}, returning null, investigate`, this);
+                    console.warn(`WARNING: irregular number (${color.count(',')}) of comma-delimited values in rgb/a: "${color}", returning null, investigate`, this);
                     return null;
             }
             return color;
@@ -391,17 +416,17 @@ export function ColorToRGBA(str, alpha = RGBAlpha.Include) {
                     // it's already 3 values, rgba 
                     break;
                 default:
-                    console.warn(`WARNING: irregular number of comma-delimited values in rgb/a: ${color}, returning null, investigate`, this);
+                    console.warn(`WARNING: irregular number (${color.count(',')}) of comma-delimited values in rgb/a: "${color}", returning null, investigate`, this);
                     return null;
             }
             return color;
         default:
             // either error, or misformatted set number 
             if (!alpha.startsWith('set')) {
-                console.error(`ERROR: Invalid alpha value ${alpha}, can't determine alpha inclusion, ignoring, returning color ${color}`, this);
+                console.error(`ERROR: Invalid alpha value ${alpha}, can't determine alpha inclusion, ignoring, returning color "${color}"`, this);
                 return color;
             }
-            console.warn(`WARNING: alpha set value: ${alpha} for color: ${color} shouldn't happen, should be set0, alphaValue: ${alphaValue}, investigate`, this);
+            console.warn(`WARNING: alpha set value: ${alpha} for color: "${color}" shouldn't happen, should be set0, alphaValue: ${alphaValue}, investigate`, this);
             if (alphaValue == null) {
                 // ensure non-null alpha value if we somehow skipped it before 
                 alphaValue = getAlphaNumber(alpha);
@@ -425,7 +450,7 @@ export function ColorToRGBA(str, alpha = RGBAlpha.Include) {
                     color = `${color.substring(0, commaIndex)}, ${alphaValue.toMax(true)})`;
                     return color;
                 default:
-                    console.warn(`WARNING: irregular number of comma-delimited values in rgb/a: ${color}, alphaValue: ${alphaValue}, returning null, investigate`, this);
+                    console.warn(`WARNING: irregular number (${color.count(',')}) of comma-delimited values in rgb/a: "${color}", alphaValue: ${alphaValue}, returning null, investigate`, this);
                     return null;
             }
     }
