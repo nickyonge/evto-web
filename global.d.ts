@@ -6,6 +6,8 @@ import { config as svgConfig } from './src/js/svg';
 
 declare global {
 
+    // #region TypeDefs 
+
     /**
      * Alternative receiving param for string spread params. 
      * Instead of `...string`, use `spreadString`. Can receive 
@@ -25,7 +27,9 @@ declare global {
      * to convert any received values to a 1D array. */
     type spreadValue = any[] | [any[]] | [any, ...any[]];
 
+    // #endregion TypeDefs
 
+    // #region Node
     interface Node {
 
         /**
@@ -40,7 +44,9 @@ declare global {
         appendChild<T extends Node | BasicComponent>(Node: T): Node;
 
     }
+    // #endregion Node
 
+    // #region Object 
     interface Object {
         /**
          * Flatten value into a 1D array (incl recursive arrays), optionally 
@@ -54,7 +60,9 @@ declare global {
          */
         flattenSpread(skipNullValues?: boolean, allowDuplicateValues?: boolean): any[];
     }
+    // #endregion Object
 
+    // #region Array 
     interface Array {
 
         /**
@@ -339,7 +347,9 @@ declare global {
         deepClone<T>(): T[];
 
     }
+    // #endregion Array
 
+    // #region Number 
     interface Number {
 
         /** 
@@ -386,7 +396,9 @@ declare global {
          * @returns {boolean} */
         isOdd(): boolean;
     }
+    // #endregion Number
 
+    // #region String 
     interface String {
         /**
          * Flatten string into a 1D array (incl recursive arrays), optionally 
@@ -401,7 +413,9 @@ declare global {
          */
         flattenSpread(skipNullValues?: boolean, allowDuplicateValues?: boolean): string[];
     }
+    // #endregion String 
 
+    // #region Console 
     interface Console {
 
         /**
@@ -440,7 +454,9 @@ declare global {
         stackString: string;
 
     }
+    // #endregion Console
 
+    // #region Element 
     interface Element {
 
         // mostly typesafe declaration 
@@ -470,6 +486,7 @@ declare global {
             focusVisible?: boolean
         }): void;
     }
+    // #endregion Element
 
 }
 
