@@ -554,18 +554,25 @@ import { isBlank, IsStringNameSafe } from "./lilutils";
      * @param {number} [maxDecimals=3] 
      * Maximum, not mandatory, decimal places.
      * If -1, simply returns the number as string with no limiting. 
-     * Otherwise must be between 0-20, per `toFixed` docs.  
+     * Otherwise must be between 0-20, per `toFixed` docs. 
+     * @param {boolean} [ensurOneDecimal = false]
+     * If the value has no decimal values, should one be inserted? 
+     * Eg, `33` becomes `33.0`. Default `false`
      * @returns {string}
      * @example
      * console.log(toMax(33.333333, 3)); // "33.333"
      * console.log(toMax(33.3, 3));      // "33.3"
      * console.log(toFixed(33.3, 3));    // "33.300"
+     * console.log(toMax(33));           // "33"
+     * console.log(toMax(33, true));     // "33.0"
      */
-    Number.prototype.toMax = function (maxDecimals = 3) {
+    Number.prototype.toMax = function (maxDecimals = 3, ensurOneDecimal = false) {
         if (maxDecimals == -1) { return this.valueOf().toString(); }
         maxDecimals = maxDecimals.clamp(0, 20);
-        const str = this.valueOf().toFixed(maxDecimals);
-        return String(Number(str));
+        let str = this.valueOf().toFixed(maxDecimals);
+        str = String(Number(str));
+        if (ensurOneDecimal && str.indexOf('.') == -1) { str += '.0'; }
+        return str;
     };
 
     /** 

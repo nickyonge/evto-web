@@ -355,14 +355,17 @@ declare global {
          * Maximum, not mandatory, decimal places. Default `3`.
          * 
          * If -1, simply returns the number as string with no limiting. 
-         * Otherwise must be between 0-20, per `toFixed` docs.  
+         * Otherwise must be between 0-20, per `toFixed` docs. 
+         * @param {boolean} [ensurOneDecimal = false]
+         * If the value has no decimal values, should one be inserted? 
+         * Eg, `33` becomes `33.0`. Default `false`
          * @returns {string}
          * @example
          * console.log(toMax(33.333333, 3)); // "33.333"
          * console.log(toMax(33.3, 3));      // "33.3"
          * console.log(toFixed(33.3, 3));    // "33.300"
          */
-        toMax(maxDecimals?: number): string;
+        toMax(maxDecimals?: number, ensurOneDecimal?: boolean): string;
 
         /** 
          * Clamps a number between the given minimum and maximum values.
