@@ -284,9 +284,167 @@ export function AddAlphaToHex(color, opacity) {
 export function IsStringColor(str, hexOnly = false) {
     if (isBlank(str)) { return false; }
     if (hexOnly) { return /^#([0-9A-F]{3}|[0-9A-F]{6})$/i.test(str); }
-    const _style = new Option().style;
-    _style.color = str;
-    return _style.color === str && _style.color !== '';
+    return EnsureColorValid(str) != null;
+}
+
+const RGBAlpha = Object.freeze({
+    Exclude: -1,
+    Ignore: 0,
+    Include: 1,
+})
+
+/**
+ * Confirms a string IS a valid color, and returns the valid result. 
+ * Inclusive of all standard CSS color types: hex, RGB/A, HSL/A, 
+ * HWB, name string (eg, `"LavenderBlush"`)
+ * 
+ * If the color is not a valid color (either the input is `null` / 
+ * blank, or the input is not a color), returns `null`.
+ * - **Note:** The specific format returned by this method is not 
+ *   consistent. It *will* be a valid CSS color, but the format may 
+ *   vary depending input string, browser, or otherwise.
+ *   - For a consistent return type, use {@linkcode ColorToHex}, 
+ *     {@linkcode ColorToRGBA}, or {@linkcode ColorToArray}.
+ *   - To determine if a string is a valid color and not return a 
+ *     potentially modified version, use {@linkcode IsStringColor}.
+ * @param {string} str Color string to check  
+ * @returns {string}
+ */
+export function EnsureColorValid(str) {
+    if (isBlank(str)) { return null; }
+    let span = DummySpan();
+    span.style.color = str;
+    return isBlank(span.style.color) ? null : span.style.color;
+}
+
+/**
+ * 
+ * @param {string} str 
+ * @param {-1|0|1|'exclude'|'ignore'|'include'|`set${number}`} [alpha] 
+ * @returns 
+ */
+export function ColorToRGBA(str, alpha = RGBAlpha.Include) {
+    if (isBlank(str)) { return null; }
+    // create a dummy, determine basic string validity 
+    let span = DummySpan();
+    span.style.color = str;
+    if (isBlank(span.style.color)) { return null; }
+    // use getComputedStyle to convert to rgb/a 
+    let color = getComputedStyle(span).color?.trim().toLowerCase();
+    if (isBlank(color)) { return null; }
+    // check alpha inclusion 
+    if (alpha == null) { return color; }
+    let alphaValue = null;
+    /** @param {string} numStr @returns {number} */
+    const getAlphaNumber = (numStr) => {
+        return EnsureToNumber(numStr.substring(numStr.search(/\d/))).clamp(0, 100) * 0.01;
+    }
+    if (typeof alpha === 'string' && alpha.startsWith('set')) {
+        alphaValue = getAlphaNumber(alpha);
+        alpha = 'set0';
+    }
+    switch (alpha) {
+        case 0:
+        case 'ignore':
+            return color;
+        case -1:
+        case 'exclude':
+            // ensure we remove alpha if rgba  
+            if (color.startsWith('rgba')) {
+                color = color.replace('a', '');
+            }
+            // remove alpha value 
+            switch (color.count(',')) {
+                case 2:
+                    // already 2 values, only rbg 
+                    break;
+                case 3:
+                    // remove alpha value 
+                    let commaIndex = color.lastIndexOf(',');
+                    let parenIndex = color.lastIndexOf(')');
+                    if (commaIndex == -1 || parenIndex == -1) {
+                        console.error(`ERROR: improperly formatted getComputedStyle color output ${color}, returning null, investigate`, this);
+                        return null;
+                    }
+                    let before = color.substring(0, commaIndex);
+                    let after = color.substring(parenIndex);
+                    color = before + after;
+                    break;
+                default:
+                    console.warn(`WARNING: irregular number of comma-delimited values in rgb/a: ${color}, returning null, investigate`, this);
+                    return null;
+            }
+            return color;
+        case 1:
+        case 'include':
+            // ensure we insert alpha if rgb 
+            if (color.startsWith('rgb(')) {
+                color = 'rgba' + color.substring(3);
+            }
+            switch (color.count(',')) {
+                case 2:
+                    // add alpha value 
+                    let parenIndex = color.lastIndexOf(')');
+                    color = `${color.substring(0, parenIndex)}, 1.0)`;
+                    break;
+                case 3:
+                    // it's already 3 values, rgba 
+                    break;
+                default:
+                    console.warn(`WARNING: irregular number of comma-delimited values in rgb/a: ${color}, returning null, investigate`, this);
+                    return null;
+            }
+            return color;
+        default:
+            // either error, or misformatted set number 
+            if (!alpha.startsWith('set')) {
+                console.error(`ERROR: Invalid alpha value ${alpha}, can't determine alpha inclusion, ignoring, returning color ${color}`, this);
+                return color;
+            }
+            console.warn(`WARNING: alpha set value: ${alpha} for color: ${color} shouldn't happen, should be set0, alphaValue: ${alphaValue}, investigate`, this);
+            if (alphaValue == null) {
+                // ensure non-null alpha value if we somehow skipped it before 
+                alphaValue = getAlphaNumber(alpha);
+            }
+        case 'set0':
+            // set at a specific color
+            if (color.startsWith('rgb(')) {
+                color = 'rgba' + color.substring(3);
+            }
+            switch (color.count(',')) {
+                case 2:
+                    // no alpha present, just add it 
+                    if (color.count(',') == 2) {
+                        let parenIndex = color.lastIndexOf(')');
+                        color = `${color.substring(0, parenIndex)}, ${alphaValue.toMax(true)})`;
+                    }
+                    return color;
+                case 3:
+                    // alpha present, replace with given value 
+                    let commaIndex = color.lastIndexOf(',');
+                    color = `${color.substring(0, commaIndex)}, ${alphaValue.toMax(true)})`;
+                    return color;
+                default:
+                    console.warn(`WARNING: irregular number of comma-delimited values in rgb/a: ${color}, alphaValue: ${alphaValue}, returning null, investigate`, this);
+                    return null;
+            }
+    }
+}
+
+/**
+ * Converts the given string to a four-number array 
+ * corresponding to the color's RGBA values. 
+ * 
+ * If the given string is not a color, or if the conversion 
+ * otherwise fails, returns `null`. 
+ * @param {string} str Color string to convert 
+ * @returns {[number, number, number, number]|null}
+ */
+export function ColorToArray(str) {
+    str = EnsureColorValid(str);
+    if (str == null) { return null; }
+    // create dummy CSS style 
+    let _span = DummySpan();
 }
 
 // #endregion Str Color

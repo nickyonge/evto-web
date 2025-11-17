@@ -2,7 +2,7 @@ import * as cmp from "../components";
 import * as ui from '../ui';
 import * as txt from '../text';
 import { svgHTMLAsset, svgShape, svgGradient, svgRect, svgDefinition, svgViewBox, svgMaskDefinition, svgImageDefinition, svgElement } from "../svg/index";
-import { isBlank, SetElementEnabled } from "../lilutils";
+import { ColorToArray, ColorToRGBA, EnsureColorValid, isBlank, SetElementEnabled } from "../lilutils";
 import { DemoGradient } from "./uiDataPageBase";
 import { mapImg } from "../assetExporter";
 
@@ -187,6 +187,10 @@ function CreatePatternSection(section) {
     section.appendChild(pivot);
     section.appendChild(offset);
     section.appendChild(mirror);
+
+
+
+    console.log("RGBA red: " + ColorToRGBA('red'));
 
     return;
 
