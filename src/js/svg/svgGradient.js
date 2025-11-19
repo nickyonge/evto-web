@@ -817,7 +817,7 @@ export class svgGradient extends svg.definition {
     }
     /** string output for FX/Y and CX/Y values (or X1/2 and Y1/2 on linear gradient) @returns {string} */
     get fcxyString() {
-        if (!this.isRadial) { return this.fcxyString; }
+        if (!this.isRadial) { return this.xy12String; }
         return `fx:${this.fx},fy:${this.fy},cx:${this.cx},cy:${this.cy}`;
     }
 
