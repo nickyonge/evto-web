@@ -194,6 +194,15 @@ export class svgGradient extends svg.definition {
     /** convenience getter. returns {@linkcode y2} if non-null; otherwise returns {@linkcode svgDefaults.GRADIENT_Y2_SCALEDEFAULT}  */
     get #y2Default() { return this.y2 == null ? svgDefaults.GRADIENT_Y2_SCALEDEFAULT : this.y2; }
 
+    /** convenience getter. returns {@linkcode fx} if non-null; otherwise returns {@linkcode svgDefaults.GRADIENT_FX_SCALEDEFAULT}  */
+    get #fxDefault() { return this.fx == null ? svgDefaults.GRADIENT_FX_SCALEDEFAULT : this.fx; }
+    /** convenience getter. returns {@linkcode fy} if non-null; otherwise returns {@linkcode svgDefaults.GRADIENT_FY_SCALEDEFAULT}  */
+    get #fyDefault() { return this.fy == null ? svgDefaults.GRADIENT_FY_SCALEDEFAULT : this.fy; }
+    /** convenience getter. returns {@linkcode cx} if non-null; otherwise returns {@linkcode svgDefaults.GRADIENT_CX_SCALEDEFAULT}  */
+    get #cxDefault() { return this.cx == null ? svgDefaults.GRADIENT_CX_SCALEDEFAULT : this.cx; }
+    /** convenience getter. returns {@linkcode cy} if non-null; otherwise returns {@linkcode svgDefaults.GRADIENT_CY_SCALEDEFAULT}  */
+    get #cyDefault() { return this.cy == null ? svgDefaults.GRADIENT_CY_SCALEDEFAULT : this.cy; }
+
     /** array for gradient stops @type {svgGradientStop[]} */
     get stops() {
         if (this.#_stops == null) { this.stops = []; }
@@ -256,7 +265,7 @@ export class svgGradient extends svg.definition {
     /** @type {string|number} */
     #_cy = svg.defaults.GRADIENT_CY;
 
-    /** radial-only, radius at end of the gradient @returns {number|string} */
+    /** radial-only, radius at start of the gradient @returns {number|string} */
     get fr() { return this.#_fr; }
     set fr(v) { let prev = this.#_fr; this.#_fr = v; this.changed('fr', v, prev); }
     /** @type {number|string} */
@@ -800,37 +809,28 @@ export class svgGradient extends svg.definition {
             return;
         }
     }
-    /**
-     * get/set FX/Y and CX/Y values (or X1/2 and Y1/2 on radial gradient).
-     * - Get: returns four-value array, `[fx, fy, cx, cy]` (values are either `number` or `string`)
-     * - Set: set by one of the following: 
-     *   - number `[fx, fy, cx, cy]`
-     *   - comma-split string `"fx,cx,fy,cy"`
-     *   - XY {@link toPoint point} objects array `[{x:fx,y:fy},{x:cx,y:cy}]`
-     * 
-     * **NOTE:** `null` setter values are accepted 
-     * @returns {[number|string,number|string,number|string,number|string]}
-     */
-    get fcxy() { return this.xy12; }
-    set fcxy(values) { this.xy12 = values; }
 
     /** string output for X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient) @returns {string} */
     get xy12String() {
-        return this.isRadial ?
-            `fx:${this.fx},fy:${this.fy},cx:${this.cx},cy:${this.cy}` :
-            `x1:${this.x1},y1:${this.y1},x2:${this.x2},y2:${this.y2}`;
+        if (this.isRadial) { return this.fcxyString; }
+        return `x1:${this.x1},y1:${this.y1},x2:${this.x2},y2:${this.y2}`;
     }
     /** string output for FX/Y and CX/Y values (or X1/2 and Y1/2 on linear gradient) @returns {string} */
-    get fcxyString() { return this.xy12String; }
+    get fcxyString() {
+        if (!this.isRadial) { return this.fcxyString; }
+        return `fx:${this.fx},fy:${this.fy},cx:${this.cx},cy:${this.cy}`;
+    }
 
     /** string output for X1/2 and Y1/2 values (or FX/Y and CX/Y on radial gradient) with local default backups if `null` @returns {string} */
     get #xy12Default() {
-        return this.isRadial ?
-            `fx:${this.#x1Default},fy:${this.#y1Default},cx:${this.#x2Default},cy:${this.#y2Default}` :
-            `x1:${this.#x1Default},y1:${this.#y1Default},x2:${this.#x2Default},y2:${this.#y2Default}`;
+        if (this.isRadial) { return this.#fcxyDefault; }
+        return `x1:${this.#x1Default},y1:${this.#y1Default},x2:${this.#x2Default},y2:${this.#y2Default}`;
     }
     /** string output for FX/Y and CX/Y values (or X1/2 and Y1/2 on linear gradient) with local default backups if `null` @returns {string} */
-    get #fcxyDefault() { return this.#xy12Default; }
+    get #fcxyDefault() {
+        if (!this.isRadial) { return this.#xy12Default; }
+        return `fx:${this.#fxDefault},fy:${this.#fyDefault},cx:${this.#cxDefault},cy:${this.#cyDefault}`;
+    }
 
     AddStop(stop) {
         if (stop == null) { return stop; }
