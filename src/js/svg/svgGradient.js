@@ -163,21 +163,21 @@ export class svgGradient extends svg.definition {
     /** @type {string|number} */
     #_x1 = svg.defaults.GRADIENT_X1;
     /** First Y-coordinate for drawing an SVG element that requires more than one coordinate.
-     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/x1
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/y1
      * @returns {string|number} */
     get y1() { return this.#_y1; }
     set y1(v) { let prev = this.#_y1; this.#_y1 = v; this.changed('y1', v, prev); }
     /** @type {string|number} */
     #_y1 = svg.defaults.GRADIENT_Y1;
     /** Second X-coordinate for drawing an SVG element that requires more than one coordinate.
-     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/x1
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/x2
      * @returns {string|number} */
     get x2() { return this.#_x2; }
     set x2(v) { let prev = this.#_x2; this.#_x2 = v; this.changed('x2', v, prev); }
     /** @type {string|number} */
     #_x2 = svg.defaults.GRADIENT_X2;
     /** Second Y-coordinate for drawing an SVG element that requires more than one coordinate.
-     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/x1
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/y2
      * @returns {string|number} */
     get y2() { return this.#_y2; }
     /** @returns {string|number} */
@@ -220,18 +220,41 @@ export class svgGradient extends svg.definition {
     /** @type {svgGradientStop[]} */
     #_stops;
 
-    /** `radialGradient` only, X coord at gradient start circle, convenience, simply gets/sets {@link x1} @returns {number|string} @see {@linkcode isRadial}*/
-    get fx() { return this.x1; }
-    set fx(i) { let prev = this.#_x1; this.#_x1 = i; this.changed('fx', i, prev); }
-    /** `radialGradient` only, Y coord at gradient start circle, convenience, simply gets/sets {@link y1} @returns {number|string} @see {@linkcode isRadial}*/
-    get fy() { return this.y1; }
-    set fy(i) { let prev = this.#_y1; this.#_y1 = i; this.changed('fy', i, prev); }
-    /** `radialGradient` only, X coord at gradient end circle, convenience, simply gets/sets {@link x2} @returns {number|string} @see {@linkcode isRadial}*/
-    get cx() { return this.x2; }
-    set cx(i) { let prev = this.#_x2; this.#_x2 = i; this.changed('cx', i, prev); }
-    /** `radialGradient` only, Y coord at gradient end circle, convenience, simply gets/sets {@link y2} @returns {number|string} @see {@linkcode isRadial}*/
-    get cy() { return this.y2; }
-    set cy(i) { let prev = this.#_y2; this.#_y2 = i; this.changed('cy', i, prev); }
+
+
+    /** 
+     * `radialGradient` only, X coord at gradient start circle @see {@linkcode isRadial}
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/fx
+     * @returns {string|number} */
+    get fx() { return this.#_fx; }
+    set fx(v) { let prev = this.#_fx; this.#_fx = v; this.changed('fx', v, prev); }
+    /** @type {string|number} */
+    #_fx = svg.defaults.GRADIENT_FX;
+    /** 
+     * `radialGradient` only, Y coord at gradient start circle @see {@linkcode isRadial}
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/fx
+     * @returns {string|number} */
+    get fy() { return this.#_fy; }
+    set fy(v) { let prev = this.#_fy; this.#_fy = v; this.changed('fy', v, prev); }
+    /** @type {string|number} */
+    #_fy = svg.defaults.GRADIENT_FY;
+    /** 
+     * `radialGradient` only, X coord at gradient end circle @see {@linkcode isRadial}
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/cx
+     * @returns {string|number} */
+    get cx() { return this.#_cx; }
+    set cx(v) { let prev = this.#_cx; this.#_cx = v; this.changed('cx', v, prev); }
+    /** @type {string|number} */
+    #_cx = svg.defaults.GRADIENT_CX;
+    /** 
+     * `radialGradient` only, Y coord at gradient end circle @see {@linkcode isRadial}
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/cy
+     * @returns {string|number} */
+    get cy() { return this.#_cy; }
+    /** @returns {string|number} */
+    set cy(v) { let prev = this.#_cy; this.#_cy = v; this.changed('cy', v, prev); }
+    /** @type {string|number} */
+    #_cy = svg.defaults.GRADIENT_CY;
 
     /** radial-only, radius at end of the gradient @returns {number|string} */
     get fr() { return this.#_fr; }
@@ -697,11 +720,11 @@ export class svgGradient extends svg.definition {
         if (this.isRadial) {
             d = this.ParseData([
                 // radial gradient 
-                ['fx', this.fx],
-                ['fy', this.fy],
-                ['cx', this.cx],
-                ['cy', this.cy],
-                ['fr', this.ScaleValue(this.fr, svg.defaults.GRADIENT_FR_SCALEDEFAULT, HandleNegative.Absolute)],
+                ['fx', this.ScaleValue(this.fx, svg.defaults.GRADIENT_FX_SCALEDEFAULT)],
+                ['fy', this.ScaleValue(this.fy, svg.defaults.GRADIENT_FY_SCALEDEFAULT)],
+                ['cx', this.ScaleValue(this.cx, svg.defaults.GRADIENT_CX_SCALEDEFAULT)],
+                ['cy', this.ScaleValue(this.cy, svg.defaults.GRADIENT_CY_SCALEDEFAULT)],
+                ['fr', this.ScaleValue(this.fr, svg.defaults.GRADIENT_FR_SCALEDEFAULT, HandleNegative.Floor)],
                 ['r', this.ScaleValue(this.r, svg.defaults.GRADIENT_R_SCALEDEFAULT)],
                 ['gradientUnits', this.gradientUnits],
                 ['gradientTransform', this.gradientTransform],
@@ -1027,7 +1050,7 @@ class svgGradientStop extends svg.element {
      * or {@linkcode data}, because color the modification will be 
      * applied and then reset in {@linkcode data}. 
      * 
-     * If this stop's {@linkcode offset} is > `100` and the next stop's
+     * If this stop's {@linkcode offset} is > `100` and the prev stop's
      * is < `100`, lerp this offset's color by the delta between this
      * offset, the previous offset, and where `0` lies between. This 
      * "simulates" the gradient stop being further out than it is. 
@@ -1040,6 +1063,7 @@ class svgGradientStop extends svg.element {
      */
     checkPrevStop(prevStop) {
         if (prevStop == null) { return; }
+        prevStop.offset
     }
     /**
      * Accommodates the next stop in the array, given the 0 - 100 

@@ -2,7 +2,7 @@ import * as cmp from "../components";
 import * as ui from '../ui';
 import * as txt from '../text';
 import { svgHTMLAsset, svgShape, svgGradient, svgRect, svgDefinition, svgViewBox, svgMaskDefinition, svgImageDefinition, svgElement } from "../svg/index";
-import { ColorToArray, ColorToRGBA, EnsureColorValid, isBlank, SetElementEnabled } from "../lilutils";
+import { ColorToArray, ColorToRGBA, EnsureColorValid, isBlank, SetElementEnabled, StringToNumber } from "../lilutils";
 import { DemoGradient } from "./uiDataPageBase";
 import { mapImg } from "../assetExporter";
 
@@ -181,12 +181,26 @@ function CreatePatternSection(section) {
 
     alphaLayer1.gradient.isRadial = true;
 
+    let fx = new cmp.Slider('fx',(value)=>{alphaLayer1.gradient.fx=`${value}%`;},StringToNumber(alphaLayer1.gradient.fx));
+    let fy = new cmp.Slider('fy',(value)=>{alphaLayer1.gradient.fy=`${value}%`;},StringToNumber(alphaLayer1.gradient.fy));
+    let cx = new cmp.Slider('cx',(value)=>{alphaLayer1.gradient.cx=`${value}%`;},StringToNumber(alphaLayer1.gradient.cx));
+    let cy = new cmp.Slider('cy',(value)=>{alphaLayer1.gradient.cy=`${value}%`;},StringToNumber(alphaLayer1.gradient.cy));
+    let fr = new cmp.Slider('fr',(value)=>{alphaLayer1.gradient.fr=`${value}%`;},StringToNumber(alphaLayer1.gradient.fr));
+    let r = new cmp.Slider('r',(value)=>{alphaLayer1.gradient.r=`${value}%`;},StringToNumber(alphaLayer1.gradient.r));
+
     section.appendChild(sharpness);
-    section.appendChild(angle);
+    // section.appendChild(angle);
     section.appendChild(scale);
-    section.appendChild(pivot);
+    // section.appendChild(pivot);
     section.appendChild(offset);
     section.appendChild(mirror);
+
+    section.appendChild(fx);
+    section.appendChild(fy);
+    section.appendChild(cx);
+    section.appendChild(cy);
+    section.appendChild(fr);
+    section.appendChild(r);
 
     // TODO: replace multi references to an SVG shape with a use URL reference
     // Issue URL: https://github.com/nickyonge/evto-web/issues/67
