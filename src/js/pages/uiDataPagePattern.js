@@ -179,7 +179,7 @@ function CreatePatternSection(section) {
 
     alphaLayer1.gradient.anglePivotPoint = { x: 50, y: 50 };
 
-    // alphaLayer1.gradient.isRadial = true;
+    alphaLayer1.gradient.isRadial = true;
 
     section.appendChild(sharpness);
     section.appendChild(angle);
@@ -187,43 +187,6 @@ function CreatePatternSection(section) {
     section.appendChild(pivot);
     section.appendChild(offset);
     section.appendChild(mirror);
-
-
-    // testing ColorToRGBA 
-    console.log("RGBA 1: " + ColorToRGBA('rgba(27,72,27,0.72)'));
-    console.log("RGBA 2: " + ColorToRGBA('rgb(213,213,213)'));
-    console.log("RGBA 3: " + ColorToRGBA('#69696969'));
-    console.log("RGBA 4: " + ColorToRGBA('#f2a1b3'));
-    console.log("RGBA 5: " + ColorToRGBA('hwb(200 10% 5% / 0.69)'));
-    console.log("RGBA 6: " + ColorToRGBA('cornflowerblue'));
-    console.log("RGBA 7: " + ColorToRGBA('hsla(69, 100%, 69%, 69%)'));
-    console.log("RGBA 8: " + ColorToRGBA('i should be null!'));
-
-    return;
-
-    // basic param definitions 
-    let width = 1000;
-    let height = width / 2;
-
-    // html asset
-    patternAlphaSVG = new svgHTMLAsset(null, null, width, height);
-    // svg gradient 
-    patternAlphaGradient = new svgGradient(svgGradient.templates.bw);
-    // mask definition 
-    patternMaskDefinition = new svgMaskDefinition();
-    patternMaskDefinition.id = pMaskID;
-    patternMaskDefinition.gradient = patternAlphaGradient;
-    // image definition 
-    patternImageDefinition = new svgImageDefinition(imageURLLight, pImageID);
-    patternImageDefinition.mask = patternMaskDefinition;
-    // add mask and image to the SVG
-    patternAlphaSVG.definitions.push(patternMaskDefinition, patternImageDefinition);
-    // add SVG to image 
-    patternImage.addSVG(patternAlphaSVG);
-    // modify gradient 
-    patternAlphaGradient.sharpness = 0.75;
-    patternAlphaGradient.angle = 80;
-    patternAlphaGradient.mirror = true;
 
     // TODO: replace multi references to an SVG shape with a use URL reference
     // Issue URL: https://github.com/nickyonge/evto-web/issues/67
