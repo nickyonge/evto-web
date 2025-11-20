@@ -207,7 +207,10 @@ export class ImageField extends TitledComponent {
     }
 
     /**
+     * Gets the index of the given image if it's associated {@link getImgSrc source URL} 
+     * is found in this ImageField's `#addedImgs` array.
      * 
+     * If not found, returns `-1`
      * @param {string | pathNode | HTMLElement | ImageAlphaLayer | ImageContainer} imgSrc `src` value for the image
      * @returns {number}
      */
@@ -241,41 +244,45 @@ export class ImageField extends TitledComponent {
         return removed != null;
     }
 
-    // /**
-    //  * 
-    //  * @param {ImageAlphaLayer} imageAlphaLayer 
-    //  * @returns {boolean}
-    //  */
-    // addAlphaLayer(imageAlphaLayer) {
-    //     if (imageAlphaLayer == null) { return false; }
-    //     if (!this.allowDuplicateAlphaLayers) {
-    //         if (this.hasAlphaLayer(imageAlphaLayer)) {
-    //             return false;
-    //         }
-    //     }
-    //     this.#addedAlphaLayers.push(imageAlphaLayer);
-    //     return true;
-    // }
-    // /**
-    //  * 
-    //  * @param {ImageAlphaLayer} imageAlphaLayer
-    //  * @returns {boolean} 
-    //  */
-    // removeAlphaLayer(imageAlphaLayer) {
-    //     // TODO: Remove ImageAlphaLayer from ImageField component 
-    //     Issue URL: https://github.com/nickyonge/evto-web/issues/76
-    //     throw new Error("Not Yet Implemented, removeAlphaLayer functionality not done");
-    // }
-    // hasAlphaLayer(imageAlphaLayer) { return this.#getAlphaLayerIndex(imageAlphaLayer) > -1; }
-    // #getAlphaLayerIndex(imageAlphaLayer) {
-    //     if (imageAlphaLayer == null) { return -1; }
-    //     for (let i = 0; i < this.#addedAlphaLayers.length; i++) {
-    //         if (this.#addedAlphaLayers[i] === imageAlphaLayer) {
-    //             return i;
-    //         }
-    //     }
-    //     return -1;
-    // }
+    /**
+     * Adds the given {@linkcode ImageAlphaLayer} to this {@linkcode ImageField}. 
+     * - Convenience for type {@linkcode ImageAlphaLayer}, just calls {@linkcode addImage}
+     * @param {ImageAlphaLayer} imageAlphaLayer 
+     * @returns {ImageContainer}
+     */
+    addAlphaLayer(imageAlphaLayer) {
+        if (imageAlphaLayer == null) { return null; }
+        return this.addImage(imageAlphaLayer);
+    }
+    /**
+     * Removes the given {@linkcode ImageAlphaLayer} from this {@linkcode ImageField}. 
+     * - Convenience for type {@linkcode ImageAlphaLayer}, just calls {@linkcode removeImage}
+     * @param {ImageAlphaLayer} imageAlphaLayer
+     * @returns {boolean} 
+     */
+    removeAlphaLayer(imageAlphaLayer) {
+        if (imageAlphaLayer == null) { return false; }
+        return this.removeImage(imageAlphaLayer);
+    }
+    /**
+     * Checks if the given {@linkcode ImageAlphaLayer} is found in this {@linkcode ImageField}. 
+     * - Convenience for {@linkcode ImageAlphaLayer}, just checks `this.#getAlphaLayerIndex()`
+     * @param {ImageAlphaLayer} imageAlphaLayer 
+     * @returns {boolean}
+     */
+    hasAlphaLayer(imageAlphaLayer) {
+        return this.#getAlphaLayerIndex(imageAlphaLayer) > -1;
+    }
+    /**
+     * Gets the index of the {@linkcode ImageAlphaLayer} if it's in this {@linkcode ImageField}. 
+     * - Convenience for {@linkcode ImageAlphaLayer}, just calls `this.#getImageIndex`
+     * @param {ImageAlphaLayer} imageAlphaLayer 
+     * @returns {number}
+     */
+    #getAlphaLayerIndex(imageAlphaLayer) {
+        if (imageAlphaLayer == null) { return -1; }
+        return this.#getImageIndex(imageAlphaLayer);
+    }
 
     /**
      * Adds an {@link svgHTMLAsset} to this image container. 
