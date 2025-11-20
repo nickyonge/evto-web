@@ -1,7 +1,6 @@
 import * as cmp from "../components";
 import * as ui from '../ui';
 import * as txt from '../text';
-import { svgHTMLAsset, svgShape, svgGradient, svgRect, svgDefinition, svgViewBox, svgMaskDefinition, svgImageDefinition, svgElement } from "../svg/index";
 import { ColorToArray, ColorToRGBA, EnsureColorValid, isBlank, SetElementEnabled, StringToNumber } from "../lilutils";
 import { DemoGradient } from "./uiDataPageBase";
 import { mapImg } from "../assetExporter";
@@ -51,109 +50,15 @@ export function CreatePagePattern(page) {
     SelectPatternPage(currentSectionNum);
 }
 
-const defaulSVGWidth = 1000;
-const defaulSVGHeight = defaulSVGWidth * 0.5;
-
-let patternAlphaSVG;
-let patternAlphaGradient;
-let patternMaskDefinition;
-let patternImageDefinition;
-
-const pMaskID = 'patternMask';
-const pImageID = 'patternMaskedImage';
 const imageURLLight = mapImg.full.monochrome.light.URL;
 const imageURLDark = mapImg.full.monochrome.dark.URL;
-
-class AlphaLayer {
-
-    /** alpha layer's number (must be unique) @type {number} */
-    number;
-
-    /** URL referencing the image to display @type {string} */
-    imageUrl;
-
-    /** @type {svgHTMLAsset} */
-    svg;
-    /** @type {svgGradient} */
-    gradient;
-    /** @type {svgMaskDefinition} */
-    maskDef;
-    /** @type {svgImageDefinition} */
-    imageDef;
-
-    /** @type {cmp.ImageField} */
-    imageFieldParent;
-
-
-    get opacity() {
-        let imgCont = this.imageFieldParent.getImage(this.imageUrl);
-        if (imgCont != null) { return imgCont.opacity; }
-        return this.svg.opacity;
-    }
-    set opacity(opacity) {
-        let imgCont = this.imageFieldParent.getImage(this.imageUrl);
-        if (imgCont != null) { imgCont.opacity = opacity; }
-        else { this.svg.opacity = opacity; }
-    }
-
-    /**
-     * 
-     * @param {number} number 
-     * @param {string} imageURL 
-     * @param {cmp.ImageField} [imageFieldParent] 
-     * @returns 
-     */
-    constructor(number, imageURL, imageFieldParent) {
-        if (number == null) { console.warn("WARNING: num can't be null when creating alphaLayer", this); return; }
-        if (isBlank(imageURL)) { console.warn("WARNING: imageURL on alphaLayer can't be null/blank", this); return; }
-        this.number = number;
-        this.imageUrl = imageURL;
-        this.#CreateSVG();
-        if (imageFieldParent != null) {
-            this.AddToImageField(imageFieldParent);
-        }
-    }
-
-    #CreateSVG() {
-        // html asset
-        this.svg = new svgHTMLAsset(null, null, defaulSVGWidth, defaulSVGHeight);
-        // svg gradient 
-        this.gradient = new svgGradient(svgGradient.templates.bw);
-        // mask definition 
-        this.maskDef = new svgMaskDefinition();
-        this.maskDef.id = this.#getIDMask;
-        this.maskDef.gradient = this.gradient;
-        // image definition 
-        this.imageDef = new svgImageDefinition(this.imageUrl, this.#getIDImage);
-        this.imageDef.mask = this.maskDef;
-        // add mask and image to the SVG
-        this.svg.definitions.push(this.maskDef, this.imageDef);
-    }
-
-    /**
-     * Add this alphaLayer's {@linkcode svg} to a 
-     * parent {@linkcode cmp.ImageField ImageField} 
-     * @param {cmp.ImageField} imageField 
-     */
-    AddToImageField(imageField) {
-        if (imageField == null) { console.warn("WARNING: can't add alphaLayer to null ImageField", this); return; }
-        if (this.svg == null) { console.warn("WARNING: svg is null on alphaLayer, can't add to ImageField", this); return; }
-        this.imageFieldParent = imageField;
-        // this.imageFieldParent.addImage(this.imageUrl);
-        this.imageFieldParent.addSVG(this.svg);
-    }
-
-    get #getIDMask() { return `__UIDPAL${this.number}_SVG${this.svg.svgInstanceNumber}_MASK`; }
-    get #getIDImage() { return `__UIDPAL${this.number}_SVG${this.svg.svgInstanceNumber}_IMAGE`; }
-
-}
 
 function CreatePatternSection(section) {
     let patternImage = new cmp.ImageField();
     section.appendChild(patternImage);
 
     patternImage.addImage(imageURLDark);
-    let alphaLayer1 = new AlphaLayer(1, imageURLLight, patternImage);
+    let alphaLayer1 = new cmp.ImageAlphaLayer(1, imageURLLight, patternImage);
     alphaLayer1.gradient.sharpness = 0.5;
 
     let sharpness = new cmp.Slider('Sharpness',

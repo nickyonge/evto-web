@@ -3,7 +3,7 @@ import * as ui from "../ui";
 import { BasicComponent, TitledComponent } from "./base";
 
 import demoImageSrc from '../../assets/png/demo-paintings/demopainting1.png';
-import { svgGradient } from "../svg/svgGradient";
+import { svgHTMLAsset, svgShape, svgGradient, svgRect, svgDefinition, svgViewBox, svgMaskDefinition, svgImageDefinition, svgElement } from "../svg/index";
 import * as svg from '../svg/index';
 import { EnsureToNumber, isBlank, isStringAndBlank, isStringNotBlank } from "../lilutils";
 
@@ -11,10 +11,10 @@ export class ImageField extends TitledComponent {
 
     /** @type {ImageContainer[]} */
     #addedImgs = [];
-    /** @type {[svg.htmlAsset,HTMLElement][]} */
+    /** @type {[svgHTMLAsset,HTMLElement][]} */
     #addedSVGs = [];
 
-    /** @returns {(ImageContainer|[svg.htmlAsset,HTMLElement])[]} */
+    /** @returns {(ImageContainer|[svgHTMLAsset,HTMLElement])[]} */
     get #addedAssets() {
         if (this.#addedImgs == null) { this.#addedImgs = []; }
         if (this.#addedSVGs == null) { this.#addedSVGs = []; }
@@ -23,7 +23,7 @@ export class ImageField extends TitledComponent {
 
     /** @type {ImageContainer} */
     #_demoImage;
-    /** @type {svg.htmlAsset} */
+    /** @type {svgHTMLAsset} */
     #_demoSvgRect;
 
     /** Are duplicicate images allowed? Default `true` @returns {boolean} */
@@ -34,14 +34,14 @@ export class ImageField extends TitledComponent {
 
     /**
      * 
-     * @param {string|ImageContainer|svg.htmlAsset|HTMLElement|pathNode|[string,string?]|[pathNode,string?]} [src]
+     * @param {string|ImageContainer|svgHTMLAsset|HTMLElement|pathNode|[string,string?]|[pathNode,string?]} [src]
      * @param {string} [componentTitle] Optional title to add to this component 
      */
     constructor(src, componentTitle) {
         super(componentTitle);
         ui.AddClassesToDOM(this.div, 'imageField', 'container');
         if (src == null) { return; }
-        if (src instanceof svg.htmlAsset) {
+        if (src instanceof svgHTMLAsset) {
             // svgHTMLAsset
             this.addSVG(src);
             return;
@@ -219,7 +219,7 @@ export class ImageField extends TitledComponent {
      * Adds an {@link svgHTMLAsset} to this image container. 
      * Returns whether or not the SVG was successfully added.
      * Will return `false` if svgAsset is null, or if it's already added (and `allowDuplicates` if `false`).
-     * @param {svg.htmlAsset} svgAsset SVG asset to add
+     * @param {svgHTMLAsset} svgAsset SVG asset to add
      * @param {svg.onChange} [onChangeCallback=null] Additional custom callback for when this SVG is modified (if not already assigned) 
      * @param {boolean} [canvasSized=true] Assign the `canvasSizedImg` CSS class, forcing 2:1 aspect ratio? Default `true` 
      * @param {number} [zSort=0] Assignment for z-index CSS class. 0: leave default, >=1: assign class `onTop`, <=0: assign class `onBottom`. Default 0
@@ -244,14 +244,14 @@ export class ImageField extends TitledComponent {
 
     /**
      * 
-     * @param {svg.htmlAsset|HTMLElement} asset Either an `svgHTMLAsset` or its associated div. 
+     * @param {svgHTMLAsset|HTMLElement} asset Either an `svgHTMLAsset` or its associated div. 
      * @returns {boolean}
      */
     removeSVG(asset) {
         if (asset == null) { return false; }
         let index = this.#getSVGIndex(asset);
         if (index == -1) { return false; }
-        /** @type {[svg.htmlAsset,HTMLElement]} */
+        /** @type {[svgHTMLAsset,HTMLElement]} */
         let removedArray = this.#addedSVGs.removeAt(index);
         if (removedArray == null) { return false; }
         removedArray[0] = null; // gosh I hate "just set it to null" as the deletion method 
@@ -323,7 +323,7 @@ export class ImageField extends TitledComponent {
     /**
      * Creates a demo SVG, with an optional array of colors for a gradient 
      * @param  {spreadString} [colors] 
-     * @returns {svg.htmlAsset}
+     * @returns {svgHTMLAsset}
      */
     CreateDemoSVG(...colors) {
         if (this.#_demoSvgRect == null) {
@@ -336,7 +336,7 @@ export class ImageField extends TitledComponent {
     /**
      * Returns the index of the given `svgHTMLAsset` or its associated element.
      * If not found, returns `-1`
-     * @param {svg.htmlAsset|HTMLElement} asset 
+     * @param {svgHTMLAsset|HTMLElement} asset 
      * @returns {number}
      */
     #getSVGIndex(asset) {
@@ -351,8 +351,8 @@ export class ImageField extends TitledComponent {
     }
 
     /**
-     * Has the given {@link svg.htmlAsset svgHTMLAsset} already been added? 
-     * @param {svg.htmlAsset} svgAsset 
+     * Has the given {@link svgHTMLAsset svgHTMLAsset} already been added? 
+     * @param {svgHTMLAsset} svgAsset 
      * @returns {boolean}
      */
     hasSVG(svgAsset) {
@@ -493,3 +493,91 @@ export class ImageContainer {
         this.parent = null;
     }
 }
+
+const defaulSVGWidth = 1000;
+const defaulSVGHeight = defaulSVGWidth * 0.5;
+
+export class ImageAlphaLayer {
+
+    /** alpha layer's number (must be unique) @type {number} */
+    number;
+
+    /** URL referencing the image to display @type {string} */
+    imageUrl;
+
+    /** @type {svgHTMLAsset} */
+    svg;
+    /** @type {svgGradient} */
+    gradient;
+    /** @type {svgMaskDefinition} */
+    maskDef;
+    /** @type {svgImageDefinition} */
+    imageDef;
+
+    /** @type {ImageField} */
+    imageFieldParent;
+
+
+    get opacity() {
+        let imgCont = this.imageFieldParent.getImage(this.imageUrl);
+        if (imgCont != null) { return imgCont.opacity; }
+        return this.svg.opacity;
+    }
+    set opacity(opacity) {
+        let imgCont = this.imageFieldParent.getImage(this.imageUrl);
+        if (imgCont != null) { imgCont.opacity = opacity; }
+        else { this.svg.opacity = opacity; }
+    }
+
+    /**
+     * 
+     * @param {number} number 
+     * @param {string} imageURL 
+     * @param {ImageField} [imageFieldParent] 
+     * @returns 
+     */
+    constructor(number, imageURL, imageFieldParent) {
+        if (number == null) { console.warn("WARNING: num can't be null when creating alphaLayer", this); return; }
+        if (isBlank(imageURL)) { console.warn("WARNING: imageURL on alphaLayer can't be null/blank", this); return; }
+        this.number = number;
+        this.imageUrl = imageURL;
+        this.#CreateSVG();
+        if (imageFieldParent != null) {
+            this.AddToImageField(imageFieldParent);
+        }
+    }
+
+    #CreateSVG() {
+        // html asset
+        this.svg = new svgHTMLAsset(null, null, defaulSVGWidth, defaulSVGHeight);
+        // svg gradient 
+        this.gradient = new svgGradient(svgGradient.templates.bw);
+        // mask definition 
+        this.maskDef = new svgMaskDefinition();
+        this.maskDef.id = this.#getIDMask;
+        this.maskDef.gradient = this.gradient;
+        // image definition 
+        this.imageDef = new svgImageDefinition(this.imageUrl, this.#getIDImage);
+        this.imageDef.mask = this.maskDef;
+        // add mask and image to the SVG
+        this.svg.definitions.push(this.maskDef, this.imageDef);
+    }
+
+    /**
+     * Add this alphaLayer's {@linkcode svg} to a 
+     * parent {@linkcode ImageField ImageField} 
+     * @param {ImageField} imageField 
+     */
+    AddToImageField(imageField) {
+        if (imageField == null) { console.warn("WARNING: can't add alphaLayer to null ImageField", this); return; }
+        if (this.svg == null) { console.warn("WARNING: svg is null on alphaLayer, can't add to ImageField", this); return; }
+        this.imageFieldParent = imageField;
+        // this.imageFieldParent.addImage(this.imageUrl);
+        this.imageFieldParent.addSVG(this.svg);
+    }
+
+    get #getIDMask() { return `__UIDPAL${this.number}_SVG${this.svg.svgInstanceNumber}_MASK`; }
+    get #getIDImage() { return `__UIDPAL${this.number}_SVG${this.svg.svgInstanceNumber}_IMAGE`; }
+
+}
+

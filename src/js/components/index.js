@@ -2,7 +2,7 @@ export { CanvasSize } from "./canvassize.js";
 export { ColorPicker } from "./colorpicker.js";
 export { DropdownList } from "./dropdown.js";
 export { HelpIcon } from "./helpicon.js";
-export { ImageField, ImageContainer } from './imagefield.js';
+export { ImageField, ImageContainer, ImageAlphaLayer } from './imagefield.js';
 export { MutliOptionList } from "./multioption.js";
 export { Slider } from "./slider.js";
 export { TextField } from "./textfield.js";
