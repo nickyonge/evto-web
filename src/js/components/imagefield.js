@@ -187,11 +187,9 @@ export class ImageField extends TitledComponent {
      */
     #getImageIndex(imgSrc) {
         let src = this.getImgSrc(imgSrc);
-        console.log("L: " + this.#addedImgs.length + ", \nSrc: " + src + ", \nimgSrc: " + imgSrc);
         if (src == null) { return -1; }
         for (let i = 0; i < this.#addedImgs.length; i++) {
             let addedSrc = this.getImgSrc(this.#addedImgs[i]);
-            console.log("i: " + i + ", eq: " + (addedSrc == src) + ", addedSrc: " + addedSrc + ", src: " + src);
             if (addedSrc == src) {
                 return i;
             }
@@ -366,9 +364,13 @@ export class ImageField extends TitledComponent {
 }
 
 /**
- * @type {'new'|'same'|'clone'}
- */
+ * How should the `element` property in an ImageContainer be assigned, 
+ * when it's passed another ImageContainer in its constructor? 
+ * @type {'new'|'same'|'clone'} */
 const IMGCONT_FROM_IMGCONT_ELEMENT = 'new';
+
+/** What method should be used to apply opacity to an image? @type {'opacity'|'filter'} */
+const IMGCONT_OPACITY_METHOD = 'opacity';
 
 export class ImageContainer {
 
@@ -460,8 +462,20 @@ export class ImageContainer {
     /** Update `src` and `style.opacity` attributes */
     UpdateAttributes() {
         if (!this.#_initialized) { return; }
+        // set URL 
         this.element.setAttribute('src', this.url);
-        this.element.style.opacity = this.opacity;
+
+        // set opacity 
+        switch (IMGCONT_OPACITY_METHOD) {
+            default:
+                console.warn(`WARNING: invalid value for IMGCONT_OPACITY_METHOD: ${IMGCONT_OPACITY_METHOD}, defaulting to 'opacity', investigate`, this);
+            case 'opacity':
+                this.element.style.opacity = this.opacity;
+                break;
+            case 'filter':
+                this.element.style.filter = `alpha(opacity=${this.opacity * 100})`;
+                break;
+        }
     }
 
     /** Get/set the alt value of this ImageContainer's element @returns {string} */

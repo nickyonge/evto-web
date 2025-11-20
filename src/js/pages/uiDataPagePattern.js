@@ -84,12 +84,16 @@ class AlphaLayer {
     /** @type {cmp.ImageField} */
     imageFieldParent;
 
-    /** 
-     * Gets the image associated with the given URL, if it's added to this layer 
-     * @param {string} url URL of the image to receive @returns {cmp.ImageContainer} */
-    getImage(url) {
-        if (this.imageFieldParent == null) { return null; }
-        return this.imageFieldParent.getImage(url);
+
+    get opacity() {
+        let imgCont = this.imageFieldParent.getImage(this.imageUrl);
+        if (imgCont != null) { return imgCont.opacity; }
+        return this.svg.opacity;
+    }
+    set opacity(opacity) {
+        let imgCont = this.imageFieldParent.getImage(this.imageUrl);
+        if (imgCont != null) { imgCont.opacity = opacity; }
+        else { this.svg.opacity = opacity; }
     }
 
     /**
@@ -135,7 +139,7 @@ class AlphaLayer {
         if (imageField == null) { console.warn("WARNING: can't add alphaLayer to null ImageField", this); return; }
         if (this.svg == null) { console.warn("WARNING: svg is null on alphaLayer, can't add to ImageField", this); return; }
         this.imageFieldParent = imageField;
-        this.imageFieldParent.addImage(this.imageUrl);
+        // this.imageFieldParent.addImage(this.imageUrl);
         this.imageFieldParent.addSVG(this.svg);
     }
 
@@ -148,13 +152,9 @@ function CreatePatternSection(section) {
     let patternImage = new cmp.ImageField();
     section.appendChild(patternImage);
 
-    patternImage.addImage(imageURLDark).opacity;
+    patternImage.addImage(imageURLDark);
     let alphaLayer1 = new AlphaLayer(1, imageURLLight, patternImage);
     alphaLayer1.gradient.sharpness = 0.5;
-
-    console.log(alphaLayer1.imageFieldParent);
-    console.log(patternImage.getImage(imageURLLight));
-    alphaLayer1.getImage(imageURLLight).opacity = 0.5;
 
     let sharpness = new cmp.Slider('Sharpness',
         (value) => { alphaLayer1.gradient.sharpness = value; },
@@ -178,7 +178,7 @@ function CreatePatternSection(section) {
         (value) => { alphaLayer1.gradient.scalePivot = value; },
         alphaLayer1.gradient.scalePivot, 0, 100, false, 1);
     pivot.AddUniqueValueOverride(69, 'Nice');
-    
+
     let offset = new cmp.Slider('Offset',
         (value) => { alphaLayer1.gradient.offset = value; },
         alphaLayer1.gradient.offset, -100, 100, false, 1);
@@ -194,12 +194,12 @@ function CreatePatternSection(section) {
 
     // alphaLayer1.gradient.isRadial = true;
 
-    let fx = new cmp.Slider('fx',(value)=>{alphaLayer1.gradient.fx=`${value}%`;},StringToNumber(alphaLayer1.gradient.fx));
-    let fy = new cmp.Slider('fy',(value)=>{alphaLayer1.gradient.fy=`${value}%`;},StringToNumber(alphaLayer1.gradient.fy));
-    let cx = new cmp.Slider('cx',(value)=>{alphaLayer1.gradient.cx=`${value}%`;},StringToNumber(alphaLayer1.gradient.cx));
-    let cy = new cmp.Slider('cy',(value)=>{alphaLayer1.gradient.cy=`${value}%`;},StringToNumber(alphaLayer1.gradient.cy));
-    let fr = new cmp.Slider('fr',(value)=>{alphaLayer1.gradient.fr=`${value}%`;},StringToNumber(alphaLayer1.gradient.fr));
-    let r = new cmp.Slider('r',(value)=>{alphaLayer1.gradient.r=`${value}%`;},StringToNumber(alphaLayer1.gradient.r));
+    let fx = new cmp.Slider('fx', (value) => { alphaLayer1.gradient.fx = `${value}%`; }, StringToNumber(alphaLayer1.gradient.fx));
+    let fy = new cmp.Slider('fy', (value) => { alphaLayer1.gradient.fy = `${value}%`; }, StringToNumber(alphaLayer1.gradient.fy));
+    let cx = new cmp.Slider('cx', (value) => { alphaLayer1.gradient.cx = `${value}%`; }, StringToNumber(alphaLayer1.gradient.cx));
+    let cy = new cmp.Slider('cy', (value) => { alphaLayer1.gradient.cy = `${value}%`; }, StringToNumber(alphaLayer1.gradient.cy));
+    let fr = new cmp.Slider('fr', (value) => { alphaLayer1.gradient.fr = `${value}%`; }, StringToNumber(alphaLayer1.gradient.fr));
+    let r = new cmp.Slider('r', (value) => { alphaLayer1.gradient.r = `${value}%`; }, StringToNumber(alphaLayer1.gradient.r));
 
     section.appendChild(sharpness);
     section.appendChild(angle);
