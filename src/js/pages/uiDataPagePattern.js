@@ -179,7 +179,7 @@ function CreatePatternSection(section) {
 
     alphaLayer1.gradient.anglePivotPoint = { x: 50, y: 50 };
 
-    alphaLayer1.gradient.isRadial = true;
+    // alphaLayer1.gradient.isRadial = true;
 
     let fx = new cmp.Slider('fx',(value)=>{alphaLayer1.gradient.fx=`${value}%`;},StringToNumber(alphaLayer1.gradient.fx));
     let fy = new cmp.Slider('fy',(value)=>{alphaLayer1.gradient.fy=`${value}%`;},StringToNumber(alphaLayer1.gradient.fy));
@@ -189,7 +189,7 @@ function CreatePatternSection(section) {
     let r = new cmp.Slider('r',(value)=>{alphaLayer1.gradient.r=`${value}%`;},StringToNumber(alphaLayer1.gradient.r));
 
     section.appendChild(sharpness);
-    // section.appendChild(angle);
+    section.appendChild(angle);
     section.appendChild(scale);
     // section.appendChild(pivot);
     section.appendChild(offset);

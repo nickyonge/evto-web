@@ -1,4 +1,4 @@
-import { arePoints, EnsureToNumber, isBlank, isPoint, Lerp, RotatePointsAroundPivot, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
+import { arePoints, EnsureToNumber, InverseLerp, isBlank, isPoint, Lerp, RotatePointsAroundPivot, StringContainsNumeric, StringNumericDivider, StringOnlyNumeric, StringToNumber, toPoint } from '../lilutils';
 import * as svg from './index';
 import { svgDefaults, svgElement, svgConfig } from './index';
 
@@ -979,6 +979,11 @@ const HandleNegative = Object.freeze({
     AbsoluteResult: 'absolute',
 });
 
+// TODO: properly implement prev/next svgGradientStop checks 
+/** skip prev/next stop checks, they're a deferred WIP */
+const SKIP_PREVNEXT_STOP_CHECKS = true;
+
+
 class svgGradientStop extends svg.element {
     /** @returns {string} */
     get color() { return this.#_color; }
@@ -1062,8 +1067,20 @@ class svgGradientStop extends svg.element {
      * @param {svgGradientStop} prevStop The previous stop in the array 
      */
     checkPrevStop(prevStop) {
+        if (SKIP_PREVNEXT_STOP_CHECKS) { return; }
+
+        // note: .offset value can be 'auto' which has to be figured out too 
+        console.log("checking prev... offset: " + this.offset + ", prevOff: " + prevStop?.offset);
         if (prevStop == null) { return; }
-        prevStop.offset
+        let offset = EnsureToNumber(this.offset);
+        if (offset <= 100) { return; }
+        let prevOffset = EnsureToNumber(prevStop.offset);
+        if (prevOffset >= 100) { return; }
+        // passed conditional checks 
+        let lerp = Lerp(offset, prevOffset, InverseLerp(prevOffset, offset, 100));
+        console.log("lerp: " + lerp + ", prevOffset: " + prevOffset + ", offset: " + offset);
+        
+        throw new Error(`Not Yet Implemented, prev gradient stop for blending`);
     }
     /**
      * Accommodates the next stop in the array, given the 0 - 100 
@@ -1085,7 +1102,10 @@ class svgGradientStop extends svg.element {
      * @param {svgGradientStop} nextStop The next stop in the array 
      */
     checkNextStop(nextStop) {
+        if (SKIP_PREVNEXT_STOP_CHECKS) { return; }
         if (nextStop == null) return;
+
+        throw new Error(`Not Yet Implemented, next gradient stop for blending`);
     }
 
     /**
@@ -1201,5 +1221,4 @@ class svgGradientStop extends svg.element {
         }
         return newStop;
     }
-
 }

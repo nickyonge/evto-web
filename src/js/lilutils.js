@@ -201,24 +201,27 @@ export const StringContainsAlpha = str => (isStringNotBlank(str) && /[a-zA-Z]/.t
  * @param {string} str string to check @returns {boolean} */
 export const StringOnlyAlphanumeric = str => (isStringNotBlank(str) && /^[a-zA-Z0-9]+$/.test(str));
 /** Checks if string contains ONLY numerical characters 
- * @param {string} str string to check @returns {boolean} */
+ * @param {string} str string to check 
+ * @param {boolean} [allowDecimalPoint=true] should a decimal point be considered? 
+ * @param {boolean} [allowNegativeSign=true] should a negative be considered? 
+ * @returns {boolean} */
 export function StringOnlyNumeric(str, allowNegativeSign = true, allowDecimalPoint = true) {
     if (!isStringNotBlank(str)) { return false; }
     if (allowNegativeSign) {
         if (allowDecimalPoint) {
             // allow negative, allow decimal 
-            return /^-?[1-9]\d*(\.\d+)?$/.test(str);
+            return /^-?[0-9]\d*(\.\d+)?$/.test(str);
         } else {
             // allow negative, refuse decimal 
-            return /^-?[1-9]\d*$/.test(str);
+            return /^-?[0-9]\d*$/.test(str);
         }
     } else {
         if (allowDecimalPoint) {
             // refuse negative, allow decimal 
-            return /^[1-9]\d*(\.\d+)?$/.test(str);
+            return /^[0-9]\d*(\.\d+)?$/.test(str);
         } else {
             // refuse negative, refuse decimal 
-            return /^[1-9]\d*$/.test(str);
+            return /^[0-9]\d*$/.test(str);
         }
     }
 }
@@ -226,11 +229,33 @@ export function StringOnlyNumeric(str, allowNegativeSign = true, allowDecimalPoi
  * @param {string} str string to check @returns {boolean} */
 export const StringOnlyAlpha = str => (isStringNotBlank(str) && /^[a-zA-Z]+$/.test(str));
 
-/** checks if the given string has any numbers in it, and if so, 
+/** 
+ * Checks if the given string has any numbers in it, and if so, 
  * returns the index of the first number found. Otherwise, returns -1 
- * @param {string} str string to check @returns {number} */
-export const StringIndexOfFirstNumber = str => {
-    if (!isStringNotBlank(str)) { return -1 }; return str.search(/[0-9]/);
+ * @param {string} str string to check 
+ * @param {boolean} [allowNegativeSign=true] 
+ * Should a negative sign be consdered the start of a number? Default `true`
+ * @param {boolean} [allowDecimalStart=true] 
+ * Can a decimal count as the start of the number? Eg, `.5` as opposed to `0.5`) 
+ * - **Note:** If this is `false` but {@linkcode allowNegativeSign} is `true`, 
+ * a string of `"-.5"` will return `2` as the first index, as the `.` is not 
+ * preceeded by a number.
+ * @returns {number} */
+export function StringIndexOfFirstNumber(str, allowNegativeSign = true, allowDecimalStart = true) {
+    if (!isStringNotBlank(str)) { return -1 };
+    if (allowNegativeSign) {
+        if (allowDecimalStart) {
+            return str.search(/-?\d?[.]?\d+/);
+        } else {
+            return str.search(/-?\d+/);
+        }
+    } else {
+        if (allowDecimalStart) {
+            return str.search(/\d?[.]?\d+/);
+        } else {
+            return str.search(/\d+/);
+        }
+    }
 };
 
 /** Splits a string into an array of alternating numeric and
