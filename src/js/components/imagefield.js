@@ -9,26 +9,32 @@ import { EnsureToNumber, isBlank, isStringAndBlank, isStringNotBlank } from "../
 
 export class ImageField extends TitledComponent {
 
-    /** @type {HTMLElement[]} */
+    /** @type {ImageContainer[]} */
     #addedImgs = [];
     /** @type {[svg.htmlAsset,HTMLElement][]} */
     #addedSVGs = [];
 
-    /** @returns {(HTMLElement|[svg.htmlAsset,HTMLElement])[]} */
+    /** @returns {(ImageContainer|[svg.htmlAsset,HTMLElement])[]} */
     get #addedAssets() {
         if (this.#addedImgs == null) { this.#addedImgs = []; }
         if (this.#addedSVGs == null) { this.#addedSVGs = []; }
         return [...this.#addedImgs, ...this.#addedSVGs];
     }
 
-    /** @type {HTMLElement} */
+    /** @type {ImageContainer} */
     #_demoImage;
     /** @type {svg.htmlAsset} */
     #_demoSvgRect;
 
+    /** Are duplicicate images allowed? Default `true` @returns {boolean} */
+    get allowDuplicateImages() { return this.allowDuplicateImages; }
+    set allowDuplicateImages(v) { this.allowDuplicateImages = v; }
+    /** @type {boolean} */
+    #_allowDuplicateImages = true;
+
     /**
      * 
-     * @param {string|svg.htmlAsset|HTMLElement|pathNode|[string,string]|[pathNode,string]} [src]
+     * @param {string|ImageContainer|svg.htmlAsset|HTMLElement|pathNode|[string,string?]|[pathNode,string?]} [src]
      * @param {string} [componentTitle] Optional title to add to this component 
      */
     constructor(src, componentTitle) {
@@ -39,13 +45,19 @@ export class ImageField extends TitledComponent {
             // svgHTMLAsset
             this.addSVG(src);
             return;
-        }
-        if (Array.isArray(src)) {
-            // [string,string] or [pathNode,string]
-            this.addImage(src[0], src[1]);
+        } else if (Array.isArray(src)) {
+            // [string,string?] or [pathNode,string?]
+            switch (src.length) {
+                case 1:
+                    this.addImage(src[0]);
+                    break;
+                case 2:
+                    this.addImage(src[0], src[1]);
+                    break;
+            }
             return;
         }
-        // string, HTMLElement, or pathNode
+        // string, ImageContainier, HTMLElement, or pathNode
         this.addImage(src);
     }
 
@@ -58,29 +70,41 @@ export class ImageField extends TitledComponent {
      * - `string`, used directly as the value for `src` attribute
      * - `pathNode`, retrieves the `URL` element from the `pathNode`
      * - `HTMLElement`, uses this element instead of creating a new one 
-     * @param {string | pathNode | HTMLElement} imgSrc Value to add to the "src" attribute to the new img 
+     * @param {string | pathNode | HTMLElement | ImageContainer} imgSrc Value to add to the "src" attribute to the new img 
      * @param {string} [alt=null] Alt text to provide to the new img (optional) 
      * @param {boolean} [canvasSized=true] Assign the `canvasSizedImg` CSS class, forcing 2:1 aspect ratio? Default `true` 
      * @param {number} [zSort=0] Assignment for z-index CSS class. 0: leave default, >=1: assign class `onTop`, <=0: assign class `onBottom`. Default 0
      * @param {...string} extraClasses Optional extra classes to add to image  
-     * @returns {HTMLElement|null}
+     * @returns {ImageContainer|null}
      * @see {@link ui.CreateImage}
      */
     addImage(imgSrc, alt = null, canvasSized = true, zSort = 0, ...extraClasses) {
         if (imgSrc == null) { return null; }
-        /** @type {HTMLElement} */ let img;
-        if (imgSrc instanceof HTMLElement) {
-            // pre-existing 
-            img = imgSrc;
+        /** @type {ImageContainer} */ let img;
+        img = this.getImage(imgSrc);
+        if (img == null) {
+            // new image, carry on 
         } else {
+            // existing image, check if duplicate images are allowed 
+            if (!this.allowDuplicateImages) { return; }
+        }
+        // prepare image type 
+        if (imgSrc instanceof HTMLElement) {
+            // pre-existing element 
+            img = new ImageContainer(this, imgSrc, alt);
+        } else if (imgSrc instanceof ImageContainer) {
+            // pre-existing ImageContainer 
+            img = new ImageContainer(this, imgSrc, alt);
+        } else {
+            // string or pathNode 
             let src = typeof imgSrc === 'string' ? imgSrc : imgSrc.URL;
             if (src == null) { return null; }
             src = src.trim();
             if (isBlank(src)) { return null; }
-            img = ui.CreateImage(src, alt);
+            img = new ImageContainer(this, src, alt);
         }
         this.#prepareHTMLElementImage(img, canvasSized, zSort, ...extraClasses);
-        this.div.appendChild(img);
+        this.div.appendChild(img.element);
         this.#addedImgs.push(img);
         return img;
     }
@@ -88,8 +112,8 @@ export class ImageField extends TitledComponent {
     /**
      * Gets the given image element, identified by source URL/pathNode/element, 
      * if it's found in this ImageField?
-     * @param {string | pathNode | HTMLElement | number} imgSrc `src` value for the image (or index of the image)
-     * @returns {HTMLElement | null}
+     * @param {string | pathNode | HTMLElement | ImageContainer | number} imgSrc `src` value for the image (or index of the image)
+     * @returns {ImageContainer | null}
      */
     getImage(imgSrc) {
         let i = typeof imgSrc === 'number' ? imgSrc : this.#getImageIndex(imgSrc);
@@ -99,7 +123,7 @@ export class ImageField extends TitledComponent {
 
     /**
      * is the given image, identified by source URL/pathNode/element, in this ImageField?
-     * @param {string | pathNode | HTMLElement} imgSrc `src` value for the image
+     * @param {string | pathNode | ImageContainer | HTMLElement} imgSrc `src` value for the image
      * @returns {boolean}
      */
     hasImage(imgSrc) {
@@ -107,14 +131,25 @@ export class ImageField extends TitledComponent {
     }
 
     /**
-     * Extract the source from a given imgSrc, either `string`, `pathNode`, or `HTMLElement`. Returns `null` if src can't be found
-     * @param {string | pathNode | HTMLElement} imgSrc `src` value input. If just a string, returns itself - otherwise, extracts the `src` value as needed 
+     * Extract the source from a given imgSrc, either `string`, `ImageContainer`, `pathNode`, or `HTMLElement`. Returns `null` if src can't be found
+     * @param {string | pathNode | ImageContainer | HTMLElement} imgSrc `src` value input. If just a string, returns itself - otherwise, extracts the `src` value as needed 
      * @returns {string | null}
      */
     getImgSrc(imgSrc) {
+        return ImageField.GetImageSource(imgSrc);
+    }
+
+    /**
+     * Extract the source from a given imgSrc, either `string`, `ImageContainer`, `pathNode`, or `HTMLElement`. Returns `null` if src can't be found
+     * @param {string | pathNode | ImageContainer | HTMLElement} imgSrc `src` value input. If just a string, returns itself - otherwise, extracts the `src` value as needed 
+     * @returns {string | null}
+     */
+    static GetImageSource(imgSrc) {
         if (imgSrc == null) { return null; }
         if (typeof imgSrc === 'string') { return imgSrc; }
-        if (imgSrc instanceof HTMLElement) {
+        if (imgSrc instanceof ImageContainer) {
+            return imgSrc.url;
+        } else if (imgSrc instanceof HTMLElement) {
             // HTMLElement, get src attribute 
             return ui.GetAttribute(imgSrc, 'src');
         }
@@ -123,15 +158,40 @@ export class ImageField extends TitledComponent {
     }
 
     /**
+     * Extract the source from a given imgSrc, either `string`, `ImageContainer`, `pathNode`, or `HTMLElement`. Returns `null` if src can't be found
+     * @param {string | pathNode | ImageContainer | HTMLElement} imgSrc `src` value input. If just a string, returns itself - otherwise, extracts the `src` value as needed 
+     * @returns {string | null}
+     */
+    GetImageAltFromSrc(imgSrc) {
+        if (imgSrc == null) { return null; }
+        let img = this.getImage(imgSrc);
+        if (imgSrc != null) {
+            return img.alt;
+        }
+        // not already added, check child types for embedded alt 
+        if (imgSrc instanceof ImageContainer) {
+            // ImageContainer should have its own alt 
+            return imgSrc.alt;
+        } else if (imgSrc instanceof HTMLElement) {
+            // HTMLElement, get alt attribute 
+            return ui.GetAttribute(imgSrc, 'alt');
+        }
+        // nothing found 
+        return null;
+    }
+
+    /**
      * 
-     * @param {string | pathNode | HTMLElement} imgSrc `src` value for the image
+     * @param {string | pathNode | HTMLElement | ImageContainer} imgSrc `src` value for the image
      * @returns {number}
      */
     #getImageIndex(imgSrc) {
         let src = this.getImgSrc(imgSrc);
+        console.log("L: " + this.#addedImgs.length + ", \nSrc: " + src + ", \nimgSrc: " + imgSrc);
         if (src == null) { return -1; }
         for (let i = 0; i < this.#addedImgs.length; i++) {
             let addedSrc = this.getImgSrc(this.#addedImgs[i]);
+            console.log("i: " + i + ", eq: " + (addedSrc == src) + ", addedSrc: " + addedSrc + ", src: " + src);
             if (addedSrc == src) {
                 return i;
             }
@@ -142,7 +202,7 @@ export class ImageField extends TitledComponent {
     /**
      * Remove the given image by source URL/pathNode/HTMLElement. 
      * Returns `true` if image was successfully found and removed.
-     * @param {string | pathNode | HTMLElement} imgSrc `src` value for the image
+     * @param {string | pathNode | HTMLElement | ImageContainer} imgSrc `src` value for the image
      * @returns {boolean} `true` if the image was removed, `false` if not (either because it couldn't be removed or it wasn't found)
      */
     removeImage(imgSrc) {
@@ -211,13 +271,16 @@ export class ImageField extends TitledComponent {
         if (div == null) { return false; }
         let assets = this.#addedAssets;
         for (let i = 0; i < assets.length; i++) {
-            if (Array.isArray(assets[i])) {
-                if (assets[i][1] === div) {
+            let a = assets[i];
+            if (Array.isArray(a)) {
+                if (a[1] === div) {
                     return this.removeSVG(div);
                 }
-            } else {
-                if (assets[i] === div) {
-                    return this.removeImage(div);
+            } else if (a instanceof ImageContainer) {
+                if (a.element === div) {
+                    let removed = this.removeImage(a);
+                    a = null;
+                    return removed;
                 }
             }
         }
@@ -225,13 +288,17 @@ export class ImageField extends TitledComponent {
     }
 
     /** Prep an HTMLElement to be added 
-     * @param {HTMLElement} element HTMLElement to prepare 
+     * @param {HTMLElement|ImageContainer} element HTMLElement to prepare 
      * @param {boolean} [canvasSized=true] is this element canvas-sized (2:1)? Default `true` 
      * @param {number} zSort Z-sorting? 0/null/default=none, -1/<0=onBottom, 1/>0=onTop
      * @param  {...string} extraClasses Any additional CSS classes to add 
+     * @returns {void}
      */
     #prepareHTMLElementImage(element, canvasSized = true, zSort = 0, ...extraClasses) {
         if (element == null) { return; }
+        if (element instanceof ImageContainer) {
+            element = element.element;
+        }
         ui.AddClassesToDOM(element, 'image');
         if (canvasSized) { ui.AddClassesToDOM(element, 'canvasSizedImg'); }
         zSort = EnsureToNumber(zSort, false); // z-index sorting 
@@ -296,4 +363,119 @@ export class ImageField extends TitledComponent {
 
     get demoImage() { return this.CreateDemoImage(); }
     get demoSVG() { return this.CreateDemoSVG(); }
+}
+
+/**
+ * @type {'new'|'same'|'clone'}
+ */
+const IMGCONT_FROM_IMGCONT_ELEMENT = 'new';
+
+export class ImageContainer {
+
+    /** URL value for the image @returns {string} */
+    get url() { return this.#_url; }
+    /** @param {string} url  */
+    set url(url) { this.#_url = url; this.UpdateAttributes(); }
+    /** URL value for the image @type {string} */
+    #_url;
+    /** Image opacity, from `0.0` to `1.0` @returns {number} */
+    get opacity() { return this.#_opacity; }
+    /** @param {number} opacity  */
+    set opacity(opacity) { this.#_opacity = opacity; this.UpdateAttributes(); }
+    /** Image opacity @type {number} */
+    #_opacity = 1;
+    /** HTMLElement this image is added to @returns {HTMLElement} */
+    get element() { return this.#_element; }
+    /** @param {HTMLElement} element  */
+    set element(element) { this.#_element = element; this.UpdateAttributes(); }
+    /** HTMLElement this image is added to @type {HTMLElement} */
+    #_element;
+
+    /** 
+     * Parent {@linkcode ImageField} of this container. Does not 
+     * need to be assigned immediately, but must be assigned before 
+     * it can be used in the document. @returns {ImageField}
+    */
+    get parent() { return this.#_parent; }
+    /** @param {ImageField} parent  */
+    set parent(parent) { this.#_parent = parent; }
+    /** @type {ImageField} */
+    #_parent;
+
+    /** Flag for initialization, to prevent pre-init updates */
+    #_initialized = false;
+
+    /**
+     * 
+     * @param {ImageField|ImageContainer} parent 
+     * @param {string|HTMLElement|pathNode|ImageContainer} imgSrc 
+     * @param {string} [alt=undefined] Alt text for image (optional) 
+     */
+    constructor(parent, imgSrc, alt = undefined) {
+        // determine parent 
+        if (parent == null) {
+            // parent will need to be assigned later  
+        } else if (parent instanceof ImageContainer) {
+            this.parent = parent.parent;
+        } else {
+            this.parent = parent;
+        }
+        // get URL 
+        this.url = ImageField.GetImageSource(imgSrc);
+        // determine source type for element 
+        if (typeof imgSrc === 'string') {
+            // url 
+            this.element = ui.CreateImage(imgSrc, alt);
+        } else if (imgSrc instanceof ImageContainer) {
+            // ImageContainer copy (create new)
+            switch (IMGCONT_FROM_IMGCONT_ELEMENT) {
+                default:
+                    console.warn(`WARNING: invalid value for IMGCONT_FROM_IMGCONT_ELEMENT: ${IMGCONT_FROM_IMGCONT_ELEMENT}, defaulting to 'new', investigate`, this);
+                case 'new':
+                    if (alt == null) { alt = imgSrc.alt; }
+                    this.element = ui.CreateImage(this.url, alt);
+                    break;
+                case 'same':
+                    this.element = imgSrc.element;
+                    if (alt != null) { this.element.setAttribute('alt', alt); }
+                    break;
+                case 'clone':
+                    this.element = /** @type {HTMLElement} */ (imgSrc.element.cloneNode(false));
+                    if (alt != null) { this.element.setAttribute('alt', alt); }
+                    break;
+            }
+        } else if (imgSrc instanceof HTMLElement) {
+            // element 
+            this.element = imgSrc;
+            if (alt != null) { this.element.setAttribute('alt', alt); }
+        } else {
+            // pathNode 
+            this.element = ui.CreateImage(imgSrc.URL, alt);
+        }
+        // confirm init, ensure attributes are correct 
+        this.#_initialized = true;
+        this.UpdateAttributes();
+    }
+
+    /** Update `src` and `style.opacity` attributes */
+    UpdateAttributes() {
+        if (!this.#_initialized) { return; }
+        this.element.setAttribute('src', this.url);
+        this.element.style.opacity = this.opacity;
+    }
+
+    /** Get/set the alt value of this ImageContainer's element @returns {string} */
+    get alt() { return this.element.getAttribute('alt'); }
+    /** @param {string} alt New alt value to set */
+    set alt(alt) { this.element.setAttribute('alt', alt); }
+
+    /** Remove and delete this ImageContainer's {@linkcode element}, and set {@linkcode parent} to `null` */
+    remove() {
+        if (this.element != null) {
+            this.element.remove();
+            this.element = null;
+        }
+        this.url = null;
+        this.parent = null;
+    }
 }

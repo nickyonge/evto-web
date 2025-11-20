@@ -84,6 +84,14 @@ class AlphaLayer {
     /** @type {cmp.ImageField} */
     imageFieldParent;
 
+    /** 
+     * Gets the image associated with the given URL, if it's added to this layer 
+     * @param {string} url URL of the image to receive @returns {cmp.ImageContainer} */
+    getImage(url) {
+        if (this.imageFieldParent == null) { return null; }
+        return this.imageFieldParent.getImage(url);
+    }
+
     /**
      * 
      * @param {number} number 
@@ -127,6 +135,7 @@ class AlphaLayer {
         if (imageField == null) { console.warn("WARNING: can't add alphaLayer to null ImageField", this); return; }
         if (this.svg == null) { console.warn("WARNING: svg is null on alphaLayer, can't add to ImageField", this); return; }
         this.imageFieldParent = imageField;
+        this.imageFieldParent.addImage(this.imageUrl);
         this.imageFieldParent.addSVG(this.svg);
     }
 
@@ -139,9 +148,13 @@ function CreatePatternSection(section) {
     let patternImage = new cmp.ImageField();
     section.appendChild(patternImage);
 
-    patternImage.addImage(imageURLDark);
+    patternImage.addImage(imageURLDark).opacity;
     let alphaLayer1 = new AlphaLayer(1, imageURLLight, patternImage);
     alphaLayer1.gradient.sharpness = 0.5;
+
+    console.log(alphaLayer1.imageFieldParent);
+    console.log(patternImage.getImage(imageURLLight));
+    alphaLayer1.getImage(imageURLLight).opacity = 0.5;
 
     let sharpness = new cmp.Slider('Sharpness',
         (value) => { alphaLayer1.gradient.sharpness = value; },
