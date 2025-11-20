@@ -1,12 +1,11 @@
 import { isBlank } from '../lilutils';
-import * as svg from './index';
-import { svgShape, svgConfig, svgGradient } from './index';
+import { svgShape, svgConfig, svgGradient, svgElement } from './index';
 
 /** 
  * Class representing an SVG definition, typically found in an SVG's `<defs>`
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/defs
  */
-export class svgDefinition extends svg.element {
+export class svgDefinition extends svgElement {
 
     /** 
      * The type of this definition (aka, what will be put in the `<defs>` tag). 
@@ -32,7 +31,7 @@ export class svgDefinition extends svg.element {
     // TODO: svgDef subDefinitions AddSubDef, RemoveSubDef, Get, Has, etc 
     // Issue URL: https://github.com/nickyonge/evto-web/issues/65
 
-    /** Array of elements contained in this SVG's `<defs>` @type {svg.definition[]} */
+    /** Array of elements contained in this SVG's `<defs>` @type {svgDefinition[]} */
     get subDefinitions() {
         if (this.#_subDefinitions == null) { this.#_subDefinitions = []; }
         return this.#_subDefinitions;
@@ -40,7 +39,7 @@ export class svgDefinition extends svg.element {
     set subDefinitions(v) {
         let prev = this.#_subDefinitions;
         if (v == null) {
-            if (svg.config.ARRAY_SET_NULL_CREATES_EMPTY_ARRAY) {
+            if (svgConfig.ARRAY_SET_NULL_CREATES_EMPTY_ARRAY) {
                 v = [];
             } else {
                 this.#_subDefinitions = null;
@@ -57,7 +56,7 @@ export class svgDefinition extends svg.element {
         this.#_subDefinitions.onChange = this.arrayChanged;
         this.changed('definitions', v, prev);
     }
-    /** @type {svg.definition[]} */
+    /** @type {svgDefinition[]} */
     #_subDefinitions;
 
     /** Additional attributes to include in the path, 
@@ -70,7 +69,7 @@ export class svgDefinition extends svg.element {
     set extraAttributes(v) {
         let prev = this.#_extraAttributes;
         if (v == null) {
-            if (svg.config.ARRAY_SET_NULL_CREATES_EMPTY_ARRAY) {
+            if (svgConfig.ARRAY_SET_NULL_CREATES_EMPTY_ARRAY) {
                 v = [];
             } else {
                 this.#_extraAttributes = null;
@@ -319,11 +318,11 @@ export class svgDefinition extends svg.element {
      * @returns {string}
      */
     get html() {
-        if (svg.config.HTML_WARN_DEFS_NO_ID && isBlank(this.id)) {
+        if (svgConfig.HTML_WARN_DEFS_NO_ID && isBlank(this.id)) {
             // check if definition lacks an ID 
             console.warn(`WARNING: svgDefinition doesn't have an assigned id value, and won't be able to be externally referenced`, this);
         }
-        if (svg.config.HTML_WARN_DEFS_NO_DEFTYPE && isBlank(this.defType)) {
+        if (svgConfig.HTML_WARN_DEFS_NO_DEFTYPE && isBlank(this.defType)) {
             // check if definition lacks an ID 
             console.warn(`WARNING: svgDefinition doesn't have an assigned definition type (defType), can't produce HTML`, this);
         }
@@ -384,7 +383,7 @@ export class svgDefinition extends svg.element {
                 if (!isBlank(subHTML)) {
                     subHTML = this.IndentHTML(subHTML, this._subDefinitionIndent);
                     h += subHTML;
-                    if (svg.config.HTML_NEWLINE) { h += '\n'; }
+                    if (svgConfig.HTML_NEWLINE) { h += '\n'; }
                 }
             }
         }
