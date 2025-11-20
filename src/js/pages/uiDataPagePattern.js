@@ -57,6 +57,7 @@ function CreatePatternSection(section) {
     let patternImage = new cmp.ImageField();
     section.appendChild(patternImage);
 
+    
     patternImage.addImage(imageURLDark);
     let alphaLayer1 = new cmp.ImageAlphaLayer(1, imageURLLight, patternImage);
     alphaLayer1.gradient.sharpness = 0.5;

@@ -14,7 +14,7 @@ export class ImageField extends TitledComponent {
     /** @type {[svgHTMLAsset,HTMLElement][]} */
     #addedSVGs = [];
 
-    /** @returns {(ImageContainer|[svgHTMLAsset,HTMLElement])[]} */
+    /** @returns {(ImageContainer|[svgHTMLAsset,HTMLElement]|ImageAlphaLayer)[]} */
     get #addedAssets() {
         if (this.#addedImgs == null) { this.#addedImgs = []; }
         if (this.#addedSVGs == null) { this.#addedSVGs = []; }
@@ -26,11 +26,23 @@ export class ImageField extends TitledComponent {
     /** @type {svgHTMLAsset} */
     #_demoSvgRect;
 
-    /** Are duplicicate images allowed? Default `true` @returns {boolean} */
+    /** 
+     * Are duplicicate images allowed? Default `true` @returns {boolean} 
+     * - **Note:** Just prevents addition of new duplicate images, 
+     * does not remove any pre-existing duplicates. */
     get allowDuplicateImages() { return this.#_allowDuplicateImages; }
     set allowDuplicateImages(v) { this.#_allowDuplicateImages = v; }
     /** @type {boolean} */
     #_allowDuplicateImages = true;
+
+    /** 
+     * Are duplicicate {@linkcode ImageAlphaLayer} allowed? Default `false` @returns {boolean}
+     * - **Note:** Just prevents addition of new duplicate alpha layers, 
+     * does not remove any pre-existing duplicates. */
+    get allowDuplicateAlphaLayers() { return this.#_allowDuplicateAlphaLayers; }
+    set allowDuplicateAlphaLayers(v) { this.#_allowDuplicateAlphaLayers = v; }
+    /** @type {boolean} */
+    #_allowDuplicateAlphaLayers = false;
 
     /**
      * 
@@ -70,7 +82,7 @@ export class ImageField extends TitledComponent {
      * - `string`, used directly as the value for `src` attribute
      * - `pathNode`, retrieves the `URL` element from the `pathNode`
      * - `HTMLElement`, uses this element instead of creating a new one 
-     * @param {string | pathNode | HTMLElement | ImageContainer} imgSrc Value to add to the "src" attribute to the new img 
+     * @param {string | pathNode | HTMLElement | ImageContainer | ImageAlphaLayer} imgSrc Value to add to the "src" attribute to the new img 
      * @param {string} [alt=null] Alt text to provide to the new img (optional) 
      * @param {boolean} [canvasSized=true] Assign the `canvasSizedImg` CSS class, forcing 2:1 aspect ratio? Default `true` 
      * @param {number} [zSort=0] Assignment for z-index CSS class. 0: leave default, >=1: assign class `onTop`, <=0: assign class `onBottom`. Default 0
@@ -86,10 +98,17 @@ export class ImageField extends TitledComponent {
             // new image, carry on 
         } else {
             // existing image, check if duplicate images are allowed 
-            if (!this.allowDuplicateImages) { return; }
+            if (imgSrc instanceof ImageAlphaLayer) {
+                if (!this.allowDuplicateAlphaLayers) { return; }
+            } else {
+                if (!this.allowDuplicateImages) { return; }
+            }
         }
         // prepare image type 
-        if (imgSrc instanceof HTMLElement) {
+        if (imgSrc instanceof ImageAlphaLayer) {
+            // ImageAlphaLayer 
+            img = new ImageContainer(this, imgSrc, alt);
+        } else if (imgSrc instanceof HTMLElement) {
             // pre-existing element 
             img = new ImageContainer(this, imgSrc, alt);
         } else if (imgSrc instanceof ImageContainer) {
@@ -103,8 +122,10 @@ export class ImageField extends TitledComponent {
             if (isBlank(src)) { return null; }
             img = new ImageContainer(this, src, alt);
         }
-        this.#prepareHTMLElementImage(img, canvasSized, zSort, ...extraClasses);
-        this.div.appendChild(img.element);
+        if (!(imgSrc instanceof ImageAlphaLayer)) {
+            this.#prepareHTMLElementImage(img, canvasSized, zSort, ...extraClasses);
+            this.div.appendChild(img.element);
+        }
         this.#addedImgs.push(img);
         return img;
     }
@@ -112,7 +133,7 @@ export class ImageField extends TitledComponent {
     /**
      * Gets the given image element, identified by source URL/pathNode/element, 
      * if it's found in this ImageField?
-     * @param {string | pathNode | HTMLElement | ImageContainer | number} imgSrc `src` value for the image (or index of the image)
+     * @param {string | pathNode | HTMLElement | ImageContainer | ImageAlphaLayer | number} imgSrc `src` value for the image (or index of the image)
      * @returns {ImageContainer | null}
      */
     getImage(imgSrc) {
@@ -123,7 +144,7 @@ export class ImageField extends TitledComponent {
 
     /**
      * is the given image, identified by source URL/pathNode/element, in this ImageField?
-     * @param {string | pathNode | ImageContainer | HTMLElement} imgSrc `src` value for the image
+     * @param {string | pathNode | ImageContainer | ImageAlphaLayer | HTMLElement} imgSrc `src` value for the image
      * @returns {boolean}
      */
     hasImage(imgSrc) {
@@ -132,7 +153,7 @@ export class ImageField extends TitledComponent {
 
     /**
      * Extract the source from a given imgSrc, either `string`, `ImageContainer`, `pathNode`, or `HTMLElement`. Returns `null` if src can't be found
-     * @param {string | pathNode | ImageContainer | HTMLElement} imgSrc `src` value input. If just a string, returns itself - otherwise, extracts the `src` value as needed 
+     * @param {string | pathNode | ImageContainer | ImageAlphaLayer | HTMLElement} imgSrc `src` value input. If just a string, returns itself - otherwise, extracts the `src` value as needed 
      * @returns {string | null}
      */
     getImgSrc(imgSrc) {
@@ -141,7 +162,7 @@ export class ImageField extends TitledComponent {
 
     /**
      * Extract the source from a given imgSrc, either `string`, `ImageContainer`, `pathNode`, or `HTMLElement`. Returns `null` if src can't be found
-     * @param {string | pathNode | ImageContainer | HTMLElement} imgSrc `src` value input. If just a string, returns itself - otherwise, extracts the `src` value as needed 
+     * @param {string | pathNode | ImageContainer | ImageAlphaLayer | HTMLElement} imgSrc `src` value input. If just a string, returns itself - otherwise, extracts the `src` value as needed 
      * @returns {string | null}
      */
     static GetImageSource(imgSrc) {
@@ -152,6 +173,9 @@ export class ImageField extends TitledComponent {
         } else if (imgSrc instanceof HTMLElement) {
             // HTMLElement, get src attribute 
             return ui.GetAttribute(imgSrc, 'src');
+        } else if (imgSrc instanceof ImageAlphaLayer) {
+            // ImageAlphaLayer 
+            return imgSrc.imageURL;
         }
         // process of elimination, pathNode
         return imgSrc['URL'] ? imgSrc.URL : null;
@@ -159,7 +183,7 @@ export class ImageField extends TitledComponent {
 
     /**
      * Extract the source from a given imgSrc, either `string`, `ImageContainer`, `pathNode`, or `HTMLElement`. Returns `null` if src can't be found
-     * @param {string | pathNode | ImageContainer | HTMLElement} imgSrc `src` value input. If just a string, returns itself - otherwise, extracts the `src` value as needed 
+     * @param {string | pathNode | ImageContainer | ImageAlphaLayer | HTMLElement} imgSrc `src` value input. If just a string, returns itself - otherwise, extracts the `src` value as needed 
      * @returns {string | null}
      */
     GetImageAltFromSrc(imgSrc) {
@@ -175,6 +199,8 @@ export class ImageField extends TitledComponent {
         } else if (imgSrc instanceof HTMLElement) {
             // HTMLElement, get alt attribute 
             return ui.GetAttribute(imgSrc, 'alt');
+        } else if (imgSrc instanceof ImageAlphaLayer) {
+            return imgSrc.alt;
         }
         // nothing found 
         return null;
@@ -182,7 +208,7 @@ export class ImageField extends TitledComponent {
 
     /**
      * 
-     * @param {string | pathNode | HTMLElement | ImageContainer} imgSrc `src` value for the image
+     * @param {string | pathNode | HTMLElement | ImageAlphaLayer | ImageContainer} imgSrc `src` value for the image
      * @returns {number}
      */
     #getImageIndex(imgSrc) {
@@ -200,7 +226,7 @@ export class ImageField extends TitledComponent {
     /**
      * Remove the given image by source URL/pathNode/HTMLElement. 
      * Returns `true` if image was successfully found and removed.
-     * @param {string | pathNode | HTMLElement | ImageContainer} imgSrc `src` value for the image
+     * @param {string | pathNode | HTMLElement | ImageAlphaLayer | ImageContainer} imgSrc `src` value for the image
      * @returns {boolean} `true` if the image was removed, `false` if not (either because it couldn't be removed or it wasn't found)
      */
     removeImage(imgSrc) {
@@ -212,8 +238,43 @@ export class ImageField extends TitledComponent {
         // found index and image, remove from array, delete image 
         let removed = this.#addedImgs.remove(img) != null;
         img.remove();
-        return removed;
+        return removed != null;
     }
+
+    // /**
+    //  * 
+    //  * @param {ImageAlphaLayer} imageAlphaLayer 
+    //  * @returns {boolean}
+    //  */
+    // addAlphaLayer(imageAlphaLayer) {
+    //     if (imageAlphaLayer == null) { return false; }
+    //     if (!this.allowDuplicateAlphaLayers) {
+    //         if (this.hasAlphaLayer(imageAlphaLayer)) {
+    //             return false;
+    //         }
+    //     }
+    //     this.#addedAlphaLayers.push(imageAlphaLayer);
+    //     return true;
+    // }
+    // /**
+    //  * 
+    //  * @param {ImageAlphaLayer} imageAlphaLayer
+    //  * @returns {boolean} 
+    //  */
+    // removeAlphaLayer(imageAlphaLayer) {
+    //     // TODO: Remove ImageAlphaLayer from ImageField component 
+    //     throw new Error("Not Yet Implemented, removeAlphaLayer functionality not done");
+    // }
+    // hasAlphaLayer(imageAlphaLayer) { return this.#getAlphaLayerIndex(imageAlphaLayer) > -1; }
+    // #getAlphaLayerIndex(imageAlphaLayer) {
+    //     if (imageAlphaLayer == null) { return -1; }
+    //     for (let i = 0; i < this.#addedAlphaLayers.length; i++) {
+    //         if (this.#addedAlphaLayers[i] === imageAlphaLayer) {
+    //             return i;
+    //         }
+    //     }
+    //     return -1;
+    // }
 
     /**
      * Adds an {@link svgHTMLAsset} to this image container. 
@@ -375,23 +436,51 @@ const IMGCONT_OPACITY_METHOD = 'opacity';
 export class ImageContainer {
 
     /** URL value for the image @returns {string} */
-    get url() { return this.#_url; }
+    get url() {
+        if (this.alphaLayer != null) {
+            // defer to alphaLayer if present 
+            return this.alphaLayer.imageURL;
+        }
+        return this.#_url;
+    }
     /** @param {string} url  */
-    set url(url) { this.#_url = url; this.UpdateAttributes(); }
+    set url(url) {
+        if (this.alphaLayer != null) {
+            this.alphaLayer.imageURL = url;
+        }
+        this.#_url = url;// backup 
+        this.UpdateAttributes();
+    }
     /** URL value for the image @type {string} */
     #_url;
     /** Image opacity, from `0.0` to `1.0` @returns {number} */
     get opacity() { return this.#_opacity; }
     /** @param {number} opacity  */
-    set opacity(opacity) { this.#_opacity = opacity; this.UpdateAttributes(); }
+    set opacity(opacity) { if (opacity == this.#_opacity) { return; } this.#_opacity = opacity; this.UpdateAttributes(); }
     /** Image opacity @type {number} */
     #_opacity = 1;
+
     /** HTMLElement this image is added to @returns {HTMLElement} */
     get element() { return this.#_element; }
     /** @param {HTMLElement} element  */
     set element(element) { this.#_element = element; this.UpdateAttributes(); }
     /** HTMLElement this image is added to @type {HTMLElement} */
     #_element;
+
+    /** ImageAlphaLayer @returns {ImageAlphaLayer} */
+    get alphaLayer() { return this.#_alphaLayer; }
+    /** @param {ImageAlphaLayer} alphaLayer  */
+    set alphaLayer(alphaLayer) {
+        if (alphaLayer === this.#_alphaLayer) { return; }
+        if (this.#_alphaLayer != null && this.#_alphaLayer.imageContainer == this) {
+            this.#_alphaLayer.imageContainer = null;
+        }
+        this.#_alphaLayer = alphaLayer;
+        this.#_alphaLayer.imageContainer = this;
+        this.UpdateAttributes();
+    }
+    /** @type {ImageAlphaLayer} */
+    #_alphaLayer;
 
     /** 
      * Parent {@linkcode ImageField} of this container. Does not 
@@ -410,7 +499,7 @@ export class ImageContainer {
     /**
      * 
      * @param {ImageField|ImageContainer} parent 
-     * @param {string|HTMLElement|pathNode|ImageContainer} imgSrc 
+     * @param {string|HTMLElement|pathNode|ImageContainer|ImageAlphaLayer} imgSrc 
      * @param {string} [alt=undefined] Alt text for image (optional) 
      */
     constructor(parent, imgSrc, alt = undefined) {
@@ -428,6 +517,10 @@ export class ImageContainer {
         if (typeof imgSrc === 'string') {
             // url 
             this.element = ui.CreateImage(imgSrc, alt);
+        } else if (imgSrc instanceof ImageAlphaLayer) {
+            // ImageAlphaLayer 
+            this.element = null;
+            this.alphaLayer = imgSrc;
         } else if (imgSrc instanceof ImageContainer) {
             // ImageContainer copy (create new)
             switch (IMGCONT_FROM_IMGCONT_ELEMENT) {
@@ -462,19 +555,26 @@ export class ImageContainer {
     /** Update `src` and `style.opacity` attributes */
     UpdateAttributes() {
         if (!this.#_initialized) { return; }
-        // set URL 
-        this.element.setAttribute('src', this.url);
-
-        // set opacity 
-        switch (IMGCONT_OPACITY_METHOD) {
-            default:
-                console.warn(`WARNING: invalid value for IMGCONT_OPACITY_METHOD: ${IMGCONT_OPACITY_METHOD}, defaulting to 'opacity', investigate`, this);
-            case 'opacity':
-                this.element.style.opacity = this.opacity;
-                break;
-            case 'filter':
-                this.element.style.filter = `alpha(opacity=${this.opacity * 100})`;
-                break;
+        // element 
+        if (this.element != null) {
+            // set element URL 
+            this.element.setAttribute('src', this.url);
+            // set element opacity 
+            switch (IMGCONT_OPACITY_METHOD) {
+                default:
+                    console.warn(`WARNING: invalid value for IMGCONT_OPACITY_METHOD: ${IMGCONT_OPACITY_METHOD}, defaulting to 'opacity', investigate`, this);
+                case 'opacity':
+                    this.element.style.opacity = this.opacity;
+                    break;
+                case 'filter':
+                    this.element.style.filter = `alpha(opacity=${this.opacity * 100})`;
+                    break;
+            }
+        }
+        // ImageAlphaLayer 
+        if (this.alphaLayer != null) {
+            this.alphaLayer.imageURL = this.url;
+            this.alphaLayer.opacity = this.opacity;
         }
     }
 
@@ -503,7 +603,11 @@ export class ImageAlphaLayer {
     number;
 
     /** URL referencing the image to display @type {string} */
-    imageUrl;
+    get imageURL() { return this.#_imageURL; }
+    /** @param {string} url  */
+    set imageURL(url) { this.#_imageURL = url; }
+    /** @type {string} */
+    #_imageURL;
 
     /** @type {svgHTMLAsset} */
     svg;
@@ -517,16 +621,96 @@ export class ImageAlphaLayer {
     /** @type {ImageField} */
     imageFieldParent;
 
+    /** @type {ImageContainer} */
+    imageContainer;
 
+    /** @type {string} */
+    alt = null;
+
+
+    /** @type {'svg'|'image'} */
+    getOpacityPreference = 'svg';
+    /** @type {'svg'|'image'|'both'} */
+    setOpacityProtocol = 'svg';
+
+    /** @returns {number} */
     get opacity() {
-        let imgCont = this.imageFieldParent.getImage(this.imageUrl);
-        if (imgCont != null) { return imgCont.opacity; }
-        return this.svg.opacity;
+        let os = this.opacityImage;
+        let oi = this.opacityImage;
+        if (this.getOpacityPreference == 'svg' || this.getOpacityPreference == null) {
+            if (os != null) { return os; }
+            return oi;
+        } else {
+            if (oi != null) { return oi; }
+            return os;
+        }
     }
+    /** @param {number} opacity  */
     set opacity(opacity) {
-        let imgCont = this.imageFieldParent.getImage(this.imageUrl);
-        if (imgCont != null) { imgCont.opacity = opacity; }
-        else { this.svg.opacity = opacity; }
+        if (this.opacityImage != null) {
+            if (this.opacitySVG != null) {
+                switch (this.setOpacityProtocol) {
+                    default:
+                    case 'svg':
+                        this.opacitySVG = opacity;
+                        break;
+                    case 'image':
+                        this.opacityImage = opacity;
+                        break;
+                    case 'both':
+                        this.opacityImage = opacity;
+                        this.opacitySVG = opacity;
+                        break;
+                }
+            } else {
+                this.opacityImage = opacity;
+            }
+        } else if (this.opacitySVG != null) {
+            this.opacitySVG = opacity;
+        }
+    }
+
+    /** @returns {number} */
+    get opacityImage() {
+        if (this.#hasImgCont) { return this.imageContainer.opacity; }
+        return null;
+    }
+    /** @param {number} opacity  */
+    set opacityImage(opacity) {
+        if (this.#hasImgCont) {
+            if (this.imageContainer.opacity != opacity) {
+                this.imageContainer.opacity;
+            }
+        }
+    }
+    /** @returns {number} */
+    get opacitySVG() { return this.svg.opacity; }
+    /** @param {number} opacity  */
+    set opacitySVG(opacity) { if (this.svg.opacity == opacity) { return; } this.svg.opacity = opacity; }
+
+    /** Checks if ImageContainer is found - also assigns it if not found  */
+    get #hasImgCont() {
+        if (this.imageContainer != null) {
+            if (this.imageFieldParent == null) {
+                if (this.imageContainer.parent != null) {
+                    this.imageFieldParent = this.imageContainer.parent;
+                }
+            } else {
+                if (this.imageFieldParent !== this.imageContainer.parent) {
+                    // imagefield and imagecontainer.parent mismatch 
+                    console.warn("WARNING: ImageAlphaLayer mismatch between parent ImgField and ImgCont.parent ImgField, investigate", this);
+                    this.imageFieldParent.addImage(this);
+                }
+            }
+            return true;
+        }
+        if (this.imageFieldParent != null) {
+            this.imageContainer = this.imageFieldParent.getImage(this.imageURL);
+            if (this.imageContainer != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -540,7 +724,7 @@ export class ImageAlphaLayer {
         if (number == null) { console.warn("WARNING: num can't be null when creating alphaLayer", this); return; }
         if (isBlank(imageURL)) { console.warn("WARNING: imageURL on alphaLayer can't be null/blank", this); return; }
         this.number = number;
-        this.imageUrl = imageURL;
+        this.imageURL = imageURL;
         this.#CreateSVG();
         if (imageFieldParent != null) {
             this.AddToImageField(imageFieldParent);
@@ -557,7 +741,7 @@ export class ImageAlphaLayer {
         this.maskDef.id = this.#getIDMask;
         this.maskDef.gradient = this.gradient;
         // image definition 
-        this.imageDef = new svgImageDefinition(this.imageUrl, this.#getIDImage);
+        this.imageDef = new svgImageDefinition(this.imageURL, this.#getIDImage);
         this.imageDef.mask = this.maskDef;
         // add mask and image to the SVG
         this.svg.definitions.push(this.maskDef, this.imageDef);
@@ -572,7 +756,8 @@ export class ImageAlphaLayer {
         if (imageField == null) { console.warn("WARNING: can't add alphaLayer to null ImageField", this); return; }
         if (this.svg == null) { console.warn("WARNING: svg is null on alphaLayer, can't add to ImageField", this); return; }
         this.imageFieldParent = imageField;
-        // this.imageFieldParent.addImage(this.imageUrl);
+        let imageContainer = this.imageFieldParent.addImage(this);
+        if (imageContainer != null) { this.imageContainer = imageContainer; }
         this.imageFieldParent.addSVG(this.svg);
     }
 
@@ -580,4 +765,3 @@ export class ImageAlphaLayer {
     get #getIDImage() { return `__UIDPAL${this.number}_SVG${this.svg.svgInstanceNumber}_IMAGE`; }
 
 }
-
