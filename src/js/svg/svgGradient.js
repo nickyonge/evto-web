@@ -980,6 +980,7 @@ const HandleNegative = Object.freeze({
 });
 
 // TODO: properly implement prev/next svgGradientStop checks 
+// Issue URL: https://github.com/nickyonge/evto-web/issues/75
 /** skip prev/next stop checks, they're a deferred WIP */
 const SKIP_PREVNEXT_STOP_CHECKS = true;
 
