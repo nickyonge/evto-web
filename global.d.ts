@@ -448,6 +448,7 @@ declare global {
         count(countString: string, allowOverlap?: boolean): number;
 
         // TODO: String.prototype.getNumber / getNumbers 
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/74
 
         /**
          * Extracts a number from a string. Returns the first number found, 
