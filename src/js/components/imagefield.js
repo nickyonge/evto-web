@@ -27,8 +27,8 @@ export class ImageField extends TitledComponent {
     #_demoSvgRect;
 
     /** Are duplicicate images allowed? Default `true` @returns {boolean} */
-    get allowDuplicateImages() { return this.allowDuplicateImages; }
-    set allowDuplicateImages(v) { this.allowDuplicateImages = v; }
+    get allowDuplicateImages() { return this.#_allowDuplicateImages; }
+    set allowDuplicateImages(v) { this.#_allowDuplicateImages = v; }
     /** @type {boolean} */
     #_allowDuplicateImages = true;
 
