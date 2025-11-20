@@ -263,6 +263,7 @@ export class ImageField extends TitledComponent {
     //  */
     // removeAlphaLayer(imageAlphaLayer) {
     //     // TODO: Remove ImageAlphaLayer from ImageField component 
+    //     Issue URL: https://github.com/nickyonge/evto-web/issues/76
     //     throw new Error("Not Yet Implemented, removeAlphaLayer functionality not done");
     // }
     // hasAlphaLayer(imageAlphaLayer) { return this.#getAlphaLayerIndex(imageAlphaLayer) > -1; }
