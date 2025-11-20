@@ -447,6 +447,30 @@ declare global {
          */
         count(countString: string, allowOverlap?: boolean): number;
 
+        // TODO: String.prototype.getNumber / getNumbers 
+
+        /**
+         * Extracts a number from a string. Returns the first number found, 
+         * separated by non-numeric characters (eg, `"num1 and num2"`) returns `1`.
+         * If no number is found, returns `null`.
+         * 
+         * To get all numbers in a string, see {@linkcode getNumbers}.
+         * @param allowNegative Are negative values (prefixed with `-`) allowed? Default `true`
+         * @param allowDecimal Are decimal values allowed? Default `true`
+         */
+        // getNumber(allowNegative?: boolean, allowDecimal?: boolean): number;
+
+        /**
+         * Extracts a number from a string. Numbers are separated by any 
+         * non-numeric characters (eg, `"num1 and num2"`) returns `[1,2]`.
+         * If no number is found, returns `[]`.
+         * 
+         * To get the first number in a string, see {@linkcode getNumbers}.
+         * @param allowNegative Are negative values (prefixed with `-`) allowed? Default `true`
+         * @param allowDecimal Are decimal values allowed? Default `true`
+         */
+        // getNumbers(allowNegative?: boolean, allowDecimal?: boolean): number[];
+
     }
     // #endregion String 
 

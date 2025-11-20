@@ -687,6 +687,32 @@ import { isBlank, IsStringNameSafe } from "./lilutils";
         }
     };
 
+    /**
+     * 
+     * @param {boolean} [allowNegative=true] 
+     * @param {boolean} [allowDecimal=true] 
+     * @returns {number}
+     */
+    // String.prototype.getNumber = function (allowNegative = true, allowDecimal = true) {
+    //     throw new Error(`Not Yet Implemented, String.prototype.getNumber`);
+    //     if (this == null || isBlank(this.toString())) { return null; }
+    //     return null;
+    // };
+
+    /**
+     * 
+     * @param {boolean} [allowNegative=true] 
+     * @param {boolean} [allowDecimal=true] 
+     * @returns {number[]}
+     */
+    // String.prototype.getNumbers = function (allowNegative = true, allowDecimal = true) {
+    //     throw new Error(`Not Yet Implemented, String.prototype.getNumbers`);
+    //     return [];
+    // }
+
+    // getNumber(allowNegative?: boolean, allowDecimal?: boolean): number;
+    // getNumbers(allowNegative?: boolean, allowDecimal?: boolean): number[];
+
     // #endregion String 
 
 })();
