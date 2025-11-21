@@ -536,22 +536,49 @@ export class svgElement {
      * let myData = ParseData(array);
      * console.log(myData); // Outputs string: first="1" third="3" blank="" */
     ParseData(data) {
+        let firstRun = false;
+        if (!svgElement.test) {
+            firstRun = true;
+            svgElement.test = true;
+            svgElement.testrun = true;
+            console.log(Array.isArray("test"));
+            /** @type {[string, any]} */
+            let a = ['test', 'testValue'];
+            console.log("1: " + this.ParseData(a));
+            svgElement.testrun = true;
+            console.log("2: " + this.ParseData([a]));
+        }
         let d = isBlank(this.id) ? [] : [this.#ParseDatum('id', this.id)];
         // ensure a single data value is properly converted to array 
         if (data.length == 0) { return d.length == 0 ? '' : d[0]; }
         if ((data.length == 1 || data.length == 2) && !Array.isArray(data[0])) {
             if (data[0] == null && !Array.isArray(data[1])) { return d.length == 0 ? '' : d[0]; }
             if (typeof data[0] === 'string') {
+                console.log("yup " + data.length);
                 if (isBlank(data[0])) { return d.length == 0 ? '' : d[0]; }
-                data = data.length == 2 ? [data[0], data[1]] : [data[0]];
+                data = data.length == 2 ? [[data[0], data[1]]] : [[data[0]]];
             }
         }
+        if (svgElement.testrun) {
+            console.log("data: " + data);
+        }
         data.forEach(datum => {
+            if (svgElement.testrun) {
+                console.log("datum: " + datum);
+            }
             let out = this.#ParseDatum(datum[0], datum[1]);
             if (!isBlank(out)) { d.push(out); }
         });
+        if (svgElement.testrun) {
+            console.log("out: " + d);
+        }
+        svgElement.testrun = false;
         return d.join(' ');
     }
+
+    static test = false;
+    static testrun = false;
+
     /** Parse individual property data for use as an SVG attribute. Returns `''` if invalid.
      * 
      * **Note:** If `value` is an `object`, it will be parsed using `JSON.strngify` 
