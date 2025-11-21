@@ -62,7 +62,7 @@ export class svgFilterDefinition extends svgFilterDefBase {
     /**
      * Container for an {@linkcode svgDefinition} that's 
      * used as a `<filter>` element.
-     * @param {string} id Unique identifier for this svgElement.  
+     * @param {string} [id=undefined] Unique identifier for this svgElement.  
      * 
      * Every svgElement must have a unique ID, but they 
      * will be automatically generated if not manually 
@@ -94,7 +94,7 @@ export class svgFilterPrimitive extends svgFilterDefBase {
     get result() { return this.#_result; }
     set result(v) { if (v == this.#_result) { return; } let prev = this.#_result; this.#_result = v; this.changed('result', v, prev); }
     /** @type {svgTypeResult} */
-    #_result;
+    #_result = svgDefaults.FILTER_PRIMITIVE_RESULT;
 
     constructor(id, defType) {
         super(id, defType);
@@ -123,7 +123,7 @@ export class svgFilterPrimitiveIn extends svgFilterPrimitive {
     get in() { return this.#_in; }
     set in(v) { if (v == this.#_in) { return; } let prev = this.#_in; this.#_in = v; this.changed('in', v, prev); }
     /** @type {svgTypeIn} */
-    #_in;
+    #_in = svgDefaults.FILTER_PRIMITIVE_IN;
 
     get data() {
         return [super.data,
@@ -153,7 +153,7 @@ export class svgFilterPrimitiveIn2 extends svgFilterPrimitive {
     get in2() { return this.#_in2; }
     set in2(v) { if (v == this.#_in2) { return; } let prev = this.#_in2; this.#_in2 = v; this.changed('in2', v, prev); }
     /** @type {svgTypeIn2} */
-    #_in2;
+    #_in2 = svgDefaults.FILTER_PRIMITIVE_IN2;
 
     get data() {
         return [super.data,
@@ -166,29 +166,96 @@ export class svgFilterPrimitiveIn2 extends svgFilterPrimitive {
 
 class svgFilterFEFunction extends svgFilterPrimitive { constructor(id, defType) { super(id, defType); } }
 
+/** The `<feBlend>` SVG filter primitive composes two objects together ruled by a certain blending mode. 
+ * This is similar to what is known from image editing software when blending two layers. 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feBlend */
 export class svgFilterFEBlend extends svgFilterPrimitiveIn2 {
-    constructor(id) { super(id, 'Blend'); }
+
+    /** The mode attribute defines the blending mode.
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/mode
+     * @returns {blendMode} */
+    get mode() { return this.#_mode; }
+    set mode(v) { if (v == this.#_mode) { return; } let prev = this.#_mode; this.#_mode = v; this.changed('mode', v, prev); }
+    /** @type {blendMode} */
+    #_mode = svgDefaults.FILTER_PRIMITIVE_BLEND_MODE;
+
+    /** The `<feBlend>` SVG filter primitive composes two objects together ruled by a certain blending mode. 
+     * This is similar to what is known from image editing software when blending two layers. 
+     * @param {blendMode} mode The mode attribute defines the blending mode.
+     * @param {string} [id]  */
+    constructor(mode, id) { super(id, 'Blend'); this.mode = mode; }
+    get data() { return [super.data, 
+        this.ParseData(['mode', this.mode])].join(' '); }
 }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feColorMatrix */
 export class svgFilterFEColorMatrix extends svgFilterPrimitive { constructor(id) { super(id, 'feColorMatrix'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feComponentTransfer */
 export class svgFilterFEComponentTransfer extends svgFilterPrimitive { constructor(id) { super(id, 'feComponentTransfer'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feComposite */
 export class svgFilterFEComposite extends svgFilterPrimitive { constructor(id) { super(id, 'feComposite'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feConvolveMatrix */
 export class svgFilterFEConvolveMatrix extends svgFilterPrimitive { constructor(id) { super(id, 'feConvolveMatrix'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDiffuseLighting */
 export class svgFilterFEDiffuseLighting extends svgFilterPrimitive { constructor(id) { super(id, 'feDiffuseLighting'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDisplacementMap */
 export class svgFilterFEDisplacementMap extends svgFilterPrimitive { constructor(id) { super(id, 'feDisplacementMap'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDistantLight */
 export class svgFilterFEDistantLight extends svgFilterPrimitive { constructor(id) { super(id, 'feDistantLight'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDropShadow */
 export class svgFilterFEDropShadow extends svgFilterPrimitive { constructor(id) { super(id, 'feDropShadow'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feFlood */
 export class svgFilterFEFlood extends svgFilterPrimitive { constructor(id) { super(id, 'feFlood'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feFuncA */
 export class svgFilterFEFuncA extends svgFilterFEFunction { constructor(id) { super(id, 'feFuncA'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feFuncB */
 export class svgFilterFEFuncB extends svgFilterFEFunction { constructor(id) { super(id, 'feFuncB'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feFuncB */
 export class svgFilterFEFuncG extends svgFilterFEFunction { constructor(id) { super(id, 'feFuncG'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feFuncR */
 export class svgFilterFEFuncR extends svgFilterFEFunction { constructor(id) { super(id, 'feFuncR'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feGaussianBlur */
 export class svgFilterFEGaussianBlur extends svgFilterPrimitive { constructor(id) { super(id, 'feGaussianBlur'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feImage */
 export class svgFilterFEImage extends svgFilterPrimitive { constructor(id) { super(id, 'feImage'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feMerge */
 export class svgFilterFEMerge extends svgFilterPrimitive { constructor(id) { super(id, 'feMerge'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feMergeNode */
 export class svgFilterFEMergeNode extends svgFilterPrimitive { constructor(id) { super(id, 'feMergeNode'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feMorphology */
 export class svgFilterFEMorphology extends svgFilterPrimitive { constructor(id) { super(id, 'feMorphology'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feOffset */
 export class svgFilterFEOffset extends svgFilterPrimitive { constructor(id) { super(id, 'feOffset'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/fePointLight */
 export class svgFilterFEPointLight extends svgFilterPrimitive { constructor(id) { super(id, 'fePointLight'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feSpecularLighting */
 export class svgFilterFESpecularLighting extends svgFilterPrimitive { constructor(id) { super(id, 'feSpecularLighting'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feSpotLight */
 export class svgFilterFESpotlight extends svgFilterPrimitive { constructor(id) { super(id, 'feSpotlight'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feTile */
 export class svgFilterFETile extends svgFilterPrimitive { constructor(id) { super(id, 'feTile'); } }
+/** 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feTurbulence */
+export class svgFilterFETurbulence extends svgFilterPrimitive { constructor(id) { super(id, 'feTurbulence'); } }

@@ -96,6 +96,10 @@ export const MASK_AUTOGENERATERECT = true;
 export const FILTER_COLORINTERPOLATIONFILTERS = null;
 export const FILTER_FILTERUNITS = null;
 export const FILTER_PRIMITIVEUNITS = null;
+export const FILTER_PRIMITIVE_IN = null;
+export const FILTER_PRIMITIVE_IN2 = null;
+export const FILTER_PRIMITIVE_RESULT = null;
+export const FILTER_PRIMITIVE_BLEND_MODE = null;
 
 /**
  * Ensures that the given values either have content
