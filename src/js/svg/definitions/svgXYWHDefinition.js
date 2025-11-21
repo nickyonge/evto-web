@@ -1,5 +1,5 @@
 import { svgDefaults, svgElement, svgHTMLAsset, svgViewBox, svgRect, svgGradient, svgConfig } from "../index";
-import { svgDefinition } from "../index";
+import { svgDefinition } from "./index";
 
 // other SVG definitions (elements)
 // see: https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element
