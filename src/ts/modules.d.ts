@@ -78,7 +78,7 @@ declare module '../js/svg/svgElement' {
 
 }
 
-declare module '../js/svg/svgDefinition' {
+declare module '../js/svg/definitions/svgDefinition' {
     
     interface svgDefinition {
 

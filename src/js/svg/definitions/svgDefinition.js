@@ -1,5 +1,5 @@
-import { isBlank } from '../lilutils';
-import { svgShape, svgConfig, svgGradient, svgElement } from './index';
+import { isBlank } from '../../lilutils';
+import { svgShape, svgConfig, svgGradient, svgElement } from '../index';
 
 /** 
  * Class representing an SVG definition, typically found in an SVG's `<defs>`

@@ -1,5 +1,5 @@
-import { svgDefinition, svgDefaults, svgElement, svgHTMLAsset, svgViewBox, svgRect, svgGradient, svgConfig } from "./index";
-import { isBlank, IsStringColor } from "../lilutils";
+import { svgDefinition, svgDefaults, svgElement, svgHTMLAsset, svgViewBox, svgRect, svgGradient, svgConfig } from "../index";
+import { isBlank, IsStringColor } from "../../lilutils";
 
 // other SVG definitions (elements)
 // see: https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element
@@ -641,4 +641,30 @@ export class svgMaskDefinition extends svgXYWHDefinition {
 
 }
 
-// #endregion Mask 
+// #endregion Mask
+
+// #region Filter
+
+/**
+ * Container for an {@linkcode svgDefinition} that's 
+ * used as a `<filter>` element.
+ */
+export class svgFilterDefinition extends svgDefinition {
+
+    /**
+     * Container for an {@linkcode svgDefinition} that's 
+     * used as a `<filter>` element.
+     * @param {string} id Unique identifier for this svgElement.  
+     * 
+     * Every svgElement must have a unique ID, but they 
+     * will be automatically generated if not manually 
+     * assigned in the constructor.
+     */
+    constructor(id = undefined) {
+        super(id, 'filter');
+    }
+
+}
+
+// #endregion Filter 
+
