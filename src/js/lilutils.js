@@ -554,6 +554,28 @@ export function IsNumberInfiniteOrNaN(num) {
     return num === Infinity || num === -Infinity || Number.isNaN(num);
 }
 
+/**
+ * Convert a {@linkcode numberOptionalNumber} value to string. 
+ * 
+ * If the given value is `null`, returns `null`
+ * @param {numberOptionalNumber} numberOptionalNumber Number, or 1-or-2-value number[] array
+ * @param {boolean} [joinWithComma=false] If two numbers, join with comma? 
+ * If `true`, returns `"1, 2"`. If `false`, returns `"1 2"`. Default `false`
+ * @returns {string}
+ */
+export function numberOptionalNumberToString(numberOptionalNumber, joinWithComma = false) {
+    if (numberOptionalNumber == null) { return null; }
+    if (typeof numberOptionalNumber == 'number') {
+        return numberOptionalNumber.toString();
+    }
+    switch (numberOptionalNumber.length) {
+        case 1:
+            return numberOptionalNumber[0].toString();
+        case 2:
+            return numberOptionalNumber.join(' ');
+    }
+}
+
 // #endregion Numbers
 
 // #region Math

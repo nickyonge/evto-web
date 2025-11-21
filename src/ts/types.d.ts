@@ -13,7 +13,7 @@ declare global {
      * @param {string} URL Filepath URL to the given asset, eg `assets/png/myImage.png' 
      * @param {string[]} Children Array of nodes, by name reference, childed to this node
      */
-    type pathNode = _pathNode;
+    declare type pathNode = _pathNode;
 
     /**
      * The `<blend-mode>` CSS data type describes how colors should appear when elements overlap. If unspecified, the default value is typically `normal`. 
@@ -61,7 +61,7 @@ declare global {
      * @see {@linkcode BlendMode} enum
      * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/blend-mode
      */
-    type blendMode =
+    declare type blendMode =
         'normal' |
         'multiply' |
         'screen' |
@@ -78,6 +78,12 @@ declare global {
         'saturation' |
         'color' |
         'luminosity';
+    
+    /**
+     * SVG value used to specify one, or optionally two, paired numbers. 
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/Content_type#number-optional-number
+     */
+    declare type numberOptionalNumber = number | [number, number?];
 }
 
 export { };
