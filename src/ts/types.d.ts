@@ -16,7 +16,7 @@ declare global {
     type pathNode = _pathNode;
 
     /**
-     * The `<blend-mode>` CSS data type describes how colors should appear when elements overlap. 
+     * The `<blend-mode>` CSS data type describes how colors should appear when elements overlap. If unspecified, the default value is typically `normal`. 
      * - **Note:** remember that the attribute name must be `"blend-mode"`, not `"blendMode"` or `"BlendMode"`.
      * @see {@linkcode blendMode blendMode} typedef
      * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/blend-mode
@@ -57,7 +57,7 @@ declare global {
     }
 
     /**
-     * The `<blend-mode>` CSS data type describes how colors should appear when elements overlap. 
+     * The `<blend-mode>` CSS data type describes how colors should appear when elements overlap. If unspecified, the default value is typically `normal`. 
      * @see {@linkcode BlendMode} enum
      * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/blend-mode
      */
