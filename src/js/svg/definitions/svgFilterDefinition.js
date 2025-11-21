@@ -73,39 +73,14 @@ export class svgFilterDefinition extends svgFilterDefBase {
     }
 }
 
+/**
+ * Primitive used as a base class for all SVG filter elements 
+ */
 export class svgFilterPrimitive extends svgFilterDefBase {
 
     /** @typedef {string} FilterPrimitiveReference */
-    /** @typedef {'SourceGraphic'|'SourceAlpha'|'BackgroundImage'|'BackgroundAlpha'|'FillPaint'|'StrokePaint'|FilterPrimitiveReference|null} svgTypeIn */
-    /** @typedef {'SourceGraphic'|'SourceAlpha'|'BackgroundImage'|'BackgroundAlpha'|'FillPaint'|'StrokePaint'|FilterPrimitiveReference|null} svgTypeIn2 */
     /** @typedef {FilterPrimitiveReference|null} svgTypeResult */
 
-    /**
-     * The `in` attribute identifies input for the given filter primitive.
-     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/in
-     * @returns {svgTypeIn}
-     */
-    get in() { return this.#_in; }
-    set in(v) { if (v == this.#_in) { return; } let prev = this.#_in; this.#_in = v; this.changed('in', v, prev); }
-    /** @type {svgTypeIn} */
-    #_in;
-    
-    /**
-     * The `in2` attribute identifies the second input for the given filter primitive. 
-     * It works exactly like the {@linkcode in} attribute.
-     * 
-     * You can use only this attribute with the following SVG elements:
-     * - `feBlend`
-     * - `feComposite`
-     * - `feDisplacementMap`
-     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/in2
-     * @returns {svgTypeIn2}
-     */
-    get in2() { return this.#_in2; }
-    set in2(v) { if (v == this.#_in2) { return; } let prev = this.#_in2; this.#_in2 = v; this.changed('in2', v, prev); }
-    /** @type {svgTypeIn2} */
-    #_in2;
-    
     /**
      * The `result` attribute defines the assigned name for this filter primitive. 
      * If supplied, then graphics that result from processing this filter primitive 
@@ -121,4 +96,99 @@ export class svgFilterPrimitive extends svgFilterDefBase {
     /** @type {svgTypeResult} */
     #_result;
 
-} 
+    constructor(id, defType) {
+        super(id, defType);
+    }
+
+    get data() {
+        return [super.data,
+        this.ParseData([
+            ['result', this.result],
+        ])].join(' ');
+    }
+
+}
+/** 
+ * Primitive used as a base class for all SVG filter elements 
+ * that use the {@linkcode in} attribute. */
+export class svgFilterPrimitiveIn extends svgFilterPrimitive {
+
+    /** @typedef {'SourceGraphic'|'SourceAlpha'|'BackgroundImage'|'BackgroundAlpha'|'FillPaint'|'StrokePaint'|FilterPrimitiveReference|null} svgTypeIn */
+
+    /**
+     * The `in` attribute identifies input for the given filter primitive.
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/in
+     * @returns {svgTypeIn}
+     */
+    get in() { return this.#_in; }
+    set in(v) { if (v == this.#_in) { return; } let prev = this.#_in; this.#_in = v; this.changed('in', v, prev); }
+    /** @type {svgTypeIn} */
+    #_in;
+
+    get data() {
+        return [super.data,
+        this.ParseData([
+            ['in', this.in],
+        ])].join(' ');
+    }
+}
+/** 
+ * Primitive used as a base class for all SVG filter elements that use the 
+ * {@linkcode svgFilterPrimitiveIn.in in} and {@linkcode in2} attributes. */
+export class svgFilterPrimitiveIn2 extends svgFilterPrimitive {
+
+    /** @typedef {'SourceGraphic'|'SourceAlpha'|'BackgroundImage'|'BackgroundAlpha'|'FillPaint'|'StrokePaint'|FilterPrimitiveReference|null} svgTypeIn2 */
+
+    /**
+     * The `in2` attribute identifies the second input for the given filter primitive. 
+     * It works exactly like the {@linkcode in} attribute.
+     * 
+     * You can use only this attribute with the following SVG elements:
+     * - `feBlend`
+     * - `feComposite`
+     * - `feDisplacementMap`
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/in2
+     * @returns {svgTypeIn2}
+     */
+    get in2() { return this.#_in2; }
+    set in2(v) { if (v == this.#_in2) { return; } let prev = this.#_in2; this.#_in2 = v; this.changed('in2', v, prev); }
+    /** @type {svgTypeIn2} */
+    #_in2;
+
+    get data() {
+        return [super.data,
+        this.ParseData([
+            ['in2', this.in2],
+        ])].join(' ');
+    }
+
+}
+
+class svgFilterFEFunction extends svgFilterPrimitive { constructor(id, defType) { super(id, defType); } }
+
+export class svgFilterFEBlend extends svgFilterPrimitiveIn2 {
+    constructor(id) { super(id, 'Blend'); }
+}
+export class svgFilterFEColorMatrix extends svgFilterPrimitive { constructor(id) { super(id, 'feColorMatrix'); } }
+export class svgFilterFEComponentTransfer extends svgFilterPrimitive { constructor(id) { super(id, 'feComponentTransfer'); } }
+export class svgFilterFEComposite extends svgFilterPrimitive { constructor(id) { super(id, 'feComposite'); } }
+export class svgFilterFEConvolveMatrix extends svgFilterPrimitive { constructor(id) { super(id, 'feConvolveMatrix'); } }
+export class svgFilterFEDiffuseLighting extends svgFilterPrimitive { constructor(id) { super(id, 'feDiffuseLighting'); } }
+export class svgFilterFEDisplacementMap extends svgFilterPrimitive { constructor(id) { super(id, 'feDisplacementMap'); } }
+export class svgFilterFEDistantLight extends svgFilterPrimitive { constructor(id) { super(id, 'feDistantLight'); } }
+export class svgFilterFEDropShadow extends svgFilterPrimitive { constructor(id) { super(id, 'feDropShadow'); } }
+export class svgFilterFEFlood extends svgFilterPrimitive { constructor(id) { super(id, 'feFlood'); } }
+export class svgFilterFEFuncA extends svgFilterFEFunction { constructor(id) { super(id, 'feFuncA'); } }
+export class svgFilterFEFuncB extends svgFilterFEFunction { constructor(id) { super(id, 'feFuncB'); } }
+export class svgFilterFEFuncG extends svgFilterFEFunction { constructor(id) { super(id, 'feFuncG'); } }
+export class svgFilterFEFuncR extends svgFilterFEFunction { constructor(id) { super(id, 'feFuncR'); } }
+export class svgFilterFEGaussianBlur extends svgFilterPrimitive { constructor(id) { super(id, 'feGaussianBlur'); } }
+export class svgFilterFEImage extends svgFilterPrimitive { constructor(id) { super(id, 'feImage'); } }
+export class svgFilterFEMerge extends svgFilterPrimitive { constructor(id) { super(id, 'feMerge'); } }
+export class svgFilterFEMergeNode extends svgFilterPrimitive { constructor(id) { super(id, 'feMergeNode'); } }
+export class svgFilterFEMorphology extends svgFilterPrimitive { constructor(id) { super(id, 'feMorphology'); } }
+export class svgFilterFEOffset extends svgFilterPrimitive { constructor(id) { super(id, 'feOffset'); } }
+export class svgFilterFEPointLight extends svgFilterPrimitive { constructor(id) { super(id, 'fePointLight'); } }
+export class svgFilterFESpecularLighting extends svgFilterPrimitive { constructor(id) { super(id, 'feSpecularLighting'); } }
+export class svgFilterFESpotlight extends svgFilterPrimitive { constructor(id) { super(id, 'feSpotlight'); } }
+export class svgFilterFETile extends svgFilterPrimitive { constructor(id) { super(id, 'feTile'); } }
