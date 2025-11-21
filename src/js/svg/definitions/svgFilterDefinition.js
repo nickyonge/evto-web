@@ -6,19 +6,19 @@ import { svgDefinition, svgXYWHDefinition } from "./index";
  */
 class svgFilterDefBase extends svgXYWHDefinition {
 
-    /** @typedef {null|'userSpaceOnUse '|'objectBoundingBox'} svgTypeFilterUnits */
-    /** @typedef {null|'userSpaceOnUse '|'objectBoundingBox'} svgTypePrimitiveUnits */
-    /** @typedef {null|'auto'|'sRGB'|'linearRGB'} svgTypeColorInterpolationFilters */
+    /** @typedef {null|'userSpaceOnUse '|'objectBoundingBox'} svgType_Filter_FilterUnits */
+    /** @typedef {null|'userSpaceOnUse '|'objectBoundingBox'} svgType_Filter_PrimitiveUnits */
+    /** @typedef {null|'auto'|'sRGB'|'linearRGB'} svgType_Filter_ColorInterpolationFilters */
 
     /**
      * The filterUnits attribute defines the coordinate system for the attributes 
      * {@linkcode x}, {@linkcode y}, {@linkcode width}, and {@linkcode height}.
      * - **Note:** `XYWH` values are stored in the parent {@linkcode svgXYWHDefinition} class. 
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/filterUnits
-     * @returns {svgTypeFilterUnits} */
+     * @returns {svgType_Filter_FilterUnits} */
     get filterUnits() { return this.#_filterUnits; }
     set filterUnits(v) { if (v == this.#_filterUnits) { return; } let prev = this.#_filterUnits; this.#_filterUnits = v; this.changed('filterUnits', v, prev); }
-    /** @type {svgTypeFilterUnits} */
+    /** @type {svgType_Filter_FilterUnits} */
     #_filterUnits = svgDefaults.FILTER_FILTERUNITS;
 
     /**
@@ -26,20 +26,20 @@ class svgFilterDefBase extends svgXYWHDefinition {
      * for the various length values within the filter primitives and 
      * for the attributes that define the filter primitive subregion.
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/primitiveUnits
-     * @returns {svgTypePrimitiveUnits} */
+     * @returns {svgType_Filter_PrimitiveUnits} */
     get primitiveUnits() { return this.#_primitiveUnits; }
     set primitiveUnits(v) { if (v == this.#_primitiveUnits) { return; } let prev = this.#_primitiveUnits; this.#_primitiveUnits = v; this.changed('primitiveUnits', v, prev); }
-    /** @type {svgTypePrimitiveUnits} */
+    /** @type {svgType_Filter_PrimitiveUnits} */
     #_primitiveUnits = svgDefaults.FILTER_PRIMITIVEUNITS;
 
     /**
      * The color-interpolation-filters attribute specifies the color 
      * space for imaging operations performed via filter effects.
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/color-interpolation-filters
-     * @returns {svgTypeColorInterpolationFilters} */
+     * @returns {svgType_Filter_ColorInterpolationFilters} */
     get colorInterpolationFilters() { return this.#_colorInterpolationFilters; }
     set colorInterpolationFilters(v) { if (v == this.#_colorInterpolationFilters) { return; } let prev = this.#_colorInterpolationFilters; this.#_colorInterpolationFilters = v; this.changed('colorInterpolationFilters', v, prev); }
-    /** @type {svgTypeColorInterpolationFilters} */
+    /** @type {svgType_Filter_ColorInterpolationFilters} */
     #_colorInterpolationFilters = svgDefaults.FILTER_COLORINTERPOLATIONFILTERS;
 
     /** Collects and returns all the data relevant to this asset, 
@@ -79,7 +79,7 @@ export class svgFilterDefinition extends svgFilterDefBase {
 export class svgFilterPrimitive extends svgFilterDefBase {
 
     /** @typedef {string} FilterPrimitiveReference */
-    /** @typedef {FilterPrimitiveReference|null} svgTypeResult */
+    /** @typedef {FilterPrimitiveReference|null} svgType_Filter_Result */
 
     /**
      * The `result` attribute defines the assigned name for this filter primitive. 
@@ -89,11 +89,11 @@ export class svgFilterPrimitive extends svgFilterDefBase {
      * the output will only be available for re-use as the implicit input into the next 
      * filter primitive, if it provides no value for its {@linkcode in} attribute.
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/result
-     * @returns {svgTypeResult}
+     * @returns {svgType_Filter_Result}
      */
     get result() { return this.#_result; }
     set result(v) { if (v == this.#_result) { return; } let prev = this.#_result; this.#_result = v; this.changed('result', v, prev); }
-    /** @type {svgTypeResult} */
+    /** @type {svgType_Filter_Result} */
     #_result = svgDefaults.FILTER_PRIMITIVE_RESULT;
 
     constructor(id, defType) {
@@ -113,16 +113,16 @@ export class svgFilterPrimitive extends svgFilterDefBase {
  * that use the {@linkcode in} attribute. */
 export class svgFilterPrimitiveIn extends svgFilterPrimitive {
 
-    /** @typedef {'SourceGraphic'|'SourceAlpha'|'BackgroundImage'|'BackgroundAlpha'|'FillPaint'|'StrokePaint'|FilterPrimitiveReference|null} svgTypeIn */
+    /** @typedef {'SourceGraphic'|'SourceAlpha'|'BackgroundImage'|'BackgroundAlpha'|'FillPaint'|'StrokePaint'|FilterPrimitiveReference|null} svgType_Filter_In */
 
     /**
      * The `in` attribute identifies input for the given filter primitive.
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/in
-     * @returns {svgTypeIn}
+     * @returns {svgType_Filter_In}
      */
     get in() { return this.#_in; }
     set in(v) { if (v == this.#_in) { return; } let prev = this.#_in; this.#_in = v; this.changed('in', v, prev); }
-    /** @type {svgTypeIn} */
+    /** @type {svgType_Filter_In} */
     #_in = svgDefaults.FILTER_PRIMITIVE_IN;
 
     get data() {
@@ -137,7 +137,7 @@ export class svgFilterPrimitiveIn extends svgFilterPrimitive {
  * {@linkcode svgFilterPrimitiveIn.in in} and {@linkcode in2} attributes. */
 export class svgFilterPrimitiveIn2 extends svgFilterPrimitive {
 
-    /** @typedef {'SourceGraphic'|'SourceAlpha'|'BackgroundImage'|'BackgroundAlpha'|'FillPaint'|'StrokePaint'|FilterPrimitiveReference|null} svgTypeIn2 */
+    /** @typedef {'SourceGraphic'|'SourceAlpha'|'BackgroundImage'|'BackgroundAlpha'|'FillPaint'|'StrokePaint'|FilterPrimitiveReference|null} svgType_Filter_In2 */
 
     /**
      * The `in2` attribute identifies the second input for the given filter primitive. 
@@ -148,11 +148,11 @@ export class svgFilterPrimitiveIn2 extends svgFilterPrimitive {
      * - `feComposite`
      * - `feDisplacementMap`
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/in2
-     * @returns {svgTypeIn2}
+     * @returns {svgType_Filter_In2}
      */
     get in2() { return this.#_in2; }
     set in2(v) { if (v == this.#_in2) { return; } let prev = this.#_in2; this.#_in2 = v; this.changed('in2', v, prev); }
-    /** @type {svgTypeIn2} */
+    /** @type {svgType_Filter_In2} */
     #_in2 = svgDefaults.FILTER_PRIMITIVE_IN2;
 
     get data() {
@@ -194,7 +194,11 @@ export class svgFilterFEBlend extends svgFilterPrimitiveIn2 {
 /** The `<feColorMatrix>` SVG filter element changes colors based on a transformation matrix. 
  * Every pixel's color value `[R,G,B,A]` is matrix multiplied by a 5 by 5 color matrix to create new color `[R',G',B',A']`.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feColorMatrix */
-export class svgFilterFEColorMatrix extends svgFilterPrimitive { constructor(id) { super(id, 'feColorMatrix'); } }
+export class svgFilterFEColorMatrix extends svgFilterPrimitive {
+    /** @typedef {''} svgType_Filter_ */
+
+    constructor(id) { super(id, 'feColorMatrix'); }
+}
 /** The `<feComponentTransfer>` SVG filter primitive performs color-component-wise remapping of data for each pixel. 
  * It allows operations like brightness adjustment, contrast adjustment, color balance or thresholding.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feComponentTransfer */
@@ -202,7 +206,7 @@ export class svgFilterFEComponentTransfer extends svgFilterPrimitive { construct
 /** The `<feComposite>` SVG filter primitive performs the combination of two input images pixel-wise in image space.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feComposite */
 export class svgFilterFEComposite extends svgFilterPrimitive {
-    /** @typedef {'over'|'in'|'out'|'atop'|'xor'|'lighter'|'arithmetic'|null} svgTypeOperatorComposite The compositing operation that is to be performed. Default `over` */
+    /** @typedef {'over'|'in'|'out'|'atop'|'xor'|'lighter'|'arithmetic'|null} svgType_Filter_Composite_Operator The compositing operation that is to be performed. Default `over` */
     constructor(id) { super(id, 'feComposite'); }
 }
 /** The `<feConvolveMatrix>` SVG filter primitive applies a matrix convolution filter effect.
@@ -265,7 +269,7 @@ export class svgFilterFEMergeNode extends svgFilterPrimitive { constructor(id) {
 /** The `<feMorphology>` SVG filter primitive is used to erode or dilate the input image.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feMorphology */
 export class svgFilterFEMorphology extends svgFilterPrimitive {
-    /** @typedef {'erode'|'dilate'|null} svgTypeOperatorMorphology Defines whether to erode (i.e., thin) or dilate (fatten) the source graphic. Default `erode` */
+    /** @typedef {'erode'|'dilate'|null} svgType_Filter_Morphology_Operator Defines whether to erode (i.e., thin) or dilate (fatten) the source graphic. Default `erode` */
     constructor(id) { super(id, 'feMorphology'); }
 }
 /** The `<feOffset>` SVG filter primitive enables offsetting an input image relative to its current position.
