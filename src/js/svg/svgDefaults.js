@@ -93,6 +93,10 @@ export const MASK_MASKCONTENTUNITS = null;
 export const MASK_MASKUNITS = null;
 export const MASK_AUTOGENERATERECT = true;
 
+export const FILTER_COLORINTERPOLATIONFILTERS = null;
+export const FILTER_FILTERUNITS = null;
+export const FILTER_PRIMITIVEUNITS = null;
+
 /**
  * Ensures that the given values either have content
  * @param  {spreadString} colors 
