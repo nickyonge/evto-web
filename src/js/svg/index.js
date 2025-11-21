@@ -11,13 +11,10 @@ export {
 
 export {
     svgDefinition, svgDefinition as definition,
-} from './definitions/svgDefinition';
-
-export {
     svgXYWHDefinition, svgXYWHDefinition as xywhDefinition,
     svgMaskDefinition, svgMaskDefinition as maskDefinition,
     svgImageDefinition, svgImageDefinition as imageDefinition,
-} from './definitions/svgSpecialDefs';
+} from './definitions';
 
 export {
     svgShape, svgShape as shape,
