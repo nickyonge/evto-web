@@ -1,6 +1,6 @@
 import { svgDefaults, svgElement, svgHTMLAsset, svgViewBox, svgRect, svgGradient, svgConfig } from "../index";
 import { svgDefinition, svgXYWHDefinition } from "./index";
-import { isBlank, IsStringColor } from "../../lilutils";
+import { GetPreserveAspectRatio, isBlank, IsStringColor } from "../../lilutils";
 
 // other SVG definitions (elements)
 // see: https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element
@@ -38,12 +38,12 @@ export class svgImageDefinition extends svgXYWHDefinition {
      * - **Note:** {@linkcode svgDefaults.IMAGE_PRESERVEASPECTRATIO}
      * is this property's default value. This value is distinct from 
      * {@linkcode svgDefaults.PRESERVEASPECTRATIO}.
-     * @returns {boolean|'none'|`x${'Min'|'Mid'|'Max'}Y${'Min'|'Mid'|'Max'} ${'meet'|'slice'}`|null}
+     * @returns {preserveAspectRatio|boolean|0|1}
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/maskUnits
     */
     get preserveAspectRatio() { return this.#_preserveAspectRatio; }
     set preserveAspectRatio(v) { let prev = this.#_preserveAspectRatio; this.#_preserveAspectRatio = v; this.changed('preserveAspectRatio', v, prev); }
-    /** @type {boolean|'none'|`x${'Min'|'Mid'|'Max'}Y${'Min'|'Mid'|'Max'} ${'meet'|'slice'}`|null} */
+    /** @type {preserveAspectRatio|boolean|0|1} */
     #_preserveAspectRatio = svgDefaults.IMAGE_PRESERVEASPECTRATIO;
 
     /**
@@ -119,7 +119,7 @@ export class svgImageDefinition extends svgXYWHDefinition {
     get data() {
         return [super.data, this.ParseData([
             ['href', this.href],
-            ['preserveAspectRatio', this.preserveAspectRatio],
+            ['preserveAspectRatio', GetPreserveAspectRatio(this.preserveAspectRatio)],
             ['crossorigin', this.crossorigin],
             ['decoding', this.decoding],
             ['mask', this.mask],

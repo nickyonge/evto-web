@@ -96,6 +96,15 @@ declare global {
     declare type rgbaChannel = 'R' | 'G' | 'B' | 'A';
 
     /**
+     * The `preserveAspectRatio` SVG CSS attribute indicates how an element with a viewBox 
+     * providing a given aspect ratio must fit into a viewport with a different aspect ratio. 
+     * 
+     * Syntax: `preserveAspectRatio="<align> [<meet or slice>]"`
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/preserveAspectRatio 
+     */
+    declare type preserveAspectRatio = 'none' | `x${'Min' | 'Mid' | 'Max'}Y${'Min' | 'Mid' | 'Max'} ${'meet' | 'slice'}`;
+
+    /**
      * CSS-valid color string. Can technically by any string value, but this type implies it should be a color. 
      * but intended to be a CSS appropriate color. 
      * @see {@linkcode EnsureColorValid} to check if a string value is a valid color 

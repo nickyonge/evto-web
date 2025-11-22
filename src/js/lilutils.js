@@ -100,6 +100,27 @@ export function IsStringNameSafe(str, varConvention = true, allowSingleUnderscor
     return /^[a-zA-Z_$][0-9a-zA-Z_$]*$/.test(str);
 }
 
+/**
+ * Converts a {@linkcode preserveAspectRatio} or a corresponding 
+ * boolean/number value to a CSS-valid string.
+ * - **Note:** If using a boolean or number, `false` / `0` 
+ * returns `"none"`, and `true` / `1` returns the default 
+ * value, '"xMidYMid meet'. 
+ * @param {preserveAspectRatio|boolean|0|1} preserveAspectRatio 
+ * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/preserveAspectRatio
+ * @returns {preserveAspectRatio}
+ */
+export function GetPreserveAspectRatio(preserveAspectRatio) {
+    if (preserveAspectRatio == null) { return null; }
+    switch (typeof preserveAspectRatio) {
+        case 'boolean':
+            return preserveAspectRatio ? 'xMidYMid meet' : 'none';
+        case 'number':
+            return preserveAspectRatio == 1 ? 'xMidYMax meet' : 'none';
+    }
+    return preserveAspectRatio;
+}
+
 // #endregion Strings
 
 // #region String Num
