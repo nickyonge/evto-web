@@ -1,5 +1,6 @@
 import type { pathNode as _pathNode } from './src/js/assetExporter';
 import { _baseNode } from '../js/assetExporter';
+import { EnsureColorValid, ColorToRGBA, ColorToHex, ColorToArray } from '../js/lilutils';
 
 declare global {
     /**
@@ -84,6 +85,18 @@ declare global {
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/Content_type#number-optional-number
      */
     declare type numberOptionalNumber = number | [number, number?];
+
+    /** Single-char string representing one of the RGBA channels */
+    declare type rgbaChannel = 'R' | 'G' | 'B' | 'A';
+
+    /**
+     * CSS-valid color string. Can technically by any string value, but this type implies it should be a color. 
+     * but intended to be a CSS appropriate color. 
+     * @see {@linkcode EnsureColorValid} to check if a string value is a valid color 
+     * @see {@linkcode ColorToRGBA}, {@linkcode ColorToHex}, and {@linkcode ColorToArray} for usable type conversion 
+     * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/color
+     */
+    declare type color = string;
 }
 
 export { };

@@ -287,7 +287,7 @@ export const StringNumericDivider = str => {
 
 /**
  * Adds an alpha value to a hex code via 0-1 numeric value
- * @param {string} color Hex code formatted color, eg `#FF00FF` 
+ * @param {color} color Hex code formatted color, eg `#FF00FF` 
  * @param {number} opacity Number from 0 to 1 to represent alpha value 
  * @returns Hex code with hex-formatted alpha added
 */
@@ -300,16 +300,16 @@ export function AddAlphaToHex(color, opacity) {
 /**
  * Checks if the string is a valid color. Can either check purely for
  * hex codes (`#FF0000`), or any CSS-safe color string (default).
- * @param {string} str String to check 
+ * @param {color} color Color string to check 
  * @param {boolean} [hexOnly=false] Are only hex colors consdered? 
  * Eg, `#FF0000`. If `false`, any CSS-safe color string can be used, 
  * such as `red` or `rgb(255,0,0)`. Faster but limited. Default `false`
  * @returns {boolean}
  */
-export function IsStringColor(str, hexOnly = false) {
-    if (isBlank(str)) { return false; }
-    if (hexOnly) { return /^#([0-9A-F]{3}|[0-9A-F]{6})$/i.test(str); }
-    return EnsureColorValid(str) != null;
+export function IsStringColor(color, hexOnly = false) {
+    if (isBlank(color)) { return false; }
+    if (hexOnly) { return /^#([0-9A-F]{3}|[0-9A-F]{6})$/i.test(color); }
+    return EnsureColorValid(color) != null;
 }
 
 /** Enum for specifying how to handle alpha values when formatting RGBA */
@@ -336,13 +336,13 @@ const RGBAlpha = Object.freeze({
  *     {@linkcode ColorToRGBA}, or {@linkcode ColorToArray}.
  *   - To determine if a string is a valid color and not return a 
  *     potentially modified version, use {@linkcode IsStringColor}.
- * @param {string} str Color string to check  
- * @returns {string}
+ * @param {color} color Color string to check  
+ * @returns {color}
  */
-export function EnsureColorValid(str) {
-    if (isBlank(str)) { return null; }
+export function EnsureColorValid(color) {
+    if (isBlank(color)) { return null; }
     let span = DummySpan();
-    span.style.color = str;
+    span.style.color = color;
     return isBlank(span.style.color) ? null : span.style.color;
 }
 
@@ -350,10 +350,10 @@ export function EnsureColorValid(str) {
  * Takes any CSS-safe color string (hex, RGB/A, HSL/A, HWB, or name 
  * strings like `"LavenderBlush"`) and returns it as an RGB/A formatted
  * string. 
- * @param {string} colorString Color string to convert to RGBA  
+ * @param {color} color Color string to convert to RGBA  
  * @param {-1|0|1|'exclude'|'ignore'|'include'|`set${number}`} [alpha] 
- * Optional value determining what to do with the alpha value. Default 
- * {@linkcode RGBAlpha.Include}.  
+ * Optional value determining what to do with the alpha value. 
+ * Default {@linkcode RGBAlpha.Include}.  
  * - `-1`, `"exclude"`, and {@linkcode RGBAlpha.Exclude} will omit any 
  * alpha values and return `"rgb(r, g, b)"` 
  * - `1`, `"includue"`, and {@linkcode RGBAlpha.Include} will ensure  
@@ -366,24 +366,24 @@ export function EnsureColorValid(str) {
  * value. Must be between `0` and `100`, will get normalized to 
  * between `0` and `1`, rounded to max three decimals.  
  * Eg, `"set50"` returns `"rgba(r, g, b, 0.5)"`
- * @returns {string} 
+ * @returns {color} 
  */
-export function ColorToRGBA(colorString, alpha = RGBAlpha.Include) {
-    if (isBlank(colorString)) { return null; }
+export function ColorToRGBA(color, alpha = RGBAlpha.Include) {
+    if (isBlank(color)) { return null; }
     // create a dummy, determine basic string validity 
     let span = DummySpan();
-    span.style.color = colorString;
+    span.style.color = color;
     if (isBlank(span.style.color)) { return null; }
     // use getComputedStyle to convert to rgb/a 
     document.body.appendChild(span);
     // let style = getComputedStyle(span);
-    let color = getComputedStyle(span).color?.trim().toLowerCase();
+    let newColor = getComputedStyle(span).color?.trim().toLowerCase();
     // let color = style.color.trim().toLowerCase();
     // let color = style.color;
     document.body.removeChild(span);
-    if (isBlank(color)) { return null; }
+    if (isBlank(newColor)) { return null; }
     // check alpha inclusion 
-    if (alpha == null) { return color; }
+    if (alpha == null) { return newColor; }
     let alphaValue = null;
     /** @param {string} numStr @returns {number} */
     const getAlphaNumber = (numStr) => {
@@ -396,105 +396,147 @@ export function ColorToRGBA(colorString, alpha = RGBAlpha.Include) {
     switch (alpha) {
         case 0:
         case 'ignore':
-            return color;
+            return newColor;
         case -1:
         case 'exclude':
             // ensure we remove alpha if rgba  
-            if (color.startsWith('rgba')) {
-                color = color.replace('a', '');
+            if (newColor.startsWith('rgba')) {
+                newColor = newColor.replace('a', '');
             }
             // remove alpha value 
-            switch (color.count(',')) {
+            switch (newColor.count(',')) {
                 case 2:
                     // already 2 values, only rbg 
                     break;
                 case 3:
                     // remove alpha value 
-                    let commaIndex = color.lastIndexOf(',');
-                    let parenIndex = color.lastIndexOf(')');
+                    let commaIndex = newColor.lastIndexOf(',');
+                    let parenIndex = newColor.lastIndexOf(')');
                     if (commaIndex == -1 || parenIndex == -1) {
-                        console.error(`ERROR: improperly formatted getComputedStyle color output "${color}", returning null, investigate`, this);
+                        console.error(`ERROR: improperly formatted getComputedStyle color output "${newColor}", returning null, investigate`, this);
                         return null;
                     }
-                    let before = color.substring(0, commaIndex);
-                    let after = color.substring(parenIndex);
-                    color = before + after;
+                    let before = newColor.substring(0, commaIndex);
+                    let after = newColor.substring(parenIndex);
+                    newColor = before + after;
                     break;
                 default:
-                    console.warn(`WARNING: irregular number (${color.count(',')}) of comma-delimited values in rgb/a: "${color}", returning null, investigate`, this);
+                    console.warn(`WARNING: irregular number (${newColor.count(',')}) of comma-delimited values in rgb/a: "${newColor}", returning null, investigate`, this);
                     return null;
             }
-            return color;
+            return newColor;
         case 1:
         case 'include':
             // ensure we insert alpha if rgb 
-            if (color.startsWith('rgb(')) {
-                color = 'rgba' + color.substring(3);
+            if (newColor.startsWith('rgb(')) {
+                newColor = 'rgba' + newColor.substring(3);
             }
-            switch (color.count(',')) {
+            switch (newColor.count(',')) {
                 case 2:
                     // add alpha value 
-                    let parenIndex = color.lastIndexOf(')');
-                    color = `${color.substring(0, parenIndex)}, 1.0)`;
+                    let parenIndex = newColor.lastIndexOf(')');
+                    newColor = `${newColor.substring(0, parenIndex)}, 1.0)`;
                     break;
                 case 3:
                     // it's already 3 values, rgba 
                     break;
                 default:
-                    console.warn(`WARNING: irregular number (${color.count(',')}) of comma-delimited values in rgb/a: "${color}", returning null, investigate`, this);
+                    console.warn(`WARNING: irregular number (${newColor.count(',')}) of comma-delimited values in rgb/a: "${newColor}", returning null, investigate`, this);
                     return null;
             }
-            return color;
+            return newColor;
         default:
             // either error, or misformatted set number 
             if (!alpha.startsWith('set')) {
-                console.error(`ERROR: Invalid alpha value ${alpha}, can't determine alpha inclusion, ignoring, returning color "${color}"`, this);
-                return color;
+                console.error(`ERROR: Invalid alpha value ${alpha}, can't determine alpha inclusion, ignoring, returning color "${newColor}"`, this);
+                return newColor;
             }
-            console.warn(`WARNING: alpha set value: ${alpha} for color: "${color}" shouldn't happen, should be set0, alphaValue: ${alphaValue}, investigate`, this);
+            console.warn(`WARNING: alpha set value: ${alpha} for color: "${newColor}" shouldn't happen, should be set0, alphaValue: ${alphaValue}, investigate`, this);
             if (alphaValue == null) {
                 // ensure non-null alpha value if we somehow skipped it before 
                 alphaValue = getAlphaNumber(alpha);
             }
         case 'set0':
             // set at a specific color
-            if (color.startsWith('rgb(')) {
-                color = 'rgba' + color.substring(3);
+            if (newColor.startsWith('rgb(')) {
+                newColor = 'rgba' + newColor.substring(3);
             }
-            switch (color.count(',')) {
+            switch (newColor.count(',')) {
                 case 2:
                     // no alpha present, just add it 
-                    if (color.count(',') == 2) {
-                        let parenIndex = color.lastIndexOf(')');
-                        color = `${color.substring(0, parenIndex)}, ${alphaValue.toMax(true)})`;
+                    if (newColor.count(',') == 2) {
+                        let parenIndex = newColor.lastIndexOf(')');
+                        newColor = `${newColor.substring(0, parenIndex)}, ${alphaValue.toMax(true)})`;
                     }
-                    return color;
+                    return newColor;
                 case 3:
                     // alpha present, replace with given value 
-                    let commaIndex = color.lastIndexOf(',');
-                    color = `${color.substring(0, commaIndex)}, ${alphaValue.toMax(true)})`;
-                    return color;
+                    let commaIndex = newColor.lastIndexOf(',');
+                    newColor = `${newColor.substring(0, commaIndex)}, ${alphaValue.toMax(true)})`;
+                    return newColor;
                 default:
-                    console.warn(`WARNING: irregular number (${color.count(',')}) of comma-delimited values in rgb/a: "${color}", alphaValue: ${alphaValue}, returning null, investigate`, this);
+                    console.warn(`WARNING: irregular number (${newColor.count(',')}) of comma-delimited values in rgb/a: "${newColor}", alphaValue: ${alphaValue}, returning null, investigate`, this);
                     return null;
             }
     }
 }
 
 /**
- * Converts the given string to a four-number array 
- * corresponding to the color's RGBA values. 
+ * Converts the given string to a three-or-four-value numer array 
+ * corresponding to the color's RGB/A values. 
  * 
  * If the given string is not a color, or if the conversion 
  * otherwise fails, returns `null`. 
- * @param {string} str Color string to convert 
- * @returns {[number, number, number, number]|null}
+ * @param {color} color Color string to convert 
+ * @param {-1|0|1|'exclude'|'ignore'|'include'|`set${number}`} [alpha] 
+ * Optional value determining what to do with the alpha value. 
+ * Default {@linkcode RGBAlpha.Include}.  
+ * - `-1`, `"exclude"`, and {@linkcode RGBAlpha.Exclude} will omit any 
+ * alpha values and return `[r, g, b]` 
+ * - `1`, `"includue"`, and {@linkcode RGBAlpha.Include} will ensure  
+ * an alpha value is included, returning `[r, g, b, a]`. If one 
+ * isn't present, adds alpha value of `1.0`
+ * - `0`, `"ignore"`, and {@linkcode RGBAlpha.Ignore} will return the 
+ * value however the CSS computed style formats it. This is typically 
+ * `rgba` but can vary. If it matters, you should specify to be sure.
+ * - `"set0"` through `"set100"` will directly assign the given alpha 
+ * value. Must be between `0` and `100`, will get normalized to 
+ * between `0` and `1`, rounded to max three decimals.  
+ * Eg, `"set50"` returns `[r, g, b, 0.5]`
+ * @returns {[number, number, number, number?]|null}
  */
-export function ColorToArray(str) {
-    str = EnsureColorValid(str);
-    if (str == null) { return null; }
+export function ColorToArray(color, alpha = RGBAlpha.Include) {
+    // TODO: finish ColorToArray and ColorToHex utils
+    throw new Error(`Not Yet Implemented, ColorToArray, can't convert str: ${color}`);
+    color = EnsureColorValid(color);
+    if (color == null) { return null; }
     // create dummy CSS style 
     let _span = DummySpan();
+}
+
+/**
+ * @param {color} color Color string to convert 
+ * @param {-1|0|1|'exclude'|'ignore'|'include'|`set${number}`} [alpha] 
+ * Optional value determining what to do with the alpha value. 
+ * Default {@linkcode RGBAlpha.Ignore}.  
+ * - `-1`, `"exclude"`, and {@linkcode RGBAlpha.Exclude} will omit any 
+ * alpha values and return `"#f0f0f0"` 
+ * - `1`, `"includue"`, and {@linkcode RGBAlpha.Include} will ensure  
+ * an alpha value is included, returning `"#f0f0f0ff"`. If one 
+ * isn't present, adds alpha value of `"ff"`
+ * - `0`, `"ignore"`, and {@linkcode RGBAlpha.Ignore} will return the 
+ * value however the CSS computed style formats it. This is typically 
+ * `rgba` but can vary. If it matters, you should specify to be sure. 
+ * - `"set0"` through `"set100"` will directly assign the given alpha 
+ * value. Must be between `0` and `100`, will get normalized to 
+ * between `0` and `1`, rounded to max three decimals.  
+ * Eg, `"set50"` returns `"#f0f0f080"`, as the hex value `"80"` 
+ * equates to 127.5 (rounded to 128), or 50% of 255.
+ * @param {string} [prefixHash='#'] Optional prefix. Default `#`
+ * @returns {color}
+ */
+export function ColorToHex(color, alpha = RGBAlpha.Ignore, prefixHash = '#') {
+    throw new Error(`Not Yet Implemented, ColorToHex, can't convert str: ${color}`);
 }
 
 // #endregion Str Color
