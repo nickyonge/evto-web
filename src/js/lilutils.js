@@ -632,6 +632,32 @@ export function NumberOptionalNumberToString(numberOptionalNumber, joinWithComma
 }
 
 /**
+ * Convert a {@linkcode numberOptionalNumber} value to string. 
+ * Ensures all numbers are rounded to {@link integer} values. 
+ * 
+ * If the given value is `null`, returns `null`
+ * @param {integerOptionalInteger} integerOptionalInteger {@link integer Integer}, or 1-or-2-value integer[] array
+ * @param {boolean} [joinWithComma=false] If two numbers, join with comma? 
+ * If `true`, returns `"1, 2"`. If `false`, returns `"1 2"`. Default `false` 
+ * @param {RoundOps} [roundingOperation=RoundOps.Round] 
+ * How should non-integer values be rounded? Default {@linkcode RoundOps.Round}
+ * @returns {string}
+ */
+export function IntegerOptionalIntegerToString(integerOptionalInteger, joinWithComma = false, roundingOperation = RoundOps.Round) {
+    if (typeof integerOptionalInteger == 'number') {
+        integerOptionalInteger = [integerOptionalInteger];
+    }
+    switch (integerOptionalInteger.length) {
+        case 2:
+            integerOptionalInteger[1] = RoundWith(integerOptionalInteger[1], roundingOperation);
+        case 1:
+            integerOptionalInteger[0] = RoundWith(integerOptionalInteger[0], roundingOperation);
+            break;
+    }
+    return NumberListOfNumbersToString(integerOptionalInteger, joinWithComma);
+}
+
+/**
  * Convert a {@linkcode numberListOfNumbers} value to string. 
  * 
  * If the given value is `null`, returns `null`

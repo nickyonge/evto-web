@@ -1,6 +1,6 @@
 import type { pathNode as _pathNode } from './src/js/assetExporter';
 import { _baseNode } from '../js/assetExporter';
-import { EnsureColorValid, ColorToRGBA, ColorToHex, ColorToArray, ToPercentage } from '../js/lilutils';
+import { EnsureColorValid, ColorToRGBA, ColorToHex, ColorToArray, ToPercentage, Round, Ceil, Floor, RoundWith, RoundOps } from '../js/lilutils';
 
 declare global {
     /**
@@ -81,10 +81,16 @@ declare global {
         'luminosity';
 
     /**
-     * SVG value used to specify one, or optionally two, paired numbers. 
+     * SVG CSS value used to specify one, or optionally two, paired numbers. 
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/Content_type#number-optional-number
      */
     declare type numberOptionalNumber = number | [number, number?];
+    /**
+     * SVG CSS value used to specify one, or optionally two, paired {@link integer integers}. 
+     * - **Note:** Integer value is documentation only; not enforced. 
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/Content_type#number-optional-number
+     */
+    declare type integerOptionalInteger = numberOptionalNumber;
 
     /**
      * SVG List-Of-Numbers value, based on the SVG type List-of-Ts. 
@@ -148,6 +154,13 @@ declare global {
      * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/color
      */
     declare type color = string;
+
+    /**
+     * Number that is intended to be an integer.
+     * - **Note:** Documentation only; not enforced. 
+     * @see {@linkcode Round}, {@linkcode Ceil}, {@linkcode Floor}, {@linkcode RoundWith}, and {@linkcode RoundOps} in `lilutils.js`
+     */
+    declare type integer = number;
 }
 
 export { };

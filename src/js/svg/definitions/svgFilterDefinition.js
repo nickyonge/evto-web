@@ -59,6 +59,7 @@ class svgFilterDefBase extends svgXYWHDefinition {
  * used as a `<filter>` element.
  */
 export class svgFilterDefinition extends svgFilterDefBase {
+
     /**
      * Container for an {@linkcode svgDefinition} that's 
      * used as a `<filter>` element.
@@ -71,6 +72,11 @@ export class svgFilterDefinition extends svgFilterDefBase {
     constructor(id = undefined) {
         super(id, 'filter');
     }
+
+    // not including filterRes - at time of coding this, it's deprecated 
+    // https://udn.realityripple.com/docs/Web/SVG/Attribute/filterRes 
+    // https://docs1.w3cub.com/svg/attribute/filterres/ 
+
 }
 
 /**
@@ -119,20 +125,20 @@ export class svgFilterPrimitiveIn extends svgFilterPrimitive {
      * The `in` attribute identifies input for the given filter primitive.
      * 
      * You can only use this attribute with the following SVG elements:
-     * - `feBlend`
-     * - `feColorMatrix`
-     * - `feComponentTransfer`
-     * - `feComposite`
-     * - `feConvolveMatrix`
-     * - `feDiffuseLighting`
-     * - `feDisplacementMap`
-     * - `feDropShadow`
-     * - `feGaussianBlur`
-     * - `feMergeNode`
-     * - `feMorphology`
-     * - `feOffset`
-     * - `feSpecularLighting`
-     * - `feTile`
+     * - {@linkcode svgFilterFEBlend feBlend} 
+     * - {@linkcode svgFilterFEColorMatrix feColorMatrix} 
+     * - {@linkcode svgFilterFEComponentTransfer feComponentTransfer} 
+     * - {@linkcode svgFilterFEComposite feComposite} 
+     * - {@linkcode svgFilterFEConvolveMatrix feConvolveMatrix} 
+     * - {@linkcode svgFilterFEDiffuseLighting feDiffuseLighting} 
+     * - {@linkcode svgFilterFEDisplacementMap feDisplacementMap} 
+     * - {@linkcode svgFilterFEDropShadow feDropShadow} 
+     * - {@linkcode svgFilterFEGaussianBlur feGaussianBlur} 
+     * - {@linkcode svgFilterFEMergeNode feMergeNode} 
+     * - {@linkcode svgFilterFEMorphology feMorphology} 
+     * - {@linkcode svgFilterFEOffset feOffset} 
+     * - {@linkcode svgFilterFESpecularLighting feSpecularLighting} 
+     * - {@linkcode svgFilterFETile feTile} 
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/in
      * @returns {svgType_Filter_In}
      */
@@ -160,9 +166,9 @@ export class svgFilterPrimitiveIn2 extends svgFilterPrimitive {
      * It works exactly like the {@linkcode in} attribute.
      * 
      * You can only use this attribute with the following SVG elements:
-     * - `feBlend`
-     * - `feComposite`
-     * - `feDisplacementMap`
+     * - {@linkcode svgFilterFEBlend feBlend} 
+     * - {@linkcode svgFilterFEComposite feComposite} 
+     * - {@linkcode svgFilterFEDisplacementMap feDisplacementMap} 
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/in2
      * @returns {svgType_Filter_In2}
      */
@@ -227,12 +233,12 @@ export class svgFilterFEComposite extends svgFilterPrimitiveIn2 {
 /** The `<feConvolveMatrix>` SVG filter primitive applies a matrix convolution filter effect.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feConvolveMatrix */
 export class svgFilterFEConvolveMatrix extends svgFilterPrimitiveIn {
-    /** @typedef {number} svgType_Filter_ConvolveMatrix_Order Must be an integer greater than zero */
+    /** @typedef {integerOptionalInteger} svgType_Filter_ConvolveMatrix_Order Must be one or two integers greater than zero */
     /** @typedef {number[]} svgType_Filter_ConvolveMatrix_KernelMatrix */
     /** @typedef {number} svgType_Filter_ConvolveMatrix_Divisor */
     /** @typedef {number} svgType_Filter_ConvolveMatrix_Bias */
-    /** @typedef {number} svgType_Filter_ConvolveMatrix_TargetX Integer */
-    /** @typedef {number} svgType_Filter_ConvolveMatrix_TargetY Integer */
+    /** @typedef {integer} svgType_Filter_ConvolveMatrix_TargetX Integer */
+    /** @typedef {integer} svgType_Filter_ConvolveMatrix_TargetY Integer */
     /** @typedef {'duplicate'|'wrap'|'none'} svgType_Filter_ConvolveMatrix_EdgeMode */
     /** @typedef {numberOptionalNumber} svgType_Filter_ConvolveMatrix_KernelUnitLength */
     /** @typedef {boolean} svgType_Filter_ConvolveMatrix_PreserveAlpha */
@@ -413,8 +419,8 @@ export class svgFilterFETile extends svgFilterPrimitiveIn {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feTurbulence */
 export class svgFilterFETurbulence extends svgFilterPrimitive {
     /** @typedef {numberOptionalNumber} svgType_Filter_Turbulence_BaseFrequency */
-    /** @typedef {number} svgType_Filter_Turbulence_NumOctaves */
-    /** @typedef {number} svgType_Filter_Turbulence_Seed */
+    /** @typedef {integer} svgType_Filter_Turbulence_NumOctaves must be integer */
+    /** @typedef {number} svgType_Filter_Turbulence_Seed Can be number, but gets rounded down to integer */
     /** @typedef {'noStitch'|'stitch'} svgType_Filter_Turbulence_StitchTiles */
     /** @typedef {'fractalNoise'|'turbulence'} svgType_Filter_Turbulence_Type */
     constructor(id) { super(id, 'feTurbulence'); }
