@@ -17,6 +17,22 @@ declare global {
     declare type pathNode = _pathNode;
 
     /**
+     * CSS-valid color string. Can technically by any string value, but this type implies it should be a color. 
+     * but intended to be a CSS appropriate color. 
+     * @see {@linkcode EnsureColorValid} to check if a string value is a valid color 
+     * @see {@linkcode ColorToRGBA}, {@linkcode ColorToHex}, and {@linkcode ColorToArray} for usable type conversion 
+     * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/color
+     */
+    declare type color = string;
+
+    /**
+     * Number that is intended to be an integer.
+     * - **Note:** Documentation only; not enforced. 
+     * @see {@linkcode Round}, {@linkcode Ceil}, {@linkcode Floor}, {@linkcode RoundWith}, and {@linkcode RoundOps} in `lilutils.js`
+     */
+    declare type integer = number;
+
+    /**
      * The `<blend-mode>` CSS data type describes how colors should appear when elements overlap. If unspecified, the default value is typically `normal`. 
      * - **Note:** remember that the attribute name must be `"blend-mode"`, not `"blendMode"` or `"BlendMode"`.
      * @see {@linkcode blendMode blendMode} typedef
@@ -84,22 +100,22 @@ declare global {
      * SVG CSS value used to specify one, or optionally two, paired numbers. 
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/Content_type#number-optional-number
      */
-    declare type numberOptionalNumber = number | [number, number?];
+    declare type cssNumberOptionalNumber = number | [number, number?];
     /**
      * SVG CSS value used to specify one, or optionally two, paired {@link integer integers}. 
      * - **Note:** Integer value is documentation only; not enforced. 
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/Content_type#number-optional-number
      */
-    declare type integerOptionalInteger = numberOptionalNumber;
+    declare type cssIntegerOptionalInteger = cssNumberOptionalNumber;
 
     /**
      * SVG List-Of-Numbers value, based on the SVG type List-of-Ts. 
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/Content_type#list-of-ts
      */
-    declare type numberListOfNumbers = number | number[];
+    declare type cssNumberListOfNumbers = number | number[];
 
     /** Single-char string representing one of the RGBA channels */
-    declare type rgbaChannel = 'R' | 'G' | 'B' | 'A';
+    declare type cssRGBA = 'R' | 'G' | 'B' | 'A';
 
     /**
      * The `preserveAspectRatio` SVG CSS attribute indicates how an element with a viewBox 
@@ -108,14 +124,14 @@ declare global {
      * Syntax: `preserveAspectRatio="<align> [<meet or slice>]"`
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/preserveAspectRatio 
      */
-    declare type preserveAspectRatio = 'none' | `x${'Min' | 'Mid' | 'Max'}Y${'Min' | 'Mid' | 'Max'} ${'meet' | 'slice'}`;
+    declare type cssPreserveAspectRatio = 'none' | `x${'Min' | 'Mid' | 'Max'}Y${'Min' | 'Mid' | 'Max'} ${'meet' | 'slice'}`;
 
     /** 
      * Provides support for configuration of the Cross-Origin 
      * Resource Sharing (CORS) requests for the element's fetched data.
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/crossorigin 
      */
-    declare type crossorigin = 'anonymous' | 'use-credentials' | '';
+    declare type cssCrossorigin = 'anonymous' | 'use-credentials' | '';
 
     /** 
      * String-number formatted `"N%"` where `N` is any number. 
@@ -123,16 +139,24 @@ declare global {
      * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/percentage 
      */
     declare type percentage = `${number}%`;
+    /**
+     * String-number formatted `"N%"` where `N` is any number. 
+     * - **Note:** Identical to {@linkcode percentage}, 
+     * only exists for convenience and type naming consistency. 
+     * @see {@linkcode ToPercentage} for `number` conversion. 
+     * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/percentage 
+     */
+    declare type cssPercentage = percentage;
     /** 
      * Common CSS data type representing a distance value. 
      * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length 
      */
     declare type cssLength = `${cssLengthUnits}${number}`;
     /**
-     * CSS data type that can either be a {@linkcode cssLength length} or {@linkcode percentage}. 
+     * CSS data type that can either be a {@linkcode cssLength length} or {@linkcode cssPercentage percentage}. 
      * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length-percentage
      */
-    declare type cssLengthPercentage = percentage | cssLength;
+    declare type cssLengthPercentage = cssPercentage | cssLength;
 
     /** All prefixes before viewport-specific CSS lengths. 
      * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length#relative_length_units_based_on_viewport */
@@ -145,22 +169,6 @@ declare global {
         'ch' | 'em' | 'ex' | 'ic' | 'lh' | 'rcap' | 'rch' | 'rem' | 'rex' |
         'ric' | 'rlh' | `${cssLengthViewportPrefix}${cssLengthViewportValues}` |
         'cqw' | 'cqh' | 'cqi' | 'cqb' | 'cqmin' | 'cqmax';
-
-    /**
-     * CSS-valid color string. Can technically by any string value, but this type implies it should be a color. 
-     * but intended to be a CSS appropriate color. 
-     * @see {@linkcode EnsureColorValid} to check if a string value is a valid color 
-     * @see {@linkcode ColorToRGBA}, {@linkcode ColorToHex}, and {@linkcode ColorToArray} for usable type conversion 
-     * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/color
-     */
-    declare type color = string;
-
-    /**
-     * Number that is intended to be an integer.
-     * - **Note:** Documentation only; not enforced. 
-     * @see {@linkcode Round}, {@linkcode Ceil}, {@linkcode Floor}, {@linkcode RoundWith}, and {@linkcode RoundOps} in `lilutils.js`
-     */
-    declare type integer = number;
 }
 
 export { };

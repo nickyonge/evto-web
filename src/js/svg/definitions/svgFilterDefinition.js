@@ -214,7 +214,7 @@ export class svgFilterFEBlend extends svgFilterPrimitiveIn2 {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feColorMatrix */
 export class svgFilterFEColorMatrix extends svgFilterPrimitiveIn {
     /** @typedef {'matrix'|'saturate'|'hueRotate'|'luminanceToAlpha'|null} svgType_Filter_ColorMatrix_Type */
-    /** @typedef {numberListOfNumbers} svgType_Filter_ColorMatrix_Values 20 numbers making a 5x4 numbers: 5 columns = x*R,x*G,x*B,x*A,x+Shift, 4 rows = RGBA channels */
+    /** @typedef {cssNumberListOfNumbers} svgType_Filter_ColorMatrix_Values 20 numbers making a 5x4 numbers: 5 columns = x*R,x*G,x*B,x*A,x+Shift, 4 rows = RGBA channels */
     constructor(id) { super(id, 'feColorMatrix'); }
 }
 /** The `<feComponentTransfer>` SVG filter primitive performs color-component-wise remapping of data for each pixel. 
@@ -233,14 +233,14 @@ export class svgFilterFEComposite extends svgFilterPrimitiveIn2 {
 /** The `<feConvolveMatrix>` SVG filter primitive applies a matrix convolution filter effect.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feConvolveMatrix */
 export class svgFilterFEConvolveMatrix extends svgFilterPrimitiveIn {
-    /** @typedef {integerOptionalInteger} svgType_Filter_ConvolveMatrix_Order Must be one or two integers greater than zero */
+    /** @typedef {cssIntegerOptionalInteger} svgType_Filter_ConvolveMatrix_Order Must be one or two integers greater than zero */
     /** @typedef {number[]} svgType_Filter_ConvolveMatrix_KernelMatrix */
     /** @typedef {number} svgType_Filter_ConvolveMatrix_Divisor */
     /** @typedef {number} svgType_Filter_ConvolveMatrix_Bias */
     /** @typedef {integer} svgType_Filter_ConvolveMatrix_TargetX Integer */
     /** @typedef {integer} svgType_Filter_ConvolveMatrix_TargetY Integer */
     /** @typedef {'duplicate'|'wrap'|'none'} svgType_Filter_ConvolveMatrix_EdgeMode */
-    /** @typedef {numberOptionalNumber} svgType_Filter_ConvolveMatrix_KernelUnitLength */
+    /** @typedef {cssNumberOptionalNumber} svgType_Filter_ConvolveMatrix_KernelUnitLength */
     /** @typedef {boolean} svgType_Filter_ConvolveMatrix_PreserveAlpha */
     constructor(id) { super(id, 'feConvolveMatrix'); }
 }
@@ -249,7 +249,7 @@ export class svgFilterFEConvolveMatrix extends svgFilterPrimitiveIn {
 export class svgFilterFEDiffuseLighting extends svgFilterPrimitiveIn {
     /** @typedef {number} svgType_Filter_DiffuseLighting_SurfaceScale */
     /** @typedef {number} svgType_Filter_DiffuseLighting_DiffuseConstant */
-    /** @typedef {numberOptionalNumber} svgType_Filter_DiffuseLighting_KernelUnitLength */
+    /** @typedef {cssNumberOptionalNumber} svgType_Filter_DiffuseLighting_KernelUnitLength */
     constructor(id) { super(id, 'feDiffuseLighting'); }
 }
 /** The `<feDisplacementMap>` SVG filter primitive uses the pixel values from the image from {@linkcode in2} 
@@ -257,8 +257,8 @@ export class svgFilterFEDiffuseLighting extends svgFilterPrimitiveIn {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDisplacementMap */
 export class svgFilterFEDisplacementMap extends svgFilterPrimitiveIn2 {
     /** @typedef {number} svgType_Filter_DisplacementMap_Scale */
-    /** @typedef {rgbaChannel} svgType_Filter_DisplacementMap_XChannelSelector */
-    /** @typedef {rgbaChannel} svgType_Filter_DisplacementMap_YChannelSelector */
+    /** @typedef {cssRGBA} svgType_Filter_DisplacementMap_XChannelSelector */
+    /** @typedef {cssRGBA} svgType_Filter_DisplacementMap_YChannelSelector */
     constructor(id) { super(id, 'feDisplacementMap'); }
 }
 /** The `<feDistantLight>` SVG element defines a distant light source that can be used within a lighting filter primitive: 
@@ -274,7 +274,7 @@ export class svgFilterFEDistantLight extends svgFilterPrimitive {
 export class svgFilterFEDropShadow extends svgFilterPrimitiveIn {
     /** @typedef {number} svgType_Filter_DropShadow_DX */
     /** @typedef {number} svgType_Filter_DropShadow_DY */
-    /** @typedef {numberOptionalNumber} svgType_Filter_DropShadow_StdDeviation */
+    /** @typedef {cssNumberOptionalNumber} svgType_Filter_DropShadow_StdDeviation */
     constructor(id) { super(id, 'feDropShadow'); }
 }
 /** The `<feFlood>` SVG filter primitive fills the filter subregion.
@@ -291,7 +291,7 @@ class svgFilterFEFunction extends svgFilterFEComponentTransfer {
     // For static properties info, see:
     // https://developer.mozilla.org/en-US/docs/Web/API/SVGComponentTransferFunctionElement#static_properties
     /** @typedef {'identity'|'table'|'discrete'|'linear'|'gamma'} svgType_Filter_Function_Type */
-    /** @typedef {numberListOfNumbers} svgType_Filter_Function_TableValues list of numbers between `0` and `1` */
+    /** @typedef {cssNumberListOfNumbers} svgType_Filter_Function_TableValues list of numbers between `0` and `1` */
     /** @typedef {number} svgType_Filter_Function_Slope */
     /** @typedef {number} svgType_Filter_Function_Intercept */
     /** @typedef {number} svgType_Filter_Function_Amplitude */
@@ -327,7 +327,7 @@ export class svgFilterFEFuncR extends svgFilterFEFunction {
  * {@linkcode stdDeviation}, which defines the bell-curve.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feGaussianBlur */
 export class svgFilterFEGaussianBlur extends svgFilterPrimitiveIn {
-    /** @typedef {numberOptionalNumber} svgType_Filter_GaussianBlur_StdDeviation */
+    /** @typedef {cssNumberOptionalNumber} svgType_Filter_GaussianBlur_StdDeviation */
     /** @typedef {'duplicate'|'wrap'|'none'} svgType_Filter_GaussianBlur_EdgeMode */
     get stdDeviation() { return this.#_stdDeviation; }
     set stdDeviation(v) { if (v == this.#_stdDeviation) { return; } let prev = this.#_stdDeviation; this.#_stdDeviation = v; this.changed('mode', v, prev); }
@@ -339,8 +339,8 @@ export class svgFilterFEGaussianBlur extends svgFilterPrimitiveIn {
  * the pixel data as output (meaning if the external source is an SVG image, it is rasterized.)
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feImage */
 export class svgFilterFEImage extends svgFilterPrimitive {
-    /** @typedef {crossorigin} svgType_Filter_Image_CrossOrigin */
-    /** @typedef {preserveAspectRatio} svgType_Filter_Image_PreserveAspectRatio */
+    /** @typedef {cssCrossorigin} svgType_Filter_Image_CrossOrigin */
+    /** @typedef {cssPreserveAspectRatio} svgType_Filter_Image_PreserveAspectRatio */
     /** @typedef {string} svgType_Filter_Image_Href */
     constructor(id) { super(id, 'feImage'); }
 
@@ -366,7 +366,7 @@ export class svgFilterFEMergeNode extends svgFilterPrimitiveIn {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feMorphology */
 export class svgFilterFEMorphology extends svgFilterPrimitiveIn {
     /** @typedef {'erode'|'dilate'|null} svgType_Filter_Morphology_Operator Defines whether to erode (i.e., thin) or dilate (fatten) the source graphic. Default `erode` */
-    /** @typedef {numberOptionalNumber} svgType_Filter_Morphology_Radius */
+    /** @typedef {cssNumberOptionalNumber} svgType_Filter_Morphology_Radius */
     constructor(id) { super(id, 'feMorphology'); }
 }
 /** The `<feOffset>` SVG filter primitive enables offsetting an input image relative to its current position.
@@ -392,7 +392,7 @@ export class svgFilterFESpecularLighting extends svgFilterPrimitiveIn {
     /** @typedef {number} svgType_Filter_SpecularLighting_SurfaceScale */
     /** @typedef {number} svgType_Filter_SpecularLighting_SpecularConstant */
     /** @typedef {number} svgType_Filter_SpecularLighting_SpecularExponent */
-    /** @typedef {numberOptionalNumber} svgType_Filter_SpecularLighting_KernelUnitLength */
+    /** @typedef {cssNumberOptionalNumber} svgType_Filter_SpecularLighting_KernelUnitLength */
     constructor(id) { super(id, 'feSpecularLighting'); }
 }
 /** The `<feSpotLight>` SVG element defines a light source that can be used to create a spotlight effect. It is used within a 
@@ -418,7 +418,7 @@ export class svgFilterFETile extends svgFilterPrimitiveIn {
  * It allows the synthesis of artificial textures like clouds or marble.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feTurbulence */
 export class svgFilterFETurbulence extends svgFilterPrimitive {
-    /** @typedef {numberOptionalNumber} svgType_Filter_Turbulence_BaseFrequency */
+    /** @typedef {cssNumberOptionalNumber} svgType_Filter_Turbulence_BaseFrequency */
     /** @typedef {integer} svgType_Filter_Turbulence_NumOctaves must be integer */
     /** @typedef {number} svgType_Filter_Turbulence_Seed Can be number, but gets rounded down to integer */
     /** @typedef {'noStitch'|'stitch'} svgType_Filter_Turbulence_StitchTiles */

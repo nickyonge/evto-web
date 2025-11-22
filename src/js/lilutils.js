@@ -101,14 +101,14 @@ export function IsStringNameSafe(str, varConvention = true, allowSingleUnderscor
 }
 
 /**
- * Converts a {@linkcode preserveAspectRatio} or a corresponding 
+ * Converts a {@linkcode cssPreserveAspectRatio} or a corresponding 
  * boolean/number value to a CSS-valid string.
  * - **Note:** If using a boolean or number, `false` / `0` 
  * returns `"none"`, and `true` / `1` returns the default 
  * value, '"xMidYMid meet'. 
- * @param {preserveAspectRatio|boolean|0|1} preserveAspectRatio 
+ * @param {cssPreserveAspectRatio|boolean|0|1} preserveAspectRatio 
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/preserveAspectRatio
- * @returns {preserveAspectRatio}
+ * @returns {cssPreserveAspectRatio}
  */
 export function GetPreserveAspectRatio(preserveAspectRatio) {
     if (preserveAspectRatio == null) { return null; }
@@ -622,7 +622,7 @@ export function IsNumberInfiniteOrNaN(num) {
  * Convert a {@linkcode numberOptionalNumber} value to string. 
  * 
  * If the given value is `null`, returns `null`
- * @param {numberOptionalNumber} numberOptionalNumber Number, or 1-or-2-value number[] array
+ * @param {cssNumberOptionalNumber} numberOptionalNumber Number, or 1-or-2-value number[] array
  * @param {boolean} [joinWithComma=false] If two numbers, join with comma? 
  * If `true`, returns `"1, 2"`. If `false`, returns `"1 2"`. Default `false`
  * @returns {string}
@@ -632,11 +632,11 @@ export function NumberOptionalNumberToString(numberOptionalNumber, joinWithComma
 }
 
 /**
- * Convert a {@linkcode numberOptionalNumber} value to string. 
+ * Convert a {@linkcode cssNumberOptionalNumber} value to string. 
  * Ensures all numbers are rounded to {@link integer} values. 
  * 
  * If the given value is `null`, returns `null`
- * @param {integerOptionalInteger} integerOptionalInteger {@link integer Integer}, or 1-or-2-value integer[] array
+ * @param {cssIntegerOptionalInteger} integerOptionalInteger {@link integer Integer}, or 1-or-2-value integer[] array
  * @param {boolean} [joinWithComma=false] If two numbers, join with comma? 
  * If `true`, returns `"1, 2"`. If `false`, returns `"1 2"`. Default `false` 
  * @param {RoundOps} [roundingOperation=RoundOps.Round] 
@@ -661,7 +661,7 @@ export function IntegerOptionalIntegerToString(integerOptionalInteger, joinWithC
  * Convert a {@linkcode numberListOfNumbers} value to string. 
  * 
  * If the given value is `null`, returns `null`
- * @param {numberListOfNumbers} numberListOfNumbers Number, or number[] array 
+ * @param {cssNumberListOfNumbers} numberListOfNumbers Number, or number[] array 
  * @param {boolean} [joinWithComma=false] If two numbers, join with comma? 
  * If `true`, returns `"1, 2, 3, ..."`. If `false`, returns `"1 2 3 ..."`. Default `false`
  * @param {number|null} [replaceNullValuesWith=null] If any null values are found, 

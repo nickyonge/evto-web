@@ -148,7 +148,10 @@ export class svgHTMLAsset extends svg.element {
     /** @type {svg.definition[]} */
     #_definitions; // don't assign default value to svg element arrays 
 
-    /** @returns {boolean} */
+    /** 
+     * Preserves the SVG's aspect ratio.
+     * - **Note:** This is distinct from {@linkcode cssPreserveAspectRatio}. 
+     * @returns {boolean} */
     get preserveAspectRatio() { return this.#_preserveAspectRatio; }
     set preserveAspectRatio(v) { let prev = this.#_preserveAspectRatio; this.#_preserveAspectRatio = v; this.changed('preserveAspectRatio', v, prev); }
     /** @type {boolean} */

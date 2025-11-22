@@ -38,23 +38,23 @@ export class svgImageDefinition extends svgXYWHDefinition {
      * - **Note:** {@linkcode svgDefaults.IMAGE_PRESERVEASPECTRATIO}
      * is this property's default value. This value is distinct from 
      * {@linkcode svgDefaults.PRESERVEASPECTRATIO}.
-     * @returns {preserveAspectRatio|boolean|0|1}
+     * @returns {cssPreserveAspectRatio|boolean|0|1}
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/maskUnits
     */
     get preserveAspectRatio() { return this.#_preserveAspectRatio; }
     set preserveAspectRatio(v) { let prev = this.#_preserveAspectRatio; this.#_preserveAspectRatio = v; this.changed('preserveAspectRatio', v, prev); }
-    /** @type {preserveAspectRatio|boolean|0|1} */
+    /** @type {cssPreserveAspectRatio|boolean|0|1} */
     #_preserveAspectRatio = svgDefaults.IMAGE_PRESERVEASPECTRATIO;
 
     /**
      * Provides support for configuration of the Cross-Origin 
      * Resource Sharing (CORS) requests for the element's fetched data.
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/crossorigin 
-     * @returns {crossorigin}
+     * @returns {cssCrossorigin}
      */
     get crossorigin() { return this.#_crossorigin; }
     set crossorigin(v) { let prev = this.#_crossorigin; this.#_crossorigin = v; this.changed('crossorigin', v, prev); }
-    /** @type {crossorigin} */
+    /** @type {cssCrossorigin} */
     #_crossorigin = svgDefaults.IMAGE_CROSSORIGIN;
 
     /**
