@@ -1,3 +1,4 @@
+import { EnsureToNumber, StringNumericOnly, StringOnlyNumeric } from "../../lilutils";
 import { svgDefaults, svgElement } from "../index";
 import { svgDefinition, svgXYWHDefinition } from "./index";
 
@@ -218,9 +219,17 @@ export class svgFilterFEBlend extends svgFilterPrimitiveIn2 {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feColorMatrix */
 export class svgFilterFEColorMatrix extends svgFilterPrimitiveIn {
     /** @typedef {'matrix'|'saturate'|'hueRotate'|'luminanceToAlpha'|null} svgType_Filter_ColorMatrix_Type */
-    type;
+    /** @returns {svgType_Filter_ColorMatrix_Type} */
+    get type() { return this.#_type; }
+    set type(v) { }
+    /** @type {svgType_Filter_ColorMatrix_Type} */
+    #_type;
     /** @typedef {cssNumberListOfNumbers} svgType_Filter_ColorMatrix_Values 20 numbers making a 5x4 numbers: 5 columns = x*R,x*G,x*B,x*A,x+Shift, 4 rows = RGBA channels */
-    values;
+    /** @returns {svgType_Filter_ColorMatrix_Values} */
+    get values() { return this.#_values; }
+    set values(v) { }
+    /** @type {svgType_Filter_ColorMatrix_Values} */
+    #_values;
     constructor(id) { super(id, 'feColorMatrix'); }
 }
 /** The `<feComponentTransfer>` SVG filter primitive performs color-component-wise remapping of data for each pixel. 
@@ -233,10 +242,26 @@ export class svgFilterFEComponentTransfer extends svgFilterPrimitiveIn {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feComposite */
 export class svgFilterFEComposite extends svgFilterPrimitiveIn2 {
     /** @typedef {number} svgType_Filter_Composite_K k1, k2, k3, k4 */
-    k1;
-    k2;
-    k3;
-    k4;
+    /** @returns {svgType_Filter_Composite_K} */
+    get k1() { return this.#_k1; }
+    set k1(v) { }
+    /** @type {svgType_Filter_Composite_K} */
+    #_k1;
+    /** @returns {svgType_Filter_Composite_K} */
+    get k2() { return this.#_k2; }
+    set k2(v) { }
+    /** @type {svgType_Filter_Composite_K} */
+    #_k2;
+    /** @returns {svgType_Filter_Composite_K} */
+    get k3() { return this.#_k3; }
+    set k3(v) { }
+    /** @type {svgType_Filter_Composite_K} */
+    #_k3;
+    /** @returns {svgType_Filter_Composite_K} */
+    get k4() { return this.#_k4; }
+    set k4(v) { }
+    /** @type {svgType_Filter_Composite_K} */
+    #_k4;
     /** @typedef {'over'|'in'|'out'|'atop'|'xor'|'lighter'|'arithmetic'|null} svgType_Filter_Composite_Operator The compositing operation that is to be performed. Default `over` */
     operator;
     constructor(id) { super(id, 'feComposite'); }
@@ -245,36 +270,89 @@ export class svgFilterFEComposite extends svgFilterPrimitiveIn2 {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feConvolveMatrix */
 export class svgFilterFEConvolveMatrix extends svgFilterPrimitiveIn {
     /** @typedef {cssIntegerOptionalInteger} svgType_Filter_ConvolveMatrix_Order Must be one or two integers greater than zero */
-    order;
+    /** @returns {svgType_Filter_ConvolveMatrix_Order} */
+    get order() { return this.#_order; }
+    set order(v) { }
+    /** @type {svgType_Filter_ConvolveMatrix_Order} */
+    #_order;
     /** @typedef {number[]} svgType_Filter_ConvolveMatrix_KernelMatrix */
-    matrix;
+    /** @returns {svgType_Filter_ConvolveMatrix_KernelMatrix} */
+    get matrix() { return this.#_matrix; }
+    set matrix(v) { }
+    /** @type {svgType_Filter_ConvolveMatrix_KernelMatrix} */
+    #_matrix;
     /** @typedef {number} svgType_Filter_ConvolveMatrix_Divisor */
-    divisor;
+    /** @returns {svgType_Filter_ConvolveMatrix_Divisor} */
+    get divisor() { return this.#_divisor; }
+    set divisor(v) { }
+    /** @type {svgType_Filter_ConvolveMatrix_Divisor} */
+    #_divisor;
     /** @typedef {number} svgType_Filter_ConvolveMatrix_Bias */
-    bias;
+    /** @returns {svgType_Filter_ConvolveMatrix_Bias} */
+    get bias() { return this.#_bias; }
+    set bias(v) { }
+    /** @type {svgType_Filter_ConvolveMatrix_Bias} */
+    #_bias;
     /** @typedef {integer} svgType_Filter_ConvolveMatrix_TargetX Integer */
-    targetX;
+    /** @returns {svgType_Filter_ConvolveMatrix_TargetX} */
+    get targetX() { return this.#_targetX; }
+    set targetX(v) { }
+    /** @type {svgType_Filter_ConvolveMatrix_TargetX} */
+    #_targetX;
     /** @typedef {integer} svgType_Filter_ConvolveMatrix_TargetY Integer */
-    targetY;
+    /** @returns {svgType_Filter_ConvolveMatrix_TargetY} */
+    get targetY() { return this.#_targetY; }
+    set targetY(v) { }
+    /** @type {svgType_Filter_ConvolveMatrix_TargetY} */
+    #_targetY;
     /** @typedef {'duplicate'|'wrap'|'none'} svgType_Filter_ConvolveMatrix_EdgeMode */
-    edgeMode;
+    /** @returns {svgType_Filter_ConvolveMatrix_EdgeMode} */
+    get edgeMode() { return this.#_edgeMode; }
+    set edgeMode(v) {
+        /** @type {svgType_Filter_ConvolveMatrix_EdgeMode} */
+    }
+    #_edgeMode;
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_ConvolveMatrix_KernelUnitLength */
-    kernelUnitLength;;
+    /** @returns {svgType_Filter_ConvolveMatrix_KernelUnitLength} */
+    get kernelUnitLength() { return this.#_kernelUnitLength; }
+    set kernelUnitLength(v) { }
+    /** @type {svgType_Filter_ConvolveMatrix_KernelUnitLength} */
+    #_kernelUnitLength;
     /** @typedef {boolean} svgType_Filter_ConvolveMatrix_PreserveAlpha */
-    preserveAlpha;
+    /** @returns {svgType_Filter_ConvolveMatrix_PreserveAlpha} */
+    get preserveAlpha() { return this.#_preserveAlpha; }
+    set preserveAlpha(v) { }
+    /** @type {svgType_Filter_ConvolveMatrix_PreserveAlpha} */
+    #_preserveAlpha;
     constructor(id) { super(id, 'feConvolveMatrix'); }
 }
 /** The `<feDiffuseLighting>` SVG filter primitive lights an image using the alpha channel as a bump map.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDiffuseLighting */
 export class svgFilterFEDiffuseLighting extends svgFilterPrimitiveIn {
     /** @typedef {number} svgType_Filter_DiffuseLighting_LightingColor lighting-color */
-    lightingColor;
+    /** @returns {svgType_Filter_DiffuseLighting_LightingColor} */
+    get lightingColor() { return this.#_lightingColor; }
+    set lightingColor(v) { }
+    /** @type {svgType_Filter_DiffuseLighting_LightingColor} */
+    #_lightingColor;
     /** @typedef {number} svgType_Filter_DiffuseLighting_SurfaceScale */
-    surfaceScale;
+    /** @returns {svgType_Filter_DiffuseLighting_SurfaceScale} */
+    get surfaceScale() { return this.#_surfaceScale; }
+    set surfaceScale(v) { }
+    /** @type {svgType_Filter_DiffuseLighting_SurfaceScale} */
+    #_surfaceScale;
     /** @typedef {number} svgType_Filter_DiffuseLighting_DiffuseConstant */
-    diffuseConstant;
+    /** @returns {svgType_Filter_DiffuseLighting_DiffuseConstant} */
+    get diffuseConstant() { return this.#_diffuseConstant; }
+    set diffuseConstant(v) { }
+    /** @type {svgType_Filter_DiffuseLighting_DiffuseConstant} */
+    #_diffuseConstant;
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_DiffuseLighting_KernelUnitLength */
-    kernelUnitLength;
+    /** @returns {svgType_Filter_DiffuseLighting_KernelUnitLength} */
+    get kernelUnitLength() { return this.#_kernelUnitLength; }
+    set kernelUnitLength(v) { }
+    /** @type {svgType_Filter_DiffuseLighting_KernelUnitLength} */
+    #_kernelUnitLength;
     constructor(id) { super(id, 'feDiffuseLighting'); }
 }
 /** The `<feDisplacementMap>` SVG filter primitive uses the pixel values from the image from {@linkcode in2} 
@@ -282,11 +360,23 @@ export class svgFilterFEDiffuseLighting extends svgFilterPrimitiveIn {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDisplacementMap */
 export class svgFilterFEDisplacementMap extends svgFilterPrimitiveIn2 {
     /** @typedef {number} svgType_Filter_DisplacementMap_Scale */
-    scale;
+    /** @returns {svgType_Filter_DisplacementMap_Scale} */
+    get scale() { return this.#_scale; }
+    set scale(v) { }
+    /** @type {svgType_Filter_DisplacementMap_Scale} */
+    #_scale;
     /** @typedef {cssRGBA} svgType_Filter_DisplacementMap_XChannelSelector */
-    xChannelSelector;
+    /** @returns {svgType_Filter_DisplacementMap_XChannelSelector} */
+    get xChannelSelector() { return this.#_xChannelSelector; }
+    set xChannelSelector(v) { }
+    /** @type {svgType_Filter_DisplacementMap_XChannelSelector} */
+    #_xChannelSelector;
     /** @typedef {cssRGBA} svgType_Filter_DisplacementMap_YChannelSelector */
-    yChannelSelector;
+    /** @returns {svgType_Filter_DisplacementMap_YChannelSelector} */
+    get yChannelSelector() { return this.#_yChannelSelector; }
+    set yChannelSelector(v) { }
+    /** @type {svgType_Filter_DisplacementMap_YChannelSelector} */
+    #_yChannelSelector;
     constructor(id) { super(id, 'feDisplacementMap'); }
 }
 /** The `<feDistantLight>` SVG element defines a distant light source that can be used within a lighting filter primitive: 
@@ -294,29 +384,69 @@ export class svgFilterFEDisplacementMap extends svgFilterPrimitiveIn2 {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDistantLight */
 export class svgFilterFEDistantLight extends svgFilterPrimitive {
     /** @typedef {number} svgType_Filter_DistantLight_Azimuth */
-    azimuth;
+    /** @returns {svgType_Filter_DistantLight_Azimuth} */
+    get azimuth() { return this.#_azimuth; }
+    set azimuth(v) { }
+    /** @type {svgType_Filter_DistantLight_Azimuth} */
+    #_azimuth;
     /** @typedef {number} svgType_Filter_DistantLight_Elevation */
-    elevation;
+    /** @returns {svgType_Filter_DistantLight_Elevation} */
+    get elevation() { return this.#_elevation; }
+    set elevation(v) { }
+    /** @type {svgType_Filter_DistantLight_Elevation} */
+    #_elevation;
     constructor(id) { super(id, 'feDistantLight'); }
 }
 /** The `<feDropShadow>` SVG filter primitive creates a drop shadow of the input image.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDropShadow */
 export class svgFilterFEDropShadow extends svgFilterPrimitiveIn {
     /** @typedef {number} svgType_Filter_DropShadow_DX */
-    dx;
+    /** @returns {svgType_Filter_DropShadow_DX} */
+    get dx() { return this.#_dx; }
+    set dx(v) { }
+    /** @type {svgType_Filter_DropShadow_DX} */
+    #_dx;
     /** @typedef {number} svgType_Filter_DropShadow_DY */
-    dy;
+    /** @returns {svgType_Filter_DropShadow_DY} */
+    get dy() { return this.#_dy; }
+    set dy(v) { }
+    /** @type {svgType_Filter_DropShadow_DY} */
+    #_dy;
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_DropShadow_StdDeviation */
-    stdDeviation;
+    /** @returns {svgType_Filter_DropShadow_StdDeviation} */
+    get stdDeviation() { return this.#_stdDeviation; }
+    set stdDeviation(v) { }
+    /** @type {svgType_Filter_DropShadow_StdDeviation} */
+    #_stdDeviation;
+    /** @typedef {color} svgType_Filter_DropShadow_FloodColor flood-color, can be used on DropShadow */
+    /** @returns {svgType_Filter_DropShadow_FloodColor} */
+    get floodColor() { return this.#_floodColor; }
+    set floodColor(v) { }
+    /** @type {svgType_Filter_DropShadow_FloodColor} */
+    #_floodColor;
+    /** @typedef {number} svgType_Filter_DropShadow_FloodOpacity flood-opacity, can be used on DropShadow */
+    /** @returns {svgType_Filter_DropShadow_FloodOpacity} */
+    get floodOpacity() { return this.#_floodOpacity; }
+    set floodOpacity(v) { }
+    /** @type {svgType_Filter_DropShadow_FloodOpacity} */
+    #_floodOpacity;
     constructor(id) { super(id, 'feDropShadow'); }
 }
 /** The `<feFlood>` SVG filter primitive fills the filter subregion.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feFlood */
 export class svgFilterFEFlood extends svgFilterPrimitive {
     /** @typedef {color} svgType_Filter_Flood_FloodColor flood-color */
-    floodColor;
+    /** @returns {svgType_Filter_Flood_FloodColor} */
+    get floodColor() { return this.#_floodColor; }
+    set floodColor(v) { }
+    /** @type {svgType_Filter_Flood_FloodColor} */
+    #_floodColor;
     /** @typedef {number} svgType_Filter_Flood_FloodOpacity flood-opacity */
-    floodOpacity;
+    /** @returns {svgType_Filter_Flood_FloodOpacity} */
+    get floodOpacity() { return this.#_floodOpacity; }
+    set floodOpacity(v) { }
+    /** @type {svgType_Filter_Flood_FloodOpacity} */
+    #_floodOpacity;
     constructor(id) { super(id, 'feFlood'); }
 }
 /**
@@ -326,19 +456,47 @@ class svgFilterFEFunction extends svgFilterFEComponentTransfer {
     // For static properties info, see:
     // https://developer.mozilla.org/en-US/docs/Web/API/SVGComponentTransferFunctionElement#static_properties
     /** @typedef {'identity'|'table'|'discrete'|'linear'|'gamma'} svgType_Filter_Function_Type */
-    type;
+    /** @returns {svgType_Filter_Function_Type} */
+    get type() { return this.#_type; }
+    set type(v) { }
+    /** @type {svgType_Filter_Function_Type} */
+    #_type;
     /** @typedef {cssNumberListOfNumbers} svgType_Filter_Function_TableValues list of numbers between `0` and `1` */
-    tableValues;
+    /** @returns {svgType_Filter_Function_TableValues} */
+    get tableValues() { return this.#_tableValues; }
+    set tableValues(v) { }
+    /** @type {svgType_Filter_Function_TableValues} */
+    #_tableValues;
     /** @typedef {number} svgType_Filter_Function_Slope */
-    slope;
+    /** @returns {svgType_Filter_Function_Slope} */
+    get slope() { return this.#_slope; }
+    set slope(v) { }
+    /** @type {svgType_Filter_Function_Slope} */
+    #_slope;
     /** @typedef {number} svgType_Filter_Function_Intercept */
-    intercept;
+    /** @returns {svgType_Filter_Function_Intercept} */
+    get intercept() { return this.#_intercept; }
+    set intercept(v) { }
+    /** @type {svgType_Filter_Function_Intercept} */
+    #_intercept;
     /** @typedef {number} svgType_Filter_Function_Amplitude */
-    amplitude;
+    /** @returns {svgType_Filter_Function_Amplitude} */
+    get amplitude() { return this.#_amplitude; }
+    set amplitude(v) { }
+    /** @type {svgType_Filter_Function_Amplitude} */
+    #_amplitude;
     /** @typedef {number} svgType_Filter_Function_Exponent */
-    exponent;
+    /** @returns {svgType_Filter_Function_Exponent} */
+    get exponent() { return this.#_exponent; }
+    set exponent(v) { }
+    /** @type {svgType_Filter_Function_Exponent} */
+    #_exponent;
     /** @typedef {number} svgType_Filter_Function_Offset */
-    offset;
+    /** @returns {svgType_Filter_Function_Offset} */
+    get offset() { return this.#_offset; }
+    set offset(v) { }
+    /** @type {svgType_Filter_Function_Offset} */
+    #_offset;
     constructor(id, defType) { super(id, defType); }
 }
 /** The `<feFuncA>` SVG filter primitive defines the transfer function for the *alpha* component of the 
@@ -375,7 +533,12 @@ export class svgFilterFEGaussianBlur extends svgFilterPrimitiveIn {
     /** @type {svgType_Filter_GaussianBlur_StdDeviation} */
     #_stdDeviation = null;
     /** @typedef {'duplicate'|'wrap'|'none'} svgType_Filter_GaussianBlur_EdgeMode */
-    edgeMode;
+    /** @returns {svgType_Filter_GaussianBlur_EdgeMode} */
+    get edgeMode() { return this.#_edgeMode; }
+    set edgeMode(v) {
+        /** @type {svgType_Filter_GaussianBlur_EdgeMode} */
+    }
+    #_edgeMode;
     constructor(id) { super(id, 'feGaussianBlur'); }
 }
 /** The `<feImage>` SVG filter primitive fetches image data from an external source and provides 
@@ -383,11 +546,23 @@ export class svgFilterFEGaussianBlur extends svgFilterPrimitiveIn {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feImage */
 export class svgFilterFEImage extends svgFilterPrimitive {
     /** @typedef {cssCrossorigin} svgType_Filter_Image_Crossorigin */
-    crossorigin;
+    /** @returns {svgType_Filter_Image_Crossorigin} */
+    get crossorigin() { return this.#_crossorigin; }
+    set crossorigin(v) { }
+    /** @type {svgType_Filter_Image_Crossorigin} */
+    #_crossorigin;
     /** @typedef {cssPreserveAspectRatio} svgType_Filter_Image_PreserveAspectRatio */
-    preserveAspectRatio;
+    /** @returns {svgType_Filter_Image_PreserveAspectRatio} */
+    get preserveAspectRatio() { return this.#_preserveAspectRatio; }
+    set preserveAspectRatio(v) { }
+    /** @type {svgType_Filter_Image_PreserveAspectRatio} */
+    #_preserveAspectRatio;
     /** @typedef {string} svgType_Filter_Image_Href */
-    href;
+    /** @returns {svgType_Filter_Image_Href} */
+    get href() { return this.#_href; }
+    set href(v) { }
+    /** @type {svgType_Filter_Image_Href} */
+    #_href;
     constructor(id) { super(id, 'feImage'); }
 
     // not including fetchpriority - at time of coding this, it's labeled as experimental / non-standard
@@ -400,7 +575,11 @@ export class svgFilterFEImage extends svgFilterPrimitive {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feMerge */
 export class svgFilterFEMerge extends svgFilterPrimitive {
     /** @typedef {svgType_Filter_Merge_MergeNodes[]} svgType_Filter_Merge_MergeNodes */
-    mergeNodes;
+    /** @returns {svgType_Filter_Merge_MergeNodes} */
+    get mergeNodes() { return this.#_mergeNodes; }
+    set mergeNodes(v) { }
+    /** @type {svgType_Filter_Merge_MergeNodes} */
+    #_mergeNodes;
     constructor(id) { super(id, 'feMerge'); }
 }
 /** 
@@ -413,30 +592,52 @@ export class svgFilterFEMergeNode extends svgFilterPrimitiveIn {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feMorphology */
 export class svgFilterFEMorphology extends svgFilterPrimitiveIn {
     /** @typedef {'erode'|'dilate'|null} svgType_Filter_Morphology_Operator Defines whether to erode (i.e., thin) or dilate (fatten) the source graphic. Default `erode` */
-    operator;
+    /** @returns {svgType_Filter_Morphology_Operator} */
+    get operator() { return this.#_operator; }
+    set operator(v) {
+        /** @type {svgType_Filter_Morphology_Operator} */
+    }
+    #_operator;
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_Morphology_Radius */
-    radius;
+    /** @returns {svgType_Filter_Morphology_Radius} */
+    get radius() { return this.#_radius; }
+    set radius(v) { }
+    /** @type {svgType_Filter_Morphology_Radius} */
+    #_radius;
     constructor(id) { super(id, 'feMorphology'); }
 }
 /** The `<feOffset>` SVG filter primitive enables offsetting an input image relative to its current position.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feOffset */
 export class svgFilterFEOffset extends svgFilterPrimitiveIn {
     /** @typedef {number} svgType_Filter_Offset_DX */
-    dx;
+    /** @returns {svgType_Filter_Offset_DX} */
+    get dx() { return this.#_dx; }
+    set dx(v) { }
+    /** @type {svgType_Filter_Offset_DX} */
+    #_dx;
     /** @typedef {number} svgType_Filter_Offset_DY */
-    dy;
+    /** @returns {svgType_Filter_Offset_DY} */
+    get dy() { return this.#_dy; }
+    set dy(v) { }
+    /** @type {svgType_Filter_Offset_DY} */
+    #_dy;
     constructor(id) { super(id, 'feOffset'); }
 }
 /** The `<fePointLight>` SVG element defines a light source which allows to create a point light effect. It can be used within a 
  * lighting filter primitive: {@linkcode svgFilterFEDiffuseLighting feDiffuseLighting} or {@linkcode svgFilterFESpecularLighting feSpecularLighting}. 
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/fePointLight */
 export class svgFilterFEPointLight extends svgFilterPrimitive {
-    /** @typedef {cssLengthPercentage} svgType_Filter_PointLight_X */
-    x;
-    /** @typedef {cssLengthPercentage} svgType_Filter_PointLight_Y */
-    y;
+
+    // get x() { }
+    // set x(v) { }
+    // get y() { }
+    // set y(v) { }
     /** @typedef {number} svgType_Filter_PointLight_Z */
-    z;
+    /** @returns {svgType_Filter_PointLight_Z} */
+    get z() { return this.#_z; }
+    set z(v) { }
+    /** @type {svgType_Filter_PointLight_Z} */
+    #_z;
     constructor(id) { super(id, 'fePointLight'); }
 }
 /** The `<feSpecularLighting>` SVG filter primitive lights a source graphic using the alpha channel as a bump map. 
@@ -444,15 +645,35 @@ export class svgFilterFEPointLight extends svgFilterPrimitive {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feSpecularLighting */
 export class svgFilterFESpecularLighting extends svgFilterPrimitiveIn {
     /** @typedef {number} svgType_Filter_SpecularLighting_LightingColor lighting-color */
-    lightingColor;
+    /** @returns {svgType_Filter_SpecularLighting_LightingColor} */
+    get lightingColor() { return this.#_lightingColor; }
+    set lightingColor(v) { }
+    /** @type {svgType_Filter_SpecularLighting_LightingColor} */
+    #_lightingColor;
     /** @typedef {number} svgType_Filter_SpecularLighting_SurfaceScale */
-    surfaceScale;
+    /** @returns {svgType_Filter_SpecularLighting_SurfaceScale} */
+    get surfaceScale() { return this.#_surfaceScale; }
+    set surfaceScale(v) { }
+    /** @type {svgType_Filter_SpecularLighting_SurfaceScale} */
+    #_surfaceScale;
     /** @typedef {number} svgType_Filter_SpecularLighting_SpecularConstant */
-    specularConstant;
+    /** @returns {svgType_Filter_SpecularLighting_SpecularConstant} */
+    get specularConstant() { return this.#_specularConstant; }
+    set specularConstant(v) { }
+    /** @type {svgType_Filter_SpecularLighting_SpecularConstant} */
+    #_specularConstant;
     /** @typedef {number} svgType_Filter_SpecularLighting_SpecularExponent */
-    specularExponent;
+    /** @returns {svgType_Filter_SpecularLighting_SpecularExponent} */
+    get specularExponent() { return this.#_specularExponent; }
+    set specularExponent(v) { }
+    /** @type {svgType_Filter_SpecularLighting_SpecularExponent} */
+    #_specularExponent;
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_SpecularLighting_KernelUnitLength */
-    kernelUnitLength;
+    /** @returns {svgType_Filter_SpecularLighting_KernelUnitLength} */
+    get kernelUnitLength() { return this.#_kernelUnitLength; }
+    set kernelUnitLength(v) { }
+    /** @type {svgType_Filter_SpecularLighting_KernelUnitLength} */
+    #_kernelUnitLength;
     constructor(id) { super(id, 'feSpecularLighting'); }
 }
 /** The `<feSpotLight>` SVG element defines a light source that can be used to create a spotlight effect. It is used within a 
@@ -460,21 +681,53 @@ export class svgFilterFESpecularLighting extends svgFilterPrimitiveIn {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feSpotLight */
 export class svgFilterFESpotlight extends svgFilterPrimitive {
     /** @typedef {number} svgType_Filter_Spotlight_X */
-    x;
+    /** @returns {svgType_Filter_Spotlight_X} */
+    get x() { return this.#_x; }
+    set x(v) { }
+    /** @type {svgType_Filter_Spotlight_X} */
+    #_x;
     /** @typedef {number} svgType_Filter_Spotlight_Y */
-    y;
+    /** @returns {svgType_Filter_Spotlight_Y} */
+    get y() { return this.#_y; }
+    set y(v) { }
+    /** @type {svgType_Filter_Spotlight_Y} */
+    #_y;
     /** @typedef {number} svgType_Filter_Spotlight_Z */
-    z;
+    /** @returns {svgType_Filter_Spotlight_Z} */
+    get z() { return this.#_z; }
+    set z(v) { }
+    /** @type {svgType_Filter_Spotlight_Z} */
+    #_z;
     /** @typedef {number} svgType_Filter_Spotlight_PointsAtX */
-    pointsAtX;
+    /** @returns {svgType_Filter_Spotlight_PointsAtX} */
+    get pointsAtX() { return this.#_pointsAtX; }
+    set pointsAtX(v) { }
+    /** @type {svgType_Filter_Spotlight_PointsAtX} */
+    #_pointsAtX;
     /** @typedef {number} svgType_Filter_Spotlight_PointsAtY */
-    pointsAtY;
+    /** @returns {svgType_Filter_Spotlight_PointsAtY} */
+    get pointsAtY() { return this.#_pointsAtY; }
+    set pointsAtY(v) { }
+    /** @type {svgType_Filter_Spotlight_PointsAtY} */
+    #_pointsAtY;
     /** @typedef {number} svgType_Filter_Spotlight_PointsAtZ */
-    pointsAtZ;
+    /** @returns {svgType_Filter_Spotlight_PointsAtZ} */
+    get pointsAtZ() { return this.#_pointsAtZ; }
+    set pointsAtZ(v) { }
+    /** @type {svgType_Filter_Spotlight_PointsAtZ} */
+    #_pointsAtZ;
     /** @typedef {number} svgType_Filter_Spotlight_LimitingConeAngle */
-    limitingConeAngle;
+    /** @returns {svgType_Filter_Spotlight_LimitingConeAngle} */
+    get limitingConeAngle() { return this.#_limitingConeAngle; }
+    set limitingConeAngle(v) { }
+    /** @type {svgType_Filter_Spotlight_LimitingConeAngle} */
+    #_limitingConeAngle;
     /** @typedef {number} svgType_Filter_Spotlight_SpecularExponent */
-    specularExponent;
+    /** @returns {svgType_Filter_Spotlight_SpecularExponent} */
+    get specularExponent() { return this.#_specularExponent; }
+    set specularExponent(v) { }
+    /** @type {svgType_Filter_Spotlight_SpecularExponent} */
+    #_specularExponent;
     constructor(id) { super(id, 'feSpotlight'); }
 }
 /** The `<feTile>` SVG filter primitive allows to fill a target rectangle with a repeated, tiled pattern of an input image. 
@@ -487,14 +740,35 @@ export class svgFilterFETile extends svgFilterPrimitiveIn {
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feTurbulence */
 export class svgFilterFETurbulence extends svgFilterPrimitive {
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_Turbulence_BaseFrequency */
-    baseFrequency;
+    /** @returns {svgType_Filter_Turbulence_BaseFrequency} */
+    get baseFrequency() { return this.#_baseFrequency; }
+    set baseFrequency(v) { }
+    /** @type {svgType_Filter_Turbulence_BaseFrequency} */
+    #_baseFrequency;
     /** @typedef {integer} svgType_Filter_Turbulence_NumOctaves must be integer */
-    numOctaves;
+    /** @returns {svgType_Filter_Turbulence_NumOctaves} */
+    get numOctaves() { return this.#_numOctaves; }
+    set numOctaves(v) { }
+    /** @type {svgType_Filter_Turbulence_NumOctaves} */
+    #_numOctaves;
     /** @typedef {number} svgType_Filter_Turbulence_Seed Can be number, but gets rounded down to integer */
-    seed;
+    /** @returns {svgType_Filter_Turbulence_Seed} */
+    get seed() { return this.#_seed; }
+    set seed(v) { }
+    /** @type {svgType_Filter_Turbulence_Seed} */
+    #_seed;
     /** @typedef {'noStitch'|'stitch'} svgType_Filter_Turbulence_StitchTiles */
-    stitchTiles;
+    /** @returns {svgType_Filter_Turbulence_StitchTiles} */
+    get stitchTiles() { return this.#_stitchTiles; }
+    set stitchTiles(v
+        /** @type {svgType_Filter_Turbulence_StitchTiles} */
+    ) { }
+    #_stitchTiles;
     /** @typedef {'fractalNoise'|'turbulence'} svgType_Filter_Turbulence_Type */
-    type;
+    /** @returns {svgType_Filter_Turbulence_Type} */
+    get type() { return this.#_type; }
+    set type(v) { }
+    /** @type {svgType_Filter_Turbulence_Type} */
+    #_type;
     constructor(id) { super(id, 'feTurbulence'); }
 }
