@@ -88,7 +88,7 @@ export class svgFilterDefinition extends svgFilterDefBase {
 /**
  * Primitive used as a base class for all SVG filter elements 
  */
-export class svgFilterPrimitive extends svgFilterDefBase {
+class svgFilterPrimitive extends svgFilterDefBase {
 
     /** @typedef {string} FilterPrimitiveReference */
     /** @typedef {FilterPrimitiveReference|null} svgType_Filter_Result */
@@ -128,7 +128,7 @@ export class svgFilterPrimitive extends svgFilterDefBase {
 /** 
  * Primitive used as a base class for all SVG filter elements 
  * that use the {@linkcode in} attribute. */
-export class svgFilterPrimitiveIn extends svgFilterPrimitive {
+class svgFilterPrimitiveIn extends svgFilterPrimitive {
 
     /** @typedef {'SourceGraphic'|'SourceAlpha'|'BackgroundImage'|'BackgroundAlpha'|'FillPaint'|'StrokePaint'|FilterPrimitiveReference|null} svgType_Filter_In */
 
@@ -176,7 +176,7 @@ export class svgFilterPrimitiveIn extends svgFilterPrimitive {
     }
 }
 /** Primitive used as a base class for all SVG filter elements that use the {@linkcode in} and {@linkcode in2} attributes. */
-export class svgFilterPrimitiveIn2 extends svgFilterPrimitiveIn {
+class svgFilterPrimitiveIn2 extends svgFilterPrimitiveIn {
 
     /** @typedef {'SourceGraphic'|'SourceAlpha'|'BackgroundImage'|'BackgroundAlpha'|'FillPaint'|'StrokePaint'|FilterPrimitiveReference|null} svgType_Filter_In2 */
 
