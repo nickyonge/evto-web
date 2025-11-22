@@ -86,6 +86,12 @@ declare global {
      */
     declare type numberOptionalNumber = number | [number, number?];
 
+    /**
+     * SVG List-Of-Numbers value, based on the SVG type List-of-Ts. 
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/Content_type#list-of-ts
+     */
+    declare type numberListOfNumbers = number | number[];
+
     /** Single-char string representing one of the RGBA channels */
     declare type rgbaChannel = 'R' | 'G' | 'B' | 'A';
 

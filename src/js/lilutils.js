@@ -605,17 +605,36 @@ export function IsNumberInfiniteOrNaN(num) {
  * If `true`, returns `"1, 2"`. If `false`, returns `"1 2"`. Default `false`
  * @returns {string}
  */
-export function numberOptionalNumberToString(numberOptionalNumber, joinWithComma = false) {
-    if (numberOptionalNumber == null) { return null; }
-    if (typeof numberOptionalNumber == 'number') {
-        return numberOptionalNumber.toString();
+export function NumberOptionalNumberToString(numberOptionalNumber, joinWithComma = false) {
+    return NumberListOfNumbersToString(numberOptionalNumber, joinWithComma, null);
+}
+
+/**
+ * Convert a {@linkcode numberListOfNumbers} value to string. 
+ * 
+ * If the given value is `null`, returns `null`
+ * @param {numberListOfNumbers} numberListOfNumbers Number, or number[] array 
+ * @param {boolean} [joinWithComma=false] If two numbers, join with comma? 
+ * If `true`, returns `"1, 2, 3, ..."`. If `false`, returns `"1 2 3 ..."`. Default `false`
+ * @param {number|null} [replaceNullValuesWith=null] If any null values are found, 
+ * should they be removed (`null`) or replaced with a given value? Default `null` 
+ * @returns {string}
+ */
+export function NumberListOfNumbersToString(numberListOfNumbers, joinWithComma = false, replaceNullValuesWith = null) {
+    if (numberListOfNumbers == null) { return null; }
+    if (typeof numberListOfNumbers == 'number') {
+        return numberListOfNumbers.toString();
     }
-    switch (numberOptionalNumber.length) {
-        case 1:
-            return numberOptionalNumber[0].toString();
-        case 2:
-            return numberOptionalNumber.join(' ');
+    if (replaceNullValuesWith == null) {
+        numberListOfNumbers.removeNullValues();
+    } else {
+        for (let i = 0; i < numberListOfNumbers.length; i++) {
+            if (numberListOfNumbers[i] == null) {
+                numberListOfNumbers[i] = replaceNullValuesWith;
+            }
+        }
     }
+    return numberListOfNumbers.join(joinWithComma ? ', ' : ' ');
 }
 
 // #endregion Numbers
