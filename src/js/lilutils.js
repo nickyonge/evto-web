@@ -567,7 +567,7 @@ export function ColorToHex(color, alpha = RGBAlpha.Ignore, prefixHash = '#') {
 
 /**
  * Takes a value, and ensures that it's a number. If `value` isn't a number
- * and can't be parsed, returns NaN and optionally outputs an error.
+ * and can't be parsed, returns `NaN` and optionally outputs an error.
  * @param {number|any} value Input value to convert to a Number 
  * @param {boolean} [errorOnFailure=true] output an error upon parsing failure? Default `true`
  * @returns {number}
@@ -659,6 +659,75 @@ export function NumberListOfNumbersToString(numberListOfNumbers, joinWithComma =
     return numberListOfNumbers.join(joinWithComma ? ', ' : ' ');
 }
 
+/**
+ * Converts a number to a percentage string, formatted `"N%"` where `N` is the 
+ * given number. The given number can either be a number, a string number, or a
+ * string percent. 
+ * 
+ * If {@linkcode number} is `null` or `NaN`, returns `null`. 
+ * 
+ * - **Note:** If {@linkcode number} any form of string, the numberic value will be extracted 
+ * and processed per the other parameters. Eg, `"50.5%"` will return `"50%"` if 
+ * {@linkcode roundingOperation} is {@linkcode RoundOps.Round} or {@linkcode RoundOps.Floor Floor}.
+ * @param {number|`${number}`|percentage} number Numeric value to convert. 
+ * Can be a number, number as string, or a {@linkcode percentage}.
+ * @param {boolean|'only01'} [multiplyBy100 = true] Number-to-percentage 
+ * multiplication protocol. If `false`, does not multiply. If `true`, multiplies 
+ * the {@linkcode number} param by `100`. If `"only01"`, multiplies {@linkcode number}
+ * if it's between `0.0` and `1.0` (inclusive). If `null`, treated as `false`. 
+ * Default `true`.
+ * - **Note:** `"only01"` is inclusive of `1`. Be sure to set this to `false` 
+ * or `null` if your input value is a range of `0` to `100`.
+ * @param {number} [minValue = null] Min allowed value. If `null`, no min limit. 
+ * A value of `0` will prevent negative output values. Default `null`
+ * @param {number} [maxValue = null] Max allowed value. If `null`, no max limit. 
+ * A value of `100`, along with a {@linkcode minValue} of `0`, will clamp the 
+ * percentage to `0` to `100`. Default `null`
+ * @param {RoundOps} [roundingOperation=RoundOps.Round] Rounding operation to use. 
+ * Rounding occurs last. Default {@linkcode RoundOps.Round}.
+ * @returns {percentage}
+ */
+export function ToPercentage(number, multiplyBy100 = true, minValue = null, maxValue = null, roundingOperation = RoundOps.Round) {
+    if (number == null) { return null; }
+    if (typeof number == 'string') {
+        // convert to number to obey the rest of the parameters 
+        if (number.endsWith('%')) {
+            number = EnsureToNumber(number.substring(0, number.length - 1));
+        } else {
+            number = EnsureToNumber(number);
+        }
+        if (number == null) { return null; }
+    }
+    if (Number.isNaN(number)) { return null; }
+    // check multiplication 
+    switch (multiplyBy100) {
+        default:
+            console.error(`ERROR: invalid ToPercentage multiplyBy100 value ${multiplyBy100}, not doing any multiplication to ${number}`, this);
+        case false:
+        case null:
+            // do nothing 
+            break;
+        case 'only01':
+            if (number <= 0 || number > 1) {
+                break;
+            }
+        case true:
+            number *= 100;
+            break;
+    }
+    // check min/max clamping 
+    if (minValue != null) {
+        if (maxValue != null) { number = number.clamp(minValue, maxValue); }
+        else {
+            if (number < minValue) { number = minValue; }
+        }
+    } else if (maxValue != null) {
+        if (number > maxValue) { number = maxValue; }
+    }
+    // check rounding 
+    number = RoundWith(number, roundingOperation);
+}
+
 // #endregion Numbers
 
 // #region Math
@@ -677,10 +746,14 @@ export const RoundOps = Object.freeze({
 });
 
 /**
- * Rounds the given number using the specified {@link RoundOps rounding operation} (default {@linkcode RoundOps.Round}). 
- * Returns the rounded number, or `null` / `NaN` if the parameter is either of those.
+ * Rounds the given number using the specified {@link RoundOps rounding operation}. 
+ * Returns the rounded number, or `null` / `NaN` if {@linkcode number} is either of those. 
+ * 
+ * Default {@linkcode roundingOperation} value is {@linkcode RoundOps.Round}. If it's `null`, 
+ * it's treated as {@linkcode RoundOps.Round}.
  * @param {number} number Number to round 
- * @param {RoundOps} [roundingOperation] Rounding opeartion to use. Default {@linkcode RoundOps.Round}
+ * @param {RoundOps} [roundingOperation] Rounding opeartion to use. Default {@linkcode RoundOps.Round}, 
+ * which is also how `null` values are treated. 
  * @returns {number}
  */
 export function Round(number, roundingOperation = RoundOps.Round) { return RoundWith(number, roundingOperation); }
@@ -692,7 +765,7 @@ export function Floor(number) { return RoundWith(number, RoundOps.Floor); }
  * Rounds the given number using the specified {@link RoundOps rounding operation}. 
  * Returns the rounded number, or `null` / `NaN` if the parameter is either of those. 
  * @param {number} number Number to round 
- * @param {RoundOps} roundingOperation Rounding operation to use. 
+ * @param {RoundOps} roundingOperation Rounding operation to use. If `null`, uses {@linkcode RoundOps.Round} 
  * @returns {number}
  */
 export function RoundWith(number, roundingOperation) {
@@ -700,7 +773,9 @@ export function RoundWith(number, roundingOperation) {
     else if (Number.isNaN(number)) { return NaN; }
     switch (roundingOperation) {
         case null:
-            console.warn(`WARNING: null RoundWith roundingOperation, it should be specified, defaulting to RoundOps.Round for number ${number}`, this)
+            if (_ROUNDWITH_WARN_ON_NULL) {
+                console.warn(`WARNING: null RoundWith roundingOperation, it should be specified, defaulting to RoundOps.Round for number ${number}`, this)
+            }
         case RoundOps.Round:
             return Math.round(number);
         case RoundOps.Ceil:
@@ -713,6 +788,8 @@ export function RoundWith(number, roundingOperation) {
             return number;
     }
 }
+/** Should {@linkcode RoundWith} output a warning if the given {@link RoundOps rounding operation} is `null`? */ 
+const _ROUNDWITH_WARN_ON_NULL = false;
 
 /**
  * Lerps (linearly interpolates) between an origin `a` and 

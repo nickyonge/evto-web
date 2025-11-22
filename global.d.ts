@@ -377,7 +377,8 @@ declare global {
         toMax(maxDecimals?: number|boolean, ensurOneDecimal?: boolean): string;
 
         /** 
-         * Clamps a number between the given minimum and maximum values.
+         * Clamps a number between the given minimum and maximum values, 
+         * and returns the clamped value. 
          * 
          * By default, clamps between 0 and 1.
          * @param {number} [min = 0] Minimum possible value (default `0`)
