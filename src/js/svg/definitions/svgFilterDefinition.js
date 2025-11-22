@@ -193,15 +193,15 @@ export class svgFilterFEBlend extends svgFilterPrimitiveIn2 {
 
     /** The mode attribute defines the blending mode.
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/mode
-     * @returns {blendMode} */
+     * @returns {BlendMode} */
     get mode() { return this.#_mode; }
     set mode(v) { if (v == this.#_mode) { return; } let prev = this.#_mode; this.#_mode = v; this.changed('mode', v, prev); }
-    /** @type {blendMode} */
+    /** @type {BlendMode} */
     #_mode = svgDefaults.FILTER_PRIMITIVE_BLEND_MODE;
 
     /** The `<feBlend>` SVG filter primitive composes two objects together ruled by a certain blending mode. 
      * This is similar to what is known from image editing software when blending two layers. 
-     * @param {blendMode} mode The mode attribute defines the blending mode.
+     * @param {BlendMode} mode The mode attribute defines the blending mode.
      * @param {string} [id]  */
     constructor(mode, id) { super(id, 'Blend'); this.mode = mode; }
     get data() {

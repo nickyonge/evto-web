@@ -33,9 +33,11 @@ declare global {
     declare type integer = number;
 
     /**
-     * The `<blend-mode>` CSS data type describes how colors should appear when elements overlap. If unspecified, the default value is typically `normal`. 
-     * - **Note:** remember that the attribute name must be `"blend-mode"`, not `"blendMode"` or `"BlendMode"`.
-     * @see {@linkcode blendMode blendMode} typedef
+     * The `<blend-mode>` CSS data type describes how colors should appear when 
+     * elements overlap. If unspecified, the default value is typically `normal`. 
+     * - **Note:** remember that the attribute name must be `"blend-mode"`, 
+     * not `"blendMode"`,  `"BlendMode"`, or any other alternative spelling. 
+     * @see {@linkcode BlendMode BlendMode} The type declaration 
      * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/blend-mode
      */
     declare enum BlendMode {
@@ -74,27 +76,18 @@ declare global {
     };
 
     /**
-     * The `<blend-mode>` CSS data type describes how colors should appear when elements overlap. If unspecified, the default value is typically `normal`. 
-     * @see {@linkcode BlendMode} enum
+     * The `<blend-mode>` CSS data type describes how colors should appear when 
+     * elements overlap. If unspecified, the default value is typically `normal`. 
+     * - **Note:** remember that the attribute name must be `"blend-mode"`, 
+     * not `"blendMode"`,  `"BlendMode"`, or any other alternative spelling. 
+     * @see {@linkcode BlendMode} The enum object containing string literal references 
      * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/blend-mode
      */
-    declare type blendMode =
-        'normal' |
-        'multiply' |
-        'screen' |
-        'overlay' |
-        'darken' |
-        'lighten' |
-        'color-dodge' |
-        'color-burn' |
-        'hard-light' |
-        'soft-light' |
-        'difference' |
-        'exclusion' |
-        'hue' |
-        'saturation' |
-        'color' |
-        'luminosity';
+    declare type BlendMode = BlendMode |
+        'normal' | 'multiply' | 'screen' | 'overlay' |
+        'darken' | 'lighten' | 'color-dodge' | 'color-burn' |
+        'hard-light' | 'soft-light' | 'difference' | 'exclusion' |
+        'hue' | 'saturation' | 'color' | 'luminosity';
 
     /**
      * SVG CSS value used to specify one, or optionally two, paired numbers. 
