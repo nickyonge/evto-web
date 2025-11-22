@@ -49,12 +49,12 @@ export class svgImageDefinition extends svgXYWHDefinition {
     /**
      * Provides support for configuration of the Cross-Origin 
      * Resource Sharing (CORS) requests for the element's fetched data.
-     * @returns {'anonymous'|'use-credentials'|''|null}
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/crossorigin 
+     * @returns {crossorigin}
      */
     get crossorigin() { return this.#_crossorigin; }
     set crossorigin(v) { let prev = this.#_crossorigin; this.#_crossorigin = v; this.changed('crossorigin', v, prev); }
-    /** @type {'anonymous'|'use-credentials'|''|null} */
+    /** @type {crossorigin} */
     #_crossorigin = svgDefaults.IMAGE_CROSSORIGIN;
 
     /**

@@ -333,9 +333,9 @@ export class svgFilterFEGaussianBlur extends svgFilterPrimitiveIn {
  * the pixel data as output (meaning if the external source is an SVG image, it is rasterized.)
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feImage */
 export class svgFilterFEImage extends svgFilterPrimitive {
-    /** @typedef {''} svgType_Filter_Image_CrossOrigin */
-    /** @typedef {''} svgType_Filter_Image_PreserveAspectRatio */
-    /** @typedef {''} svgType_Filter_Image_Href */
+    /** @typedef {crossorigin} svgType_Filter_Image_CrossOrigin */
+    /** @typedef {preserveAspectRatio} svgType_Filter_Image_PreserveAspectRatio */
+    /** @typedef {string} svgType_Filter_Image_Href */
     constructor(id) { super(id, 'feImage'); }
 
     // not including fetchpriority - at time of coding this, it's labeled as experimental / non-standard

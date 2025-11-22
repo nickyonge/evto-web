@@ -79,7 +79,7 @@ declare global {
         'saturation' |
         'color' |
         'luminosity';
-    
+
     /**
      * SVG value used to specify one, or optionally two, paired numbers. 
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Guides/Content_type#number-optional-number
@@ -103,6 +103,13 @@ declare global {
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/preserveAspectRatio 
      */
     declare type preserveAspectRatio = 'none' | `x${'Min' | 'Mid' | 'Max'}Y${'Min' | 'Mid' | 'Max'} ${'meet' | 'slice'}`;
+
+    /** 
+     * Provides support for configuration of the Cross-Origin 
+     * Resource Sharing (CORS) requests for the element's fetched data.
+     * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/crossorigin 
+     */
+    declare type crossorigin = 'anonymous' | 'use-credentials' | '';
 
     /**
      * CSS-valid color string. Can technically by any string value, but this type implies it should be a color. 
