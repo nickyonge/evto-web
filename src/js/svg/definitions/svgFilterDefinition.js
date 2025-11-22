@@ -107,6 +107,10 @@ export class svgFilterPrimitive extends svgFilterDefBase {
     /** @type {svgType_Filter_Result} */
     #_result = svgDefaults.FILTER_PRIMITIVE_RESULT;
 
+    /**
+     * @param {string} id Unique identifier for this svgElement. 
+     * @param {`fe${string}`} defType Filter definition type. Must begin with prefix `"fe"`, eg `"feBlend"`. 
+     */
     constructor(id, defType) {
         super(id, defType);
     }
@@ -208,7 +212,7 @@ export class svgFilterFEBlend extends svgFilterPrimitiveIn2 {
      * This is similar to what is known from image editing software when blending two layers. 
      * @param {BlendMode} mode The mode attribute defines the blending mode.
      * @param {string} [id]  */
-    constructor(mode, id) { super(id, 'Blend'); this.mode = mode; }
+    constructor(mode, id) { super(id, 'feBlend'); this.mode = mode; }
     get data() {
         return [super.data,
         this.ParseData(['mode', this.mode])].join(' ');
@@ -221,13 +225,13 @@ export class svgFilterFEColorMatrix extends svgFilterPrimitiveIn {
     /** @typedef {'matrix'|'saturate'|'hueRotate'|'luminanceToAlpha'|null} svgType_Filter_ColorMatrix_Type */
     /** @returns {svgType_Filter_ColorMatrix_Type} */
     get type() { return this.#_type; }
-    set type(v) { }
+    set type(v) { if (v == this.#_type) { return; } let prev = this.#_type; this.#_type = v; this.changed('type', v, prev); }
     /** @type {svgType_Filter_ColorMatrix_Type} */
     #_type;
     /** @typedef {cssNumberListOfNumbers} svgType_Filter_ColorMatrix_Values 20 numbers making a 5x4 numbers: 5 columns = x*R,x*G,x*B,x*A,x+Shift, 4 rows = RGBA channels */
     /** @returns {svgType_Filter_ColorMatrix_Values} */
     get values() { return this.#_values; }
-    set values(v) { }
+    set values(v) { if (v == this.#_values) { return; } let prev = this.#_values; this.#_values = v; this.changed('values', v, prev); }
     /** @type {svgType_Filter_ColorMatrix_Values} */
     #_values;
     constructor(id) { super(id, 'feColorMatrix'); }
@@ -236,6 +240,10 @@ export class svgFilterFEColorMatrix extends svgFilterPrimitiveIn {
  * It allows operations like brightness adjustment, contrast adjustment, color balance or thresholding.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feComponentTransfer */
 export class svgFilterFEComponentTransfer extends svgFilterPrimitiveIn {
+    /**
+     * @param {string} id Unique identifier for this svgElement. 
+     * @param {`fe${string}`} [defType] Filter definition type. Must begin with prefix `"fe"`, eg `"feComponentTransfer"`. 
+     */
     constructor(id, defType = 'feComponentTransfer') { super(id, defType); }
 }
 /** The `<feComposite>` SVG filter primitive performs the combination of two input images pixel-wise in image space.
@@ -244,26 +252,30 @@ export class svgFilterFEComposite extends svgFilterPrimitiveIn2 {
     /** @typedef {number} svgType_Filter_Composite_K k1, k2, k3, k4 */
     /** @returns {svgType_Filter_Composite_K} */
     get k1() { return this.#_k1; }
-    set k1(v) { }
+    set k1(v) { if (v == this.#_k1) { return; } let prev = this.#_k1; this.#_k1 = v; this.changed('k1', v, prev); }
     /** @type {svgType_Filter_Composite_K} */
     #_k1;
     /** @returns {svgType_Filter_Composite_K} */
     get k2() { return this.#_k2; }
-    set k2(v) { }
+    set k2(v) { if (v == this.#_k2) { return; } let prev = this.#_k2; this.#_k2 = v; this.changed('k2', v, prev); }
     /** @type {svgType_Filter_Composite_K} */
     #_k2;
     /** @returns {svgType_Filter_Composite_K} */
     get k3() { return this.#_k3; }
-    set k3(v) { }
+    set k3(v) { if (v == this.#_k3) { return; } let prev = this.#_k3; this.#_k3 = v; this.changed('k3', v, prev); }
     /** @type {svgType_Filter_Composite_K} */
     #_k3;
     /** @returns {svgType_Filter_Composite_K} */
     get k4() { return this.#_k4; }
-    set k4(v) { }
+    set k4(v) { if (v == this.#_k4) { return; } let prev = this.#_k4; this.#_k4 = v; this.changed('k4', v, prev); }
     /** @type {svgType_Filter_Composite_K} */
     #_k4;
     /** @typedef {'over'|'in'|'out'|'atop'|'xor'|'lighter'|'arithmetic'|null} svgType_Filter_Composite_Operator The compositing operation that is to be performed. Default `over` */
-    operator;
+    /** @returns {svgType_Filter_Composite_Operator} */
+    get operator() { return this.#_operator; }
+    set operator(v) { if (v == this.#_operator) { return; } let prev = this.#_operator; this.#_operator = v; this.changed('operator', v, prev); }
+    /** @type {svgType_Filter_Composite_Operator} */
+    #_operator;
     constructor(id) { super(id, 'feComposite'); }
 }
 /** The `<feConvolveMatrix>` SVG filter primitive applies a matrix convolution filter effect.
@@ -272,56 +284,55 @@ export class svgFilterFEConvolveMatrix extends svgFilterPrimitiveIn {
     /** @typedef {cssIntegerOptionalInteger} svgType_Filter_ConvolveMatrix_Order Must be one or two integers greater than zero */
     /** @returns {svgType_Filter_ConvolveMatrix_Order} */
     get order() { return this.#_order; }
-    set order(v) { }
+    set order(v) { if (v == this.#_order) { return; } let prev = this.#_order; this.#_order = v; this.changed('order', v, prev); }
     /** @type {svgType_Filter_ConvolveMatrix_Order} */
     #_order;
     /** @typedef {number[]} svgType_Filter_ConvolveMatrix_KernelMatrix */
     /** @returns {svgType_Filter_ConvolveMatrix_KernelMatrix} */
     get matrix() { return this.#_matrix; }
-    set matrix(v) { }
+    set matrix(v) { if (v == this.#_matrix) { return; } let prev = this.#_matrix; this.#_matrix = v; this.changed('matrix', v, prev); }
     /** @type {svgType_Filter_ConvolveMatrix_KernelMatrix} */
     #_matrix;
     /** @typedef {number} svgType_Filter_ConvolveMatrix_Divisor */
     /** @returns {svgType_Filter_ConvolveMatrix_Divisor} */
     get divisor() { return this.#_divisor; }
-    set divisor(v) { }
+    set divisor(v) { if (v == this.#_divisor) { return; } let prev = this.#_divisor; this.#_divisor = v; this.changed('divisor', v, prev); }
     /** @type {svgType_Filter_ConvolveMatrix_Divisor} */
     #_divisor;
     /** @typedef {number} svgType_Filter_ConvolveMatrix_Bias */
     /** @returns {svgType_Filter_ConvolveMatrix_Bias} */
     get bias() { return this.#_bias; }
-    set bias(v) { }
+    set bias(v) { if (v == this.#_bias) { return; } let prev = this.#_bias; this.#_bias = v; this.changed('bias', v, prev); }
     /** @type {svgType_Filter_ConvolveMatrix_Bias} */
     #_bias;
     /** @typedef {integer} svgType_Filter_ConvolveMatrix_TargetX Integer */
     /** @returns {svgType_Filter_ConvolveMatrix_TargetX} */
     get targetX() { return this.#_targetX; }
-    set targetX(v) { }
+    set targetX(v) { if (v == this.#_targetX) { return; } let prev = this.#_targetX; this.#_targetX = v; this.changed('targetX', v, prev); }
     /** @type {svgType_Filter_ConvolveMatrix_TargetX} */
     #_targetX;
     /** @typedef {integer} svgType_Filter_ConvolveMatrix_TargetY Integer */
     /** @returns {svgType_Filter_ConvolveMatrix_TargetY} */
     get targetY() { return this.#_targetY; }
-    set targetY(v) { }
+    set targetY(v) { if (v == this.#_targetY) { return; } let prev = this.#_targetY; this.#_targetY = v; this.changed('targetY', v, prev); }
     /** @type {svgType_Filter_ConvolveMatrix_TargetY} */
     #_targetY;
     /** @typedef {'duplicate'|'wrap'|'none'} svgType_Filter_ConvolveMatrix_EdgeMode */
     /** @returns {svgType_Filter_ConvolveMatrix_EdgeMode} */
     get edgeMode() { return this.#_edgeMode; }
-    set edgeMode(v) {
-        /** @type {svgType_Filter_ConvolveMatrix_EdgeMode} */
-    }
+    set edgeMode(v) { if (v == this.#_edgeMode) { return; } let prev = this.#_edgeMode; this.#_edgeMode = v; this.changed('edgeMode', v, prev); }
+    /** @type {svgType_Filter_ConvolveMatrix_EdgeMode} */
     #_edgeMode;
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_ConvolveMatrix_KernelUnitLength */
     /** @returns {svgType_Filter_ConvolveMatrix_KernelUnitLength} */
     get kernelUnitLength() { return this.#_kernelUnitLength; }
-    set kernelUnitLength(v) { }
+    set kernelUnitLength(v) { if (v == this.#_kernelUnitLength) { return; } let prev = this.#_kernelUnitLength; this.#_kernelUnitLength = v; this.changed('kernelUnitLength', v, prev); }
     /** @type {svgType_Filter_ConvolveMatrix_KernelUnitLength} */
     #_kernelUnitLength;
     /** @typedef {boolean} svgType_Filter_ConvolveMatrix_PreserveAlpha */
     /** @returns {svgType_Filter_ConvolveMatrix_PreserveAlpha} */
     get preserveAlpha() { return this.#_preserveAlpha; }
-    set preserveAlpha(v) { }
+    set preserveAlpha(v) { if (v == this.#_preserveAlpha) { return; } let prev = this.#_preserveAlpha; this.#_preserveAlpha = v; this.changed('preserveAlpha', v, prev); }
     /** @type {svgType_Filter_ConvolveMatrix_PreserveAlpha} */
     #_preserveAlpha;
     constructor(id) { super(id, 'feConvolveMatrix'); }
@@ -332,25 +343,25 @@ export class svgFilterFEDiffuseLighting extends svgFilterPrimitiveIn {
     /** @typedef {number} svgType_Filter_DiffuseLighting_LightingColor lighting-color */
     /** @returns {svgType_Filter_DiffuseLighting_LightingColor} */
     get lightingColor() { return this.#_lightingColor; }
-    set lightingColor(v) { }
+    set lightingColor(v) { if (v == this.#_lightingColor) { return; } let prev = this.#_lightingColor; this.#_lightingColor = v; this.changed('lightingColor', v, prev); }
     /** @type {svgType_Filter_DiffuseLighting_LightingColor} */
     #_lightingColor;
     /** @typedef {number} svgType_Filter_DiffuseLighting_SurfaceScale */
     /** @returns {svgType_Filter_DiffuseLighting_SurfaceScale} */
     get surfaceScale() { return this.#_surfaceScale; }
-    set surfaceScale(v) { }
+    set surfaceScale(v) { if (v == this.#_surfaceScale) { return; } let prev = this.#_surfaceScale; this.#_surfaceScale = v; this.changed('surfaceScale', v, prev); }
     /** @type {svgType_Filter_DiffuseLighting_SurfaceScale} */
     #_surfaceScale;
     /** @typedef {number} svgType_Filter_DiffuseLighting_DiffuseConstant */
     /** @returns {svgType_Filter_DiffuseLighting_DiffuseConstant} */
     get diffuseConstant() { return this.#_diffuseConstant; }
-    set diffuseConstant(v) { }
+    set diffuseConstant(v) { if (v == this.#_diffuseConstant) { return; } let prev = this.#_diffuseConstant; this.#_diffuseConstant = v; this.changed('diffuseConstant', v, prev); }
     /** @type {svgType_Filter_DiffuseLighting_DiffuseConstant} */
     #_diffuseConstant;
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_DiffuseLighting_KernelUnitLength */
     /** @returns {svgType_Filter_DiffuseLighting_KernelUnitLength} */
     get kernelUnitLength() { return this.#_kernelUnitLength; }
-    set kernelUnitLength(v) { }
+    set kernelUnitLength(v) { if (v == this.#_kernelUnitLength) { return; } let prev = this.#_kernelUnitLength; this.#_kernelUnitLength = v; this.changed('kernelUnitLength', v, prev); }
     /** @type {svgType_Filter_DiffuseLighting_KernelUnitLength} */
     #_kernelUnitLength;
     constructor(id) { super(id, 'feDiffuseLighting'); }
@@ -362,19 +373,19 @@ export class svgFilterFEDisplacementMap extends svgFilterPrimitiveIn2 {
     /** @typedef {number} svgType_Filter_DisplacementMap_Scale */
     /** @returns {svgType_Filter_DisplacementMap_Scale} */
     get scale() { return this.#_scale; }
-    set scale(v) { }
+    set scale(v) { if (v == this.#_scale) { return; } let prev = this.#_scale; this.#_scale = v; this.changed('scale', v, prev); }
     /** @type {svgType_Filter_DisplacementMap_Scale} */
     #_scale;
     /** @typedef {cssRGBA} svgType_Filter_DisplacementMap_XChannelSelector */
     /** @returns {svgType_Filter_DisplacementMap_XChannelSelector} */
     get xChannelSelector() { return this.#_xChannelSelector; }
-    set xChannelSelector(v) { }
+    set xChannelSelector(v) { if (v == this.#_xChannelSelector) { return; } let prev = this.#_xChannelSelector; this.#_xChannelSelector = v; this.changed('xChannelSelector', v, prev); }
     /** @type {svgType_Filter_DisplacementMap_XChannelSelector} */
     #_xChannelSelector;
     /** @typedef {cssRGBA} svgType_Filter_DisplacementMap_YChannelSelector */
     /** @returns {svgType_Filter_DisplacementMap_YChannelSelector} */
     get yChannelSelector() { return this.#_yChannelSelector; }
-    set yChannelSelector(v) { }
+    set yChannelSelector(v) { if (v == this.#_yChannelSelector) { return; } let prev = this.#_yChannelSelector; this.#_yChannelSelector = v; this.changed('yChannelSelector', v, prev); }
     /** @type {svgType_Filter_DisplacementMap_YChannelSelector} */
     #_yChannelSelector;
     constructor(id) { super(id, 'feDisplacementMap'); }
@@ -386,13 +397,13 @@ export class svgFilterFEDistantLight extends svgFilterPrimitive {
     /** @typedef {number} svgType_Filter_DistantLight_Azimuth */
     /** @returns {svgType_Filter_DistantLight_Azimuth} */
     get azimuth() { return this.#_azimuth; }
-    set azimuth(v) { }
+    set azimuth(v) { if (v == this.#_azimuth) { return; } let prev = this.#_azimuth; this.#_azimuth = v; this.changed('azimuth', v, prev); }
     /** @type {svgType_Filter_DistantLight_Azimuth} */
     #_azimuth;
     /** @typedef {number} svgType_Filter_DistantLight_Elevation */
     /** @returns {svgType_Filter_DistantLight_Elevation} */
     get elevation() { return this.#_elevation; }
-    set elevation(v) { }
+    set elevation(v) { if (v == this.#_elevation) { return; } let prev = this.#_elevation; this.#_elevation = v; this.changed('elevation', v, prev); }
     /** @type {svgType_Filter_DistantLight_Elevation} */
     #_elevation;
     constructor(id) { super(id, 'feDistantLight'); }
@@ -403,31 +414,31 @@ export class svgFilterFEDropShadow extends svgFilterPrimitiveIn {
     /** @typedef {number} svgType_Filter_DropShadow_DX */
     /** @returns {svgType_Filter_DropShadow_DX} */
     get dx() { return this.#_dx; }
-    set dx(v) { }
+    set dx(v) { if (v == this.#_dx) { return; } let prev = this.#_dx; this.#_dx = v; this.changed('dx', v, prev); }
     /** @type {svgType_Filter_DropShadow_DX} */
     #_dx;
     /** @typedef {number} svgType_Filter_DropShadow_DY */
     /** @returns {svgType_Filter_DropShadow_DY} */
     get dy() { return this.#_dy; }
-    set dy(v) { }
+    set dy(v) { if (v == this.#_dy) { return; } let prev = this.#_dy; this.#_dy = v; this.changed('dy', v, prev); }
     /** @type {svgType_Filter_DropShadow_DY} */
     #_dy;
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_DropShadow_StdDeviation */
     /** @returns {svgType_Filter_DropShadow_StdDeviation} */
     get stdDeviation() { return this.#_stdDeviation; }
-    set stdDeviation(v) { }
+    set stdDeviation(v) { if (v == this.#_stdDeviation) { return; } let prev = this.#_stdDeviation; this.#_stdDeviation = v; this.changed('stdDeviation', v, prev); }
     /** @type {svgType_Filter_DropShadow_StdDeviation} */
     #_stdDeviation;
     /** @typedef {color} svgType_Filter_DropShadow_FloodColor flood-color, can be used on DropShadow */
     /** @returns {svgType_Filter_DropShadow_FloodColor} */
     get floodColor() { return this.#_floodColor; }
-    set floodColor(v) { }
+    set floodColor(v) { if (v == this.#_floodColor) { return; } let prev = this.#_floodColor; this.#_floodColor = v; this.changed('floodColor', v, prev); }
     /** @type {svgType_Filter_DropShadow_FloodColor} */
     #_floodColor;
     /** @typedef {number} svgType_Filter_DropShadow_FloodOpacity flood-opacity, can be used on DropShadow */
     /** @returns {svgType_Filter_DropShadow_FloodOpacity} */
     get floodOpacity() { return this.#_floodOpacity; }
-    set floodOpacity(v) { }
+    set floodOpacity(v) { if (v == this.#_floodOpacity) { return; } let prev = this.#_floodOpacity; this.#_floodOpacity = v; this.changed('floodOpacity', v, prev); }
     /** @type {svgType_Filter_DropShadow_FloodOpacity} */
     #_floodOpacity;
     constructor(id) { super(id, 'feDropShadow'); }
@@ -438,13 +449,13 @@ export class svgFilterFEFlood extends svgFilterPrimitive {
     /** @typedef {color} svgType_Filter_Flood_FloodColor flood-color */
     /** @returns {svgType_Filter_Flood_FloodColor} */
     get floodColor() { return this.#_floodColor; }
-    set floodColor(v) { }
+    set floodColor(v) { if (v == this.#_floodColor) { return; } let prev = this.#_floodColor; this.#_floodColor = v; this.changed('floodColor', v, prev); }
     /** @type {svgType_Filter_Flood_FloodColor} */
     #_floodColor;
     /** @typedef {number} svgType_Filter_Flood_FloodOpacity flood-opacity */
     /** @returns {svgType_Filter_Flood_FloodOpacity} */
     get floodOpacity() { return this.#_floodOpacity; }
-    set floodOpacity(v) { }
+    set floodOpacity(v) { if (v == this.#_floodOpacity) { return; } let prev = this.#_floodOpacity; this.#_floodOpacity = v; this.changed('floodOpacity', v, prev); }
     /** @type {svgType_Filter_Flood_FloodOpacity} */
     #_floodOpacity;
     constructor(id) { super(id, 'feFlood'); }
@@ -458,43 +469,43 @@ class svgFilterFEFunction extends svgFilterFEComponentTransfer {
     /** @typedef {'identity'|'table'|'discrete'|'linear'|'gamma'} svgType_Filter_Function_Type */
     /** @returns {svgType_Filter_Function_Type} */
     get type() { return this.#_type; }
-    set type(v) { }
+    set type(v) { if (v == this.#_type) { return; } let prev = this.#_type; this.#_type = v; this.changed('type', v, prev); }
     /** @type {svgType_Filter_Function_Type} */
     #_type;
     /** @typedef {cssNumberListOfNumbers} svgType_Filter_Function_TableValues list of numbers between `0` and `1` */
     /** @returns {svgType_Filter_Function_TableValues} */
     get tableValues() { return this.#_tableValues; }
-    set tableValues(v) { }
+    set tableValues(v) { if (v == this.#_tableValues) { return; } let prev = this.#_tableValues; this.#_tableValues = v; this.changed('tableValues', v, prev); }
     /** @type {svgType_Filter_Function_TableValues} */
     #_tableValues;
     /** @typedef {number} svgType_Filter_Function_Slope */
     /** @returns {svgType_Filter_Function_Slope} */
     get slope() { return this.#_slope; }
-    set slope(v) { }
+    set slope(v) { if (v == this.#_slope) { return; } let prev = this.#_slope; this.#_slope = v; this.changed('slope', v, prev); }
     /** @type {svgType_Filter_Function_Slope} */
     #_slope;
     /** @typedef {number} svgType_Filter_Function_Intercept */
     /** @returns {svgType_Filter_Function_Intercept} */
     get intercept() { return this.#_intercept; }
-    set intercept(v) { }
+    set intercept(v) { if (v == this.#_intercept) { return; } let prev = this.#_intercept; this.#_intercept = v; this.changed('intercept', v, prev); }
     /** @type {svgType_Filter_Function_Intercept} */
     #_intercept;
     /** @typedef {number} svgType_Filter_Function_Amplitude */
     /** @returns {svgType_Filter_Function_Amplitude} */
     get amplitude() { return this.#_amplitude; }
-    set amplitude(v) { }
+    set amplitude(v) { if (v == this.#_amplitude) { return; } let prev = this.#_amplitude; this.#_amplitude = v; this.changed('amplitude', v, prev); }
     /** @type {svgType_Filter_Function_Amplitude} */
     #_amplitude;
     /** @typedef {number} svgType_Filter_Function_Exponent */
     /** @returns {svgType_Filter_Function_Exponent} */
     get exponent() { return this.#_exponent; }
-    set exponent(v) { }
+    set exponent(v) { if (v == this.#_exponent) { return; } let prev = this.#_exponent; this.#_exponent = v; this.changed('exponent', v, prev); }
     /** @type {svgType_Filter_Function_Exponent} */
     #_exponent;
     /** @typedef {number} svgType_Filter_Function_Offset */
     /** @returns {svgType_Filter_Function_Offset} */
     get offset() { return this.#_offset; }
-    set offset(v) { }
+    set offset(v) { if (v == this.#_offset) { return; } let prev = this.#_offset; this.#_offset = v; this.changed('offset', v, prev); }
     /** @type {svgType_Filter_Function_Offset} */
     #_offset;
     constructor(id, defType) { super(id, defType); }
@@ -529,15 +540,14 @@ export class svgFilterFEFuncR extends svgFilterFEFunction {
 export class svgFilterFEGaussianBlur extends svgFilterPrimitiveIn {
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_GaussianBlur_StdDeviation */
     get stdDeviation() { return this.#_stdDeviation; }
-    set stdDeviation(v) { if (v == this.#_stdDeviation) { return; } let prev = this.#_stdDeviation; this.#_stdDeviation = v; this.changed('mode', v, prev); }
+    set stdDeviation(v) { if (v == this.#_stdDeviation) { return; } let prev = this.#_stdDeviation; this.#_stdDeviation = v; this.changed('stdDeviation', v, prev); }
     /** @type {svgType_Filter_GaussianBlur_StdDeviation} */
     #_stdDeviation = null;
     /** @typedef {'duplicate'|'wrap'|'none'} svgType_Filter_GaussianBlur_EdgeMode */
     /** @returns {svgType_Filter_GaussianBlur_EdgeMode} */
     get edgeMode() { return this.#_edgeMode; }
-    set edgeMode(v) {
-        /** @type {svgType_Filter_GaussianBlur_EdgeMode} */
-    }
+    set edgeMode(v) { if (v == this.#_edgeMode) { return; } let prev = this.#_edgeMode; this.#_edgeMode = v; this.changed('edgeMode', v, prev); }
+    /** @type {svgType_Filter_GaussianBlur_EdgeMode} */
     #_edgeMode;
     constructor(id) { super(id, 'feGaussianBlur'); }
 }
@@ -548,19 +558,19 @@ export class svgFilterFEImage extends svgFilterPrimitive {
     /** @typedef {cssCrossorigin} svgType_Filter_Image_Crossorigin */
     /** @returns {svgType_Filter_Image_Crossorigin} */
     get crossorigin() { return this.#_crossorigin; }
-    set crossorigin(v) { }
+    set crossorigin(v) { if (v == this.#_crossorigin) { return; } let prev = this.#_crossorigin; this.#_crossorigin = v; this.changed('crossorigin', v, prev); }
     /** @type {svgType_Filter_Image_Crossorigin} */
     #_crossorigin;
     /** @typedef {cssPreserveAspectRatio} svgType_Filter_Image_PreserveAspectRatio */
     /** @returns {svgType_Filter_Image_PreserveAspectRatio} */
     get preserveAspectRatio() { return this.#_preserveAspectRatio; }
-    set preserveAspectRatio(v) { }
+    set preserveAspectRatio(v) { if (v == this.#_preserveAspectRatio) { return; } let prev = this.#_preserveAspectRatio; this.#_preserveAspectRatio = v; this.changed('preserveAspectRatio', v, prev); }
     /** @type {svgType_Filter_Image_PreserveAspectRatio} */
     #_preserveAspectRatio;
     /** @typedef {string} svgType_Filter_Image_Href */
     /** @returns {svgType_Filter_Image_Href} */
     get href() { return this.#_href; }
-    set href(v) { }
+    set href(v) { if (v == this.#_href) { return; } let prev = this.#_href; this.#_href = v; this.changed('href', v, prev); }
     /** @type {svgType_Filter_Image_Href} */
     #_href;
     constructor(id) { super(id, 'feImage'); }
@@ -577,7 +587,7 @@ export class svgFilterFEMerge extends svgFilterPrimitive {
     /** @typedef {svgType_Filter_Merge_MergeNodes[]} svgType_Filter_Merge_MergeNodes */
     /** @returns {svgType_Filter_Merge_MergeNodes} */
     get mergeNodes() { return this.#_mergeNodes; }
-    set mergeNodes(v) { }
+    set mergeNodes(v) { if (v == this.#_mergeNodes) { return; } let prev = this.#_mergeNodes; this.#_mergeNodes = v; this.changed('mergeNodes', v, prev); }
     /** @type {svgType_Filter_Merge_MergeNodes} */
     #_mergeNodes;
     constructor(id) { super(id, 'feMerge'); }
@@ -594,14 +604,13 @@ export class svgFilterFEMorphology extends svgFilterPrimitiveIn {
     /** @typedef {'erode'|'dilate'|null} svgType_Filter_Morphology_Operator Defines whether to erode (i.e., thin) or dilate (fatten) the source graphic. Default `erode` */
     /** @returns {svgType_Filter_Morphology_Operator} */
     get operator() { return this.#_operator; }
-    set operator(v) {
-        /** @type {svgType_Filter_Morphology_Operator} */
-    }
+    set operator(v) { if (v == this.#_operator) { return; } let prev = this.#_operator; this.#_operator = v; this.changed('operator', v, prev); }
+    /** @type {svgType_Filter_Morphology_Operator} */
     #_operator;
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_Morphology_Radius */
     /** @returns {svgType_Filter_Morphology_Radius} */
     get radius() { return this.#_radius; }
-    set radius(v) { }
+    set radius(v) { if (v == this.#_radius) { return; } let prev = this.#_radius; this.#_radius = v; this.changed('radius', v, prev); }
     /** @type {svgType_Filter_Morphology_Radius} */
     #_radius;
     constructor(id) { super(id, 'feMorphology'); }
@@ -612,13 +621,13 @@ export class svgFilterFEOffset extends svgFilterPrimitiveIn {
     /** @typedef {number} svgType_Filter_Offset_DX */
     /** @returns {svgType_Filter_Offset_DX} */
     get dx() { return this.#_dx; }
-    set dx(v) { }
+    set dx(v) { if (v == this.#_dx) { return; } let prev = this.#_dx; this.#_dx = v; this.changed('dx', v, prev); }
     /** @type {svgType_Filter_Offset_DX} */
     #_dx;
     /** @typedef {number} svgType_Filter_Offset_DY */
     /** @returns {svgType_Filter_Offset_DY} */
     get dy() { return this.#_dy; }
-    set dy(v) { }
+    set dy(v) { if (v == this.#_dy) { return; } let prev = this.#_dy; this.#_dy = v; this.changed('dy', v, prev); }
     /** @type {svgType_Filter_Offset_DY} */
     #_dy;
     constructor(id) { super(id, 'feOffset'); }
@@ -682,19 +691,19 @@ export class svgFilterFEPointLight extends svgFilterPrimitive {
     /** @typedef {number} svgType_Filter_PointLight_Z */
     /** @returns {svgType_Filter_PointLight_Z} */
     get z() { return this.#_z; }
-    set z(v) { }
+    set z(v) { if (v == this.#_z) { return; } let prev = this.#_z; this.#_z = v; this.changed('z', v, prev); }
     /** @type {svgType_Filter_PointLight_Z} */
     #_z;
     /** @typedef {cssLengthPercentage} svgType_Filter_PointLight_X */
     /** @returns {svgType_Filter_PointLight_X} */
     get pointLightX() { return this.#_pointLightX; }
-    set pointLightX(v) { }
+    set pointLightX(v) { if (v == this.#_pointLightX) { return; } let prev = this.#_pointLightX; this.#_pointLightX = v; this.changed('pointLightX', v, prev); }
     /** @type {svgType_Filter_PointLight_X} */
     #_pointLightX;
     /** @typedef {cssLengthPercentage} svgType_Filter_PointLight_Y */
     /** @returns {svgType_Filter_PointLight_Y} */
     get pointLightY() { return this.#_pointLightY; }
-    set pointLightY(v) { }
+    set pointLightY(v) { if (v == this.#_pointLightY) { return; } let prev = this.#_pointLightY; this.#_pointLightY = v; this.changed('pointLightY', v, prev); }
     /** @type {svgType_Filter_PointLight_Y} */
     #_pointLightY;
     /** Convenience / naming consistency. Gets/sets {@linkcode z} @returns {svgType_Filter_PointLight_Z} */
@@ -709,31 +718,31 @@ export class svgFilterFESpecularLighting extends svgFilterPrimitiveIn {
     /** @typedef {number} svgType_Filter_SpecularLighting_LightingColor lighting-color */
     /** @returns {svgType_Filter_SpecularLighting_LightingColor} */
     get lightingColor() { return this.#_lightingColor; }
-    set lightingColor(v) { }
+    set lightingColor(v) { if (v == this.#_lightingColor) { return; } let prev = this.#_lightingColor; this.#_lightingColor = v; this.changed('lightingColor', v, prev); }
     /** @type {svgType_Filter_SpecularLighting_LightingColor} */
     #_lightingColor;
     /** @typedef {number} svgType_Filter_SpecularLighting_SurfaceScale */
     /** @returns {svgType_Filter_SpecularLighting_SurfaceScale} */
     get surfaceScale() { return this.#_surfaceScale; }
-    set surfaceScale(v) { }
+    set surfaceScale(v) { if (v == this.#_surfaceScale) { return; } let prev = this.#_surfaceScale; this.#_surfaceScale = v; this.changed('surfaceScale', v, prev); }
     /** @type {svgType_Filter_SpecularLighting_SurfaceScale} */
     #_surfaceScale;
     /** @typedef {number} svgType_Filter_SpecularLighting_SpecularConstant */
     /** @returns {svgType_Filter_SpecularLighting_SpecularConstant} */
     get specularConstant() { return this.#_specularConstant; }
-    set specularConstant(v) { }
+    set specularConstant(v) { if (v == this.#_specularConstant) { return; } let prev = this.#_specularConstant; this.#_specularConstant = v; this.changed('specularConstant', v, prev); }
     /** @type {svgType_Filter_SpecularLighting_SpecularConstant} */
     #_specularConstant;
     /** @typedef {number} svgType_Filter_SpecularLighting_SpecularExponent */
     /** @returns {svgType_Filter_SpecularLighting_SpecularExponent} */
     get specularExponent() { return this.#_specularExponent; }
-    set specularExponent(v) { }
+    set specularExponent(v) { if (v == this.#_specularExponent) { return; } let prev = this.#_specularExponent; this.#_specularExponent = v; this.changed('specularExponent', v, prev); }
     /** @type {svgType_Filter_SpecularLighting_SpecularExponent} */
     #_specularExponent;
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_SpecularLighting_KernelUnitLength */
     /** @returns {svgType_Filter_SpecularLighting_KernelUnitLength} */
     get kernelUnitLength() { return this.#_kernelUnitLength; }
-    set kernelUnitLength(v) { }
+    set kernelUnitLength(v) { if (v == this.#_kernelUnitLength) { return; } let prev = this.#_kernelUnitLength; this.#_kernelUnitLength = v; this.changed('kernelUnitLength', v, prev); }
     /** @type {svgType_Filter_SpecularLighting_KernelUnitLength} */
     #_kernelUnitLength;
     constructor(id) { super(id, 'feSpecularLighting'); }
@@ -745,19 +754,19 @@ export class svgFilterFESpotlight extends svgFilterPrimitive {
     /** @typedef {number} svgType_Filter_Spotlight_X */
     /** @returns {svgType_Filter_Spotlight_X} */
     get x() { return this.#_x; }
-    set x(v) { }
+    set x(v) { if (v == this.#_x) { return; } let prev = this.#_x; this.#_x = v; this.changed('x', v, prev); }
     /** @type {svgType_Filter_Spotlight_X} */
     #_x;
     /** @typedef {number} svgType_Filter_Spotlight_Y */
     /** @returns {svgType_Filter_Spotlight_Y} */
     get y() { return this.#_y; }
-    set y(v) { }
+    set y(v) { if (v == this.#_y) { return; } let prev = this.#_y; this.#_y = v; this.changed('y', v, prev); }
     /** @type {svgType_Filter_Spotlight_Y} */
     #_y;
     /** @typedef {number} svgType_Filter_Spotlight_Z */
     /** @returns {svgType_Filter_Spotlight_Z} */
     get z() { return this.#_z; }
-    set z(v) { }
+    set z(v) { if (v == this.#_z) { return; } let prev = this.#_z; this.#_z = v; this.changed('z', v, prev); }
     /** @type {svgType_Filter_Spotlight_Z} */
     #_z;
     /** Convenience / naming consistency. Gets/sets to {@linkcode x} @returns {svgType_Filter_Spotlight_X} */
@@ -772,31 +781,31 @@ export class svgFilterFESpotlight extends svgFilterPrimitive {
     /** @typedef {number} svgType_Filter_Spotlight_PointsAtX */
     /** @returns {svgType_Filter_Spotlight_PointsAtX} */
     get pointsAtX() { return this.#_pointsAtX; }
-    set pointsAtX(v) { }
+    set pointsAtX(v) { if (v == this.#_pointsAtX) { return; } let prev = this.#_pointsAtX; this.#_pointsAtX = v; this.changed('pointsAtX', v, prev); }
     /** @type {svgType_Filter_Spotlight_PointsAtX} */
     #_pointsAtX;
     /** @typedef {number} svgType_Filter_Spotlight_PointsAtY */
     /** @returns {svgType_Filter_Spotlight_PointsAtY} */
     get pointsAtY() { return this.#_pointsAtY; }
-    set pointsAtY(v) { }
+    set pointsAtY(v) { if (v == this.#_pointsAtY) { return; } let prev = this.#_pointsAtY; this.#_pointsAtY = v; this.changed('pointsAtY', v, prev); }
     /** @type {svgType_Filter_Spotlight_PointsAtY} */
     #_pointsAtY;
     /** @typedef {number} svgType_Filter_Spotlight_PointsAtZ */
     /** @returns {svgType_Filter_Spotlight_PointsAtZ} */
     get pointsAtZ() { return this.#_pointsAtZ; }
-    set pointsAtZ(v) { }
+    set pointsAtZ(v) { if (v == this.#_pointsAtZ) { return; } let prev = this.#_pointsAtZ; this.#_pointsAtZ = v; this.changed('pointsAtZ', v, prev); }
     /** @type {svgType_Filter_Spotlight_PointsAtZ} */
     #_pointsAtZ;
     /** @typedef {number} svgType_Filter_Spotlight_LimitingConeAngle */
     /** @returns {svgType_Filter_Spotlight_LimitingConeAngle} */
     get limitingConeAngle() { return this.#_limitingConeAngle; }
-    set limitingConeAngle(v) { }
+    set limitingConeAngle(v) { if (v == this.#_limitingConeAngle) { return; } let prev = this.#_limitingConeAngle; this.#_limitingConeAngle = v; this.changed('limitingConeAngle', v, prev); }
     /** @type {svgType_Filter_Spotlight_LimitingConeAngle} */
     #_limitingConeAngle;
     /** @typedef {number} svgType_Filter_Spotlight_SpecularExponent */
     /** @returns {svgType_Filter_Spotlight_SpecularExponent} */
     get specularExponent() { return this.#_specularExponent; }
-    set specularExponent(v) { }
+    set specularExponent(v) { if (v == this.#_specularExponent) { return; } let prev = this.#_specularExponent; this.#_specularExponent = v; this.changed('specularExponent', v, prev); }
     /** @type {svgType_Filter_Spotlight_SpecularExponent} */
     #_specularExponent;
     constructor(id) { super(id, 'feSpotlight'); }
@@ -813,32 +822,31 @@ export class svgFilterFETurbulence extends svgFilterPrimitive {
     /** @typedef {cssNumberOptionalNumber} svgType_Filter_Turbulence_BaseFrequency */
     /** @returns {svgType_Filter_Turbulence_BaseFrequency} */
     get baseFrequency() { return this.#_baseFrequency; }
-    set baseFrequency(v) { }
+    set baseFrequency(v) { if (v == this.#_baseFrequency) { return; } let prev = this.#_baseFrequency; this.#_baseFrequency = v; this.changed('baseFrequency', v, prev); }
     /** @type {svgType_Filter_Turbulence_BaseFrequency} */
     #_baseFrequency;
     /** @typedef {integer} svgType_Filter_Turbulence_NumOctaves must be integer */
     /** @returns {svgType_Filter_Turbulence_NumOctaves} */
     get numOctaves() { return this.#_numOctaves; }
-    set numOctaves(v) { }
+    set numOctaves(v) { if (v == this.#_numOctaves) { return; } let prev = this.#_numOctaves; this.#_numOctaves = v; this.changed('numOctaves', v, prev); }
     /** @type {svgType_Filter_Turbulence_NumOctaves} */
     #_numOctaves;
     /** @typedef {number} svgType_Filter_Turbulence_Seed Can be number, but gets rounded down to integer */
     /** @returns {svgType_Filter_Turbulence_Seed} */
     get seed() { return this.#_seed; }
-    set seed(v) { }
+    set seed(v) { if (v == this.#_seed) { return; } let prev = this.#_seed; this.#_seed = v; this.changed('seed', v, prev); }
     /** @type {svgType_Filter_Turbulence_Seed} */
     #_seed;
     /** @typedef {'noStitch'|'stitch'} svgType_Filter_Turbulence_StitchTiles */
     /** @returns {svgType_Filter_Turbulence_StitchTiles} */
     get stitchTiles() { return this.#_stitchTiles; }
-    set stitchTiles(v
-        /** @type {svgType_Filter_Turbulence_StitchTiles} */
-    ) { }
+    set stitchTiles(v) { if (v == this.#_stitchTiles) { return; } let prev = this.#_stitchTiles; this.#_stitchTiles = v; this.changed('stitchTiles', v, prev); }
+    /** @type {svgType_Filter_Turbulence_StitchTiles} */
     #_stitchTiles;
     /** @typedef {'fractalNoise'|'turbulence'} svgType_Filter_Turbulence_Type */
     /** @returns {svgType_Filter_Turbulence_Type} */
     get type() { return this.#_type; }
-    set type(v) { }
+    set type(v) { if (v == this.#_type) { return; } let prev = this.#_type; this.#_type = v; this.changed('type', v, prev); }
     /** @type {svgType_Filter_Turbulence_Type} */
     #_type;
     constructor(id) { super(id, 'feTurbulence'); }
