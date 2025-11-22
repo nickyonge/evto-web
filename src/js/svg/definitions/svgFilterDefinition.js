@@ -627,17 +627,79 @@ export class svgFilterFEOffset extends svgFilterPrimitiveIn {
  * lighting filter primitive: {@linkcode svgFilterFEDiffuseLighting feDiffuseLighting} or {@linkcode svgFilterFESpecularLighting feSpecularLighting}. 
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/fePointLight */
 export class svgFilterFEPointLight extends svgFilterPrimitive {
-
-    // get x() { }
-    // set x(v) { }
-    // get y() { }
-    // set y(v) { }
+    /** 
+     * **Note:** This {@linkcode x} value is overridden in `fePointLight`, 
+     * and can be either a `number` or {@linkcode cssLengthPercentage}. 
+     * 
+     * Because JS subclasses cannot widen the types of parent 
+     * class properties, a {@linkcode cssLengthPercentage} cannot 
+     * be assigned to `x` directly. 
+     * - Setter assigns value to {@linkcode pointLightX}.
+     *   - A numerical value assigned to {@linkcode pointLightX} 
+     * will be converted to a {@linkcode percentage} on output.
+     * - Getter returns the numerical portion of the stored 
+     * {@linkcode pointLightX} value, eg `"10px"` returns `10`.
+     *   - **Note:** If there is any non-numeric data in that 
+     * value, *it will be lost*. This also outputs a warning.  
+     * Strongly recommended to use {@linkcode pointLightX}.
+     * @returns {number} */
+    get x() {
+        let value = this.pointLightX;
+        if (value == null) { return null; }
+        if (StringOnlyNumeric(value)) { return Number(value); }
+        let num = EnsureToNumber(StringNumericOnly(value));
+        console.warn(`WARNING: Converting X ${value} to number ${num}, loss of data incurred! Use pointLightX instead!`, this);
+        return num;
+    }
+    /** @param {number} v `number` only. Converted to {@linkcode percentage}. Recommended to use {@linkcode pointLightX}. */
+    set x(v) { this.pointLightX = /** @type {`${number}%`} */ (`${v}%`); }
+    /** 
+     * **Note:** This {@linkcode y} value is overridden in `fePointLight`, 
+     * and can be either a `number` or {@linkcode cssLengthPercentage}. 
+     * 
+     * Because JS subclasses cannot widen the types of parent 
+     * class properties, a {@linkcode cssLengthPercentage} cannot 
+     * be assigned to `y` directly. 
+     * - Setter assigns value to {@linkcode pointLightY}.
+     *   - A numerical value assigned to {@linkcode pointLightY} 
+     * will be converted to a {@linkcode percentage} on output.
+     * - Getter returns the numerical portion of the stored 
+     * {@linkcode pointLightY} value, eg `"10px"` returns `10`.
+     *   - **Note:** If there is any non-numeric data in that 
+     * value, *it will be lost*. This also outputs a warning.  
+     * Strongly recommended to use {@linkcode pointLightY}.
+     * @returns {number} */
+    get y() {
+        let value = this.pointLightY;
+        if (value == null) { return null; }
+        if (StringOnlyNumeric(value)) { return Number(value); }
+        let num = EnsureToNumber(StringNumericOnly(value));
+        console.warn(`WARNING: Converting Y ${value} to number ${num}, loss of data incurred! Use pointLightY instead!`, this);
+        return num;
+    }
+    /** @param {number} v `number` only. Converted to {@linkcode percentage}. Recommended to use {@linkcode pointLightY}. */
+    set y(v) { this.pointLightY = /** @type {`${number}%`} */ (`${v}%`); }
     /** @typedef {number} svgType_Filter_PointLight_Z */
     /** @returns {svgType_Filter_PointLight_Z} */
     get z() { return this.#_z; }
     set z(v) { }
     /** @type {svgType_Filter_PointLight_Z} */
     #_z;
+    /** @typedef {cssLengthPercentage} svgType_Filter_PointLight_X */
+    /** @returns {svgType_Filter_PointLight_X} */
+    get pointLightX() { return this.#_pointLightX; }
+    set pointLightX(v) { }
+    /** @type {svgType_Filter_PointLight_X} */
+    #_pointLightX;
+    /** @typedef {cssLengthPercentage} svgType_Filter_PointLight_Y */
+    /** @returns {svgType_Filter_PointLight_Y} */
+    get pointLightY() { return this.#_pointLightY; }
+    set pointLightY(v) { }
+    /** @type {svgType_Filter_PointLight_Y} */
+    #_pointLightY;
+    /** Convenience / naming consistency. Gets/sets {@linkcode z} @returns {svgType_Filter_PointLight_Z} */
+    get pointLightZ() { return this.z; }
+    set pointLightZ(v) { this.z = v; }
     constructor(id) { super(id, 'fePointLight'); }
 }
 /** The `<feSpecularLighting>` SVG filter primitive lights a source graphic using the alpha channel as a bump map. 
@@ -698,6 +760,15 @@ export class svgFilterFESpotlight extends svgFilterPrimitive {
     set z(v) { }
     /** @type {svgType_Filter_Spotlight_Z} */
     #_z;
+    /** Convenience / naming consistency. Gets/sets to {@linkcode x} @returns {svgType_Filter_Spotlight_X} */
+    get spotlightX() { return this.x; }
+    set spotlightX(v) { this.x = v; }
+    /** Convenience / naming consistency. Gets/sets to {@linkcode y} @returns {svgType_Filter_Spotlight_Y} */
+    get spotlightY() { return this.y; }
+    set spotlightY(v) { this.y = v; }
+    /** Convenience / naming consistency. Gets/sets {@linkcode z} @returns {svgType_Filter_Spotlight_Z} */
+    get spotlightZ() { return this.z; }
+    set spotlightZ(v) { this.z = v; }
     /** @typedef {number} svgType_Filter_Spotlight_PointsAtX */
     /** @returns {svgType_Filter_Spotlight_PointsAtX} */
     get pointsAtX() { return this.#_pointsAtX; }
