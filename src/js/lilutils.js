@@ -238,8 +238,8 @@ export const StringContainsAlpha = str => (isStringNotBlank(str) && /[a-zA-Z]/.t
 export const StringOnlyAlphanumeric = str => (isStringNotBlank(str) && /^[a-zA-Z0-9]+$/.test(str));
 /** Checks if string contains ONLY numerical characters 
  * @param {string} str string to check 
- * @param {boolean} [allowDecimalPoint=true] should a decimal point be considered? 
- * @param {boolean} [allowNegativeSign=true] should a negative be considered? 
+ * @param {boolean} [allowDecimalPoint=true] should a decimal point be considered? Default `true` 
+ * @param {boolean} [allowNegativeSign=true] should a negative be considered? Default `true` 
  * @returns {boolean} */
 export function StringOnlyNumeric(str, allowNegativeSign = true, allowDecimalPoint = true) {
     if (!isStringNotBlank(str)) { return false; }
