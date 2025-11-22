@@ -1,6 +1,6 @@
 import type { pathNode as _pathNode } from './src/js/assetExporter';
 import { _baseNode } from '../js/assetExporter';
-import { EnsureColorValid, ColorToRGBA, ColorToHex, ColorToArray } from '../js/lilutils';
+import { EnsureColorValid, ColorToRGBA, ColorToHex, ColorToArray, ToPercentage } from '../js/lilutils';
 
 declare global {
     /**
@@ -55,7 +55,7 @@ declare global {
         Color = 'color',
         /** The final color has the *luminosity* of the top color, while using the *hue* and *saturation* of the bottom color. This blend mode is equivalent to {@linkcode Color color}, but with the layers swapped. */
         Luminosity = 'luminosity',
-    }
+    };
 
     /**
      * The `<blend-mode>` CSS data type describes how colors should appear when elements overlap. If unspecified, the default value is typically `normal`. 
@@ -110,16 +110,35 @@ declare global {
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/crossorigin 
      */
     declare type crossorigin = 'anonymous' | 'use-credentials' | '';
-    
+
+    /** 
+     * String-number formatted `"N%"` where `N` is any number. 
+     * @see {@linkcode ToPercentage} for `number` conversion. 
+     * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/percentage 
+     */
     declare type percentage = `${number}%`;
+    /** 
+     * Common CSS data type representing a distance value. 
+     * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length 
+     */
     declare type cssLength = `${cssLengthUnits}${number}`;
+    /**
+     * CSS data type that can either be a {@linkcode cssLength length} or {@linkcode percentage}. 
+     * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length-percentage
+     */
     declare type cssLengthPercentage = percentage | cssLength;
-    // ^ specifying "number|`${number}%`" because of intellisense bug 
+
+    /** All prefixes before viewport-specific CSS lengths. 
+     * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length#relative_length_units_based_on_viewport */
     type cssLengthViewportPrefix = '' | 's' | 'l' | 'd';
+    /** All viewport-specific CSS length units. 
+     * @see https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Values/length#relative_length_units_based_on_viewport */
     type cssLengthViewportValues = 'vh' | 'vw' | 'vmax' | 'vmin' | 'vb' | 'vi';
-    type cssLengthUnits = 'px' | 'cm' | 'mm' | 'Q' | 'in' | 'pc' | 'pt' |
-        'cap' | 'ch' | 'em' | 'ex' | 'ic' | 'lh' | 'rcap' | 'rch' | 'rem' | 'rex' | 'ric' | 'rlh' |
-        `${cssLengthViewportPrefix}${cssLengthViewportValues}` | 'cqw' | 'cqh' | 'cqi' | 'cqb' | 'cqmin' | 'cqmax';
+    /** All possible unit values for CSS lengths */
+    type cssLengthUnits = 'px' | 'cm' | 'mm' | 'Q' | 'in' | 'pc' | 'pt' | 'cap' |
+        'ch' | 'em' | 'ex' | 'ic' | 'lh' | 'rcap' | 'rch' | 'rem' | 'rex' |
+        'ric' | 'rlh' | `${cssLengthViewportPrefix}${cssLengthViewportValues}` |
+        'cqw' | 'cqh' | 'cqi' | 'cqb' | 'cqmin' | 'cqmax';
 
     /**
      * CSS-valid color string. Can technically by any string value, but this type implies it should be a color. 
