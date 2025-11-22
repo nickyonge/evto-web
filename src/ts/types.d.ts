@@ -110,6 +110,16 @@ declare global {
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/crossorigin 
      */
     declare type crossorigin = 'anonymous' | 'use-credentials' | '';
+    
+    declare type percentage = `${number}%`;
+    declare type cssLength = `${cssLengthUnits}${number}`;
+    declare type cssLengthPercentage = percentage | cssLength;
+    // ^ specifying "number|`${number}%`" because of intellisense bug 
+    type cssLengthViewportPrefix = '' | 's' | 'l' | 'd';
+    type cssLengthViewportValues = 'vh' | 'vw' | 'vmax' | 'vmin' | 'vb' | 'vi';
+    type cssLengthUnits = 'px' | 'cm' | 'mm' | 'Q' | 'in' | 'pc' | 'pt' |
+        'cap' | 'ch' | 'em' | 'ex' | 'ic' | 'lh' | 'rcap' | 'rch' | 'rem' | 'rex' | 'ric' | 'rlh' |
+        `${cssLengthViewportPrefix}${cssLengthViewportValues}` | 'cqw' | 'cqh' | 'cqi' | 'cqb' | 'cqmin' | 'cqmax';
 
     /**
      * CSS-valid color string. Can technically by any string value, but this type implies it should be a color. 
