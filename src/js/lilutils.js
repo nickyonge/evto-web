@@ -179,11 +179,26 @@ export const StringAlphanumericOnly = str => (isBlank(str) ? str : str.replace(/
 export function StringNumericOnly(str, keepNumericSymbols = true) {
     if (typeof str === 'number') { return str.toString(); }
     if (isBlank(str)) { return str; }
-    str = str.replace(/[^0-9.-]/g, ''); // remove non-nums, keep . and - 
-    str = str.replace(/(?!^)-/g, ''); // keep one - at the start, if present
-    let decimal = str.indexOf('.'); // get first index of decimal point 
-    str = str.replaceAll('.', ''); // remove all periods 
-    if (decimal >= 0) { str = InsertString(str, '.', decimal); }
+    if (keepNumericSymbols) {
+        // remove everything before the first digit, minus sign, or decimal point 
+        str = str.replace(/^[^\d.-]*/, '');
+        // remove all minus signs that are not the first string value
+        str = str.replace(/(?!^)-/g, '');
+        // preserve initial minus sign
+        const isNegative = str.startsWith('-');
+        if (isNegative) { str.slice(1); }
+        // keep only digits and decimal point 
+        str = str.replace(/[^0-9.]/g, '');
+        // remove any decimal that isn't followed by any zeros 
+        str = str.replace(/\.(?!.*\d)/g, '');
+        // keep only the first decimal, if one is found - remove the rest
+        str = str.replace(/(^[^.]*)\.|[.]/g, (_match, prefix) => prefix !== undefined ? prefix + '.' : ''); // god i hate regex 
+        // re-apply the initial minus sign, if needed
+        if (isNegative) { str = `-${str}`; }
+    } else {
+        // simply remove all non-numeric character 
+        str = str.replace(/^\D/g, '');
+    }
     return str;
 };
 /** Strips away all non-alphabetical characters from a string
@@ -814,7 +829,7 @@ export function RoundWith(number, roundingOperation) {
             return number;
     }
 }
-/** Should {@linkcode RoundWith} output a warning if the given {@link RoundOps rounding operation} is `null`? */ 
+/** Should {@linkcode RoundWith} output a warning if the given {@link RoundOps rounding operation} is `null`? */
 const _ROUNDWITH_WARN_ON_NULL = false;
 
 /**
