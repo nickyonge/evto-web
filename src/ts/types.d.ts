@@ -1,6 +1,7 @@
 import type { pathNode as _pathNode } from './src/js/assetExporter';
 import { _baseNode } from '../js/assetExporter';
 import { EnsureColorValid, ColorToRGBA, ColorToHex, ColorToArray, ToPercentage, Round, Ceil, Floor, RoundWith, RoundOps } from '../js/lilutils';
+import { svgXYWHDefinition } from '../js/svg';
 
 declare global {
     /**
@@ -162,6 +163,27 @@ declare global {
         'ch' | 'em' | 'ex' | 'ic' | 'lh' | 'rcap' | 'rch' | 'rem' | 'rex' |
         'ric' | 'rlh' | `${cssLengthViewportPrefix}${cssLengthViewportValues}` |
         'cqw' | 'cqh' | 'cqi' | 'cqb' | 'cqmin' | 'cqmax';
+
+    /**
+     * Used in {@linkcode svgXYWHDefinition}. Determines which values 
+     * between {@linkcode svgXYWHDefinition.x}, {@linkcode svgXYWHDefinition.y | .y}, 
+     * {@linkcode svgXYWHDefinition.width | .width}, and {@linkcode svgXYWHDefinition.height | .height} 
+     * are included on {@linkcode svgXYWHDefinition.html html} export. 
+     * 
+     * If value is a boolean, it's straightfoward - all (`true`) or none (`false`). 
+     * 
+     * If value is `null`, same as `false`. 
+     * 
+     * If value is a string (case sensitive), corresponding output is: 
+     * - `"xyOnly"`: only `x` and `y` 
+     * - `"whOnly"` / `"widthHeight"` / `"widthHeightOnly"`: only `width` and `height` 
+     * - `"xywh"` / `"all"`: `x`, `y`, `width`, and `height` (same as `true`) 
+     *   - Any subset of these characters will use only the 
+     *     assocaited values. Eg, `"yh"` will use `y` and `height`. 
+     * - `"x"`, `"y"`, `"w"` / `"width"`, or `"h"`/`"height"`: only that value 
+     * - `"none"` / `""`: no values, same as `false` 
+     */
+    declare type xywhInclusion = boolean | 'all' | 'xyOnly' | 'whOnly' | 'widthHeight' | 'widthHeightOnly' | `${'x' | ''}${'y' | ''}${'w' | ''}${'h' | ''}` | 'width' | 'height' | `none`;
 }
 
 export { };

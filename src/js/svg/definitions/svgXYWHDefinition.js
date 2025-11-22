@@ -32,26 +32,6 @@ export class svgXYWHDefinition extends svgDefinition {
     #_matchViewboxXYWH = svgDefaults.XYWHDEF_MATCHVIEWBOX;
 
     /**
-     * @typedef {boolean | 'all' | 'xyOnly' | 'whOnly' | 'widthHeight' | 'widthHeightOnly' | `${'x'|''}${'y'|''}${'w'|''}${'h'|''}` | 'width' | 'height' | `none` } xywhInclusion 
-     * Determines which values between {@linkcode x}, {@linkcode y}, 
-     * {@linkcode width}, and {@linkcode height} values will be 
-     * included when exporting this def's {@linkcode html}. 
-     * 
-     * If value is a boolean, it's straightfoward - all (`true`) or none (`false`). 
-     * 
-     * If value is `null`, same as `false`. 
-     * 
-     * If value is a string (case sensitive), corresponding output is: 
-     * - `"xyOnly"`: only `x` and `y` 
-     * - `"whOnly"` / `"widthHeight"` / `"widthHeightOnly"`: only `width` and `height` 
-     * - `"xywh"` / `"all"`: `x`, `y`, `width`, and `height` (same as `true`) 
-     *   - Any subset of these characters will use only the 
-     *     assocaited values. Eg, `"yh"` will use `y` and `height`. 
-     * - `"x"`, `"y"`, `"w"` / `"width"`, or `"h"`/`"height"`: only that value 
-     * - `"none"` / `""`: no values, same as `false` 
-     */
-
-    /**
      * Should this definition's {@linkcode x}, {@linkcode y}, 
      * {@linkcode width}, and {@linkcode height} values be 
      * included while exporting this def's {@linkcode html}? 
