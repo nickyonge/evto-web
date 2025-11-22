@@ -863,6 +863,30 @@ export class svgFilterFEMerge extends svgFilterPrimitive {
         super(result, id, 'feMerge');
         this.mergeNodes = mergeNodes;
     }
+    get html() {
+        if (this.mergeNodes != null && this.mergeNodes.length > 0) {
+            // preserve suppressOnChange states and enable 
+            let prevSuppress = this.suppressOnChange;
+            let prevSuppressArray = this.subDefinitions.suppressOnChange;
+            this.suppressOnChange = true;
+            this.subDefinitions.suppressOnChange = true;
+            // clone array before adding 
+            let subs = this.subDefinitions.clone();
+            // add new elements to array 
+            this.subDefinitions.push(...this.mergeNodes);
+            // generate HTML with new elements 
+            let h = super.html;
+            // reset original elements 
+            this.subDefinitions = subs;
+            // reset suppressOnChange states 
+            this.suppressOnChange = prevSuppress;
+            this.subDefinitions.suppressOnChange = prevSuppressArray;
+            // return html
+            return h;
+        }
+        // no mergeNodes present, just get html 
+        return super.html;
+    }
 }
 /** 
  * The `<feMergeNode>` SVG takes the result of another filter to be processed by its parent {@linkcode svgFilterFEMerge feMerge}.
