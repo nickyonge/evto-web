@@ -117,6 +117,22 @@ export class svgFilterPrimitiveIn extends svgFilterPrimitive {
 
     /**
      * The `in` attribute identifies input for the given filter primitive.
+     * 
+     * You can only use this attribute with the following SVG elements:
+     * - `feBlend`
+     * - `feColorMatrix`
+     * - `feComponentTransfer`
+     * - `feComposite`
+     * - `feConvolveMatrix`
+     * - `feDiffuseLighting`
+     * - `feDisplacementMap`
+     * - `feDropShadow`
+     * - `feGaussianBlur`
+     * - `feMergeNode`
+     * - `feMorphology`
+     * - `feOffset`
+     * - `feSpecularLighting`
+     * - `feTile`
      * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/in
      * @returns {svgType_Filter_In}
      */
@@ -143,7 +159,7 @@ export class svgFilterPrimitiveIn2 extends svgFilterPrimitive {
      * The `in2` attribute identifies the second input for the given filter primitive. 
      * It works exactly like the {@linkcode in} attribute.
      * 
-     * You can use only this attribute with the following SVG elements:
+     * You can only use this attribute with the following SVG elements:
      * - `feBlend`
      * - `feComposite`
      * - `feDisplacementMap`
@@ -163,10 +179,6 @@ export class svgFilterPrimitiveIn2 extends svgFilterPrimitive {
     }
 
 }
-/**
- * Parent class for {@linkcode svgFilterFEFuncA}, {@linkcode svgFilterFEFuncB}, 
- * {@linkcode svgFilterFEFuncG}, and {@linkcode svgFilterFEFuncR}. */
-class svgFilterFEFunction extends svgFilterPrimitive { constructor(id, defType) { super(id, defType); } }
 
 /** The `<feBlend>` SVG filter primitive composes two objects together ruled by a certain blending mode. 
  * This is similar to what is known from image editing software when blending two layers. 
@@ -194,103 +206,202 @@ export class svgFilterFEBlend extends svgFilterPrimitiveIn2 {
 /** The `<feColorMatrix>` SVG filter element changes colors based on a transformation matrix. 
  * Every pixel's color value `[R,G,B,A]` is matrix multiplied by a 5 by 5 color matrix to create new color `[R',G',B',A']`.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feColorMatrix */
-export class svgFilterFEColorMatrix extends svgFilterPrimitive {
-    /** @typedef {''} svgType_Filter_ */
-
+export class svgFilterFEColorMatrix extends svgFilterPrimitiveIn {
+    /** @typedef {'matrix'|'saturate'|'hueRotate'|'luminanceToAlpha'|null} svgType_Filter_ColorMatrix_Type */
+    /** @typedef {numberListOfNumbers} svgType_Filter_ColorMatrix_Values 20 numbers making a 5x4 numbers: 5 columns = x*R,x*G,x*B,x*A,x+Shift, 4 rows = RGBA channels */
     constructor(id) { super(id, 'feColorMatrix'); }
 }
 /** The `<feComponentTransfer>` SVG filter primitive performs color-component-wise remapping of data for each pixel. 
  * It allows operations like brightness adjustment, contrast adjustment, color balance or thresholding.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feComponentTransfer */
-export class svgFilterFEComponentTransfer extends svgFilterPrimitive { constructor(id) { super(id, 'feComponentTransfer'); } }
+export class svgFilterFEComponentTransfer extends svgFilterPrimitiveIn {
+    constructor(id, defType = 'feComponentTransfer') { super(id, defType); }
+}
 /** The `<feComposite>` SVG filter primitive performs the combination of two input images pixel-wise in image space.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feComposite */
-export class svgFilterFEComposite extends svgFilterPrimitive {
+export class svgFilterFEComposite extends svgFilterPrimitiveIn2 {
+    /** @typedef {number} svgType_Filter_Composite_K */
     /** @typedef {'over'|'in'|'out'|'atop'|'xor'|'lighter'|'arithmetic'|null} svgType_Filter_Composite_Operator The compositing operation that is to be performed. Default `over` */
     constructor(id) { super(id, 'feComposite'); }
 }
 /** The `<feConvolveMatrix>` SVG filter primitive applies a matrix convolution filter effect.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feConvolveMatrix */
-export class svgFilterFEConvolveMatrix extends svgFilterPrimitive { constructor(id) { super(id, 'feConvolveMatrix'); } }
+export class svgFilterFEConvolveMatrix extends svgFilterPrimitiveIn {
+    /** @typedef {number} svgType_Filter_ConvolveMatrix_Order Must be an integer greater than zero */
+    /** @typedef {number[]} svgType_Filter_ConvolveMatrix_KernelMatrix */
+    /** @typedef {number} svgType_Filter_ConvolveMatrix_Divisor */
+    /** @typedef {number} svgType_Filter_ConvolveMatrix_Bias */
+    /** @typedef {number} svgType_Filter_ConvolveMatrix_TargetX Integer */
+    /** @typedef {number} svgType_Filter_ConvolveMatrix_TargetY Integer */
+    /** @typedef {'duplicate'|'wrap'|'none'} svgType_Filter_ConvolveMatrix_EdgeMode */
+    /** @typedef {numberOptionalNumber} svgType_Filter_ConvolveMatrix_KernelUnitLength */
+    /** @typedef {boolean} svgType_Filter_ConvolveMatrix_PreserveAlpha */
+    constructor(id) { super(id, 'feConvolveMatrix'); }
+}
 /** The `<feDiffuseLighting>` SVG filter primitive lights an image using the alpha channel as a bump map.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDiffuseLighting */
-export class svgFilterFEDiffuseLighting extends svgFilterPrimitive { constructor(id) { super(id, 'feDiffuseLighting'); } }
+export class svgFilterFEDiffuseLighting extends svgFilterPrimitiveIn {
+    /** @typedef {number} svgType_Filter_DiffuseLighting_SurfaceScale */
+    /** @typedef {number} svgType_Filter_DiffuseLighting_DiffuseConstant */
+    /** @typedef {numberOptionalNumber} svgType_Filter_DiffuseLighting_KernelUnitLength */
+    constructor(id) { super(id, 'feDiffuseLighting'); }
+}
 /** The `<feDisplacementMap>` SVG filter primitive uses the pixel values from the image from {@linkcode in2} 
  * to spatially displace the image from {@linkcode svgFilterPrimitiveIn.in in}.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDisplacementMap */
-export class svgFilterFEDisplacementMap extends svgFilterPrimitiveIn2 { constructor(id) { super(id, 'feDisplacementMap'); } }
+export class svgFilterFEDisplacementMap extends svgFilterPrimitiveIn2 {
+    /** @typedef {number} svgType_Filter_DisplacementMap_Scale */
+    /** @typedef {rgbaChannel} svgType_Filter_DisplacementMap_XChannelSelector */
+    /** @typedef {rgbaChannel} svgType_Filter_DisplacementMap_YChannelSelector */
+    constructor(id) { super(id, 'feDisplacementMap'); }
+}
 /** The `<feDistantLight>` SVG element defines a distant light source that can be used within a lighting filter primitive: 
  * {@linkcode svgFilterFEDiffuseLighting feDiffuseLighting} or {@linkcode svgFilterFESpecularLighting feSpecularLighting}. 
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDistantLight */
-export class svgFilterFEDistantLight extends svgFilterPrimitive { constructor(id) { super(id, 'feDistantLight'); } }
+export class svgFilterFEDistantLight extends svgFilterPrimitive {
+    /** @typedef {number} svgType_Filter_DistantLight_Azimuth */
+    /** @typedef {number} svgType_Filter_DistantLight_Elevation */
+    constructor(id) { super(id, 'feDistantLight'); }
+}
 /** The `<feDropShadow>` SVG filter primitive creates a drop shadow of the input image.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feDropShadow */
-export class svgFilterFEDropShadow extends svgFilterPrimitive { constructor(id) { super(id, 'feDropShadow'); } }
+export class svgFilterFEDropShadow extends svgFilterPrimitiveIn {
+    /** @typedef {number} svgType_Filter_DropShadow_DX */
+    /** @typedef {number} svgType_Filter_DropShadow_DY */
+    /** @typedef {numberOptionalNumber} svgType_Filter_DropShadow_StdDeviation */
+    constructor(id) { super(id, 'feDropShadow'); }
+}
 /** The `<feFlood>` SVG filter primitive fills the filter subregion.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feFlood */
-export class svgFilterFEFlood extends svgFilterPrimitive { constructor(id) { super(id, 'feFlood'); } }
+export class svgFilterFEFlood extends svgFilterPrimitive {
+    /** @typedef {color} svgType_Filter_Flood_FloodColor */
+    /** @typedef {number} svgType_Filter_Flood_FloodOpacity */
+    constructor(id) { super(id, 'feFlood'); }
+}
+/**
+ * Parent class for {@linkcode svgFilterFEFuncA}, {@linkcode svgFilterFEFuncB}, 
+ * {@linkcode svgFilterFEFuncG}, and {@linkcode svgFilterFEFuncR}. */
+class svgFilterFEFunction extends svgFilterFEComponentTransfer {
+    // For static properties info, see:
+    // https://developer.mozilla.org/en-US/docs/Web/API/SVGComponentTransferFunctionElement#static_properties
+    /** @typedef {'identity'|'table'|'discrete'|'linear'|'gamma'} svgType_Filter_Function_Type */
+    /** @typedef {numberListOfNumbers} svgType_Filter_Function_TableValues list of numbers between `0` and `1` */
+    /** @typedef {number} svgType_Filter_Function_Slope */
+    /** @typedef {number} svgType_Filter_Function_Intercept */
+    /** @typedef {number} svgType_Filter_Function_Amplitude */
+    /** @typedef {number} svgType_Filter_Function_Exponent */
+    /** @typedef {number} svgType_Filter_Function_Offset */
+    constructor(id, defType) { super(id, defType); }
+}
 /** The `<feFuncA>` SVG filter primitive defines the transfer function for the *alpha* component of the 
  * input graphic of its parent {@linkcode svgFilterFEComponentTransfer feComponentTransfer} element.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feFuncA */
-export class svgFilterFEFuncA extends svgFilterFEFunction { constructor(id) { super(id, 'feFuncA'); } }
+export class svgFilterFEFuncA extends svgFilterFEFunction {
+    constructor(id) { super(id, 'feFuncA'); }
+}
 /** The `<feFuncA>` SVG filter primitive defines the transfer function for the *blue* component of the 
  * input graphic of its parent {@linkcode svgFilterFEComponentTransfer feComponentTransfer} element.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feFuncB */
-export class svgFilterFEFuncB extends svgFilterFEFunction { constructor(id) { super(id, 'feFuncB'); } }
+export class svgFilterFEFuncB extends svgFilterFEFunction {
+    constructor(id) { super(id, 'feFuncB'); }
+}
 /** The `<feFuncA>` SVG filter primitive defines the transfer function for the *green* component of the 
  * input graphic of its parent {@linkcode svgFilterFEComponentTransfer feComponentTransfer} element.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feFuncB */
-export class svgFilterFEFuncG extends svgFilterFEFunction { constructor(id) { super(id, 'feFuncG'); } }
+ export class svgFilterFEFuncG extends svgFilterFEFunction {
+     constructor(id) { super(id, 'feFuncG'); }
+}
 /** The `<feFuncA>` SVG filter primitive defines the transfer function for the *red* component of the 
  * input graphic of its parent {@linkcode svgFilterFEComponentTransfer feComponentTransfer} element.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feFuncR */
-export class svgFilterFEFuncR extends svgFilterFEFunction { constructor(id) { super(id, 'feFuncR'); } }
+export class svgFilterFEFuncR extends svgFilterFEFunction {
+    constructor(id) { super(id, 'feFuncR'); }
+}
 /** The `<feGaussianBlur>` SVG filter primitive blurs the input image by the amount specified in 
  * {@linkcode stdDeviation}, which defines the bell-curve.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feGaussianBlur */
-export class svgFilterFEGaussianBlur extends svgFilterPrimitive {
+export class svgFilterFEGaussianBlur extends svgFilterPrimitiveIn {
+    /** @typedef {numberOptionalNumber} svgType_Filter_GaussianBlur_StdDeviation */
+    /** @typedef {'duplicate'|'wrap'|'none'} svgType_Filter_GaussianBlur_EdgeMode */
     get stdDeviation() { return this.#_stdDeviation; }
     set stdDeviation(v) { if (v == this.#_stdDeviation) { return; } let prev = this.#_stdDeviation; this.#_stdDeviation = v; this.changed('mode', v, prev); }
-    /** @type {blendMode} */
+    /** @type {svgType_Filter_GaussianBlur_StdDeviation} */
     #_stdDeviation = null;
     constructor(id) { super(id, 'feGaussianBlur'); }
 }
 /** The `<feImage>` SVG filter primitive fetches image data from an external source and provides 
  * the pixel data as output (meaning if the external source is an SVG image, it is rasterized.)
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feImage */
-export class svgFilterFEImage extends svgFilterPrimitive { constructor(id) { super(id, 'feImage'); } }
+export class svgFilterFEImage extends svgFilterPrimitive {
+    /** @typedef {''} svgType_Filter_Image_CrossOrigin */
+    /** @typedef {''} svgType_Filter_Image_PreserveAspectRatio */
+    /** @typedef {''} svgType_Filter_Image_Href */
+    constructor(id) { super(id, 'feImage'); }
+
+    // not including fetchpriority - at time of coding this, it's labeled as experimental / non-standard
+    // https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/fetchpriority 
+
+    // not including xlink:href - at time of coding this, it's deprecated 
+    // https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Attribute/xlink:href 
+}
 /** The `<feMerge>` SVG element allows filter effects to be applied concurrently instead of sequentially.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feMerge */
-export class svgFilterFEMerge extends svgFilterPrimitive { constructor(id) { super(id, 'feMerge'); } }
+export class svgFilterFEMerge extends svgFilterPrimitive {
+    /** @typedef {''} svgType_Filter_Merge_ */
+    constructor(id) { super(id, 'feMerge'); }
+}
 /** 
  * The `<feMergeNode>` SVG takes the result of another filter to be processed by its parent {@linkcode svgFilterFEMerge feMerge}.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feMergeNode */
-export class svgFilterFEMergeNode extends svgFilterPrimitive { constructor(id) { super(id, 'feMergeNode'); } }
+export class svgFilterFEMergeNode extends svgFilterPrimitiveIn {
+    /** @typedef {''} svgType_Filter_MergeNode_ */
+    constructor(id) { super(id, 'feMergeNode'); }
+}
 /** The `<feMorphology>` SVG filter primitive is used to erode or dilate the input image.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feMorphology */
-export class svgFilterFEMorphology extends svgFilterPrimitive {
+export class svgFilterFEMorphology extends svgFilterPrimitiveIn {
+    /** @typedef {''} svgType_Filter_Morphology_ */
     /** @typedef {'erode'|'dilate'|null} svgType_Filter_Morphology_Operator Defines whether to erode (i.e., thin) or dilate (fatten) the source graphic. Default `erode` */
     constructor(id) { super(id, 'feMorphology'); }
 }
 /** The `<feOffset>` SVG filter primitive enables offsetting an input image relative to its current position.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feOffset */
-export class svgFilterFEOffset extends svgFilterPrimitive { constructor(id) { super(id, 'feOffset'); } }
+export class svgFilterFEOffset extends svgFilterPrimitiveIn {
+    /** @typedef {''} svgType_Filter_Offset_ */
+    constructor(id) { super(id, 'feOffset'); }
+}
 /** The `<fePointLight>` SVG element defines a light source which allows to create a point light effect. It can be used within a 
  * lighting filter primitive: {@linkcode svgFilterFEDiffuseLighting feDiffuseLighting} or {@linkcode svgFilterFESpecularLighting feSpecularLighting}. 
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/fePointLight */
-export class svgFilterFEPointLight extends svgFilterPrimitive { constructor(id) { super(id, 'fePointLight'); } }
+export class svgFilterFEPointLight extends svgFilterPrimitive {
+    /** @typedef {''} svgType_Filter_PointLight_ */
+    constructor(id) { super(id, 'fePointLight'); }
+}
 /** The `<feSpecularLighting>` SVG filter primitive lights a source graphic using the alpha channel as a bump map. 
  * The resulting image is an RGBA image based on the light color.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feSpecularLighting */
-export class svgFilterFESpecularLighting extends svgFilterPrimitive { constructor(id) { super(id, 'feSpecularLighting'); } }
+export class svgFilterFESpecularLighting extends svgFilterPrimitiveIn {
+    /** @typedef {''} svgType_Filter_SpecularLighting_ */
+    /** @typedef {numberOptionalNumber} svgType_Filter_SpecularLighting_KernelUnitLength */
+    constructor(id) { super(id, 'feSpecularLighting'); }
+}
 /** The `<feSpotLight>` SVG element defines a light source that can be used to create a spotlight effect. It is used within a 
  * lighting filter primitive: {@linkcode svgFilterFEDiffuseLighting feDiffuseLighting} or {@linkcode svgFilterFESpecularLighting feSpecularLighting}. 
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feSpotLight */
-export class svgFilterFESpotlight extends svgFilterPrimitive { constructor(id) { super(id, 'feSpotlight'); } }
+export class svgFilterFESpotlight extends svgFilterPrimitive {
+    /** @typedef {''} svgType_Filter_Spotlight_ */
+    constructor(id) { super(id, 'feSpotlight'); }
+}
 /** The `<feTile>` SVG filter primitive allows to fill a target rectangle with a repeated, tiled pattern of an input image. 
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feTile */
-export class svgFilterFETile extends svgFilterPrimitive { constructor(id) { super(id, 'feTile'); } }
+export class svgFilterFETile extends svgFilterPrimitiveIn {
+    /** @typedef {''} svgType_Filter_Tile_ */
+    constructor(id) { super(id, 'feTile'); }
+}
 /** The `<feTurbulence>` SVG filter primitive creates an image using the Perlin turbulence function. 
  * It allows the synthesis of artificial textures like clouds or marble.
  * @see https://developer.mozilla.org/en-US/docs/Web/SVG/Reference/Element/feTurbulence */
-export class svgFilterFETurbulence extends svgFilterPrimitive { constructor(id) { super(id, 'feTurbulence'); } }
+export class svgFilterFETurbulence extends svgFilterPrimitive {
+    /** @typedef {''} svgType_Filter_Turbulence_ */
+    constructor(id) { super(id, 'feTurbulence'); }
+}
