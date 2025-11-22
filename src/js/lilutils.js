@@ -507,6 +507,7 @@ export function ColorToRGBA(color, alpha = RGBAlpha.Include) {
  */
 export function ColorToArray(color, alpha = RGBAlpha.Include) {
     // TODO: finish ColorToArray and ColorToHex utils
+    // Issue URL: https://github.com/nickyonge/evto-web/issues/77
     throw new Error(`Not Yet Implemented, ColorToArray, can't convert str: ${color}`);
     color = EnsureColorValid(color);
     if (color == null) { return null; }
