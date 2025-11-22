@@ -493,7 +493,7 @@ export class svgFilterFEDiffuseLighting extends svgFilterPrimitiveIn {
     }
     get data() {
         return [super.data, this.ParseData([
-            ['lightingColor', this.lightingColor],
+            ['lighting-color', this.lightingColor],
             ['surfaceScale', this.surfaceScale],
             ['diffuseConstant', this.diffuseConstant],
             ['kernelUnitLength', this.kernelUnitLength],
@@ -635,8 +635,8 @@ export class svgFilterFEDropShadow extends svgFilterPrimitiveIn {
             ['dx', this.dx],
             ['dy', this.dy],
             ['stdDeviation', this.stdDeviation],
-            ['floodColor', this.floodColor],
-            ['floodOpacity', this.floodOpacity],
+            ['flood-color', this.floodColor],
+            ['flood-opacity', this.floodOpacity],
         ])].join(' ');
     }
 }
@@ -668,8 +668,8 @@ export class svgFilterFEFlood extends svgFilterPrimitive {
     }
     get data() {
         return [super.data, this.ParseData([
-            ['floodColor', this.floodColor],
-            ['floodOpacity', this.floodOpacity],
+            ['flood-color', this.floodColor],
+            ['flood-opacity', this.floodOpacity],
         ])].join(' ');
     }
 }
@@ -1197,7 +1197,7 @@ export class svgFilterFESpecularLighting extends svgFilterPrimitiveIn {
     }
     get data() {
         return [super.data, this.ParseData([
-            ['lightingColor', this.lightingColor],
+            ['lighting-color', this.lightingColor],
             ['surfaceScale', this.surfaceScale],
             ['specularConstant', this.specularConstant],
             ['specularExponent', this.specularExponent],
