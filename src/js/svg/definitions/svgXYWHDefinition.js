@@ -32,26 +32,47 @@ export class svgXYWHDefinition extends svgDefinition {
     #_matchViewboxXYWH = svgDefaults.XYWHDEF_MATCHVIEWBOX;
 
     /**
+     * @typedef {boolean | 'all' | 'xyOnly' | 'whOnly' | 'widthHeight' | 'widthHeightOnly' | `${'x'|''}${'y'|''}${'w'|''}${'h'|''}` | 'width' | 'height' | `none` } xywhInclusion 
+     * Determines which values between {@linkcode x}, {@linkcode y}, 
+     * {@linkcode width}, and {@linkcode height} values will be 
+     * included when exporting this def's {@linkcode html}. 
+     * 
+     * If value is a boolean, it's straightfoward - all (`true`) or none (`false`). 
+     * 
+     * If value is `null`, same as `false`. 
+     * 
+     * If value is a string (case sensitive), corresponding output is: 
+     * - `"xyOnly"`: only `x` and `y` 
+     * - `"whOnly"` / `"widthHeight"` / `"widthHeightOnly"`: only `width` and `height` 
+     * - `"xywh"` / `"all"`: `x`, `y`, `width`, and `height` (same as `true`) 
+     *   - Any subset of these characters will use only the 
+     *     assocaited values. Eg, `"yh"` will use `y` and `height`. 
+     * - `"x"`, `"y"`, `"w"` / `"width"`, or `"h"`/`"height"`: only that value 
+     * - `"none"` / `""`: no values, same as `false` 
+     */
+
+    /**
      * Should this definition's {@linkcode x}, {@linkcode y}, 
      * {@linkcode width}, and {@linkcode height} values be 
-     * included while exporting this def's {@linkcode html}?
+     * included while exporting this def's {@linkcode html}? 
      * 
-     * If value is a boolean, it's straightfoward. 
+     * If value is a boolean, it's straightfoward - all (`true`) or none (`false`). 
      * 
-     * If value is `null`, same as `false`.
+     * If value is `null`, same as `false`. 
      * 
-     * If value is a string (case sensitive), corresponding `data` output is:
-     * - `xyOnly`: only `x` and `y`
-     * - `whOnly` / `widthHeightOnly`: only `width` and `height`
-     * - `xywh` / `all`: `x`, `y`, `width`, and `height` (same as `true`)
+     * If value is a string (case sensitive), corresponding output is: 
+     * - `"xyOnly"`: only `x` and `y` 
+     * - `"whOnly"` / `"widthHeight"` / `"widthHeightOnly"`: only `width` and `height` 
+     * - `"xywh"` / `"all"`: `x`, `y`, `width`, and `height` (same as `true`) 
      *   - Any subset of these characters will use only the 
-     *     assocaited values. Eg, `yh` will use `y` and `height`.
-     * - `x`, `y`, `w` / `width`, or `h`/`height`: only that value 
-     * - `none`: no values, same as `false`
-     * @returns {boolean | 'all' | 'xyOnly' | 'whOnly' | 'widthHeightOnly' | 'xywh' | 'xyw' | 'xyh' | 'xwh' | 'xy' | 'xw' | 'xh' | 'wh' | 'ywh' | 'yw' | 'yh' | 'wh' | 'x' | 'y' | 'w' | 'h' | 'width' | 'height' | `none` } */
+     *     assocaited values. Eg, `"yh"` will use `y` and `height`. 
+     * - `"x"`, `"y"`, `"w"` / `"width"`, or `"h"`/`"height"`: only that value 
+     * - `"none"` / `""`: no values, same as `false` 
+     * @returns {xywhInclusion} */
     get includeXYWHInData() { return this.#_includeXYWHInData; }
+    /** @param {xywhInclusion} v */
     set includeXYWHInData(v) { let prev = this.#_includeXYWHInData; this.#_includeXYWHInData = v; this.changed('includeXYWHInData', v, prev); }
-    /** @type {boolean | 'all' | 'xyOnly' | 'whOnly' | 'widthHeightOnly' | 'xywh' | 'xyw' | 'xyh' | 'xwh' | 'xy' | 'xw' | 'xh' | 'wh' | 'ywh' | 'yw' | 'yh' | 'wh' | 'x' | 'y' | 'w' | 'h' | 'width' | 'height' | `none` } */
+    /** @type {xywhInclusion} */
     #_includeXYWHInData = svgDefaults.XYWHDEF_INCLUDEXYWHNDATA;
 
     /** Get the `x` value of this definition. If {@linkcode matchViewboxXYWH} is `true`, this has no affect, as the value wll be read from a parent {@linkcode svgViewBox} (if one exists). @returns {number} */
