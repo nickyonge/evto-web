@@ -341,7 +341,7 @@ const RGBAlpha = Object.freeze({
     Ignore: 0,
     /** Alpha should be *included*, returning `rgba(r, g, b, a)` */
     Include: 1,
-})
+});
 
 /**
  * Confirms a string IS a valid color, and returns the valid result. 
@@ -662,6 +662,57 @@ export function NumberListOfNumbersToString(numberListOfNumbers, joinWithComma =
 // #endregion Numbers
 
 // #region Math
+
+
+/** All possible rounding operations @typedef {'round'|'ceil'|'floor'|'none'} RoundOps */
+export const RoundOps = Object.freeze({
+    /** Round to the nearest integer: `0.2 = 0` , `0.49 = 0` , `0.5 = 1` , `0.8 = 1` */
+    Round: 'round',
+    /** Ceiling, round UP to the next integer: `0.2 = 1` , `0.5 = 1` , `0.8 = 1` */
+    Ceil: 'ceil',
+    /** Floor, round DOWN to the last integer: `0.2 = 0` , `0.5 = 0` , `0.8 = 0` */
+    Floor: 'floor',
+    /** Do not round: `0.2 = 0.2` , `0.49 = 0.49` , `0.5 = 0.5` , `0.8 = 0.8` */
+    None: 'none'
+});
+
+/**
+ * Rounds the given number using the specified {@link RoundOps rounding operation} (default {@linkcode RoundOps.Round}). 
+ * Returns the rounded number, or `null` / `NaN` if the parameter is either of those.
+ * @param {number} number Number to round 
+ * @param {RoundOps} [roundingOperation] Rounding opeartion to use. Default {@linkcode RoundOps.Round}
+ * @returns {number}
+ */
+export function Round(number, roundingOperation = RoundOps.Round) { return RoundWith(number, roundingOperation); }
+/** Rounds the given number down @param {number} number Number to round down @see {@linkcode RoundOps.Ceil} @returns {number} */
+export function Ceil(number) { return RoundWith(number, RoundOps.Ceil); }
+/** Rounds the given number up @param {number} number Number to round down @see {@linkcode RoundOps.Floor} @returns {number} */
+export function Floor(number) { return RoundWith(number, RoundOps.Floor); }
+/**
+ * Rounds the given number using the specified {@link RoundOps rounding operation}. 
+ * Returns the rounded number, or `null` / `NaN` if the parameter is either of those. 
+ * @param {number} number Number to round 
+ * @param {RoundOps} roundingOperation Rounding operation to use. 
+ * @returns {number}
+ */
+export function RoundWith(number, roundingOperation) {
+    if (number == null) { return null; }
+    else if (Number.isNaN(number)) { return NaN; }
+    switch (roundingOperation) {
+        case null:
+            console.warn(`WARNING: null RoundWith roundingOperation, it should be specified, defaulting to RoundOps.Round for number ${number}`, this)
+        case RoundOps.Round:
+            return Math.round(number);
+        case RoundOps.Ceil:
+            return Math.ceil(number);
+        case RoundOps.Floor:
+            return Math.floor(number);
+        default:
+            console.error(`ERROR: invalid RoundWith roundingOperation ${roundingOperation}, can't round, returning initial number ${number}`, this);
+        case RoundOps.None:
+            return number;
+    }
+}
 
 /**
  * Lerps (linearly interpolates) between an origin `a` and 
