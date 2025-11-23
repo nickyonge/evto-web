@@ -7,11 +7,6 @@
     top: calc(-100% - (var(--ui-art-canvas-border-width) * 3));
     left: var(--ui-art-canvas-border-width);
     border-radius: var(--ui-art-canvas-border-radius);
-    user-select: none;
-    -ms-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
-    pointer-events: none;
     z-index: 0;
     /* background-color: #ff00ff69; */
 }

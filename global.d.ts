@@ -525,9 +525,12 @@ declare global {
         checked?: boolean;
         defaultChecked?: boolean;
         value?: string | number | boolean;
-        draggable?: string | boolean;
+        draggable?: 'true'|'false'|'auto'|boolean;
         style?: CSSStyleProperties;
         disabled?: boolean;
+
+        _priorDraggable?: [any];
+        _priorPointerEvents?: [any];
 
         /** Removes keyboard focus from this element. @returns {void} */
         blur(): void;

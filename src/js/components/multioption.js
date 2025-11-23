@@ -41,7 +41,7 @@ export class MutliOptionList extends TitledComponent {
             input.defaultChecked = i == initialValue;
             this.#inputs.push(input);
             // create label
-            let label = ui.CreateElementWithClass('label', 'value');
+            let label = ui.CreateElementWithClass('label', 'listValue', 'selectable');
             ui.AddElementAttribute(label, 'for', uniqueName);
             this.#labels.push(label);
             // create svg

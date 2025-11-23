@@ -41,10 +41,10 @@ export class DropdownList extends TitledComponent {
         this.#currentCost = 0;
 
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
-        this.#dropdown = ui.CreateDivWithClass('dropdown');
+        this.#dropdown = ui.CreateDivWithClass('dropdown', 'selectable');
         ObserverCallbackOnAdded(this.#dropdown, this.DropdownAddedToPage);
         ObserverCallbackOnAdded(this.div, this.DivAddedToPage);
-        this.#selected = ui.CreateDivWithClass('ddSelected');
+        this.#selected = ui.CreateDivWithClass('ddSelected', 'selectable');
         this.#selectedCost = ui.CreateDivWithClass('cost', 'inline', 'floating', 'forceSelected');
         this.#selectedCost.style.opacity = '0';
         this.#selected.appendChild(this.#selectedCost);
@@ -70,7 +70,7 @@ export class DropdownList extends TitledComponent {
         this.#optionsLabels = [];
         this.#optionsCosts = [];
         this.#optionsCostsP = [];
-        this.#optionsContainer = ui.CreateDivWithClass('ddOptions');
+        this.#optionsContainer = ui.CreateDivWithClass('ddOptions', 'selectable');
         ObserverCallbackOnAdded(this.#optionsContainer, this.OptionsAddedToPage);
         // iterate thru options 
         for (let i = 0; i < options.length; i++) {
@@ -82,7 +82,7 @@ export class DropdownList extends TitledComponent {
             ui.AddElementAttributes(oInput, ['name', 'labelValue'], ['ddOption', options[i]]);
             oInput.defaultChecked = isChecked;
             oInput.checked = isChecked;
-            let oLabel = ui.CreateElementWithClass('label', 'ddOption');
+            let oLabel = ui.CreateElementWithClass('label', 'ddOption', 'selectable');
             ui.AddElementAttributes(oLabel, ['for', 'data-txt', 'data-cost'], [uniqueName, options[i], '']);
             // ensure correct checked background
             if (isChecked) {

@@ -28,7 +28,7 @@ export class Toggle extends TitledComponent {
 
         ui.AddClassesToDOM(this.div, 'toggle');
         this.#input = ui.CreateInputWithID('checkbox', this.uniqueComponentID, 'toggle');
-        this.#label = ui.CreateElementWithClass('label', 'toggleLabel');
+        this.#label = ui.CreateElementWithClass('label', 'toggleLabel', 'selectable');
         ui.AddElementAttribute(this.#label, 'for', this.uniqueComponentID);
         this._titleElement = ui.CreateElement('span');
         this.#switch = ui.CreateElementWithClass('span', 'toggleSwitch');
@@ -72,7 +72,6 @@ export class Toggle extends TitledComponent {
         } else {
             this.#cost.hidden = false;
             let _cost = costArray[0];
-            console.log(" --- CHECK TO ENSURE COSTS [0] IS CORRECT --- ");
             if (_cost < -99) { _cost = -99; } else if (_cost > 999) { _cost = 999; }
             if (_cost < -9 || _cost > 99) {
                 ui.AddClassToDOMs('tinyText', this.#cost);

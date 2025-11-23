@@ -35,7 +35,6 @@ body {
     width: var(--ui-data-sidebar-tabs-width);
     height: 20%;
     text-align: right;
-    user-select: none;
     margin-left: auto;
     padding-right: 10px;
     /* transition: opacity 0.2s ease-out; */

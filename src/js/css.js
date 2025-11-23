@@ -1,10 +1,20 @@
 // import all css files 
+
+// import core css 
+import './../css/style.css';
+import './../css/fonts.css';
+import './../css/interactivity.css';
+
+// import external css 
+import '@melloware/coloris/dist/coloris.css';
+
+// import layout css 
 import './../css/artwindow.css';
 import './../css/datawindow.css';
-import './../css/fonts.css';
 import './../css/overlay.css';
-import './../css/style.css';
 import './../css/threejs.css';
+
+// import component scripts 
 import './../css/components/base.css';
 import './../css/components/canvassize.css';
 import './../css/components/colorpicker.css';
@@ -21,28 +31,3 @@ import './../css/components/slider.css';
 import './../css/components/tabs.css';
 import './../css/components/textfield.css';
 import './../css/components/toggle.css';
-import '@melloware/coloris/dist/coloris.css';
-
-// import(/* webpackPreload: true */ './../css/artwindow.css');
-// import(/* webpackPreload: true */ './../css/datawindow.css');
-// import(/* webpackPreload: true */ './../css/fonts.css');
-// import(/* webpackPreload: true */ './../css/overlay.css');
-// import(/* webpackPreload: true */ './../css/style.css');
-// import(/* webpackPreload: true */ './../css/threejs.css');
-// import(/* webpackPreload: true */ './../css/components/base.css');
-// import(/* webpackPreload: true */ './../css/components/canvassize.css');
-// import(/* webpackPreload: true */ './../css/components/colorpicker.css');
-// import(/* webpackPreload: true */ './../css/components/costtoken.css');
-// import(/* webpackPreload: true */ './../css/components/dropdown.css');
-// import(/* webpackPreload: true */ './../css/components/hbbtn.css');
-// import(/* webpackPreload: true */ './../css/components/helpicon.css');
-// import(/* webpackPreload: true */ './../css/components/imagefield.css');
-// import(/* webpackPreload: true */ './../css/components/minput.css');
-// import(/* webpackPreload: true */ './../css/components/multioption.css');
-// import(/* webpackPreload: true */ './../css/components/socialbtn.css');
-// import(/* webpackPreload: true */ './../css/components/slidebtn.css');
-// import(/* webpackPreload: true */ './../css/components/slider.css');
-// import(/* webpackPreload: true */ './../css/components/tabs.css');
-// import(/* webpackPreload: true */ './../css/components/textfield.css');
-// import(/* webpackPreload: true */ './../css/components/toggle.css');
-// import(/* webpackPreload: true */ '@melloware/coloris/dist/coloris.css');

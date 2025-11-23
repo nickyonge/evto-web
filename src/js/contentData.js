@@ -24,10 +24,10 @@ export const Size = Object.freeze({
 // IDs / technical names for each page, as consts here so they're not hardcoded all higgledy piggledy 
 export const PG_INTRO = 'intro', PG_SIZE = 'size', PG_FEATURES = 'features', PG_PATTERN = 'pattern', PG_SAVE = 'save';
 
-/** Current user-selected {@link Size} of the canvas 
+/** Currently selected {@link Size} of the canvas 
  * @type {Size} */
 export let currentSize = Size.Small;
-/** Is user-select current size plus sized? 
+/** Is currently selected canvas plus sized? 
  * @type {boolean} @see {@link Size} */
 export let currentPlusSized = false;
 /** Raw number for {@link currentSize}, 0=SM,1=SMP,2=MD,3=MDP,4=LG,5=LGP

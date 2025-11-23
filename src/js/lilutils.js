@@ -1336,6 +1336,34 @@ export const DummySpan = () => document.createElement('span');
 // #region Element Selection
 
 /**
+ * Checks if the given Element is selected or not 
+ * @param {Element} element Element to check for selection 
+ * @param {boolean} [includeChildren=true] 
+ * Also check if a child of the given element is selected? 
+ * @returns {boolean} 
+ */
+export function IsElementSelected(element, includeChildren = true) {
+    if (element == null) { return false; }
+
+    // check for selection
+    const selection = window.getSelection && window.getSelection();
+    if (selection && selection.rangeCount) {
+        for (let i = 0; i < selection.rangeCount; i++) {
+            const range = selection.getRangeAt(i); 
+            if (element.contains(range.commonAncestorContainer)) {
+                return true;
+            }
+        }
+    }
+    // check for a focused descendant 
+    const active = document.activeElement;
+    if (active && element.contains(active)) {
+        return true;
+    }
+    return false;
+}
+
+/**
  * Deselects (and optionally blurs) the given HTMLElement AND all its children
  * @param {Element} element HTMLElement to deselect
  * @param {boolean} [alsoBlur=true] also blur (unfocus) the element, or any focused children of the element?  
@@ -1421,13 +1449,26 @@ export function IsActiveElement(element) {
  *   - Setting `inert` attribute to `''`
  * @param {Element} element HTMLElement to fully enable or disable
  * @param {boolean} [set=true] state to assign, `true` to Enable (default), or `false` to Disable 
+ * @param {boolean} [updateStoredValues=false] Should stored values (draggable, pointer-events) 
+ * also be updated? Default `false` 
  */
-export function SetElementEnabled(element, set = true) {
+export function SetElementEnabled(element, set = true, updateStoredValues = false) {
+    // preserve values on first call 
+    if (element._priorDraggable == null) { 
+        element._priorDraggable = [element.draggable];
+    }
+    if (element._priorPointerEvents == null) {
+        element._priorPointerEvents = [element.style.pointerEvents];
+    }
     if (!set) {
         DeselectElement(element, true);
-        element.draggable = set ? 'auto' : 'false';
+        if (updateStoredValues) {
+            element.draggable = set ? element._priorDraggable[0] : 'false';
+        }
     }
-    element.style.pointerEvents = set ? 'auto' : 'none';
+    if (updateStoredValues) {
+        element.style.pointerEvents = set ? element._priorPointerEvents : 'none';
+    }
     if (set) {
         // enable 
         if (element.hasAttribute('preservedTabIndex')) {

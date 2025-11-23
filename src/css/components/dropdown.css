@@ -22,7 +22,6 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     border-radius: 5px;
     overflow: hidden;
     transition: max-height 300ms;
-    pointer-events: auto;
 }
 
 .ddSelected {
@@ -38,7 +37,6 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     transition: all 300ms, clip-path 0s;
     height: 12px;
     clip-path: inset(0px 0px 0px 0px);
-    pointer-events: auto;
 }
 
 .ddSelected::before {

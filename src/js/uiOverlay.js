@@ -18,7 +18,7 @@ export function InitializeOverlay() {
     if (_initialized) { return; }
     if (!overlayBG) {
         overlayBG = ui.CreateDivWithClass('overlayBG');
-        ui.AddElementAttribute(overlayBG, 'show', 'false');
+        SetOverlayShow(false, 'bg');
         overlay.appendChild(overlayBG);
         overlay.addEventListener('click', () => {
             if (IsOverlayDisplayed()) {
@@ -28,7 +28,7 @@ export function InitializeOverlay() {
     }
     if (!overlayBox) {
         overlayBox = ui.CreateDivWithClass('overlayBox');
-        ui.AddElementAttribute(overlayBox, 'show', 'false');
+        SetOverlayShow(false, 'box');
         overlayTitleText = ui.CreateElementWithClass('p', 'overlayTitle');
         overlayBodyText = ui.CreateElementWithClass('p', 'overlayBody');
         overlay.appendChild(overlayBox);
@@ -82,11 +82,40 @@ function HideOverlay() {
     }
 }
 
-function SetOverlayShow(set) {
-    ui.AddElementAttribute(overlayBG, 'show', `${set}`);
-    ui.AddElementAttribute(overlayBox, 'show', `${set}`);
+function SetOverlayShow(set, target = 'both') {
+    function SetTargetShow(set, target) {
+        ui.AddElementAttribute(target, 'show', `${set}`);
+        if (set) {
+            ui.AddClassToDOMs('selectable', target);
+        } else {
+            ui.RemoveClassFromDOMs('selectable', target);
+        }
+    }
+    switch (target) {
+        case 'box':
+            SetTargetShow(set, overlayBox);
+            break;
+        case 'bg':
+            SetTargetShow(set, overlayBG);
+            break;
+        case 'both':
+        default:
+            SetOverlayShow(set, 'box');
+            SetOverlayShow(set, 'bg');
+            break;
+    }
 }
-
-function IsOverlayDisplayed() {
-    return ui.GetAttribute(overlayBG, 'show') == 'true';
+function IsOverlayDisplayed(target = 'bg') {
+    function IsTargetDisplayed(target) {
+        return ui.GetAttribute(target, 'show') == 'true';
+    }
+    switch (target) {
+        case 'box':
+            return IsTargetDisplayed(overlayBox);
+        case 'bg':
+            return IsTargetDisplayed(overlayBG);
+        case 'either':
+        default:
+            return IsOverlayDisplayed('box') || IsOverlayDisplayed('bg');
+    }
 }

@@ -67,7 +67,7 @@ function CreateTabs() {
             ['type', 'id', 'name'],
             ['radio', tab, 'tab']);
         // create label 
-        let tabLabel = ui.CreateElementWithClass('label', tabColors[i]); // label element
+        let tabLabel = ui.CreateElementWithClass('label', 'selectable', tabColors[i]); // label element
         // check for separators
         if (useSeparators && i != txt.PAGES_COUNT - 1) {
             ui.AddClassToDOMs('separator', tabLabel);

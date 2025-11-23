@@ -26,8 +26,8 @@ export class HelpIcon {
         }
 
         this.#helpDiv = togglePos ?
-            ui.CreateDivWithClass('helpDiv', 'togglePos') :
-            ui.CreateDivWithClass('helpDiv');
+            ui.CreateDivWithClass('helpDiv', 'selectable', 'togglePos') :
+            ui.CreateDivWithClass('helpDiv', 'selectable');
 
         //create icon
         // this.#iconImg = ui.CreateImage(iconHelp, txt.HELPICON_ALT);

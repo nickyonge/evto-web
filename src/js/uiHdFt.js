@@ -33,7 +33,7 @@ function CreateTopBar(topBar) {
 }
 
 function CreateHamburgerButton() {
-    let btn = ui.CreateElementWithClass('label', 'burger', 'hdrContent');
+    let btn = ui.CreateElementWithClass('label', 'burger', 'selectable');
     ui.AddElementAttribute(btn, 'for', 'burger');
     let input = ui.CreateInputWithID('checkbox', 'burger');
     btn.appendChild(input);
@@ -49,38 +49,25 @@ function CreateHamburgerButton() {
 
 function CreateBottomBar(btmBar) {
     // ------------------------------ create social buttons 
+    btmBar.appendChild(CreateSocialBar());
+    // ------------------------------ create mailing list join 
+    btmBar.appendChild(CreateMailButton());
+    // ------------------------------ create sliding button
+    btmBar.appendChild(CreateSlidingButton());
+}
+
+function CreateSocialBar() {
     let ul = ui.CreateElementWithClass('ul', 'sbWrapper');
     ul.appendChild(CreateSocialButton('GitHub'));
     ul.appendChild(CreateSocialButton('Instagram'));
     ul.appendChild(CreateSocialButton('Bluesky'));
-    btmBar.appendChild(ul);
-    // ------------------------------ create mailing list join 
-    // TODO: add email icon to newsletter bar 
-    // Issue URL: https://github.com/nickyonge/evto-web/issues/38
-    let mailGroup = ui.CreateDivWithClass('minput-group');
-    let mailInput = ui.CreateElementWithClass('input', 'minput');
-    mailInput.setAttribute('id', 'Email');
-    mailInput.setAttribute('name', 'Email');
-    mailInput.setAttribute('placeholder', txt.EMAIL_PLACEHOLDER);
-    mailInput.setAttribute('autocomplete', 'off');
-    let mailButton = ui.CreateElementWithClass('input', 'mbuttonSubmit');
-    mailButton.setAttribute('value', txt.EMAIL_BTN_TEXT);
-    mailButton.setAttribute('type', 'submit');
-    mailGroup.appendChild(mailInput);
-    mailGroup.appendChild(mailButton);
-    btmBar.appendChild(mailGroup);
-    // create sliding button
-    btmBar.appendChild(CreateSlidingButton());
-    // iterate thru all footer content
-    ui.AddClassToDOMs('ftrContent', ...GetAllChildren(btmBar, false));
-    // GetAllChildren(btmBar, false).forEach(child => {
-    // });
+    return ul;
 }
 function CreateSocialButton(name) {
-    let li = ui.CreateElementWithClass('li', 'icon', name.toLowerCase());
+    let li = ui.CreateElementWithClass('li', 'icon', name.toLowerCase(), 'selectable');
     ui.DisableContentSelection(li);
     let tt = ui.CreateElementWithClass('span', 'tooltip');
-    tt.innerText = name;
+    tt.innerText = GetSocialTextByName(name);
     li.appendChild(tt);
     let img = ui.CreateImage(GetSocialImgByName(name), name);
     li.appendChild(img);
@@ -113,8 +100,25 @@ function GetSocialTextByName(name) {
     return null;
 }
 
+function CreateMailButton() {
+    // TODO: add email icon to newsletter bar 
+    // Issue URL: https://github.com/nickyonge/evto-web/issues/38
+    let mailGroup = ui.CreateDivWithClass('minput-group');
+    let mailInput = ui.CreateElementWithClass('input', 'minput', 'selectable');
+    mailInput.setAttribute('id', 'Email');
+    mailInput.setAttribute('name', 'Email');
+    mailInput.setAttribute('placeholder', txt.EMAIL_PLACEHOLDER);
+    mailInput.setAttribute('autocomplete', 'off');
+    let mailButton = ui.CreateElementWithClass('input', 'mbuttonSubmit', 'selectable', 'noText');
+    mailButton.setAttribute('value', txt.EMAIL_BTN_TEXT);
+    mailButton.setAttribute('type', 'submit');
+    mailGroup.appendChild(mailInput);
+    mailGroup.appendChild(mailButton);
+    return mailGroup;
+}
+
 function CreateSlidingButton() {
-    let btn = ui.CreateElementWithClass('button', 'slidingbtn');
+    let btn = ui.CreateElementWithClass('button', 'slidingbtn', 'selectable');
     let circle = ui.CreateElementWithClass('span', 'circle');
     circle.setAttribute('aria-hidden', 'true');
     circle.appendChild(ui.CreateElementWithClass('span', 'icon', 'arrow'));

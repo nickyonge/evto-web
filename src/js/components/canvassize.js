@@ -51,7 +51,7 @@ export class CanvasSize extends BasicComponent {
             } else {
                 canvasName = CanvasSize.canvasNumToName(canvasFramesArray.length - i);
             }
-            ui.AddClassesToDOM(img, 'canvasSize', 'image', canvasName);
+            ui.AddClassesToDOM(img, 'canvasSize', 'image', 'selectable', canvasName);
             img.draggable = false;
             if (i == 0) {
                 // base image

@@ -10,10 +10,6 @@
     border: 1px var(--color-ui-costToken-default) solid;
     box-sizing: border-box;
     overflow: hidden;
-    user-select: none;
-    -ms-user-select: none;
-    -moz-user-select: none;
-    -webkit-user-select: none;
     transition: 100ms;
     z-index: 1;
     background-color: var(--color-ui-costToken-default-bg-inner);
