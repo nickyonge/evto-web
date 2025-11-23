@@ -3,6 +3,7 @@ import * as ui from './ui';
 import { overlay } from './uiMain';
 
 const allowOverlayBoxSelection = false;
+const allowOverlayTextSelection = true && allowOverlayBoxSelection;
 
 let overlayBG;
 let overlayBox;
@@ -28,9 +29,9 @@ export function InitializeOverlay() {
     }
     if (!overlayBox) {
         overlayBox = ui.CreateDivWithClass('overlayBox');
-        SetOverlayShow(false, 'box');
         overlayTitleText = ui.CreateElementWithClass('p', 'overlayTitle');
         overlayBodyText = ui.CreateElementWithClass('p', 'overlayBody');
+        SetOverlayShow(false, 'box');
         overlay.appendChild(overlayBox);
         overlayBox.appendChild(overlayTitleText);
         overlayBox.appendChild(overlayBodyText);
@@ -83,8 +84,11 @@ function HideOverlay() {
 }
 
 function SetOverlayShow(set, target = 'both') {
-    function SetTargetShow(set, target) {
+    function SetTargetShow(set, target, alsoSetSelectable = true) {
         ui.AddElementAttribute(target, 'show', `${set}`);
+        SetTargetSelectable(set && alsoSetSelectable, target);
+    }
+    function SetTargetSelectable(set, target) {
         if (set) {
             ui.AddClassToDOMs('selectable', target);
         } else {
@@ -93,7 +97,9 @@ function SetOverlayShow(set, target = 'both') {
     }
     switch (target) {
         case 'box':
-            SetTargetShow(set, overlayBox);
+            SetTargetShow(set, overlayBox, allowOverlayBoxSelection);
+            SetTargetSelectable(set && allowOverlayTextSelection, overlayBodyText);
+            SetTargetSelectable(set && allowOverlayTextSelection, overlayTitleText);
             break;
         case 'bg':
             SetTargetShow(set, overlayBG);
