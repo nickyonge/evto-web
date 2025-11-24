@@ -4,6 +4,7 @@ import { EnsureColorValid, ColorToRGBA, ColorToHex, ColorToArray, ToPercentage, 
 import { svgXYWHDefinition } from '../js/svg';
 
 declare global {
+
     /**
      * Any type of node created via `nestedPath` in `assetExporter.js`
      * 

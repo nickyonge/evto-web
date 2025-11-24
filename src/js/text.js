@@ -3,6 +3,12 @@
 // ============= GENERAL =================================
 
 export const HELPICON_ALT = "Help";
+export const INPUT_CLICK = "Click";
+export const INPUT_TAP = "Tap";
+export const OVERLAY_CLICKANYWHERE = `${GetInput()} anywhere to dismiss`;
+export const OVERLAY_CLICKOUTSIDE = `${GetInput()} outside the infobox to dismiss`;
+
+function GetInput() { return INPUT_CLICK; }
 
 // --------- CANVAS SIZES -----------------------
 export const DATA_SIZE_SM = '10x20"';
