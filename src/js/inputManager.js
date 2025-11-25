@@ -14,7 +14,19 @@ let _initialized = false;
 /** Has {@linkcode TrackedPointerEvent} been called yet? @type {boolean} */
 let _firstEvent = false;
 
-/** Local reference for the currentt {@linkcode InputMode} mode @type {InputMode} */
+export const InputMode = Object.freeze({
+    MOUSE: 'mouse',
+    TOUCH: 'touch',
+    PEN: 'pen',
+});
+export const PenAndTouchProtocol = Object.freeze({
+    None: 'none',
+    TouchIsPenOnly: 'touchIsPenOnly',
+    PenIsTouchOnly: 'penIsTouchOnly',
+    Equivalent: 'equivalent'
+});
+
+/** Local reference for the currentt {@linkcode InputMode} mode @type {inputMode} */
 let currentMode = GetDefaultMode();
 
 /** Initialize the {@linkcode window.InputMode} system */
@@ -44,7 +56,7 @@ export function InitializeInputManager() {
  * {@linkcode window.InputMode.inputModeChange inputModeChange} event.
  * 
  * Returns `true` if an event was triggered. 
- * @param {InputMode} newMode Mode to change to 
+ * @param {inputMode} newMode Mode to change to 
  * @param {PointerEvent} sourceEvent `PointerEvent` that triggered the change 
  * @returns {boolean}
  */
@@ -59,9 +71,9 @@ function setMode(newMode, sourceEvent) {
     // if the input mode has changed, fire an event 
     const ev = new CustomEvent(window.InputMode.inputModeChange, {
         detail: {
-            /** The {@linkcode InputMode} that was just changed to, now the current mode @type {InputMode} */
+            /** The {@linkcode InputMode} that was just changed to, now the current mode @type {inputMode} */
             currentMode: currentMode,
-            /** The {@linkcode InputMode} that was changed from, the previous mode @type {InputMode} */
+            /** The {@linkcode InputMode} that was changed from, the previous mode @type {inputMode} */
             previous: previousMode,
             /** The `PointerEvent` that triggered the change (may be null) @type {PointerEvent|null} */
             sourcePointerEvent: sourceEvent
@@ -75,7 +87,7 @@ function setMode(newMode, sourceEvent) {
 /**
  * Determine the {@linkcode InputMode} based on a given pointer event 
  * @param {PointerEvent} pointerEvent 
- * @returns {InputMode}
+ * @returns {inputMode}
  */
 function InputModeFromEvent(pointerEvent) {
     // this has way too many failsafes lol 
@@ -213,7 +225,7 @@ function HasTouchscreen() {
  * If {@linkcode hasTouchscreen} is `true`, this will be 
  * {@linkcode InputMode.TOUCH}. If `false`, it will be {@linkcode InputMode.MOUSE} 
  * - **Note:** The default mode will never be {@linkcode InputMode.PEN}
- * @returns {InputMode}
+ * @returns {inputMode}
  */
 function GetDefaultMode() {
     return HasTouchscreen() ?

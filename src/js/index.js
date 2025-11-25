@@ -11,7 +11,7 @@ import { _env_currentEnv, GetParentWithClass } from './lilutils';
 import { GenerateCSS as ComponentsCSS } from './components/index';
 
 import './doc'; // document-level utility could. Should be called after all other imports 
-// import { InitializeInputManager } from './inputManager';
+import './inputManager';
 
 let _onLoadCompleteCallbacks = [];
 

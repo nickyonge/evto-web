@@ -92,17 +92,20 @@ declare global {
      * - **Note:** this is the data type.  
      * For the enum with string literals, see {@linkcode InputMode} (uppercase `i`). 
      */
-    declare type inputMode = InputMode;
-    
+    type inputMode = (typeof InputMode)[keyof typeof InputMode];
+    // declare type inputMode = 'mouse' | 'touch' | 'pen';
     // declare type inputMode = InputMode.MOUSE | InputMode.TOUCH | InputMode.PEN;
-    /** 
+
+    /**
      * Possible cursor-based input modes for user interaction 
      * - **Note:** this is the enum for string literals.  
      * For the type, see {@linkcode inputMode} (lowercase `i`). 
      */
-    declare enum InputMode {
-        /** Mouse, typically laptop or desktop PC, sometimes tablet */
-        MOUSE = 'mouse',
+    const InputMode: Readonly<{
+        /** 
+         * Mouse, typically laptop or desktop PC, 
+         * sometimes tablet */
+        MOUSE: 'mouse';
         /** 
          * Touch, typically mobile or tablet 
          * @see {@linkcode InputModeAPI.penAndTouchProtocol} 
@@ -110,21 +113,23 @@ declare global {
          * inputs as equivalently valid during 
          * {@linkcode InputModeAPI.isTouch()} and 
          * {@linkcode InputModeAPI.isPen()} checks. */
-        TOUCH = 'touch',
+        TOUCH: 'touch';
         /** Pen, uncommon but typically tablet or laptop. 
          * @see {@linkcode InputModeAPI.penAndTouchProtocol} 
          * to consider {@linkcode TOUCH} and {@linkcode PEN} 
          * inputs as equivalently valid during 
          * {@linkcode InputModeAPI.isPen()} and 
          * {@linkcode InputModeAPI.isTouch()} checks. */
-        PEN = 'pen'
-    }
+        PEN: 'pen';
+    }>;
+    
+    type penAndTouchProtocol = (typeof InputMode)[keyof typeof InputMode];
 
     /** 
      * Protocol for handling {@linkcode InputMode.TOUCH} and {@linkcode InputMode.PEN} inputs 
      * between the {@linkcode InputModeAPI.isTouch()} and {@linkcode InputModeAPI.isPen()} checks. 
      */
-    declare enum PenAndTouchProtocol {
+    declare const PenAndTouchProtocol: {
         /** 
          * None, {@linkcode InputModeAPI.isTouch()} will only return `true`
          * if {@linkcode InputModeAPI.mode} is {@linkcode InputMode.TOUCH},
@@ -134,7 +139,7 @@ declare global {
          * Useful for projects that have explicitly separate stylus 
          * and touchscreen features. 
          */
-        None = 'none',
+        None: 'none',
         /**
          * {@linkcode InputModeAPI.isPen()} will return `true` if {@linkcode InputModeAPI.mode} 
          * is {@linkcode InputMode.TOUCH}, but {@linkcode InputModeAPI.isTouch()} 
@@ -142,7 +147,7 @@ declare global {
          * 
          * Uncommon, only for projects that require a stylus to use. 
          */
-        TouchIsPenOnly = 'touchIsPenOnly',
+        TouchIsPenOnly: 'touchIsPenOnly',
         /** 
          * {@linkcode InputModeAPI.isTouch()} will return `true` if {@linkcode InputModeAPI.mode} 
          * is {@linkcode InputMode.PEN}, but {@linkcode InputModeAPI.isPen()} 
@@ -153,7 +158,7 @@ declare global {
          * 
          * Default value. 
          */
-        PenIsTouchOnly = 'penIsTouchOnly', // omg this name tho lol 
+        PenIsTouchOnly: 'penIsTouchOnly', // omg this name tho lol 
         /** 
          * Both {@linkcode InputModeAPI.isTouch()} and {@linkcode InputModeAPI.isPen()}
          * will return `true` if {@linkcode InputModeAPI.mode} is either 
@@ -165,7 +170,7 @@ declare global {
          * {@linkcode InputModeAPI.isTouch()} and {@linkcode InputModeAPI.isPen()} 
          * all willy-nilly, you heathen. 
          */
-        Equivalent = 'equivalent'
+        Equivalent: 'equivalent'
     }
 
     interface Window {
