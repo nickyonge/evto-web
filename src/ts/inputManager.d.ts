@@ -90,11 +90,9 @@ declare global {
 
     /** Possible cursor-based input modes for user interaction 
      * - **Note:** this is the data type.  
-     * For the enum with string literals, see {@linkcode InputMode} (uppercase `i`). 
+     * For the enum with string literals, see {@linkcode InputMode} (uppercase `I`). 
      */
     type inputMode = (typeof InputMode)[keyof typeof InputMode];
-    // declare type inputMode = 'mouse' | 'touch' | 'pen';
-    // declare type inputMode = InputMode.MOUSE | InputMode.TOUCH | InputMode.PEN;
 
     /**
      * Possible cursor-based input modes for user interaction 
@@ -109,25 +107,33 @@ declare global {
         /** 
          * Touch, typically mobile or tablet 
          * @see {@linkcode InputModeAPI.penAndTouchProtocol} 
-         * to consider {@linkcode PEN} and {@linkcode TOUCH} 
+         * to consider {@linkcode InputMode.PEN} and {@linkcode InputMode.TOUCH TOUCH} 
          * inputs as equivalently valid during 
          * {@linkcode InputModeAPI.isTouch()} and 
-         * {@linkcode InputModeAPI.isPen()} checks. */
+         * {@linkcode InputModeAPI.isPen() isPen()} checks. */
         TOUCH: 'touch';
         /** Pen, uncommon but typically tablet or laptop. 
          * @see {@linkcode InputModeAPI.penAndTouchProtocol} 
-         * to consider {@linkcode TOUCH} and {@linkcode PEN} 
+         * to consider {@linkcode InputMode.TOUCH} and {@linkcode InputMode.PEN PEN} 
          * inputs as equivalently valid during 
          * {@linkcode InputModeAPI.isPen()} and 
-         * {@linkcode InputModeAPI.isTouch()} checks. */
+         * {@linkcode InputModeAPI.isTouch() isTouch()} checks. */
         PEN: 'pen';
     }>;
     
+    /** 
+     * Protocol for handling {@linkcode InputMode.TOUCH} and {@linkcode InputMode.PEN} inputs 
+     * between the {@linkcode InputModeAPI.isTouch()} and {@linkcode InputModeAPI.isPen()} checks. 
+     * - **Note:** this is the data type.  
+     * For the enum with string literals, see {@linkcode penAndTouchProtocol} (uppercase `P`). 
+     */
     type penAndTouchProtocol = (typeof InputMode)[keyof typeof InputMode];
 
     /** 
      * Protocol for handling {@linkcode InputMode.TOUCH} and {@linkcode InputMode.PEN} inputs 
      * between the {@linkcode InputModeAPI.isTouch()} and {@linkcode InputModeAPI.isPen()} checks. 
+     * - **Note:** this is the enum for string literals.  
+     * For the type, see {@linkcode penAndTouchProtocol} (lowercase `p`). 
      */
     declare const PenAndTouchProtocol: {
         /** 

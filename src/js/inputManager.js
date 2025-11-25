@@ -1,5 +1,10 @@
 /* Manager for tracking user input device */
 
+// #region Setup
+
+/** Should InputManager log relevant events? */
+const DEBUG_INPUT_MANAGER = true;
+
 /** Capture events bubbling up through the DOM tree? @see https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#usecapture @type {boolean} */
 const USE_CAPTURE = true;
 
@@ -9,22 +14,96 @@ const REMOVE_MOVE_EVENTS_ON_FIRST_EVENT = true;
 /** If `true`, automatically calls {@linkcode InitializeInputManager()} as soon as this script is loaded */
 const AUTO_INITIALIZE_ON_LOAD = false;
 
+// #endregion Setup
+
+// #region Definitions
+
+/** InputManager Debug Log, prefix before any debug statements @see {@linkcode DEBUG_INPUT_MANAGER} @type {string} */
+const _imdl = "ℹ️ 𝙄𝙣𝙥𝙪𝙩𝙈𝙖𝙣𝙖𝙜𝙚𝙧 :";
+
+/**
+ * Possible cursor-based input modes for user interaction 
+ * - **Note:** this is the enum for string literals.  
+ * For the type, see {@linkcode inputMode} (lowercase `i`). 
+ */
+export const InputMode = Object.freeze({
+    /** 
+     * Mouse, typically laptop or desktop PC, 
+     * sometimes tablet */
+    MOUSE: 'mouse',
+    /** 
+     * Touch, typically mobile or tablet 
+     * @see {@linkcode PenAndTouchProtocol} 
+     * to consider {@linkcode InputMode.PEN} and {@linkcode InputMode.TOUCH TOUCH} 
+     * inputs as equivalently valid during 
+     * {@linkcode window.InputMode.isTouch()} and 
+     * {@linkcode window.InputMode.isPen isPen()} checks. */
+    TOUCH: 'touch',
+    /** Pen, uncommon but typically tablet or laptop. 
+     * @see {@linkcode PenAndTouchProtocol} 
+     * to consider {@linkcode InputMode.TOUCH} and {@linkcode InputMode.PEN PEN} 
+     * inputs as equivalently valid during 
+     * {@linkcode window.InputMode.isPen()} and 
+     * {@linkcode window.InputMode.isTouch isTouch()} checks. */
+    PEN: 'pen',
+});
+
+/** 
+ * Protocol for handling {@linkcode InputMode.TOUCH} and {@linkcode InputMode.PEN} inputs 
+ * between the {@linkcode window.InputMode.isTouch()} and {@linkcode window.InputMode.isPen()} checks. 
+ * - **Note:** this is the enum for string literals.  
+ * For the type, see {@linkcode penAndTouchProtocol} (lowercase `p`). 
+ */
+export const PenAndTouchProtocol = Object.freeze({
+    /** 
+     * None, {@linkcode window.InputMode.isTouch()} will only return `true`
+     * if {@linkcode window.InputMode.mode} is {@linkcode InputMode.TOUCH},
+     * and {@linkcode window.InputMode.isPen()} will only return `true`
+     * if {@linkcode window.InputMode.mode} is {@linkcode InputMode.PEN}. 
+     * 
+     * Useful for projects that have explicitly separate stylus 
+     * and touchscreen features. 
+     */
+    None: 'none',
+    /**
+     * {@linkcode window.InputMode.isPen()} will return `true` if {@linkcode window.InputMode.mode} 
+     * is {@linkcode InputMode.TOUCH}, but {@linkcode window.InputMode.isTouch()} 
+     * will return `false` if {@linkcode window.InputMode.mode} is {@linkcode InputMode.PEN}. 
+     * 
+     * Uncommon, only for projects that require a stylus to use. 
+     */
+    TouchIsPenOnly: 'touchIsPenOnly',
+    /** 
+     * {@linkcode window.InputMode.isTouch()} will return `true` if {@linkcode window.InputMode.mode} 
+     * is {@linkcode InputMode.PEN}, but {@linkcode window.InputMode.isPen()} 
+     * will return `false` if {@linkcode window.InputMode.mode} is {@linkcode InputMode.TOUCH}. 
+     * 
+     * Useful for touchscreen devices with styluses when your 
+     * project does not have any pen-specific features. 
+     * 
+     * Default value. 
+     */
+    PenIsTouchOnly: 'penIsTouchOnly', // omg this name tho lol 
+    /** 
+     * Both {@linkcode window.InputMode.isTouch()} and {@linkcode window.InputMode.isPen()}
+     * will return `true` if {@linkcode window.InputMode.mode} is either 
+     * {@linkcode InputMode.TOUCH} or {@linkcode InputMode.PEN}. 
+     * 
+     * Uncommon, but useful for touchscreen devices with styluses 
+     * when your project has lots of touch-and-pen based features 
+     * that can be used interchangeably - or when you want to use 
+     * {@linkcode window.InputMode.isTouch()} and {@linkcode window.InputMode.isPen()} 
+     * all willy-nilly, you heathen. 
+     */
+    Equivalent: 'equivalent'
+});
+
+// #endregion Definitions
+
 /** Has {@linkcode InitializeInputManager} been called? Should be called as soon as your page loads @type {boolean} */
 let _initialized = false;
 /** Has {@linkcode TrackedPointerEvent} been called yet? @type {boolean} */
 let _firstEvent = false;
-
-export const InputMode = Object.freeze({
-    MOUSE: 'mouse',
-    TOUCH: 'touch',
-    PEN: 'pen',
-});
-export const PenAndTouchProtocol = Object.freeze({
-    None: 'none',
-    TouchIsPenOnly: 'touchIsPenOnly',
-    PenIsTouchOnly: 'penIsTouchOnly',
-    Equivalent: 'equivalent'
-});
 
 /** Local reference for the currentt {@linkcode InputMode} mode @type {inputMode} */
 let currentMode = GetDefaultMode();
@@ -32,6 +111,7 @@ let currentMode = GetDefaultMode();
 /** Initialize the {@linkcode window.InputMode} system */
 export function InitializeInputManager() {
     if (_initialized) { return; }
+    console.if(DEBUG_INPUT_MANAGER, _imdl, "Initializing InputManager");
     // set initial current mode 
     currentMode = window.InputMode.defaultMode;
     // tracked events for determining pointer activity
@@ -63,6 +143,8 @@ export function InitializeInputManager() {
 function setMode(newMode, sourceEvent) {
     // nullcheck + do not trigger if new mode is the same 
     if (newMode == null || newMode === currentMode) { return false; }
+
+    console.if(DEBUG_INPUT_MANAGER, _imdl, `Changing InputMode to ${newMode}`);
 
     // update the mode 
     const previousMode = currentMode;
@@ -177,7 +259,10 @@ function TrackedPointerEvent(pointerEvent) {
     if (!_firstEvent) {
         _firstEvent = true;
         if (REMOVE_MOVE_EVENTS_ON_FIRST_EVENT) {
-            window.addEventListener('pointermove', TrackedPointerEvent, USE_CAPTURE);
+            console.if(DEBUG_INPUT_MANAGER, _imdl, "Removing Move event listeners");
+            window.removeEventListener('pointermove', TrackedPointerEvent, USE_CAPTURE);
+            window.removeEventListener('mousemove', TrackedPointerEvent, USE_CAPTURE);
+            window.removeEventListener('touchmove', TrackedPointerEvent, USE_CAPTURE);
         }
     }
     const mode = InputModeFromEvent(pointerEvent);
@@ -278,3 +363,5 @@ window.InputMode = {
 if (AUTO_INITIALIZE_ON_LOAD) {
     InitializeInputManager();
 }
+
+console.if(DEBUG_INPUT_MANAGER, _imdl, "Script Loaded");

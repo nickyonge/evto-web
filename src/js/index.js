@@ -4,6 +4,7 @@ import { BuildUI, DisplayUI } from './uiMain';
 import { SetupDataWindow } from './contentData';
 import { SetupArtWindow } from './contentArt';
 import { DisconnectObserver, StartObservation } from './mutationObserver';
+import { InitializeInputManager } from './inputManager';
 import Coloris from '@melloware/coloris';
 import { BasicComponent } from './components/base';
 import { _env_currentEnv, GetParentWithClass } from './lilutils';
@@ -11,7 +12,6 @@ import { _env_currentEnv, GetParentWithClass } from './lilutils';
 import { GenerateCSS as ComponentsCSS } from './components/index';
 
 import './doc'; // document-level utility could. Should be called after all other imports 
-import './inputManager';
 
 let _onLoadCompleteCallbacks = [];
 
@@ -19,6 +19,7 @@ window.addEventListener('load', function () {
     // initial window load
     GenerateCSS();
     StartObservation();
+    InitializeInputManager();
     BuildUI();
     SetupDataWindow();
     SetupArtWindow();
