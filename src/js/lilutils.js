@@ -2,7 +2,12 @@
 
 // #region Strings
 
-/** check if a string is null, empty, or whitespace
+/** 
+ * Check if a string is `null`, empty, or whitespace. 
+ * 
+ * Returns `false` if value is a string with any non-whitespace 
+ * content in it. Returns `true` if the value is `null`, empty, 
+ * blank, or if it is not a string. 
  * @param {string} str input string to test 
  * @param {boolean} [errorOnNonString=false] 
  * Throw error on a non-string? If false, just return `true`.
@@ -1315,6 +1320,37 @@ export function GetAllParentsWithClass(childElement, cssClass) {
     }
     return parentsWithClass;
 }
+
+/**
+ * Gets all Elements in an array with the given CSS class. 
+ * 
+ * Uses `getElementsByClassName`. To search for multiple CSS classes, 
+ * use {@linkcode GetAllElementsWithClasses}, or separate multiple class
+ * names by whitespace. If no classes are found or the given class is 
+ * empty, returns `[]`
+ * @param {string} cssClass CSS class to read. If null/blank, returns `[]` 
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByClassName 
+ * @returns {Element[]}
+ */
+export function GetAllElementsWithClass(cssClass) {
+    if (isBlank(cssClass)) { return []; }
+    let htmlCollection = document.getElementsByClassName(cssClass);
+    return Array.from(htmlCollection);
+}
+/**
+ * Gets all Elements in an array with all of the given CSS classes. 
+ * 
+ * For using a single CSS class, see {@linkcode GetAllChildrenWithClass}.
+ * @param {spreadString} cssClasses CSS classes to read. If null, returns `[]` 
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Document/getElementsByClassName 
+ * @returns {Element[]}
+ */
+export function GetAllElementsWithClasses(...cssClasses) {
+    if (cssClasses == null) { return []; }
+    cssClasses = cssClasses.flattenSpread();
+    return GetAllElementsWithClass(cssClasses.join(' '));
+}
+
 /**
  * Convenience method, just checks if the given element has the given CSS class
  * @param {Element} element 
