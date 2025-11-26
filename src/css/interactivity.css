@@ -22,6 +22,18 @@
     user-select: none;
 }
 
+#container .scrollable {
+    /* scrollbar-gutter: stable; */
+    scrollbar-width: thin;
+    /* scroll-margin-block-start: 10px ; */
+    overscroll-behavior-y: none;
+    /* overflow-y: scroll; */
+    overflow-y: auto;
+}
+/* #container .scrollable .scrollScroll {
+    overflow-y: scroll;
+} */
+
 .allowSelectDefaultCursor {
     user-select: text;
     -o-user-select: text;

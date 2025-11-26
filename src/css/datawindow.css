@@ -86,7 +86,7 @@ dataWindow .content .page {
     overflow-x: hidden;
     overflow-y: auto;
     /* scrollbar-gutter: stable; */
-    scrollbar-width: thin;
+    scrollbar-width: thin; /* REPLACE SCROLL */
     /* scroll-margin-block-start: 10px ; */
 }
 

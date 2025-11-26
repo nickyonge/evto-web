@@ -38,6 +38,7 @@ export class DropdownList extends TitledComponent {
         this.#initialValue = initialValue;
 
         this.#costArray = costs;
+        console.log(this.uniqueComponentName);
         this.#currentCost = 0;
 
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
@@ -310,16 +311,24 @@ export class DropdownList extends TitledComponent {
             });
         }
     }
+    /** @param {HTMLElement} target  */
     DropdownAddedToPage(target) { // this.#dropdown
         // ensure dropdown width fits page 
         target.style.width = `${target.parentElement.offsetWidth - 4.5}px`;
     }
-    OptionsAddedToPage(target) { // this.#optionsContainer 
+    /** @param {HTMLElement} target  */
+    OptionsAddedToPage(target) { // this.#optionsContainer
         // determine if window height exceeds max, and if so, add scrollbar
+        // remove scrollable to prevent messing with results 
+            ui.RemoveClassesFromDOM(target, 'scrollable');
         let targetHeight = target.offsetHeight;
-        if (targetHeight > DropdownList._dropdownMaxHeight) {
-            target.style.setProperty('overflow-y', 'scroll');
+        let scrollable = targetHeight > DropdownList._dropdownMaxHeight;
+        let style = /** @type {CSSStyleDeclaration} */ (target.style);
+        console.log(BasicComponent.GetParentComponent(target).uniqueComponentName + " \nSCROLL: " + scrollable + ", targetHeight: " + targetHeight + ", maxHeight: " + DropdownList._dropdownMaxHeight + ", offset: " + target.offsetHeight);
+        if (scrollable) {
+            ui.AddClassesToDOM(target, 'scrollable');
         }
+        console.log(target);
     }
 
     set selection(sel) { // this.optionsInputs[i]

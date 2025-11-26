@@ -109,7 +109,7 @@ function CreatePages() {
     pageHeaders = [];
     perPageComponents = [];
     for (let i = 0; i < txt.PAGES_COUNT; i++) {
-        let page = ui.CreateDivWithClass('page', pageIDs[i], tabColors[i], 'selectable', 'noText');
+        let page = ui.CreateDivWithClass('page', pageIDs[i], tabColors[i], 'selectable', 'noText', 'scrollable');
         // page.id = `page${i}`; // page ID is numeric
         page.id = pageIDs[i]; // page ID is named
         ui.AddElementAttribute(page, 'z-index', i + 1);
