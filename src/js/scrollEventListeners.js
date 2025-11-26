@@ -5,11 +5,14 @@ import { GetAllElementsWithClass } from './lilutils';
 import { disableBodyScroll } from 'body-scroll-lock';
 
 /** CSS class denoting a scrollable element @type {string} */
-const scrollableClass = '.scrollable';
+const SCROLLABLE_CLASS = '.scrollable';
 
 /** Use passive events? Less performance-hungry, but may not work */
-const passiveEvents = false;
+const USE_PASSIVE_EVENTS = false;
 
+const BODYSCROLL_ASSIGN_RESERVE_SCROLL_BAR_GAP = true;
+const BODYSCROLL_SET_RESERVE_SCROLL_BAR_GAP_TO = true;
+const BODYSCROLL_ASSIGN_ALLOW_TOUCH_MOVE = true;
 
 /** local flag to track whether or not this system is initialized @type {boolean} */
 let _initialized = false;
@@ -33,8 +36,14 @@ export function InitializeScrollEvents() {
 
 function OnDocLoadedCallback() {
     // ensure the given elements are allowed to scroll 
-    GetAllElementsWithClass(scrollableClass).forEach(scrollElement => {
-        // disableBodyScroll(scrollElement);
+    GetAllElementsWithClass(SCROLLABLE_CLASS).forEach(scrollElement => {
+        disableBodyScroll(scrollElement,
+            {
+                reserveScrollBarGap: BODYSCROLL_ASSIGN_RESERVE_SCROLL_BAR_GAP ?
+                    BODYSCROLL_SET_RESERVE_SCROLL_BAR_GAP_TO : undefined,
+                allowTouchMove: BODYSCROLL_ASSIGN_ALLOW_TOUCH_MOVE ?
+                    element => element === scrollElement : undefined,
+            });
     });
 }
 
@@ -43,7 +52,7 @@ function WheelScrollEvent() {
     // prevent overscroll 
     document.addEventListener('wheel', function (event) {
         let target = /** @type {HTMLElement} */ (event.target);
-        const scrollable = target.closest(scrollableClass);
+        const scrollable = target.closest(SCROLLABLE_CLASS);
         // if we're NOT in a scrollable element, block the scroll (no page scroll/overscroll)
         if (!scrollable) {
             event.preventDefault();
@@ -71,7 +80,7 @@ function WheelScrollEvent() {
 
     }, {
         // addEventLsitener params 
-        passive: passiveEvents,
+        passive: USE_PASSIVE_EVENTS,
         capture: true
     });
 }
@@ -86,7 +95,7 @@ function TouchScrollEvent() {
             lastTouchY = event.touches[0].clientY;
         }
     }, {
-        passive: passiveEvents
+        passive: USE_PASSIVE_EVENTS
     });
 
     // track Y value movement 
@@ -96,7 +105,7 @@ function TouchScrollEvent() {
 
         let target = /** @type {HTMLElement} */ (event.target);
 
-        const scrollable = target.closest(scrollableClass);
+        const scrollable = target.closest(SCROLLABLE_CLASS);
         // if we're NOT in a scrollable element, block the scroll (no page scroll/overscroll)
         if (!scrollable) {
             event.preventDefault();
@@ -128,7 +137,7 @@ function TouchScrollEvent() {
 
     }, {
         // addEventLsitener params 
-        passive: passiveEvents,
+        passive: USE_PASSIVE_EVENTS,
         capture: true
     });
 }
