@@ -1334,6 +1334,7 @@ export function GetAllParentsWithClass(childElement, cssClass) {
  */
 export function GetAllElementsWithClass(cssClass) {
     if (isBlank(cssClass)) { return []; }
+    cssClass = cssClass.removeAll('.'); // remove periods from class names 
     let htmlCollection = document.getElementsByClassName(cssClass);
     return Array.from(htmlCollection);
 }
@@ -1385,7 +1386,7 @@ export function IsElementSelected(element, includeChildren = true) {
     const selection = window.getSelection && window.getSelection();
     if (selection && selection.rangeCount) {
         for (let i = 0; i < selection.rangeCount; i++) {
-            const range = selection.getRangeAt(i); 
+            const range = selection.getRangeAt(i);
             if (element.contains(range.commonAncestorContainer)) {
                 return true;
             }
@@ -1490,7 +1491,7 @@ export function IsActiveElement(element) {
  */
 export function SetElementEnabled(element, set = true, updateStoredValues = false) {
     // preserve values on first call 
-    if (element._priorDraggable == null) { 
+    if (element._priorDraggable == null) {
         element._priorDraggable = [element.draggable];
     }
     if (element._priorPointerEvents == null) {
