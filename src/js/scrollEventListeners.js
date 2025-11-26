@@ -36,7 +36,7 @@ export function InitializeScrollEvents() {
 function OnDocLoadedCallback() {
     // ensure the given elements are allowed to scroll 
     GetAllElementsWithClass(scrollableClass).forEach(scrollElement => {
-        disableBodyScroll(scrollElement);
+        // disableBodyScroll(scrollElement);
     });
 }
 
