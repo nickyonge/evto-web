@@ -1,6 +1,6 @@
 /* functionality related to the Art window */
 
-import * as THREE from 'three';
+// import * as THREE from 'three';
 import * as ui from './ui';
 import { canvasInner } from './uiArt';
 
@@ -32,73 +32,73 @@ const hqVisuals = true;
 const useDemoCube = true;
 
 function Create3DScene() {
-    scene = new THREE.Scene();
-    UpdateCamera();
-    renderer = new THREE.WebGLRenderer({
-        alpha: true,
-        antialias: hqVisuals,
-        premultipliedAlpha: hqVisuals
-    });
-    canvas = renderer.domElement;
-    if (useDemoCube) {
-        const demoCubeGeo = new THREE.BoxGeometry(1, 1, 1);
-        const demoCubeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        demoCube = new THREE.Mesh(demoCubeGeo, demoCubeMat);
-        scene.add(demoCube);
-    }
+    // scene = new THREE.Scene();
+    // UpdateCamera();
+    // renderer = new THREE.WebGLRenderer({
+    //     alpha: true,
+    //     antialias: hqVisuals,
+    //     premultipliedAlpha: hqVisuals
+    // });
+    // canvas = renderer.domElement;
+    // if (useDemoCube) {
+    //     const demoCubeGeo = new THREE.BoxGeometry(1, 1, 1);
+    //     const demoCubeMat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    //     demoCube = new THREE.Mesh(demoCubeGeo, demoCubeMat);
+    //     scene.add(demoCube);
+    // }
 
-    window.onresize = UpdateCamera;
-    UpdateRendererSize();
+    // window.onresize = UpdateCamera;
+    // UpdateRendererSize();
 
-    renderer.setAnimationLoop(ThreeJSFrame);
-    ui.AddClassToDOMs('threeJS', canvas);
-    canvasInner.appendChild(canvas);
+    // renderer.setAnimationLoop(ThreeJSFrame);
+    // ui.AddClassToDOMs('threeJS', canvas);
+    // canvasInner.appendChild(canvas);
 }
 
 export function UpdateCamera() {
-    if (queueCameraUpdate) {
-        return;
-    }
-    // check if camera has updated. if so, test for update duration
-    if (lastCameraUpdate != 0) {
-        let camUpdateInterval = performance.now() - lastCameraUpdate;
-        if (camUpdateInterval < cameraUpdateInterval) {
-            queueCameraUpdate = true;
-            return;
-        }
-    }
-    // update camera
-    // TODO: instead of re-instancing 3js camera, just reset the properties if camera is non-null
-    // Issue URL: https://github.com/nickyonge/evto-web/issues/8
-    if (useOrthographicCamera) {
-        camera = new THREE.OrthographicCamera(sceneWidth() / - camOrthoDivFactor, sceneWidth() / camOrthoDivFactor, sceneHeight() / camOrthoDivFactor, sceneHeight() / - camOrthoDivFactor, cameraNearClip, cameraFarClip);
-    } else {
-        camera = new THREE.PerspectiveCamera(camPerspectiveFOV, sceneAspect(), cameraNearClip, cameraFarClip);
-    }
-    camera.position.z = 6.9;
-    lastCameraUpdate = performance.now();
+    // if (queueCameraUpdate) {
+    //     return;
+    // }
+    // // check if camera has updated. if so, test for update duration
+    // if (lastCameraUpdate != 0) {
+    //     let camUpdateInterval = performance.now() - lastCameraUpdate;
+    //     if (camUpdateInterval < cameraUpdateInterval) {
+    //         queueCameraUpdate = true;
+    //         return;
+    //     }
+    // }
+    // // update camera
+    // // TODO: instead of re-instancing 3js camera, just reset the properties if camera is non-null
+    // // Issue URL: https://github.com/nickyonge/evto-web/issues/8
+    // if (useOrthographicCamera) {
+    //     camera = new THREE.OrthographicCamera(sceneWidth() / - camOrthoDivFactor, sceneWidth() / camOrthoDivFactor, sceneHeight() / camOrthoDivFactor, sceneHeight() / - camOrthoDivFactor, cameraNearClip, cameraFarClip);
+    // } else {
+    //     camera = new THREE.PerspectiveCamera(camPerspectiveFOV, sceneAspect(), cameraNearClip, cameraFarClip);
+    // }
+    // camera.position.z = 6.9;
+    // lastCameraUpdate = performance.now();
 }
 export function UpdateRendererSize() {
-    renderer.setSize(sceneWidth() * upscaleFactor, sceneHeight() * upscaleFactor, false);
+    // renderer.setSize(sceneWidth() * upscaleFactor, sceneHeight() * upscaleFactor, false);
 }
 
 export function ThreeJSFrame() {
 
-    if (useDemoCube) {
-        demoCube.rotation.x += 0.01;
-        demoCube.rotation.y += 0.015;
-    }
+    // if (useDemoCube) {
+    //     demoCube.rotation.x += 0.01;
+    //     demoCube.rotation.y += 0.015;
+    // }
 
-    renderer.render(scene, camera);
+    // renderer.render(scene, camera);
 
-    // check for queued camera update... 
-    if (queueCameraUpdate) {
-        if (performance.now() - lastCameraUpdate >= cameraUpdateInterval) {
-            queueCameraUpdate = false;
-            lastCameraUpdate = 0;// reset last cam update to force update
-            UpdateCamera();
-        }
-    }
+    // // check for queued camera update... 
+    // if (queueCameraUpdate) {
+    //     if (performance.now() - lastCameraUpdate >= cameraUpdateInterval) {
+    //         queueCameraUpdate = false;
+    //         lastCameraUpdate = 0;// reset last cam update to force update
+    //         UpdateCamera();
+    //     }
+    // }
 }
 
 
