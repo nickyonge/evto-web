@@ -50,11 +50,11 @@ declare global {
          * returns the result as a new array.
          * 
          * **Note:** Arrays are flattened, but other collections (eg `Set`) are treated as single values.
-         * @param {boolean} [skipNullValues=true] Are `null` and `undefined` values allowed? Default `true`
+         * @param {boolean} [allowNullValues=true] Are `null` and `undefined` values allowed? Default `true`
          * @param {boolean} [allowDuplicateValues=true] Are duplicate values allowed? Default `true`
          * @returns {any[]} 
          */
-        flattenSpread(skipNullValues?: boolean, allowDuplicateValues?: boolean): any[];
+        flattenSpread(allowNullValues?: boolean, allowDuplicateValues?: boolean): any[];
     }
     // #endregion Object
 
@@ -67,11 +67,11 @@ declare global {
          * and return the result as a new array.
          * 
          * **Note:** Arrays are flattened, but other collections (eg `Set`) are treated as single values.
-         * @param {boolean} [skipNullValues=true] Are `null` and `undefined` values allowed? Default `true`
+         * @param {boolean} [allowNullValues=true] Are `null` and `undefined` values allowed? Default `true`
          * @param {boolean} [allowDuplicateValues=true] Are duplicate values allowed? Default `true`
          * @returns {any[]} 
          */
-        flattenSpread(skipNullValues?: boolean, allowDuplicateValues?: boolean): any[];
+        flattenSpread(allowNullValues?: boolean, allowDuplicateValues?: boolean): any[];
 
         /**
          * Optionally-assigned name for this array 
@@ -417,11 +417,11 @@ declare global {
          * 
          * This is present largely as a typesafe way to accommodate functions 
          * that take ...spread param input and/or single string input.
-         * @param {boolean} [skipNullValues=true] Are `null` and `undefined` values allowed? Default `true`
+         * @param {boolean} [allowNullValues=true] Are `null` and `undefined` values allowed? Default `true`
          * @param {boolean} [allowDuplicateValues=true] Are duplicate values allowed? Default `true`
          * @returns {string[]} 
          */
-        flattenSpread(skipNullValues?: boolean, allowDuplicateValues?: boolean): string[];
+        flattenSpread(allowNullValues?: boolean, allowDuplicateValues?: boolean): string[];
 
         /**
          * Counts the number of times the given character or string is found 
