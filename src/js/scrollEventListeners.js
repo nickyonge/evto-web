@@ -10,9 +10,12 @@ const SCROLLABLE_CLASS = '.scrollable';
 /** Use passive events? Less performance-hungry, but may not work */
 const USE_PASSIVE_EVENTS = false;
 
-const BODYSCROLL_ASSIGN_RESERVE_SCROLL_BAR_GAP = true;
+/** 
+ * Replaces scrollbar width with gap to prevent flickering
+ * @see https://github.com/willmcpo/body-scroll-lock?tab=readme-ov-file#reservescrollbargap
+ */
+const BODYSCROLL_ASSIGN_RESERVE_SCROLL_BAR_GAP = false;
 const BODYSCROLL_SET_RESERVE_SCROLL_BAR_GAP_TO = true;
-const BODYSCROLL_ASSIGN_ALLOW_TOUCH_MOVE = true;
 
 /** local flag to track whether or not this system is initialized @type {boolean} */
 let _initialized = false;
@@ -40,9 +43,7 @@ function OnDocLoadedCallback() {
         disableBodyScroll(scrollElement,
             {
                 reserveScrollBarGap: BODYSCROLL_ASSIGN_RESERVE_SCROLL_BAR_GAP ?
-                    BODYSCROLL_SET_RESERVE_SCROLL_BAR_GAP_TO : undefined,
-                allowTouchMove: BODYSCROLL_ASSIGN_ALLOW_TOUCH_MOVE ?
-                    element => element === scrollElement : undefined,
+                    BODYSCROLL_SET_RESERVE_SCROLL_BAR_GAP_TO : undefined
             });
     });
 }
