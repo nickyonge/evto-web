@@ -145,7 +145,7 @@ export function AddClassesToDOM(domElement, ...cssClasses) {
         return;
     }
     for (let i = 0; i < cssClasses.length; i++) {
-        if (!domElement.classList.contains(cssClasses[i])) {
+        if (!HasClass(domElement, cssClasses[i])) {
             domElement.classList.add(cssClasses[i]);
         }
     }
@@ -158,7 +158,7 @@ export function AddClassesToDOM(domElement, ...cssClasses) {
 export function AddClassToDOMs(cssClass, ...domElements) {
     domElements = domElements.flattenSpread();
     for (let i = 0; i < domElements.length; i++) {
-        if (!domElements[i].classList.contains(cssClass)) {
+        if (HasClass(domElements[i], cssClass)) {
             domElements[i].classList.add(cssClass);
         }
     }
@@ -176,7 +176,7 @@ export function RemoveClassesFromDOM(domElement, ...cssClasses) {
     }
     cssClasses = cssClasses.flattenSpread();
     for (let i = 0; i < cssClasses.length; i++) {
-        if (domElement.classList.contains(cssClasses[i])) {
+        if (HasClass(domElement, cssClasses[i])) {
             domElement.classList.remove(cssClasses[i]);
         }
     }
@@ -189,10 +189,48 @@ export function RemoveClassesFromDOM(domElement, ...cssClasses) {
 export function RemoveClassFromDOMs(cssClass, ...domElements) {
     domElements = domElements.flattenSpread();
     for (let i = 0; i < domElements.length; i++) {
-        if (domElements[i].classList.contains(cssClass)) {
+        if (HasClass(domElements[i], cssClass)) {
             domElements[i].classList.remove(cssClass);
         }
     }
+}
+
+/**
+ * Does the given element have the given CSS class?
+ * @param {Element} element Element to check. If `null`, returns `false`  
+ * @param {string} cssClass CSS class. If `null`/empty, returns `false`
+ * @returns {boolean}
+ */
+export function HasClass(element, cssClass) {
+    if (element == null || isBlank(cssClass)) { return false; }
+    return element.classList.contains(cssClass);
+}
+/**
+ * Does the given element have any or all (default all) 
+ * of the given CSS classes? 
+ * @param {Element} element Element to check. If `null`, returns `false` 
+ * @param {string[]} cssClasses Array of classes to check 
+ * @param {boolean} [all=true] If `true`, returns `true` only if the given 
+ * element has every given class. If `false`, returns `true` if the given 
+ * element has any one of the given classes. Default `true`. 
+ * - **Note:** If `cssClasses` is null, returns `false`. If `cssClasses`
+ * is `[]`, returns the value of `all`.
+ * @returns {boolean}
+ */
+export function HasClasses(element, cssClasses, all = true) {
+    if (element == null || cssClasses == null) { return false; }
+    for (let i = 0; i < cssClasses.length; i++) {
+        if (all) {
+            if (!HasClass(element, cssClasses[i])) {
+                return false;
+            }
+        } else {
+            if (HasClass(element, cssClasses[i])) {
+                return true;
+            }
+        }
+    }
+    return all ? true : false;
 }
 
 // #endregion Classes / IDs
@@ -288,14 +326,17 @@ export function HasAttributeWithValue(element, attType, attValue, countNullAsEmp
 }
 /**
  * Check if the given HTMLElement has any or all of the given attributes
- * @param {Element} element 
+ * @param {Element} element Element to check. If `null`, returns `false` 
  * @param {string[]} attTypes List of attribute names to check 
- * @param {boolean} [all=true] Check for all attributes? If `true` (default), 
- * only returns `true` if all given attributes are present. If `false`,
- * returns `true` if any of the given attributes are present
+ * @param {boolean} [all=true] If `true`, returns `true` only if the given 
+ * element has every given attribute. If `false`, returns `true` if the given 
+ * element has any one of the given attributes. Default `true`. 
+ * - **Note:** If `attTypes` is null, returns `false`. If `attTypes`
+ * is `[]`, returns the value of `all`.
  * @returns {boolean}
  */
 export function HasAttributes(element, attTypes, all = true) {
+    if (element == null || attTypes == null) { return false; }
     for (let i = 0; i < attTypes.length; i++) {
         if (all) {
             if (!element.hasAttribute(attTypes[i])) {
@@ -518,7 +559,7 @@ export function AllowContentSelectionWithTextIndicator(...domElements) {
     RemoveClassFromDOMs('preventSelect', ...domElements); // default selection type
 }
 
-// #endregion Nav/Select 
+// #endregion Nav/Select
 
 // TODO: add Enter input to elements that only function on spacebar (eg, rn the "Subscribe" btn works for Spacebar but not Enter)
 // Issue URL: https://github.com/nickyonge/evto-web/issues/15
