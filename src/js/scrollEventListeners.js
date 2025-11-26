@@ -1,6 +1,7 @@
 /* EventListeners to ensure scrolling behaves, including on mobile */
 
 import { CallOnLoadComplete } from '.';
+import { GetAllElementsWithClass } from './lilutils';
 
 /** CSS class denoting a scrollable element @type {string} */
 const scrollableClass = '.scrollable';
@@ -8,7 +9,7 @@ const scrollableClass = '.scrollable';
 /** Use passive events? Less performance-hungry, but may not work */
 const passiveEvents = false;
 
-const bodyScrollLock = require('body-scroll-lock');
+const bodyScrollLock = require('body-scroll-lock')
 const disableBodyScroll = bodyScrollLock.disableBodyScroll;
 const enableBodyScroll = bodyScrollLock.enableBodyScroll;
 
@@ -33,6 +34,10 @@ export function InitializeScrollEvents() {
 }
 
 function OnDocLoadedCallback() {
+    // ensure the given elements are allowed to scroll 
+    GetAllElementsWithClass(scrollableClass).forEach(scrollElement => {
+        disableBodyScroll(scrollElement);
+    });
 }
 
 /** Event listener for `'wheel'` */
