@@ -3,7 +3,7 @@
 // #region Setup
 
 /** Should InputManager log relevant events? */
-const DEBUG_INPUT_MANAGER = true;
+const DEBUG_INPUT_MANAGER = false;
 
 /** Capture events bubbling up through the DOM tree? @see https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#usecapture @type {boolean} */
 const USE_CAPTURE = true;
