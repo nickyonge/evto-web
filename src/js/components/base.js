@@ -1,5 +1,5 @@
 import * as ui from "../ui";
-import { ElementHasClass, GetParentWithClass, isBlank, StringAlphanumericOnly } from "../lilutils";
+import { ElementHasClass, EnsureToNumber, GetParentWithClass, isBlank, StringAlphanumericOnly } from "../lilutils";
 import { HelpIcon } from "./helpicon";
 
 export const basicComponentClass = '__UICOMP';
@@ -31,8 +31,9 @@ export class BasicComponent {
         BasicComponent.allComponents.push(this);
         BasicComponent.allComponentDivs.push(this.div);
     }
+    /** @returns {Number} */
     get uniqueComponentID() {
-        return ui.GetAttribute(this.div, 'uniqueComponentID');
+        return EnsureToNumber(ui.GetAttribute(this.div, 'uniqueComponentID'));
     }
     get uniqueComponentName() {
         let uniqueComponentName = `_uiComponent${this.uniqueComponentID}`;
@@ -72,21 +73,76 @@ export class BasicComponent {
     /** Convenience method to bypass appendChild on component directly to its div 
      * @param {Element} child */
     appendChild(child) {
+        if (child == null) { return; }
         this.div.appendChild(child);
     }
+    /**
+     * Get a {@linkcode BasicComponent} via the given 
+     * {@linkcode uniqueComponentID} number. If no component 
+     * with that ID is found, returns `null`.
+     * @param {number} uniqueID 
+     * @returns {BasicComponent}
+     */
     static GetComponentByUniqueID(uniqueID) {
+        if (uniqueID == null) { return null; }
         for (let i = 0; i < BasicComponent.allComponentDivs.length; i++) {
-            if (ui.GetAttribute(BasicComponent.allComponentDivs[i], 'uniqueComponentID') == uniqueID) {
+            let componentID = EnsureToNumber(ui.GetAttribute(BasicComponent.allComponentDivs[i], 'uniqueComponentID'));
+            if (componentID == uniqueID) {
                 return BasicComponent.allComponents[i];
             }
         }
         return null;
     }
-    static GetComponentByDiv(div) {
-        let divID = ui.GetAttribute(div, 'uniqueComponentID');
-        if (!divID) { return null; }
-        return BasicComponent.GetComponentByUniqueID(divID);
+    /**
+     * Get a {@linkcode BasicComponent} via the given 
+     * `Element`. If no component is found on that 
+     * element, returns `null`. Optionally (default `false`) 
+     * can search for components on parents of the given element. 
+     * @param {Element} element 
+     * @param {boolean} [searchParentage=false] 
+     * Search upward in the element's hierarchy? Default `false` 
+     * @returns {BasicComponent}
+     */
+    static GetComponentByDiv(element, searchParentage = false) {
+        if (element == null) { return null; }
+        let id = ui.GetAttribute(element, 'uniqueComponentID');
+        if (id == null && searchParentage) {
+            element = GetParentWithClass(element, basicComponentClass);
+            if (element != null) {
+                id = ui.GetAttribute(element, 'uniqueComponentID');
+            }
+        }
+        return id == null ? null :
+            BasicComponent.GetComponentByUniqueID(EnsureToNumber(id));
     }
+
+    /**
+     * Gets the parent component to the given element, searching 
+     * for {@linkcode basicComponentClass}. 
+     * 
+     * If element  
+     * @param {Element|BasicComponent} element 
+     * @returns {BasicComponent}
+     */
+    static GetParentComponent(element) {
+        if (element instanceof BasicComponent) {
+            return element;
+        }
+        /** @type {BasicComponent} */
+        let parentComponent = null;
+        if (ui.HasClass(element, basicComponentClass)) {
+            parentComponent = BasicComponent.GetComponentByDiv(element);
+            if (parentComponent != null) {
+                return parentComponent;
+            }
+        }
+        let parentElement = GetParentWithClass(element, basicComponentClass);
+        if (parentElement != null) {
+            parentComponent = BasicComponent.GetComponentByDiv(parentElement);
+        }
+        return parentComponent;
+    }
+
 }
 export class TitledComponent extends BasicComponent {
 
