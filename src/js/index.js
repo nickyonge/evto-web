@@ -17,6 +17,7 @@ let _onLoadCompleteCallbacks = [];
 
 window.addEventListener('load', function () {
     // initial window load
+    DocumentEvents();
     GenerateCSS();
     StartObservation();
     InitializeInputManager();
@@ -70,6 +71,16 @@ window.addEventListener('load', function () {
 
     }, 0);
 });
+
+function DocumentEvents() {
+    document.addEventListener('wheel', function(event) {
+  event.preventDefault();
+}, { passive: false });
+
+// document.addEventListener('touchmove', function(event) {
+//   event.preventDefault();
+// }, { passive: false });
+}
 
 /** Generate dynamic CSS across all scripts that call for it */
 function GenerateCSS() {

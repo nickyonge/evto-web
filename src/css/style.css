@@ -14,9 +14,14 @@
 /* match width to var(--viewport-bottombar-wrap) in vars.css */
 /* @media screen and (min-width: 750px) { } */
 
+html, body {
+    overflow-y: hidden; 
+    overscroll-behavior-y: none;
+    touch-action: none;
+}
+
 body {
     /* body height 100vh useful for window size debugging */
-    /* height: 100vh; */
     margin: 0px;
     background-repeat: no-repeat;
     background-attachment: fixed;
@@ -49,6 +54,7 @@ h3 {
         background-image: none;
     }
 } */
+
 
 #container {
     z-index: -1;
