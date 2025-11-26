@@ -1,6 +1,7 @@
 /* global CSS script to handle pointer events and selection */
 
-html *, body *,
+html *,
+body *,
 #container * {
     /* disable all input/selection by default */
     pointer-events: none;
@@ -24,20 +25,14 @@ html *, body *,
 }
 
 #container .scrollable {
-    /* scrollbar-gutter: stable; */
     scrollbar-width: thin;
-    /* scroll-margin-block-start: 10px ; */
     overscroll-behavior-y: none;
-    /* overflow-y: scroll; */
     overflow-y: auto;
     touch-action: pan-y;
 }
 #container .scrollable * {
     touch-action: pan-y;
 }
-/* #container .scrollable .scrollScroll {
-    overflow-y: scroll;
-} */
 
 .allowSelectDefaultCursor {
     user-select: text;
