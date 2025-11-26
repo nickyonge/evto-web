@@ -3,6 +3,7 @@ import './css'; // import css classes
 import { BuildUI, DisplayUI } from './uiMain';
 import { SetupDataWindow } from './contentData';
 import { SetupArtWindow } from './contentArt';
+import { InitializeScrollEvents } from './scrollEventListeners';
 import { DisconnectObserver, StartObservation } from './mutationObserver';
 import { InitializeInputManager } from './inputManager';
 import Coloris from '@melloware/coloris';
@@ -16,11 +17,11 @@ import './doc'; // document-level utility could. Should be called after all othe
 let _onLoadCompleteCallbacks = [];
 
 window.addEventListener('load', function () {
-    // initial window load
-    DocumentLevelEventListeners();
+    // initial window load 
     GenerateCSS();
     StartObservation();
     InitializeInputManager();
+    InitializeScrollEvents();
     BuildUI();
     SetupDataWindow();
     SetupArtWindow();
@@ -41,6 +42,7 @@ window.addEventListener('load', function () {
         Coloris.init();
         Coloris({
             margin: 6.9,
+            // @ts-ignore - just ignoring TS errors on external libraries 
             themeMode: 'polaroid',
             alpha: false,
             defaultColor: '#beeeef',
@@ -70,44 +72,6 @@ window.addEventListener('load', function () {
 
     }, 0);
 });
-
-/** Event listeners that control the overall behaviour of the doc */
-function DocumentLevelEventListeners() {
-
-    // prevent overscroll 
-    document.addEventListener('wheel', function (event) {
-        let target = /** @type {HTMLElement} */ (event.target);
-        const scrollable = target.closest('.scrollable');
-        // if we're NOT in a scrollable element, block the scroll (no page scroll/overscroll)
-        if (!scrollable) {
-            event.preventDefault();
-            return;
-        }
-        // determine destination + directional scroll ability 
-        const deltaY = event.deltaY;
-        const goingDown = deltaY > 0;
-        const goingUp = deltaY < 0;
-
-        const scrollTop = scrollable.scrollTop;
-        const scrollHeight = scrollable.scrollHeight;
-        const clientHeight = scrollable.clientHeight;
-
-        const atTop = scrollTop === 0;
-        const atBottom = scrollTop + clientHeight >= scrollHeight;
-
-        // allow in-scrollable-element scrolling to proceed 
-        if ((goingUp && !atTop) || (goingDown && !atBottom)) {
-            return; // allow normal scrolling *inside* the element
-        }
-
-        // not inside a non-scrollable element, carry on with overscroll interruption 
-        event.preventDefault();
-    }, {
-        // addEventLsitener params 
-        passive: false,
-        capture: true
-    });
-}
 
 /** Generate dynamic CSS across all scripts that call for it */
 function GenerateCSS() {
