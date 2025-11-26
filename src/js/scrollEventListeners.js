@@ -2,6 +2,7 @@
 
 import { CallOnLoadComplete } from '.';
 import { GetAllElementsWithClass } from './lilutils';
+import { disableBodyScroll } from 'body-scroll-lock';
 
 /** CSS class denoting a scrollable element @type {string} */
 const scrollableClass = '.scrollable';
@@ -9,9 +10,6 @@ const scrollableClass = '.scrollable';
 /** Use passive events? Less performance-hungry, but may not work */
 const passiveEvents = false;
 
-const bodyScrollLock = require('body-scroll-lock')
-const disableBodyScroll = bodyScrollLock.disableBodyScroll;
-const enableBodyScroll = bodyScrollLock.enableBodyScroll;
 
 /** local flag to track whether or not this system is initialized @type {boolean} */
 let _initialized = false;
