@@ -13,11 +13,13 @@ import { _env_currentEnv, GetParentWithClass } from './lilutils';
 import { GenerateCSS as ComponentsCSS } from './components/index';
 
 import './doc'; // document-level utility could. Should be called after all other imports 
+import { LaunchDebugging } from './debug';
 
 let _onLoadCompleteCallbacks = [];
 
 window.addEventListener('load', function () {
     // initial window load 
+    LaunchDebugging();
     GenerateCSS();
     StartObservation();
     InitializeInputManager();
@@ -30,14 +32,17 @@ window.addEventListener('load', function () {
 
     // post-load timeout 
     this.setTimeout(() => {
-        // one tick after loading
+        // one tick after loading 
+
         // on load complete callbacks 
         for (let i = 0; i < _onLoadCompleteCallbacks.length; i++) {
             _onLoadCompleteCallbacks[i]();
         }
         _onLoadCompleteCallbacks = [];
+
         // disconnect mutation observer
         DisconnectObserver();
+
         // init coloris
         Coloris.init();
         Coloris({
@@ -49,6 +54,7 @@ window.addEventListener('load', function () {
             selectInput: true,
             formatToggle: true,
         });
+
         // assign parent page to all components, and call DocumentLoaded on them 
         let unparentedComponents = [];
         BasicComponent.allComponents.forEach(component => {
