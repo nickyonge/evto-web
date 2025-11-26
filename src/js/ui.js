@@ -158,7 +158,7 @@ export function AddClassesToDOM(domElement, ...cssClasses) {
 export function AddClassToDOMs(cssClass, ...domElements) {
     domElements = domElements.flattenSpread();
     for (let i = 0; i < domElements.length; i++) {
-        if (HasClass(domElements[i], cssClass)) {
+        if (!HasClass(domElements[i], cssClass)) {
             domElements[i].classList.add(cssClass);
         }
     }
