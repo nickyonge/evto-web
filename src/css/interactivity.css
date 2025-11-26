@@ -1,6 +1,6 @@
 /* global CSS script to handle pointer events and selection */
 
-
+html, body,
 #container * {
     /* disable all input/selection by default */
     pointer-events: none;
