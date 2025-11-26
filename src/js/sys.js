@@ -230,11 +230,11 @@ export const devtoolsURL = import.meta.url;
      * 
      * **Note:** Arrays are flattened, but other collections (eg `Set`) are treated as single values.
      * @this {any} `this` can be of any input type
-     * @param {boolean} [skipNullValues=true] Are `null` and `undefined` values allowed? Default `true`
+     * @param {boolean} [allowNullValues=true] Are `null` and `undefined` values allowed? Default `true`
      * @param {boolean} [allowDuplicateValues=true] Are duplicate values allowed? Default `true`
      * @returns {any[]} 
      */
-    function flattenSpread(skipNullValues = true, allowDuplicateValues = true) {
+    function flattenSpread(allowNullValues = true, allowDuplicateValues = true) {
 
         // get primitive 
         const root = ObjectToPrimitive(this);
@@ -251,9 +251,12 @@ export const devtoolsURL = import.meta.url;
             // get first value out of the array 
             const firstValue = stack.shift();
 
-            // check if skipping null/undefined values 
-            if (!skipNullValues && firstValue == null) {
-                out.push(firstValue);
+            // check if allowing null/undefined values 
+            if (firstValue == null) {
+                if (allowNullValues) {
+                    // allowed, push to output 
+                    out.push(firstValue);
+                }
                 continue;
             }
 
