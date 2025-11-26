@@ -32,6 +32,9 @@ html *, body *,
     overflow-y: auto;
     touch-action: pan-y;
 }
+#container .scrollable * {
+    touch-action: pan-y;
+}
 /* #container .scrollable .scrollScroll {
     overflow-y: scroll;
 } */
