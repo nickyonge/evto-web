@@ -82,7 +82,7 @@ export class DropdownList extends TitledComponent {
             ui.AddElementAttributes(oInput, ['name', 'labelValue'], ['ddOption', options[i]]);
             oInput.defaultChecked = isChecked;
             oInput.checked = isChecked;
-            let oLabel = ui.CreateElementWithClass('label', 'ddOption', 'selectable');
+            let oLabel = ui.CreateElementWithClass('label', 'ddOption', 'selectable', 'noText');
             ui.AddElementAttributes(oLabel, ['for', 'data-txt', 'data-cost'], [uniqueName, options[i], '']);
             // ensure correct checked background
             if (isChecked) {
@@ -167,7 +167,7 @@ export class DropdownList extends TitledComponent {
         // update costs 
         this.UpdateCosts();
     }
-    
+
     #updateSelectedCost() {
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
         let _cost = this.costByDiv;
@@ -263,7 +263,7 @@ export class DropdownList extends TitledComponent {
             // TODO: make dropdown CSS not clip out of page, on scroll dropdown out of page top, if ddSelPointerEvents is 'auto'
             // Issue URL: https://github.com/nickyonge/evto-web/issues/37
             dropdownPointerEvents = 'none';
-            ddSelPointerEvents = 'none';
+            ddSelPointerEvents = 'auto';
         }
 
         if (clipBtm < 0) {
