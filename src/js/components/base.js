@@ -1,8 +1,15 @@
 import * as ui from "../ui";
-import { ElementHasClass, GetParentWithClass, isBlank } from "../lilutils";
+import { ElementHasClass, GetParentWithClass, isBlank, StringAlphanumericOnly } from "../lilutils";
 import { HelpIcon } from "./helpicon";
 
 export const basicComponentClass = '__UICOMP';
+
+/**
+ * If this is a {@linkcode TitledComponent}, should this 
+ * component's {@linkcode TitledComponent.title title}, 
+ * stripped of all non-alphanumeric characters, be appended 
+ * to {@linkcode uniqueComponentName}? @type {boolean} */
+const INCLUDE_COMPONENT_TITLE_IN_UNIQUE_NAME = true;
 
 export class BasicComponent {
     /** @type {HTMLElement} */
@@ -28,7 +35,16 @@ export class BasicComponent {
         return ui.GetAttribute(this.div, 'uniqueComponentID');
     }
     get uniqueComponentName() {
-        return `_uiComponent${this.uniqueComponentID}`;
+        let uniqueComponentName = `_uiComponent${this.uniqueComponentID}`;
+        if (INCLUDE_COMPONENT_TITLE_IN_UNIQUE_NAME && this instanceof TitledComponent) {
+            if (this.title != null) {
+                let ucn = StringAlphanumericOnly(this.title);
+                if (!isBlank(ucn)) {
+                    uniqueComponentName += `_${ucn}`;
+                }
+            }
+        }
+        return uniqueComponentName;
     }
     /** page that this component has been added to. should only be accessed after UI has finished loading. 
      * @type {Element} */
