@@ -1,10 +1,13 @@
 import * as ui from "../ui";
 import { BasicComponent, TitledComponent } from "./base";
 import { ObserverCallbackOnAdded } from "../mutationObserver";
-import { GetChildWithClass, GetCSSVariable, GetParentWithClass, GetSiblingWithClass, isBlank } from "../lilutils";
+import { GetChildWithClass, GetCSSVariable, GetParentWithClass, isBlank } from "../lilutils";
 import * as cost from '../costs';
 
 const _smootherScroll = true;
+
+/** Should vertical dragging be a valid method of scrolling a dropdown list? */
+const _dragScroll = true;
 
 export class DropdownList extends TitledComponent {
 
@@ -283,6 +286,7 @@ export class DropdownList extends TitledComponent {
         ddSelected.style.pointerEvents = ddSelPointerEvents;
         ddSelected.style.clipPath = `inset(${clipTop}px 0px ${clipBtm}px 0px)`;
     }
+    /** @param {HTMLElement} target  */
     DivAddedToPage(target) { // this.div
         // add scroll event
         if (_smootherScroll) {
@@ -313,6 +317,7 @@ export class DropdownList extends TitledComponent {
         // ensure dropdown width fits page 
         target.style.width = `${target.parentElement.offsetWidth - 4.5}px`;
     }
+
     /** 
      * `this.#optionsContainer` added to page. 
      * Determine if window height exceeds max, 
@@ -321,11 +326,76 @@ export class DropdownList extends TitledComponent {
     OptionsAddedToPage(target) { // this.#optionsContainer
         // remove scrollable to prevent messing with results 
         ui.RemoveClassesFromDOM(target, 'scrollable');
+        // get component reference to allow dragging 
+        let component = this instanceof DropdownList ? this :
+            BasicComponent.GetParentComponent(target);
+        if (component != null && component instanceof DropdownList) {
+            component.removeDrag(target);
+        }
+        // determine if scrollable
         let targetHeight = target.offsetHeight;
         let scrollable = targetHeight > DropdownList._dropdownMaxHeight;
         if (scrollable) {
+            // scrollable - set class, add dragging 
             ui.AddClassesToDOM(target, 'scrollable');
+            if (component != null && component instanceof DropdownList) {
+                component.addDrag(target);
+            }
         }
+    }
+
+    // --------------------------------- dragging
+
+    // TODO: dropdown dragging is very choppy and does not respect smooth scroll, clean up 
+    
+    /** @type {boolean} @private */
+    _isDragging;
+    /** @type {number} @private */
+    _startY;
+    /** @type {number} @private */
+    _initialScrollTop;
+    /** @param {Element} target  */
+    addDrag(target) {
+        target.addEventListener('mousedown', this.dragDown);
+        target.addEventListener('mouseleave', this.dragLeave);
+        target.addEventListener('mouseup', this.dragUp);
+        target.addEventListener('mousemove', this.dragMove);
+    }
+    /** @param {Element} target  */
+    removeDrag(target) {
+        if (target == null) { return; }
+        target.removeEventListener('mousedown', this.dragDown);
+        target.removeEventListener('mouseleave', this.dragLeave);
+        target.removeEventListener('mouseup', this.dragUp);
+        target.removeEventListener('mousemove', this.dragMove);
+    }
+    /** @param {MouseEvent} event */
+    dragDown(event) {
+        this._isDragging = true;
+        let target = /** @type {HTMLElement} */ (event.target);
+        target.classList.add('active-drag'); // Optional: Add a class for styling during drag
+        this._startY = event.pageY;
+        this._initialScrollTop = target.scrollTop;
+    }
+    /** @param {MouseEvent} event */
+    dragLeave(event) {
+        this._isDragging = false;
+        let target = /** @type {HTMLElement} */ (event.target);
+        target.classList.remove('active-drag');
+    }
+    /** @param {MouseEvent} event */
+    dragUp(event) {
+        this._isDragging = false;
+        let target = /** @type {HTMLElement} */ (event.target);
+        target.classList.remove('active-drag');
+    }
+    /** @param {MouseEvent} event */
+    dragMove(event) {
+        if (!this._isDragging) return;
+        let target = /** @type {HTMLElement} */ (event.target);
+        event.preventDefault(); // Prevent default browser drag behavior
+        const deltaY = event.pageY - this._startY;
+        target.scrollTop = this._initialScrollTop - deltaY;
     }
 
     set selection(sel) { // this.optionsInputs[i]
