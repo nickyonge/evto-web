@@ -1,10 +1,11 @@
 /* global CSS script to handle pointer events and selection */
 
-html, body,
+html *, body *,
 #container * {
     /* disable all input/selection by default */
     pointer-events: none;
     user-select: none;
+    touch-action: none;
 }
 
 #container .selectable,
@@ -29,6 +30,7 @@ html, body,
     overscroll-behavior-y: none;
     /* overflow-y: scroll; */
     overflow-y: auto;
+    touch-action: pan-y;
 }
 /* #container .scrollable .scrollScroll {
     overflow-y: scroll;
