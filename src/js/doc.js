@@ -689,6 +689,29 @@ import { isBlank, IsStringNameSafe } from "./lilutils";
     };
 
     /**
+     * Removes the first instance of the given string or expression. 
+     * Returns the modified string. 
+     * 
+     * Convenience, shorthand for `string.replaceAll(removeValue,'')`
+     * @param {string | RegExp} removeValue Value to remove
+     * @returns {string} 
+     */
+    String.prototype.remove = function (removeValue) {
+        return this.replace(removeValue, '');
+    }
+    /**
+     * Removes all instances of the given string or expression. 
+     * Returns the modified string. 
+     * 
+     * Convenience, shorthand for `string.replaceAll(removeValue,'')`
+     * @param {string | RegExp} removeValue Value to remove
+     * @returns {string} 
+     */
+    String.prototype.removeAll = function (removeValue) {
+        return this.replaceAll(removeValue, '');
+    }
+
+    /**
      * 
      * @param {boolean} [allowNegative=true] 
      * @param {boolean} [allowDecimal=true] 

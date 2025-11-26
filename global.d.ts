@@ -374,7 +374,7 @@ declare global {
          * console.log(toMax(33));           // "33"
          * console.log(toMax(33, true));     // "33.0"
          */
-        toMax(maxDecimals?: number|boolean, ensurOneDecimal?: boolean): string;
+        toMax(maxDecimals?: number | boolean, ensurOneDecimal?: boolean): string;
 
         /** 
          * Clamps a number between the given minimum and maximum values, 
@@ -447,6 +447,25 @@ declare global {
          * @returns {number}
          */
         count(countString: string, allowOverlap?: boolean): number;
+
+        /**
+         * Removes the first instance of the given string or expression. 
+         * Returns the modified string. 
+         * 
+         * Convenience, shorthand for `string.replaceAll(removeValue,'')`
+         * @param {string | RegExp} removeValue Value to remove
+         * @returns {string} 
+         */
+        remove(removeValue: string): string;
+        /**
+         * Removes all instances of the given string or expression. 
+         * Returns the modified string. 
+         * 
+         * Convenience, shorthand for `string.replaceAll(removeValue,'')`
+         * @param {string | RegExp} removeValue Value to remove
+         * @returns {string} 
+         */
+        removeAll(removeValue: string): string;
 
         // TODO: String.prototype.getNumber / getNumbers 
         // Issue URL: https://github.com/nickyonge/evto-web/issues/74
@@ -525,7 +544,7 @@ declare global {
         checked?: boolean;
         defaultChecked?: boolean;
         value?: string | number | boolean;
-        draggable?: 'true'|'false'|'auto'|boolean;
+        draggable?: 'true' | 'false' | 'auto' | boolean;
         style?: CSSStyleProperties;
         disabled?: boolean;
 
