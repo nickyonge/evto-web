@@ -76,7 +76,9 @@ function WheelScrollEvent() {
         }
 
         // not inside a non-scrollable element, carry on with overscroll interruption 
-        event.preventDefault();
+        if (event.cancelable) {
+            event.preventDefault();
+        }
 
     }, {
         // addEventLsitener params 
@@ -133,7 +135,9 @@ function TouchScrollEvent() {
         }
 
         // not inside a non-scrollable element, carry on with overscroll interruption 
-        event.preventDefault();
+        if (event.cancelable) {
+            event.preventDefault();
+        }
 
     }, {
         // addEventLsitener params 
