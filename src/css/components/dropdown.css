@@ -21,7 +21,9 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
     max-height: 30px;
     border-radius: 5px;
     overflow: hidden;
-    transition: max-height 300ms;
+    transition:
+        max-height 300ms,
+        z-index 0s 120ms;
 }
 
 .ddSelected {
@@ -88,8 +90,10 @@ https://uiverse.io/nickyonge/soft-zebra-63 */
 .dropdown:has(:focus-visible),
 .dropdown:hover {
     max-height: var(--ui-component-dropdown-max-height);
-    transition: 300ms;
     z-index: 20;
+    transition:
+        max-height 300ms ease,
+        z-index 0s 0s;
 }
 
 .dropdown:focus-visible > .ddOptions,

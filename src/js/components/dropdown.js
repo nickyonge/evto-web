@@ -166,10 +166,8 @@ export class DropdownList extends TitledComponent {
 
         // update costs 
         this.UpdateCosts();
-
-        //TODO: when closing, dropdown z-index brieifly appears underneath other components & ddselect
-        //Issue URL: https://github.com/nickyonge/evto-web/issues/41
     }
+    
     #updateSelectedCost() {
         ui.AddElementAttribute(this.#selected, 'data-label', this.selection);
         let _cost = this.costByDiv;
