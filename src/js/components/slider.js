@@ -390,6 +390,9 @@ export class Slider extends TitledComponent {
         ui.AddElementAttribute(this.#bg, 'value', this.initialValue);
         this.#bg.style.setProperty('--slider-value', this.valueAsPercentNormalized);
 
+        // ensure input is tabbable (mobile fix)
+        ui.MakeTabbable(this.#input);
+
         // generate text indicator
         this.#textIndicator = ui.CreateDivWithClass('stext');
         this.#updateText();
