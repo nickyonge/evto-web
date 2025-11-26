@@ -41,7 +41,6 @@ window.addEventListener('load', function () {
         Coloris.init();
         Coloris({
             margin: 6.9,
-            // @ts-ignore - just ignoring TS errors on external libraries 
             themeMode: 'polaroid',
             alpha: false,
             defaultColor: '#beeeef',
@@ -103,20 +102,11 @@ function DocumentLevelEventListeners() {
 
         // not inside a non-scrollable element, carry on with overscroll interruption 
         event.preventDefault();
-    },
+    }, {
         // addEventLsitener params 
-        {
-            passive: false,
-            capture: true
-        });
-//     function DocumentEvents() {
-//     document.addEventListener('wheel', function(event) {
-//   event.preventDefault();
-// }, { passive: false });
-
-// document.addEventListener('touchmove', function(event) {
-//   event.preventDefault();
-// }, { passive: false });
+        passive: false,
+        capture: true
+    });
 }
 
 /** Generate dynamic CSS across all scripts that call for it */

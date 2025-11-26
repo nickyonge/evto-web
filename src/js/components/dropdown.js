@@ -30,15 +30,14 @@ export class DropdownList extends TitledComponent {
 
     constructor(componentTitle, onSelectCallback, options, costs, icons, initialValue = 0) {
         super(componentTitle);
-        
+
         if (DropdownList._dropdownMaxHeight < 0) {
             DropdownList._dropdownMaxHeight = parseInt(GetCSSVariable('--ui-component-dropdown-max-height'), 10);
         }
-        
+
         this.#initialValue = initialValue;
 
         this.#costArray = costs;
-        console.log(this.uniqueComponentName);
         this.#currentCost = 0;
 
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
@@ -316,19 +315,19 @@ export class DropdownList extends TitledComponent {
         // ensure dropdown width fits page 
         target.style.width = `${target.parentElement.offsetWidth - 4.5}px`;
     }
-    /** @param {HTMLElement} target  */
+    /** 
+     * `this.#optionsContainer` added to page. 
+     * Determine if window height exceeds max, 
+     * and if so, assign scrollable class. 
+     * @param {HTMLElement} target  */
     OptionsAddedToPage(target) { // this.#optionsContainer
-        // determine if window height exceeds max, and if so, add scrollbar
         // remove scrollable to prevent messing with results 
-            ui.RemoveClassesFromDOM(target, 'scrollable');
+        ui.RemoveClassesFromDOM(target, 'scrollable');
         let targetHeight = target.offsetHeight;
         let scrollable = targetHeight > DropdownList._dropdownMaxHeight;
-        let style = /** @type {CSSStyleDeclaration} */ (target.style);
-        console.log(BasicComponent.GetParentComponent(target).uniqueComponentName + " \nSCROLL: " + scrollable + ", targetHeight: " + targetHeight + ", maxHeight: " + DropdownList._dropdownMaxHeight + ", offset: " + target.offsetHeight);
         if (scrollable) {
             ui.AddClassesToDOM(target, 'scrollable');
         }
-        console.log(target);
     }
 
     set selection(sel) { // this.optionsInputs[i]
