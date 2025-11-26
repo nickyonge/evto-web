@@ -12,7 +12,6 @@ import '@melloware/coloris/dist/coloris.css';
 import './../css/artwindow.css';
 import './../css/datawindow.css';
 import './../css/overlay.css';
-import './../css/threejs.css';
 
 // import component scripts 
 import './../css/components/base.css';
