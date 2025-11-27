@@ -1259,12 +1259,19 @@ export function GetAllSiblingsWithClass(element, cssClass) {
  * If none are found, returns null 
  * @param {Element} parentElement source parent element to search the children of 
  * @param {string} cssClass class name to check for 
+ * @param {boolean} [recursive=true] search children of children? Default `true` 
  * @returns {Element|null} first found child element with class, or null
  */
-export function GetChildWithClass(parentElement, cssClass) {
+export function GetChildWithClass(parentElement, cssClass, recursive = true) {
     for (const child of parentElement.children) {
         if (ElementHasClass(child, cssClass)) {
             return child;
+        }
+        if (recursive) {
+            let grandchild = GetChildWithClass(child, cssClass, recursive);
+            if (grandchild != null) {
+                return grandchild;
+            }
         }
     }
     return null;
@@ -1273,10 +1280,11 @@ export function GetChildWithClass(parentElement, cssClass) {
  * Returns all children of the given element with the given class found
  * @param {Element} parentElement source parent element to search the children of 
  * @param {string} cssClass class name to check for 
+ * @param {boolean} [recursive=true] search children of children? Default `true` 
  * @returns {Element[]} child elements with class
  */
-export function GetAllChildrenWithClass(parentElement, cssClass) {
-    let children = GetAllChildren(parentElement);
+export function GetAllChildrenWithClass(parentElement, cssClass, recursive = true) {
+    let children = GetAllChildren(parentElement, recursive);
     if (children == []) { return null; }
     let childrenWithClass = [];
     for (let i = 0; i < children.length; i++) {
