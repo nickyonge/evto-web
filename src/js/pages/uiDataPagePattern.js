@@ -53,11 +53,31 @@ export function CreatePagePattern(page) {
 const imageURLLight = mapImg.full.monochrome.light.URL;
 const imageURLDark = mapImg.full.monochrome.dark.URL;
 
+
 function CreatePatternSection(section) {
+
+    // let patternImage = new cmp.ImageField();
+    let patternImage = new cmp.ImageField(imageURLLight);
+    section.appendChild(patternImage);
+
+
+    let patternGrid = ui.CreateDivWithClass('grid');
+    section.appendChild(patternGrid);
+
+    let modeDropdown = new cmp.DropdownList('Mode');
+    patternGrid.appendChild(modeDropdown);
+    let previewDropdown = new cmp.DropdownList('Preview');
+    patternGrid.appendChild(previewDropdown);
+
+    section.appendChild(patternGrid);
+
+}
+
+function CreateColorsSection(section) {
     let patternImage = new cmp.ImageField();
     section.appendChild(patternImage);
 
-    
+
     patternImage.addImage(imageURLDark);
     let alphaLayer1 = new cmp.ImageAlphaLayer(1, imageURLLight, patternImage);
     alphaLayer1.gradient.sharpness = 0.5;
@@ -130,9 +150,6 @@ function CreatePatternSection(section) {
     // type to reference it, instead of adding it repeatedly (effectively causing multiple shapes
     // with the same ID to be added)
 
-}
-
-function CreateColorsSection(section) {
 }
 
 
