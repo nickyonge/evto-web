@@ -43,6 +43,8 @@ export class DropdownList extends TitledComponent {
         this.#costArray = costs;
         this.#currentCost = 0;
 
+        if (options == null) { options = []; }
+
         ui.AddClassesToDOM(this.div, 'dropdownContainer');
         this.#dropdown = ui.CreateDivWithClass('dropdown', 'selectable');
         ObserverCallbackOnAdded(this.#dropdown, this.DropdownAddedToPage);
@@ -52,7 +54,7 @@ export class DropdownList extends TitledComponent {
         this.#selectedCost.style.opacity = '0';
         this.#selected.appendChild(this.#selectedCost);
         ui.MakeTabbable(this.#dropdown);
-        if (options && options.length >= initialValue + 1) {
+        if (options.length >= initialValue + 1) {
             ui.AddElementAttribute(this.#selected, 'data-label', options[initialValue]);
         } else {
             ui.AddElementAttribute(this.#selected, 'data-label', '');
@@ -165,7 +167,7 @@ export class DropdownList extends TitledComponent {
         // add help component
         this.addHelpIcon(`help me! ${componentTitle}`);
 
-        this.onScroll = () => { this.PositionUpdate?.(this.div); };
+        this.OnScroll = () => { this.PositionUpdate?.(this.div); };
 
         // update costs 
         this.UpdateCosts();
