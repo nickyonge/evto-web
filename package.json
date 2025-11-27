@@ -1,6 +1,6 @@
 {
   "name": "web",
-  "version": "1.0.0",
+  "version": "0.4.0",
   "main": "webpack.config.js",
   "scripts": {
     "start": "webpack serve --open",
@@ -11,7 +11,7 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "GPL-3.0-only",
   "description": "",
   "dependencies": {
     "@melloware/coloris": "^0.25.0",
