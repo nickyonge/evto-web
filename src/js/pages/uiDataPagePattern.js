@@ -62,6 +62,7 @@ function CreatePatternSection(section) {
 
 
     let patternGrid = ui.CreateDivWithClass('grid');
+    ui.AddElementAttribute(patternGrid, 'forceSingleColumn', false);
     section.appendChild(patternGrid);
 
     let modeDropdown = new cmp.DropdownList('Mode');
