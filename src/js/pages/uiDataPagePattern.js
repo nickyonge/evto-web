@@ -1,7 +1,7 @@
 import * as cmp from "../components";
 import * as ui from '../ui';
 import * as txt from '../text';
-import { ColorToArray, ColorToRGBA, EnsureColorValid, isBlank, SetElementEnabled, StringToNumber } from "../lilutils";
+import { ColorToArray, ColorToRGBA, EnsureColorValid, isBlank, IsParentOf, SetElementEnabled, StringToNumber } from "../lilutils";
 import { DemoGradient } from "./uiDataPageBase";
 import { mapImg } from "../assetExporter";
 
@@ -21,9 +21,9 @@ export function CreatePagePattern(page) {
     let sectionSelection = new cmp.MutliOptionList('', SelectPatternPage, txt.PG_PATTERN_SECTIONS, null, null, currentSectionNum, true);
 
     // create page divs
-    sectionContainer = ui.CreateDivWithClass('sectionContainer');
-    sectionPattern = ui.CreateDivWithClass('section', 'pattern');
-    sectionColors = ui.CreateDivWithClass('section', 'colors');
+    sectionContainer = ui.CreateDivWithIDAndClasses('pgPtrnSectionContainer', 'sectionContainer');
+    sectionPattern = ui.CreateDivWithIDAndClasses('pgPtrnSection_Pattern', 'section', 'pattern');
+    sectionColors = ui.CreateDivWithIDAndClasses('pgPtrnSection_Colors', 'section', 'colors');
 
     // add elements to page 
     page.appendChild(sectionSelection);
@@ -63,15 +63,44 @@ function CreatePatternSection(section) {
 
     let patternGrid = ui.CreateDivWithClass('grid');
     ui.AddElementAttribute(patternGrid, 'forceSingleColumn', false);
-    section.appendChild(patternGrid);
+    // section.appendChild(patternGrid);
 
-    let modeDropdown = new cmp.DropdownList('Mode');
-    patternGrid.appendChild(modeDropdown);
-    let previewDropdown = new cmp.DropdownList('Preview');
+    let layoutDropdown = new cmp.DropdownList(txt.PG_PATTERN_PATTERN_LAYOUT, SelectOption, txt.PG_PATTERN_PATTERN_LAYOUT_OPTIONS);
+    patternGrid.appendChild(layoutDropdown);
+    let previewDropdown = new cmp.DropdownList(txt.PG_PATTERN_PATTERN_PREVIEW, SelectOption, txt.PG_PATTERN_PATTERN_PREVIEW_OPTIONS);
     patternGrid.appendChild(previewDropdown);
 
     section.appendChild(patternGrid);
 
+}
+
+/**
+ * dropdown option was selected on either the pattern or colours section 
+ * @param {number} selectedOption 
+ * @param {Element} selectionTarget 
+ * @returns {void}
+ */
+function SelectOption(selectedOption, selectionTargetID, selectionTarget) {
+    if (selectionTarget == null) {
+        console.warn(`WARNING: null target, can't select Pattern/Colours option, selected option: ${selectedOption}, returning`, this);
+        return;
+    }
+    if (IsParentOf(sectionPattern, selectionTarget)) {
+        // option is child of pattern section
+
+        switch (selectedOption) {
+        }
+
+    } else if (IsParentOf(sectionColors, selectionTarget)) {
+        // option is child of color section
+
+        switch (selectedOption) {
+        }
+
+    } else {
+        console.warn(`WARNING: selectionTarget ${selectionTarget} is child of neither sectionPattern nor sectionColors, can't determine option control, selectionOption: ${selectedOption}`, this);
+        return;
+    }
 }
 
 function CreateColorsSection(section) {

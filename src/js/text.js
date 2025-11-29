@@ -78,6 +78,12 @@ export const PG_TITLE_PATTERN = "Map Colours & Design Pattern";
 export const PG_TITLE_PATTERN_SHORTER = ["Colours & Design Pattern", "Colours & Pattern", "Design Pattern", "Map Pattern", "Pattern"]
 export const PG_PATTERN_SECTIONS = ["Pattern", "Colour"];
 
+export const PG_PATTERN_PATTERN_LAYOUT = 'Map Layout';
+export const PG_PATTERN_PATTERN_PREVIEW = 'Layout Preview';
+
+export const PG_PATTERN_PATTERN_LAYOUT_OPTIONS = ['Single', 'Double'];
+export const PG_PATTERN_PATTERN_PREVIEW_OPTIONS = ['None', 'Grayscale', 'Colour'];
+
 // --------- SAVE & LOAD PAGE -----------------
 export const PG_TITLE_SAVE = "Save & Load Map Info";
 export const PG_TITLE_SAVE_SHORTER = ["Save & Load Map", "Save & Load", "Save/Load", "Save"];
