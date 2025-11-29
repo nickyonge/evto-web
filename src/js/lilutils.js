@@ -1371,6 +1371,42 @@ export function ElementHasClass(element, cssClass) {
 }
 
 /**
+ * Is the given `parentElement` the parent of the given `childElement`? 
+ * Returns `true` if so. 
+ * 
+ * If `recursive` is `true`, searches the entire DOM hierarchy from
+ * `childElement` upwards. If `false`, only checks for immediate parenting. 
+ * @param {Element} parentElement Parent element to search for 
+ * @param {Element} childElement Child element to reference 
+ * @param {boolean} [recursive=true] Search entire hierarchy? Default `true` 
+ * @see {@linkcode IsChildOf} 
+ * @returns {boolean} 
+ */
+export function IsParentOf(parentElement, childElement, recursive = true) {
+    // if (childElement == null) { return false; }
+    // if (childElement.parentElement == null) { return parentElement == null; } // ignore 
+    if (childElement == null || parentElement == null) { return false; }
+    if (childElement.parentElement === parentElement) { return true; }
+    if (recursive) { return IsParentOf(parentElement, childElement.parentElement, recursive); }
+    return false;
+}
+/**
+ * Is the given `childElement` a child of the given `parentElement`? 
+ * Returns `true` if so. 
+ * 
+ * If `recursive` is `true`, searches the entire DOM hierarchy from
+ * `childElement` upwards. If `false`, only checks for immediate parenting. 
+ * @param {Element} parentElement Parent element to search for 
+ * @param {Element} childElement Child element to reference 
+ * @param {boolean} [recursive=true] Search entire hierarchy? Default `true` 
+ * @see {@linkcode IsParentOf}
+ * @returns {boolean} 
+ */
+export function IsChildOf(childElement, parentElement, recursive = true) {
+    return IsParentOf(parentElement, childElement);
+}
+
+/**
  * Creates a new {@link HTMLSpanElement}, typically for CSS/JS type interactions. 
  * @returns {HTMLSpanElement}
  */
