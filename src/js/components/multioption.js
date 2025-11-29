@@ -194,5 +194,5 @@ export class MutliOptionList extends TitledComponent {
     #isValidSelectionIndex(i) {
         return (i >= 0 && i < this.#inputs.length);
     }
-    
+
 }

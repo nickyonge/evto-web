@@ -352,7 +352,7 @@ export class DropdownList extends TitledComponent {
 
     // TODO: dropdown dragging is very choppy and does not respect smooth scroll, clean up 
     // Issue URL: https://github.com/nickyonge/evto-web/issues/78
-    
+
     /** @type {boolean} @private */
     _isDragging;
     /** @type {number} @private */
