@@ -132,6 +132,7 @@ export class DropdownList extends TitledComponent {
                     let target = /** @type {Element} */ (event.target);
                     onSelectCallback(i, target == null ? null : target.id, target);
                     // TODO: standardize all component callbacks to supply the selected option, and target only (not ID, that can be retrieved later)
+                    // Issue URL: https://github.com/nickyonge/evto-web/issues/79
                 }
                 if (!this.#initialChange) {
                     // initial option wasn't appearing as selected, manually set and un-set appearance 
