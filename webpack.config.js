@@ -134,12 +134,6 @@ module.exports = () => {
                 chunkFilename: '[name].css',
                 runtime: false,
             }),
-
-            // define a plugin to ensure globally accessible __DEV__ and __PROD__ flags (prolly redundant, maybe remove later)
-            new webpack.DefinePlugin({
-                __DEV__: JSON.stringify(!PRODUCTION_BUILD),
-                __PROD__: JSON.stringify(PRODUCTION_BUILD),
-            }),
         ],
 
         // enable inline source mapping, so we can see lines/error info in browser console output
