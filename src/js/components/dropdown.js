@@ -128,8 +128,10 @@ export class DropdownList extends TitledComponent {
             oInput.addEventListener('change', (event) => {
                 this.#updateSelectedCost();
                 if (onSelectCallback) {
+                    // callback has three params: option index, fully unique id of the option label, and event target 
                     let target = /** @type {Element} */ (event.target);
-                    onSelectCallback(i, target == null ? null : target.id);
+                    onSelectCallback(i, target == null ? null : target.id, target);
+                    // TODO: standardize all component callbacks to supply the selected option, and target only (not ID, that can be retrieved later)
                 }
                 if (!this.#initialChange) {
                     // initial option wasn't appearing as selected, manually set and un-set appearance 
