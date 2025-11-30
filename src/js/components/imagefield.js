@@ -572,7 +572,7 @@ export class ImageContainer {
                 default:
                     console.warn(`WARNING: invalid value for IMGCONT_OPACITY_METHOD: ${IMGCONT_OPACITY_METHOD}, defaulting to 'opacity', investigate`, this);
                 case 'opacity':
-                    this.element.style.opacity = this.opacity;
+                    this.element.style.opacity = String(this.opacity);
                     break;
                 case 'filter':
                     this.element.style.filter = `alpha(opacity=${this.opacity * 100})`;
