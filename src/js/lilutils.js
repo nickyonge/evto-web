@@ -1,5 +1,7 @@
 // some little utilities :3
 
+// TODO: The big one: convert all utilities to a package, duckpond.js
+
 // #region Strings
 
 /** 
