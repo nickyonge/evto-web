@@ -1,6 +1,7 @@
 // some little utilities :3
 
 // TODO: The big one: convert all utilities to a package, duckpond.js
+// Issue URL: https://github.com/nickyonge/evto-web/issues/80
 
 // #region Strings
 
