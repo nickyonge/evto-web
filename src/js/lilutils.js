@@ -135,20 +135,21 @@ export function GetPreserveAspectRatio(preserveAspectRatio) {
 
 /**
  * Removes {@link StringNumericOnly non-numeric} chars from a string and returns the resulting number. 
- * Returns `NaN` if no number is found. 
+ * Returns {@linkcode returnOnInvalid} (default `NaN`) if no number is found, or if parsing fails. 
  * @param {string|number} str Input string to convert. If given a number, simply returns it.
  * @param {boolean} [parseToInt = false] If true, returns `int`. If false, returns `Number`. Default `false`. 
+ * @param {number} [returnOnInvalid=NaN] Returns this value if no number is found, or if parsing fails. Default `NaN`
  * @returns {number|NaN} The parsed number, or `NaN` if no digits are found.
  * @see {@linkcode EnsureToNumber} if you need to parse a non-string, non-numeric value
  */
-export function StringToNumber(str, parseToInt = false) {
+export function StringToNumber(str, parseToInt = false, returnOnInvalid = NaN) {
     if (typeof str === 'number') { return str; }
-    if (!isStringNotBlank(str)) { return NaN; }
+    if (!isStringNotBlank(str)) { return returnOnInvalid; }
     let strLow = str.toLowerCase().trim();
     if (strLow == 'infinity') { return Infinity; }
     else if (strLow == '-infinity') { return -Infinity; }
     else if (strLow == 'nan') { return NaN; }
-    if (!StringContainsNumeric(str)) { return NaN; }
+    if (!StringContainsNumeric(str)) { return returnOnInvalid; }
     str = StringNumericOnly(str);// strip away all non-numeric chars 
     return parseToInt ? parseInt(str) : Number(str);
 }
@@ -590,42 +591,44 @@ export function ColorToHex(color, alpha = RGBAlpha.Ignore, prefixHash = '#') {
 
 /**
  * Takes a value, and ensures that it's a number. If `value` isn't a number
- * and can't be parsed, returns `NaN` and optionally outputs an error.
+ * and can't be parsed, returns {@linkcode returnOnInvalid} (default `NaN`) 
+ * and optionally outputs an error.
  * @param {number|any} value Input value to convert to a Number 
  * @param {boolean} [errorOnFailure=true] output an error upon parsing failure? Default `true`
+ * @param {number} [returnOnInvalid=NaN] Value to return on parsing error. Default `NaN`
  * @returns {number}
  */
-export function EnsureToNumber(value, errorOnFailure = true) {
-    function failure(reason) {
+export function EnsureToNumber(value, errorOnFailure = true, returnOnInvalid = NaN) {
+    function failure(/** @type {string} */ reason) {
         if (errorOnFailure) {
             console.error(`ERROR: failed to parse value: ${value} (type: ${typeof value}) to Number, ${reason}`, value);
         }
-        return NaN;
+        return returnOnInvalid;
     }
     if (value == null) { return failure('value is null or undefined'); }
     switch (typeof value) {
         case 'number': return value;
-        case 'string': return StringToNumber(value);
+        case 'string': return StringToNumber(value, false, returnOnInvalid);
         case 'boolean': return value ? 1 : 0;
         case 'bigint': return Number(value);
         default:
             // other type - attempt to coerce to number
             const n = Number(value);
             if (Number.isFinite(n)) { return n; }
-            // failed, before checking if n is Infinity, -Infinity, or NaN, try toString 
+            // failed, before checking if n is Infinity, -Infinity, or NaN, try toString
             const s = value.toString();
             if (isStringNotBlank(s)) {
-                const sn = StringToNumber(s);
+                const sn = StringToNumber(s, false, returnOnInvalid);
                 if (Number.isFinite(sn)) { return sn; }
                 if (IsNumberInfiniteOrNaN(sn)) { return sn; }
             }
-            // infinity/NaN n check 
+            // infinity/NaN n check
             if (IsNumberInfiniteOrNaN(n)) { return n; }
             if (n == null || typeof n != 'number') {
                 // conversion fully failed
                 return failure('failed to convert value, likely too complex for conversion');
             }
-            // unspecified error 
+            // unspecified error
             return failure('catastrophic error?? like, how???');
     }
 }
