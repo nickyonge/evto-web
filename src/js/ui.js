@@ -47,7 +47,7 @@ export function CreateElement(newElement) {
 /**
  * Create a new HTMLElement of the given type, with one or more CSS classes
  * @param {string} newElement type of new HTMLElement
- * @param  {...string} cssClasses one or more classes to add to the new element
+ * @param  {spreadString} cssClasses one or more classes to add to the new element
  * @returns {HTMLElement} returns HTMLElement with the given CSS class name(s)
  */
 export function CreateElementWithClass(newElement, ...cssClasses) {
@@ -58,7 +58,7 @@ export function CreateElementWithClass(newElement, ...cssClasses) {
 /**
  * Create a DIV HTMLElement with the given ID and CSS class(es)
  * @param {string} id ID value
- * @param {...string} cssClasses one or more CSS classes to add
+ * @param {spreadString} cssClasses one or more CSS classes to add
  * @returns {HTMLElement} newly made HTML <div> element
  */
 export function CreateDivWithIDAndClasses(id, ...cssClasses) {
@@ -70,7 +70,7 @@ export function CreateDivWithIDAndClasses(id, ...cssClasses) {
 /**
  * Create an input `HTMLElement`, optionally with the given CSS class(es)
  * @param {string} type type of input, eg 'checkbox'
- * @param  {...string} cssClasses optional CSS class or classes to assign
+ * @param  {spreadString} cssClasses optional CSS class or classes to assign
  * @returns {HTMLElement} newly made HTML `<input>` element
  */
 export function CreateInput(type, ...cssClasses) {
@@ -83,7 +83,7 @@ export function CreateInput(type, ...cssClasses) {
  * Create an input `HTMLElement` and the given ID, optionally with the given CSS class(es)
  * @param {string} type type of input, eg 'checkbox'
  * @param {string} id id for the input element
- * @param  {...string} cssClasses optional CSS class or classes to assign
+ * @param  {spreadString} cssClasses optional CSS class or classes to assign
  * @returns {HTMLElement} newly made HTML `<input>` element
  */
 export function CreateInputWithID(type, id, ...cssClasses) {
@@ -116,7 +116,7 @@ export function AddElementTo(domElement, newElement) {
  * and appends it as a child to the given pre-existing element (domElement)
  * @param {Element} domElement existing HTMLElement which will be newElement's parent
  * @param {string} newElement HTMLElement type to create and append as a child to domElement
- * @param  {...string} cssClasses one or more classes to add to the new element. 
+ * @param  {spreadString} cssClasses one or more classes to add to the new element. 
  * If none is specified, uses `newElement` as class name
  * @returns {HTMLElement} returns the newly created HTMLElement
  */
@@ -167,7 +167,7 @@ export function AddClassToDOMs(cssClass, ...domElements) {
 /**
  * Removes the given class(es) from the given HTMLElement (one element, multiple classes)
  * @param {Element} domElement HTMLElement to remove the given classes from
- * @param  {...string} cssClasses one or more classes to remove from the domElement
+ * @param  {spreadString} cssClasses one or more classes to remove from the domElement
  * @returns 
  */
 export function RemoveClassesFromDOM(domElement, ...cssClasses) {
@@ -377,7 +377,7 @@ export function CreateImage(imgSrc, alt = undefined) {
  * and then assigns the given CSS class(es) to it.
  * @param {string} imgSrc Value to add to the "src" attribute to the new img
  * @param {string} [alt=undefined] Alt text to provide to the new img (optional)
- * @param  {...string} cssClasses optional CSS class(es) to apply to the new img
+ * @param  {spreadString} cssClasses optional CSS class(es) to apply to the new img
  * @returns {HTMLElement} newly-made <img> HTMLElement
  */
 export function CreateImageWithClasses(imgSrc, alt = undefined, ...cssClasses) {
@@ -390,7 +390,7 @@ export function CreateImageWithClasses(imgSrc, alt = undefined, ...cssClasses) {
  * Creates a new `<svg>` element, with the given `path` child element attributes
  * @param {string|string[]} path Path value, either a single string for the `d` path attribute, 
  * or a two-value string array with [d,fill] attributes
- * @param  {...string} cssClasses optional CSS class(es) to apply to the SVG
+ * @param  {spreadString} cssClasses optional CSS class(es) to apply to the SVG
  * @returns {HTMLElement} newly-made SVG HTMLElement
  */
 export function CreateSVGFromPath(path, ...cssClasses) {
@@ -403,7 +403,7 @@ export function CreateSVGFromPath(path, ...cssClasses) {
  * Creates a new `<svg>` element, with the given `path` child element attributes
  * @param {string} path Path `d` attribute value
  * @param {string} fill Path `fill` attribute value
- * @param  {...string} cssClasses optional CSS class(es) to apply to the SVG
+ * @param  {spreadString} cssClasses optional CSS class(es) to apply to the SVG
  * @returns {HTMLElement} newly-made SVG HTMLElement
  */
 export function CreateSVGFromPathWithFill(path, fill, ...cssClasses) {
@@ -422,7 +422,7 @@ export function CreateSVGFromPathWithFill(path, fill, ...cssClasses) {
  * @param {string[][]} attributes 2D array of attributes. Each element is a
  * separate attribute, and each attribute is an array of two strings,
  * [attribute,value]. If no value is present, assigns `''`.
- * @param  {...string} cssClasses optional CSS class(es) to apply to the SVG
+ * @param  {spreadString} cssClasses optional CSS class(es) to apply to the SVG
  * @returns {HTMLElement} newly-made SVG HTMLElement
  */
 export function CreateSVG(paths, attributes, ...cssClasses) {
