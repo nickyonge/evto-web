@@ -196,6 +196,41 @@ export function RemoveClassFromDOMs(cssClass, ...domElements) {
 }
 
 /**
+ * Sets the given class(es) for the given HTMLElement (one element, multiple classes). 
+ * Adds each class if it's not present, removes it if it is.
+ * 
+ * Attempting to add a class that is already present on an element, 
+ * or remove a class that is not, does nothing (no error).
+ * @param {Element} domElement HTMLElement to set the given class(es) for
+ * @param {boolean} setTo If `true`, {@linkplain AddClassesToDOM adds}, and if `false`, {@linkplain RemoveClassesFromDOM removes} each class 
+ * @param  {spreadString} cssClasses one or more classes to add or remove to the domElement 
+ */
+export function SetClassesForDOM(domElement, setTo, ...cssClasses) { 
+    if (setTo) {
+        AddClassesToDOM(domElement, ...cssClasses);
+    } else {
+        RemoveClassesFromDOM(domElement, ...cssClasses);
+    }
+}
+/**
+ * Sets the given class for the given HTMLElement(s) (one class, multiple elements). 
+ * Adds the class if it's not present, removes it if it is.
+ * 
+ * Attempting to add a class that is already present on an element, 
+ * or remove a class that is not, does nothing (no error).
+ * @param {string} cssClass Class to add/remove
+ * @param {boolean} setTo If `true`, {@linkplain AddClassToDOMs adds}, and if `false`, {@linkplain RemoveClassFromDOMs removes} the class 
+ * @param  {...Element} domElements HTMLElement(s) to add/remove the class from
+ */
+export function SetClassForDOMs(cssClass, setTo, ...domElements) { 
+    if (setTo) {
+        AddClassToDOMs(cssClass, ...domElements);
+    } else {
+        RemoveClassFromDOMs(cssClass, ...domElements);
+    }
+}
+
+/**
  * Does the given element have the given CSS class?
  * @param {Element} element Element to check. If `null`, returns `false`  
  * @param {string} cssClass CSS class. If `null`/empty, returns `false`
