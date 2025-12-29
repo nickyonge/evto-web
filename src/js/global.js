@@ -2,6 +2,7 @@
 // script for document-level architecture
 
 // TODO: on conversion to duckpond.js, refactor to modularize / outright avoid global type extensions
+// Issue URL: https://github.com/nickyonge/evto-web/issues/81
 
 import { BasicComponent } from "./components/base";
 import { isBlank, IsStringNameSafe } from "./lilutils";
