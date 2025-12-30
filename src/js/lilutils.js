@@ -1601,6 +1601,21 @@ export function SetElementDisabled(element) {
     SetElementEnabled(element, false);
 }
 
+/**
+ * Is the given element connected to the document, and (optionally) is its 
+ * `getClientRects()` count greater than zero (eg, is it rendered in the layout)?
+ * @param {Element} element Element to check 
+ * @param {boolean} [alsoCheckLayoutBox=true] If connected, also check `getClientRects` count? Default `true` 
+ * @see {@linkcode https://developer.mozilla.org/en-US/docs/Web/API/Node/isConnected Node.isConnected} docs 
+ * @see {@linkcode https://developer.mozilla.org/en-US/docs/Web/API/Element/getClientRects Element.getClientRects} docs 
+ * @returns {boolean}
+ */
+export function IsElementConnected(element, alsoCheckLayoutBox = true) {
+    if (!element.isConnected) { return false; }
+    if (alsoCheckLayoutBox && element.getClientRects().length === 0) { return false; }
+    return true;
+}
+
 // #endregion Element Selection
 
 // #region Timing 
