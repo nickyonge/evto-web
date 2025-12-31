@@ -596,34 +596,44 @@ export function ColorToHex(color, alpha = RGBAlpha.Ignore, prefixHash = '#') {
  * @param {number|any} value Input value to convert to a Number 
  * @param {boolean} [errorOnFailure=true] output an error upon parsing failure? Default `true`
  * @param {number} [returnOnInvalid=NaN] Value to return on parsing error. Default `NaN`
+ * @param {boolean} [ensureFinite=true] Ensure non-infinite + non-NaN return value? Default `true`
+ * - **Note:** Even if `ensureFinite` is `true`, an invalid operation will still return
+ * {@linkcode returnOnInvalid}, even if it's `NaN`. If it's mandatory to ensure a given
+ * fallback number, set {@linkcode returnOnInvalid} to `0` or the desired default value.
  * @returns {number}
  */
-export function EnsureToNumber(value, errorOnFailure = true, returnOnInvalid = NaN) {
+export function EnsureToNumber(value, errorOnFailure = true, returnOnInvalid = NaN, ensureFinite = true) {
     function failure(/** @type {string} */ reason) {
         if (errorOnFailure) {
             console.error(`ERROR: failed to parse value: ${value} (type: ${typeof value}) to Number, ${reason}`, value);
         }
         return returnOnInvalid;
     }
+    function checkReturnFinite(value, ensureFinite) {
+        // TODO: EnsureToNumber ensureFinite implementation is sloppy
+        if (!ensureFinite) { return value; }
+        if (IsNumberFinite(value)) { return value; }
+        return failure('value returned is NaN or infinite');
+    }
     if (value == null) { return failure('value is null or undefined'); }
     switch (typeof value) {
-        case 'number': return value;
-        case 'string': return StringToNumber(value, false, returnOnInvalid);
-        case 'boolean': return value ? 1 : 0;
-        case 'bigint': return Number(value);
+        case 'number': return checkReturnFinite(value, ensureFinite);
+        case 'string': return checkReturnFinite(StringToNumber(value, false, returnOnInvalid), ensureFinite);
+        case 'boolean': return checkReturnFinite(value ? 1 : 0, ensureFinite);
+        case 'bigint': return checkReturnFinite(Number(value), ensureFinite);
         default:
             // other type - attempt to coerce to number
             const n = Number(value);
-            if (Number.isFinite(n)) { return n; }
+            if (Number.isFinite(n)) { return checkReturnFinite(n, ensureFinite); }
             // failed, before checking if n is Infinity, -Infinity, or NaN, try toString
             const s = value.toString();
             if (isStringNotBlank(s)) {
                 const sn = StringToNumber(s, false, returnOnInvalid);
-                if (Number.isFinite(sn)) { return sn; }
-                if (IsNumberInfiniteOrNaN(sn)) { return sn; }
+                if (Number.isFinite(sn)) { return checkReturnFinite(sn, ensureFinite); }
+                if (IsNumberInfiniteOrNaN(sn)) { return checkReturnFinite(sn, ensureFinite); }
             }
             // infinity/NaN n check
-            if (IsNumberInfiniteOrNaN(n)) { return n; }
+            if (IsNumberInfiniteOrNaN(n)) { return checkReturnFinite(n, ensureFinite); }
             if (n == null || typeof n != 'number') {
                 // conversion fully failed
                 return failure('failed to convert value, likely too complex for conversion');
@@ -642,6 +652,18 @@ export function IsNumberInfiniteOrNaN(num) {
     if (num == null || typeof num != 'number') { return false; }
     if (Number.isFinite(num)) { return false; }
     return num === Infinity || num === -Infinity || Number.isNaN(num);
+}
+/** 
+ * Checks if the given number is a valid number
+ * that is not `Infinity`, `-Infinity`, or `NaN`.
+ * 
+ * Convenience to match {@linkcode IsNumberInfiniteOrNaN}
+ * styling; simply calls `Number.isFinite`.
+ * @param {number} num Number to check
+ * @returns {boolean} 
+ * @see {@linkcode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/isFinite Number.isFinite()} on MDN */
+export function IsNumberFinite(num) {
+    return Number.isFinite(num);
 }
 
 /**
