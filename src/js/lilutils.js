@@ -611,6 +611,7 @@ export function EnsureToNumber(value, errorOnFailure = true, returnOnInvalid = N
     }
     function checkReturnFinite(value, ensureFinite) {
         // TODO: EnsureToNumber ensureFinite implementation is sloppy
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/82
         if (!ensureFinite) { return value; }
         if (IsNumberFinite(value)) { return value; }
         return failure('value returned is NaN or infinite');
