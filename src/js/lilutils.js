@@ -847,7 +847,8 @@ export const RandomSecureMode = Object.freeze({
  * 
  * Optionally uses the WebCrypto API for cryptographically secure pseudorandom number generation (CSPRNG). 
  * 
- * To get an integer-rounded random value, see {@linkcode RandomInt}.
+ * To get an integer-rounded random value, see {@linkcode RandomInt}. In the case of arrays, 
+ * remember to account for rounding being `max` inclusive by default. 
  * 
  * ---
  * @param {number} [min=0] Minimum possible random value. Must be finite. Default `0`
@@ -888,6 +889,8 @@ export function RandomValue(min = 0, max = 1, secureMode = RandomSecureMode.Fast
  * 
  * - **NOTE:** If {@linkcode roundingOperation} is {@linkcode RoundOps.None}, simply returns 
  * {@linkcode RandomValue} with the given parameters. In this case, {@linkcode max} is *exclusive*, not *inclusive*.
+ * - **NOTE:** If getting a random array index (or other `max` exclusive operation), remember to use 
+ * {@linkcode RoundOps.Floor} for your {@linkcode roundingOperation}, or simply use {@linkcode RandomArrayIndex}.
  * 
  * ---
  * @param {number} [min=0] Minimum possible random value. Must be finite. Default `0`
@@ -899,6 +902,29 @@ export function RandomValue(min = 0, max = 1, secureMode = RandomSecureMode.Fast
 export function RandomInt(min = 0, max = 100, roundingOperation = RoundOps.Round, secureMode = RandomSecureMode.Fast) {
     let randomValue = RandomValue(min, max, secureMode);
     return RoundWith(randomValue, roundingOperation);
+}
+
+/**
+ * Gets a random index value from the given array.
+ * @param {any[]} array Array to get a random index of. Must be non-null, and have a `length` greater than 0.
+ * @param {RandomSecureMode} [secureMode=RandomSecureMode.Fast] Security mode to use during generation. Default {@linkcode RandomSecureMode.Fast Fast}
+ * @returns {number}
+ */
+export function RandomArrayIndex(array, secureMode = RandomSecureMode.Fast) {
+    if (array == null || array.length === 0) {
+        console.warn(`Can't get random index from a null/empty array, array: ${array}, secureMode: ${secureMode}, returning NaN`, this);
+        return NaN;
+    }
+    let index = RandomInt(0, array.length, RoundOps.Floor);
+    let failsafe = Math.max(10, array.length + 1);
+    while (index >= array.length && failsafe > 0) {
+        index = RandomInt(0, array.length, RoundOps.Floor);
+        failsafe--;
+        if (failsafe == 0) {
+            console.warn("WARNING: hit the RandomInt failsafe getting random index, investigate", this);
+        }
+    }
+    return index;
 }
 
 // #endregion Numbers
