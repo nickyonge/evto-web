@@ -5,7 +5,7 @@
 // Issue URL: https://github.com/nickyonge/evto-web/issues/81
 
 import { BasicComponent } from "./components/base";
-import { isBlank, IsStringNameSafe } from "./lilutils";
+import { isBlank, IsStringNameSafe, RandomArrayIndex, RandomSecureMode } from "./lilutils";
 
 // DOCUMENT-LEVEL - imported to index LAST, after all other imports are completed
 (() => {
@@ -580,6 +580,22 @@ import { isBlank, IsStringNameSafe } from "./lilutils";
      */
     Array.prototype.deepClone = function () {
         return this.structuredClone();
+    }
+
+    /**
+     * Gets a single random value from this array. 
+     * Array must be non-null with a `length` greater than zero. 
+     * - **NOTE:** This is non-mutating, and does not modify the array 
+     * or any of its values in any way. 
+     * @param {RandomSecureMode} secureMode Security method to use. Default {@linkcode RandomSecureMode.Fast}
+     * @returns {any}
+     */
+    Array.prototype.randomValue = function (secureMode = RandomSecureMode.Fast) {
+        if (this == null || this.length === 0) {
+            console.warn('Cannot get random value from null/empty array, returning undefined');
+            return undefined;
+        }
+        return this[RandomArrayIndex(this, secureMode)];
     }
 
     // #endregion Array 

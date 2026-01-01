@@ -342,6 +342,18 @@ declare global {
          */
         deepClone<T>(): T[];
 
+        /**
+         * Gets a single random value from this array. 
+         * Array must be non-null with a `length` greater than zero. 
+         * - **NOTE:** This is non-mutating, and does not modify the array 
+         * or any of its values in any way. 
+         * @param {RandomSecureMode} [secureMode=RandomSecureMode.Fast] Security method to use. Default {@linkcode RandomSecureMode.Fast}
+         * @returns {T} Single random element from this array. 
+         * @type {<T>(RandomSecureMode): T}
+         * @template T 
+         */
+        randomValue<T>(secureMode?: RandomSecureMode): T;
+
     }
     // #endregion Array
 
