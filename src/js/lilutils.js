@@ -803,6 +803,104 @@ export function ToPercentage(number, multiplyBy100 = true, minValue = null, maxV
     number = RoundWith(number, roundingOperation);
 }
 
+/** 
+ * Security mode to use when generating a random number. 
+ * - {@linkcode RandomSecureMode.Fast Fast}: Uses `Math.random`. 
+ * Quickest pseudorandom generation, but non-cryptographically secure. 
+ * - {@linkcode RandomSecureMode.TrySecure TrySecure}: Attempts cryptographically 
+ * secure pseudorandom number generation (CSPRNG) via the WebCrypto API. 
+ * If the API is unavailable, reverts to {@linkcode RandomSecureMode.Fast Fast}. 
+ * - {@linkcode RandomSecureMode.ForceSecure ForceSecure}: Attempts cryptographically 
+ * secure pseudorandom number generation (CSPRNG) via the WebCrypto API. 
+ * If the API is unavailable, throws an error.
+ *     - **Note:** While this is cryptographically secure, it's still being run on the user's 
+ *     local environment. Any client-side code execution is fundamentally unsafe. 
+ * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API WebCrypto API} MDN documentation
+ * @typedef {'Fast'|'TrySecure'|'ForceSecure'} RandomSecureMode
+ */
+export const RandomSecureMode = Object.freeze({
+    /** 
+     * Uses `Math.random()` to get a random value from the array. 
+     * This is preferred for most user-facing situations, such as 
+     * random colour variation or single-player gameplay situations. 
+     * 
+     * "Would it be fundamentally okay if the user could predict the result?" */
+    Fast: 'Fast',
+    /** 
+     * Safer, more expensive. Tries to use cryptographically-secure random number generation via the 
+     * {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API WebCrypto API}.
+     * If that API is unavailable, defaults to using {@linkcode RandomSecureMode.Fast Fast}. 
+     * Useful when security is important yet non-critical, and functionality is MORE important. */
+    TrySecure: 'TrySecure',
+    /** 
+     * Safer, more expensive. Tries to use cryptographically-secure random number generation via the 
+     * {@link https://developer.mozilla.org/en-US/docs/Web/API/Web_Crypto_API WebCrypto API}.
+     * Throws an error if the API is unavailable. 
+     * 
+     * - **Note:** While this is cryptographically secure, it's still being run on the user's 
+     * local environment. Any client-side code execution is fundamentally unsafe. */
+    ForceSecure: 'ForceSecure'
+});
+
+/**
+ * Generates and returns a random number between `min` (inclusive) and `max` (exclusive). 
+ * 
+ * Optionally uses the WebCrypto API for cryptographically secure pseudorandom number generation (CSPRNG). 
+ * 
+ * To get an integer-rounded random value, see {@linkcode RandomInt}.
+ * 
+ * ---
+ * @param {number} [min=0] Minimum possible random value. Must be finite. Default `0`
+ * @param {number} [max=1] Minimum possible random value. Must be finite. Default `0`
+ * @param {RandomSecureMode} secureMode Security mode to use during generation. Default {@linkcode RandomSecureMode.Fast Fast}
+ * @returns {number}
+ */
+export function RandomValue(min = 0, max = 1, secureMode = RandomSecureMode.Fast) {
+    // ensure valid input values 
+    if (!IsNumberFinite(min) || !IsNumberFinite(max)) {
+        throw new Error(`Cannot generate random number with non-finite values, min: ${min}, max: ${max}, secureMode: ${secureMode}, returning NaN`, this);
+    }
+    if (min === max) { return min; }
+    else if (max < min) [min, max] = [max, min];
+    // check security mode 
+    if (secureMode != 'Fast') {
+        // local ref to webcrypto api 
+        const webCryptoAPI = globalThis.crypto;
+        if (webCryptoAPI != null && typeof webCryptoAPI?.getRandomValues === "function") {
+            // WebCrypto API is available 
+            const uInt32array = new Uint32Array(1);
+            webCryptoAPI.getRandomValues(uInt32array);
+            const unitInterval = uInt32array[0] / 0x100000000; // smallest fractional unit (1/2^32), 0 inclusive, 1 exclusive 
+            return (unitInterval * (max - min)) + min; // map unit to min/max range, min inclusive, max exclusive
+        } else if (secureMode == 'ForceSecure') {
+            // api is unavailable but required, error out 
+            throw new Error('This environment does not support web cryptography. Cannot generate secure random number.');
+        }
+    }
+    // fast, simple execution 
+    return min + Math.random() * (max - min);
+}
+/**
+ * Generates and returns a random integer between `min` (inclusive) and `max` (inclusive), 
+ * using the given {@linkcode RoundOps rounding operation}. 
+ * 
+ * Optionally uses the WebCrypto API for cryptographically secure pseudorandom number generation (CSPRNG). 
+ * 
+ * - **NOTE:** If {@linkcode roundingOperation} is {@linkcode RoundOps.None}, simply returns 
+ * {@linkcode RandomValue} with the given parameters. In this case, {@linkcode max} is *exclusive*, not *inclusive*.
+ * 
+ * ---
+ * @param {number} [min=0] Minimum possible random value. Must be finite. Default `0`
+ * @param {number} [max=1] Minimum possible random value. Must be finite. Default `0`
+ * @param {RoundOps} [roundingOperation=RoundOps.Round] Rounding operation to use. Default {@linkcode RoundOps.Round Round}.
+ * @param {RandomSecureMode} secureMode Security mode to use during generation. Default {@linkcode RandomSecureMode.Fast Fast}
+ * @returns {number}
+ */
+export function RandomInt(min = 0, max = 100, roundingOperation = RoundOps.Round, secureMode = RandomSecureMode.Fast) {
+    let randomValue = RandomValue(min, max, secureMode);
+    return RoundWith(randomValue, roundingOperation);
+}
+
 // #endregion Numbers
 
 // #region Math
