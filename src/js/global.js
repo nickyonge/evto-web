@@ -592,6 +592,7 @@ import { isBlank, IsStringNameSafe, RandomArrayIndex, RandomSecureMode } from ".
      */
     Array.prototype.randomValue = function (secureMode = RandomSecureMode.Fast) {
         // TODO: add "unshift" option to Array.prototype.randomValue, to remove value from the array 
+        // Issue URL: https://github.com/nickyonge/evto-web/issues/83
         if (this == null || this.length === 0) {
             console.warn('Cannot get random value from null/empty array, returning undefined');
             return undefined;
