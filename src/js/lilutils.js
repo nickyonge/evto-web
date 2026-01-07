@@ -1692,15 +1692,15 @@ export function IsActiveElement(element) {
 export function SetElementEnabled(element, set = true, updateStoredValues = false) {
     // preserve values on first call 
     if (element._priorDraggable == null) {
-        element._priorDraggable = [element.draggable];
+        element._priorDraggable = element.draggable;
     }
     if (element._priorPointerEvents == null) {
-        element._priorPointerEvents = [element.style.pointerEvents];
+        element._priorPointerEvents = element.style.pointerEvents;
     }
     if (!set) {
         DeselectElement(element, true);
         if (updateStoredValues) {
-            element.draggable = set ? element._priorDraggable[0] : 'false';
+            element.draggable = set ? element._priorDraggable : 'false';
         }
     }
     if (updateStoredValues) {
