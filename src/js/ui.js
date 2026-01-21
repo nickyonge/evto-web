@@ -268,6 +268,57 @@ export function HasClasses(element, cssClasses, all = true) {
     return all ? true : false;
 }
 
+/**
+ * Checks whether or not the given element (or, optionally, any of its parents) 
+ * has its `style.display` property set to `"none"`. 
+ * - **Note:** This ONLY checks for `display === "none"`. If you want a more 
+ * surefire way to check for visibility overall, use {@linkcode IsElementVisible}. 
+ * - **Note:** If {@linkcode element} is `null`, this will return `false`. 
+ * That doesn't mean it's hidden - it means it doesn't exist! Don't use this 
+ * method for nullcheckery. 
+ * @param {Element} element Element to check. If undefined, returns `false`
+ * @param {boolean} [inlineOnly = false] Check only for inline style in the 
+ * element's HTML? Default `false`, which also checks imported CSS stylesheets.  
+ * @param {boolean} [checkParents = false] Check the element's entire parent 
+ * hierarchy? Default `false`
+ * @returns {boolean}
+ */
+export function IsElementDisplayNone(element, inlineOnly = false, checkParents = false) {
+    if (element == null) { return false; }
+    if (checkParents) {
+        if (IsElementDisplayNone(element, inlineOnly, false)) { return true; }
+        if (element.parentElement == null) { return false; }
+        return (IsElementDisplayNone(element.parentElement, inlineOnly, true));
+    }
+    return inlineOnly ?
+        element.style.display === 'none' :
+        getComputedStyle(element).display === 'none';
+}
+/**
+ * Checks if the given element is visible in the DOM layout whatsoever. 
+ * - **Note:** If {@linkcode element} is `null`, this will return `false`. 
+ * That doesn't mean it's hidden - it means it doesn't exist! Don't use this 
+ * method for nullcheckery. 
+ * @param {Element} element Element to check. If undefined, returns `false` 
+ * @returns {boolean}
+ * @see {@linkcode IsElementHidden}, convenience method, checks for the opposite  
+ */
+export function IsElementVisible(element) {
+    return element.isConnected && element.getClientRects().length > 0;
+}
+/**
+ * Checks if the given element is in any way fully hidden in the DOM layout. 
+ * - **Note:** If {@linkcode element} is `null`, this will return `false`. 
+ * That doesn't mean it's hidden - it means it doesn't exist! Don't use this 
+ * method for nullcheckery. 
+ * @param {Element} element Element to check. If undefined, returns `false` 
+ * @returns {boolean}
+ * @see {@linkcode IsElementVisible}, convenience method, checks for the opposite  
+ */
+export function IsElementHidden(element) {
+    return !IsElementVisible(element);
+}
+
 // #endregion Classes / IDs
 
 // ------------------------------------------------------------------ 
