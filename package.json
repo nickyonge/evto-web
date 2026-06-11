@@ -39,5 +39,11 @@
         "webpack-cli": "^6.0.1",
         "webpack-dev-server": "^5.2.2",
         "webpack-remove-empty-scripts": "^1.1.1"
+    },
+    "overrides": {
+        "uuid": "^14.0.0",
+        "sockjs": {
+            "uuid": "^14.0.0"
+        }
     }
 }
